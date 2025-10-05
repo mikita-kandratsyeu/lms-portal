@@ -248,7 +248,8 @@
     },
     "card": {
       "chapter": "{ amount, plural, one {# часть} few {# части} many {# частей} other {# частей}}",
-      "premium": "Премиум"
+      "new": "Новинка",
+      "topSale": "Топ продаж"
     },
     "info-card": {
       "completed": "Завершено",

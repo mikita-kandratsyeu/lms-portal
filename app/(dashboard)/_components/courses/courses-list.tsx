@@ -19,7 +19,10 @@ type CoursesListProps = {
 export const CoursesList = ({ fees, items, specificFilter }: CoursesListProps) => {
   const t = useTranslations('courses.list');
 
-  const groupedCourseList = getGroupedCourseList(items, specificFilter);
+  const { groupedCourseList, topCourseIds, newCourseIds } = getGroupedCourseList(
+    items,
+    specificFilter,
+  );
 
   return (
     <>
@@ -45,7 +48,9 @@ export const CoursesList = ({ fees, items, specificFilter }: CoursesListProps) =
                   category={item?.category?.name}
                   chaptersLength={item._count.chapters}
                   fees={fees}
+                  isNewCourse={newCourseIds.includes(item.id)}
                   isPurchased={Boolean(item?._count?.purchases)}
+                  isTopPurchased={topCourseIds.includes(item.id)}
                   key={item.id}
                 />
               ))}

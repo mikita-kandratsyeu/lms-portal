@@ -249,7 +249,8 @@
     },
     "card": {
       "chapter": "{ amount, plural, one {# частка} few {# часткі} many {# частак} other {# частак}}",
-      "premium": "Прэміум"
+      "new": "Навінка",
+      "topSale": "Топ продажаў"
     },
     "info-card": {
       "completed": "Завершана",

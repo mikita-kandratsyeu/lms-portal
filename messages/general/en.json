@@ -249,7 +249,8 @@
     },
     "card": {
       "chapter": "{ amount, plural, =1 {# chapter} other {# chapters}}",
-      "premium": "Premium"
+      "new": "New",
+      "topSale": "Top sales"
     },
     "info-card": {
       "completed": "Completed",

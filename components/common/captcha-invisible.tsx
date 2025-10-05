@@ -22,7 +22,7 @@ export const CaptchaInvisible = ({
         onChallengeHidden={() => setVisible(false)}
         onSuccess={callback}
         sitekey={process.env.NEXT_PUBLIC_YD_CAPTCHA as string}
-        // test={process.env.NODE_ENV === 'development'}
+        test={process.env.NODE_ENV === 'development'}
         visible={visible}
         webview
       />

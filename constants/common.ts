@@ -7,6 +7,7 @@ export const ONE_HOUR_SEC = 60 * 60;
 export const ONE_MINUTE_SEC = 60;
 export const ONE_YEAR_SEC = 60 * 60 * 24 * 365;
 export const TEN_MINUTE_SEC = 60 * 10;
+export const ONE_WEEK_SEC = 60 * 60 * 24 * 7;
 
 export const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 export const ONE_MIN_MS = 60 * 1000;

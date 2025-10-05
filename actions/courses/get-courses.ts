@@ -35,6 +35,7 @@ export const getCourses = async ({ categoryIds, hasSubscription, title, userId }
         select: {
           ...(userId && { purchases: { where: { userId } } }),
           chapters: { where: { isPublished: true } },
+          purchases: true,
         },
       },
       category: true,
