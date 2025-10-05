@@ -29,7 +29,6 @@ export const POST = async (
     const action = searchParams.get('action');
 
     const t = await getTranslations('payments.payout');
-    const emailT = await getTranslations('email-notification.payout');
 
     if (action === PayoutRequestStatus.DECLINED) {
       const payoutRequest = await db.payoutRequest.update({
@@ -108,7 +107,6 @@ export const POST = async (
         await sentEmailByTemplate({
           emails: [connectAccountInfo?.email ?? ''],
           params: emailParams,
-          subject: emailT('subject'),
           template: 'teacher-payout',
         });
       }

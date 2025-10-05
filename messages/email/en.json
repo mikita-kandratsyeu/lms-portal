@@ -18,7 +18,14 @@
     "subject": "Thank you for your purchase! Access to your course is now open 🔑"
   },
   "teacher-payout": {
-    "subject": "The payment has been confirmed 💸"
+    "analyticButton": "View Analytics",
+    "description": "We are pleased to inform you that your withdrawal request has been processed. The funds have been successfully transferred to your account.",
+    "footerNote": "All rights reserved.",
+    "gratitude": "Thank you for your contribution and professionalism in working with the Nova Academy platform!",
+    "greeting": "Hello, {username}!",
+    "idRequest": "Payment request ID: ",
+    "ignoreNote": "In the analytics section, you can check the status of your account and payment details.",
+    "subject": "Payment Confirmed 💸"
   },
   "login-code": {
     "subject": "{{code}} - Your Nova Academy login code",
