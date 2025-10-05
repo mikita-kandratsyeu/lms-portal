@@ -77,7 +77,6 @@
       "yandex": true
     }
   },
-  "regional": { "availableCountryCodes": ["BY", "DE", "ES", "FR", "IT", "NL", "PL", "RU", "UK", "US"] },
   "features": {
     "christmas": false,
     "testMode": true
