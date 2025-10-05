@@ -82,14 +82,16 @@ export const POST = async (
         },
       });
 
+      const totalAmount = formatPrice(getConvertedPrice(updatedPayoutRequest.amount), {
+        currency: updatedPayoutRequest.currency,
+        locale: DEFAULT_LOCALE,
+      });
+
       await createWebSocketNotification({
         channel: `notification_channel_${payoutRequest.connectAccount.userId}`,
         data: {
           body: t('paid.body', {
-            amount: formatPrice(getConvertedPrice(updatedPayoutRequest.amount), {
-              currency: updatedPayoutRequest.currency,
-              locale: DEFAULT_LOCALE,
-            }),
+            amount: totalAmount,
           }),
           userId: payoutRequest.connectAccount.userId,
           title: t('paid.title', { payoutRequestId: payoutRequest.id }),
@@ -99,9 +101,10 @@ export const POST = async (
 
       if (connectAccountInfo?.isEmailConfirmed) {
         const emailParams = {
-          teacherName: user?.name ?? '',
-          payoutId: payoutRequest.id,
           analyticsLink: absoluteUrl('/teacher/analytics'),
+          payoutId: payoutRequest.id,
+          teacherName: user?.name ?? '',
+          totalAmount,
         };
 
         await sentEmailByTemplate({

@@ -65,7 +65,7 @@
     }
   ],
   "auth": {
-    "allowNewUsers": false,
+    "allowNewUsers": true,
     "allowNewUserSubscriptions": false,
     "providers": {
       "github": true,

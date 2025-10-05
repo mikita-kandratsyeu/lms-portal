@@ -18,6 +18,7 @@
     "subject": "Thank you for your purchase! Access to your course is now open 🔑"
   },
   "teacher-payout": {
+    "amount": "Payout amount: ",
     "analyticButton": "View Analytics",
     "description": "We are pleased to inform you that your withdrawal request has been processed. The funds have been successfully transferred to your account.",
     "footerNote": "All rights reserved.",
