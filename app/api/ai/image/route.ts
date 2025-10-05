@@ -7,7 +7,7 @@ import { generateImage } from '@/actions/ai/generate-image';
 import { getRequestsLimit } from '@/actions/ai/get-requests-imit';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { uploadFiles } from '@/actions/uploadthing/upload-files';
-import { REQUEST_STATUS } from '@/constants/ai';
+import { REQUEST_STATUS } from '@/constants/ai/general';
 
 export const maxDuration = 60;
 

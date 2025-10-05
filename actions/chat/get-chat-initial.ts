@@ -3,7 +3,7 @@
 import { getLocale } from 'next-intl/server';
 import { ChatCompletionUserMessageParam } from 'openai/resources/index.mjs';
 
-import { ChatCompletionRole } from '@/constants/ai';
+import { ChatCompletionRole } from '@/constants/ai/general';
 import { ONE_DAY_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
 

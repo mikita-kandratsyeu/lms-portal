@@ -18,7 +18,8 @@ import { Textarea } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
-import { ChatCompletionRole, USER_CHAPTER_DESCRIPTION_PROMPT } from '@/constants/ai';
+import { ChatCompletionRole } from '@/constants/ai/general';
+import { USER_CHAPTER_DESCRIPTION_PROMPT } from '@/constants/ai/prompts';
 import { fetcher } from '@/lib/fetcher';
 import { cn } from '@/lib/utils';
 

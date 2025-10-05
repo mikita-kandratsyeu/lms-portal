@@ -20,7 +20,8 @@ import {
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
-import { ChatCompletionRole, USER_COURSE_SHORT_DESCRIPTION_PROMPT } from '@/constants/ai';
+import { ChatCompletionRole } from '@/constants/ai/general';
+import { USER_COURSE_SHORT_DESCRIPTION_PROMPT } from '@/constants/ai/prompts';
 import { TEXTAREA_MAX_LENGTH } from '@/constants/courses';
 import { fetcher } from '@/lib/fetcher';
 import { cn } from '@/lib/utils';

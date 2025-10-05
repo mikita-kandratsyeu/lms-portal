@@ -14,7 +14,7 @@ import React, {
 import ScrollToBottom, { useScrollToBottom, useSticky } from 'react-scroll-to-bottom';
 
 import { Button } from '@/components/ui';
-import { ChatCompletionRole } from '@/constants/ai';
+import { ChatCompletionRole } from '@/constants/ai/general';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { cn } from '@/lib/utils';

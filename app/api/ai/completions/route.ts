@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateCompletion } from '@/actions/ai/generate-completion';
 import { getRequestsLimit } from '@/actions/ai/get-requests-imit';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { REQUEST_STATUS } from '@/constants/ai';
+import { REQUEST_STATUS } from '@/constants/ai/general';
 
 export const maxDuration = 60;
 

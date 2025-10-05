@@ -8,7 +8,6 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getIsEmailConfirmed } from '@/actions/auth/get-is-email-confirmed';
 import { sentEmailByTemplate } from '@/actions/mailer/sent-email-by-template';
 import { getWelcomeDiscounts } from '@/actions/stripe/get-welcome-discounts';
-import { EMAIL_COURSE_PURCHASE_SUBJECT } from '@/constants/email-subject';
 import db from '@/lib/db';
 import { getConvertedPrice, getScaledPrice } from '@/lib/format';
 import { getLocale } from '@/lib/locale';
@@ -100,8 +99,6 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ courseId
           emails: [user?.email ?? ''],
           locale: appLocale,
           params: emailParams,
-          subject:
-            EMAIL_COURSE_PURCHASE_SUBJECT[appLocale as keyof typeof EMAIL_COURSE_PURCHASE_SUBJECT],
           template: 'course-purchase',
         });
       }
