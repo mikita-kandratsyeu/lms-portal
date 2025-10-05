@@ -22,7 +22,7 @@
     "description": "We are pleased to inform you that your withdrawal request has been processed. The funds have been successfully transferred to your account.",
     "footerNote": "All rights reserved.",
     "gratitude": "Thank you for your contribution and professionalism in working with the Nova Academy platform!",
-    "greeting": "Hello, {username}!",
+    "greeting": "Hello, {teacherName}!",
     "idRequest": "Payment request ID: ",
     "ignoreNote": "In the analytics section, you can check the status of your account and payment details.",
     "subject": "Payment Confirmed 💸"
