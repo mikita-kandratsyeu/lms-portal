@@ -44,7 +44,7 @@ export const ColumnActions = ({ userId }: ColumnActionsProps) => {
 
         const blob = await response.blob();
 
-        const url = window.URL.createObjectURL(blob);
+        const url = globalThis.URL.createObjectURL(blob);
 
         const a = document.createElement('a');
         a.style.display = 'none';
@@ -54,7 +54,7 @@ export const ColumnActions = ({ userId }: ColumnActionsProps) => {
         document.body.appendChild(a);
         a.click();
 
-        window.URL.revokeObjectURL(url);
+        globalThis.URL.revokeObjectURL(url);
         document.body.removeChild(a);
 
         return blob;

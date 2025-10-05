@@ -16,8 +16,8 @@ declare global {
 const connectionString = `${process.env.POSTGRES_PRISMA_URL}`;
 
 const adapter = new PrismaNeon({ connectionString });
-const prisma = global.prisma || new PrismaClient({ adapter });
+const prisma = globalThis.prisma || new PrismaClient({ adapter });
 
-if (process.env.NODE_ENV === 'development') global.prisma = prisma;
+if (process.env.NODE_ENV === 'development') globalThis.prisma = prisma;
 
 export default prisma;
