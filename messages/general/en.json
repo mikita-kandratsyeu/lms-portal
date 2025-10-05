@@ -314,7 +314,7 @@
   "chat": {
     "body": {
       "greeting": "Hello there!",
-      "image-loading": "Creating something interesting. A moment of patience...",
+      "image-loading": "I'm preparing an answer, wait a bit...",
       "title": "What can I assist you with today?"
     },
     "conversation": {
