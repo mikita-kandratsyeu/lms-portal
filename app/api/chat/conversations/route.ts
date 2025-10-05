@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { CONVERSATION_ACTION, LIMIT_CONVERSATION_TITLE } from '@/constants/chat';
 import { generateConversationTitle } from '@/lib/chat';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const POST = async (req: NextRequest) => {
   try {

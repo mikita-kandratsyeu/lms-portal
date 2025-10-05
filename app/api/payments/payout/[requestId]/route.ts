@@ -6,7 +6,7 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { sentEmailByTemplate } from '@/actions/mailer/sent-email-by-template';
 import { DEFAULT_LOCALE } from '@/constants/locale';
 import { PayoutRequestStatus } from '@/constants/payments';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 import { createWebSocketNotification } from '@/lib/notifications';
 import { isOwner } from '@/lib/owner';

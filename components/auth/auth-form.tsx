@@ -26,7 +26,7 @@ export const AuthForm = ({ callbackUrl }: AuthFormProps) => {
   const pathname = usePathname();
 
   const { config } = useAppConfigStore((state) => ({ config: state.config }));
-  const { isBlockedNewLogin = false, providers = {} } = config?.auth ?? {};
+  const { allowNewUsers = false, providers = {} } = config?.auth ?? {};
 
   const [isDisabledButtons, setIsDisabledButtons] = useState(false);
   const [isSignUpFlow, setIsSignUpFlow] = useState(false);
@@ -52,7 +52,7 @@ export const AuthForm = ({ callbackUrl }: AuthFormProps) => {
         providers={providers}
         setIsDisabledButtons={setIsDisabledButtons}
       />
-      {!isBlockedNewLogin && (
+      {allowNewUsers && (
         <p className="text-sm text-muted-foreground text-center mt-4">
           {t(`${isSignUpFlow ? 'alreadyHaveAnAccount' : 'doNotHaveAnAccount'}`)}{' '}
           <Link
@@ -64,7 +64,7 @@ export const AuthForm = ({ callbackUrl }: AuthFormProps) => {
           </Link>
         </p>
       )}
-      {!isBlockedNewLogin && <TermsAndPrivacy />}
+      {allowNewUsers && <TermsAndPrivacy />}
     </>
   );
 };

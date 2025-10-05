@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { TEN_MINUTE_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { isOwner } from '@/lib/owner';
 
 export const GET = async (req: NextRequest) => {

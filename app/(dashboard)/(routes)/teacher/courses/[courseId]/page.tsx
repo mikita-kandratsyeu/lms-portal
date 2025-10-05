@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { Banner } from '@/components/common/banner';
 import { IconBadge } from '@/components/common/icon-badge';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 import { Actions } from './_components/actions';
 import { AdvancedOptionsForm } from './_components/form/advanced-options-form';

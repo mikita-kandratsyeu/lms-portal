@@ -17,8 +17,8 @@ export type GetAppConfig = {
     provider: string;
   }[];
   auth: {
-    isBlockedNewLogin: boolean;
-    isBlockingNewSubscriptions: boolean;
+    allowNewUsers: boolean;
+    allowNewUserSubscriptions: boolean;
     providers: Record<string, boolean>;
   };
   regional: {
@@ -47,8 +47,8 @@ export const getAppConfig = async (): Promise<GetAppConfig> => {
         },
       ],
       auth: {
-        isBlockedNewLogin: true,
-        isBlockingNewSubscriptions: true,
+        allowNewUsers: false,
+        allowNewUserSubscriptions: false,
         providers: {
           google: false,
           yandex: false,

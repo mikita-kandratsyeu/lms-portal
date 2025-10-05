@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { verifyUserEmail } from '@/actions/users/verify-user-email';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 import { AdvancedOptions } from './_components/advanced-options/advanced-options';
 import { ConnectedAccounts } from './_components/connected-accounts';

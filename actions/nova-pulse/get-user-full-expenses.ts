@@ -1,7 +1,7 @@
 'use server';
 
 import { DEFAULT_CURRENCY } from '@/constants/locale';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const getUserFullExpenses = async (userId: string) => {
   try {

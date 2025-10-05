@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { PayoutRequestStatus } from '@/constants/payments';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
 import { stripe } from '@/server/stripe';
 

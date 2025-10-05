@@ -9,7 +9,7 @@ import { getIsEmailConfirmed } from '@/actions/auth/get-is-email-confirmed';
 import { sentEmailByTemplate } from '@/actions/mailer/sent-email-by-template';
 import { getWelcomeDiscounts } from '@/actions/stripe/get-welcome-discounts';
 import { EMAIL_COURSE_PURCHASE_SUBJECT } from '@/constants/email-subject';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { getConvertedPrice, getScaledPrice } from '@/lib/format';
 import { getLocale } from '@/lib/locale';
 import { absoluteUrl } from '@/lib/utils';

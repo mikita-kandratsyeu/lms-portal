@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { ONE_DAY_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { stripe } from '@/server/stripe';
 
 export const getUserSubscription = async (userId = '', noCache = false) => {

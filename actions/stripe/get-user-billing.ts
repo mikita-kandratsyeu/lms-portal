@@ -3,7 +3,7 @@
 import { getUnixTime } from 'date-fns';
 
 import { DEFAULT_CURRENCY } from '@/constants/locale';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { stripe } from '@/server/stripe';
 
 export const getUserBilling = async (userId?: string) => {

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { DEFAULT_COUNTRY_CODE } from '@/constants/locale';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { absoluteUrl } from '@/lib/utils';
 import { stripe } from '@/server/stripe';
 

@@ -2,7 +2,7 @@
 
 import { getLocale } from 'next-intl/server';
 
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const getIsEmailConfirmed = async (userId: string) => {
   const locale = await getLocale();

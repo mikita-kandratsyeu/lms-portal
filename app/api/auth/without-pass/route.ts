@@ -6,7 +6,7 @@ import { sentEmailByTemplate } from '@/actions/mailer/sent-email-by-template';
 import { TEN_MINUTE_SEC } from '@/constants/common';
 import { OTP_LENGTH } from '@/constants/otp';
 import { fetchCachedData } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { getRandomInt, maskEmail } from '@/lib/utils';
 
 export const POST = async (req: NextRequest) => {

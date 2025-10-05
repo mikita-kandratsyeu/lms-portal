@@ -5,7 +5,7 @@ import { Course, Purchase, PurchaseDetails } from '@prisma/client';
 import { TEN_MINUTE_SEC } from '@/constants/common';
 import { DELAY_MS } from '@/constants/paginations';
 import { fetchCachedData } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { getBatchedItems, sleep } from '@/lib/utils';
 import { stripe } from '@/server/stripe';
 

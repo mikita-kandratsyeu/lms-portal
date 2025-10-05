@@ -5,10 +5,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 import { sentEmailByTemplate } from '@/actions/mailer/sent-email-by-template';
-import { EMAIL_COURSE_PURCHASE_SUBJECT } from '@/constants/email-subject';
 import { DEFAULT_LANGUAGE } from '@/constants/locale';
 import { removeValueFromMemoryCache } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { fetcher } from '@/lib/fetcher';
 import { isObject, isString } from '@/lib/guard';
 import { stripe } from '@/server/stripe';
@@ -132,8 +131,6 @@ export const POST = async (req: NextRequest) => {
           emails: [session?.metadata?.email ?? ''],
           locale,
           params: emailParams,
-          subject:
-            EMAIL_COURSE_PURCHASE_SUBJECT[locale as keyof typeof EMAIL_COURSE_PURCHASE_SUBJECT],
           template: 'course-purchase',
         });
       }

@@ -6,7 +6,7 @@ import Handlebars from 'handlebars';
 import { getEmailTemplate } from '@/actions/mailer/get-email-template';
 import { TIMESTAMP_EMAIL_TEMPLATE } from '@/constants/common';
 import { DEFAULT_LOCALE } from '@/constants/locale';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 
 import { getBrowser } from '../virtualization/getBrowser';

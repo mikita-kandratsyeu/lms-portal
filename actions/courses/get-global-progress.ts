@@ -1,7 +1,7 @@
 'use server';
 
 import { CHAPTER_XP } from '@/constants/courses';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const getGlobalProgress = async (userId?: string) => {
   if (!userId) {

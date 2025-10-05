@@ -2,7 +2,7 @@
 
 import { Attachment, Chapter } from '@prisma/client';
 
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { getImagePlaceHolder } from '@/lib/image';
 
 type GetChapter = {

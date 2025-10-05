@@ -2,7 +2,7 @@
 
 import { Category, Course } from '@prisma/client';
 
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { getImagePlaceHolder } from '@/lib/image';
 
 import { getProgress } from './get-progress';

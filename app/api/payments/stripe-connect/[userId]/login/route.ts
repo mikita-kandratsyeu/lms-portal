@@ -2,7 +2,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { stripe } from '@/server/stripe';
 
 export const POST = async (_: NextRequest, props: { params: Promise<{ userId: string }> }) => {

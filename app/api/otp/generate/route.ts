@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { authenticator } from 'otplib';
 import qrcode from 'qrcode';
 
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const POST = async (req: NextRequest) => {
   try {

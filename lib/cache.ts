@@ -1,11 +1,11 @@
-import { createClient, VercelKV } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import NodeCache from 'node-cache';
 
 const TTL_DEFAULT = 60;
 
 export const cacheProvider = (() => {
   if (process.env.NODE_ENV === 'production') {
-    return createClient({
+    return new Redis({
       automaticDeserialization: false,
       token: process.env.NEXT_PUBLIC_REDIS_REST_API_TOKEN as string,
       url: process.env.NEXT_PUBLIC_REDIS_REST_API_URL as string,
@@ -18,7 +18,7 @@ export const cacheProvider = (() => {
 })();
 
 export const setValueToMemoryCache = async (key: string, value: string, expires = TTL_DEFAULT) => {
-  if (cacheProvider instanceof VercelKV) {
+  if (cacheProvider instanceof Redis) {
     return cacheProvider.set(key, value, { ex: expires });
   }
 

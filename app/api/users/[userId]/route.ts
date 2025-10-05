@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { createCsmIssue } from '@/actions/csm/create-csm-issue';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
 import { stripe } from '@/server/stripe';
 

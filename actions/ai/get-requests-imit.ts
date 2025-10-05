@@ -6,7 +6,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 
 import { LIMIT_REQUESTS_PER_WEEK, REQUEST_STATUS } from '@/constants/ai';
 import { TIMESTAMP_REQUESTS_LIMIT_TEMPLATE } from '@/constants/common';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { getFormatLocale } from '@/lib/locale';
 
 import { getCurrentUser } from '../auth/get-current-user';

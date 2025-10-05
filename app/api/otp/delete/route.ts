@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { OTP_SECRET_SECURE } from '@/constants/otp';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const PATCH = async (req: NextRequest) => {
   try {

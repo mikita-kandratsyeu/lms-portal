@@ -3,7 +3,7 @@ import { Notification } from '@prisma/client';
 import { getUserNotifications } from '@/actions/users/get-user-notifications';
 import { pusher } from '@/server/pusher';
 
-import { db } from './db';
+import db from './db';
 
 type UserNotification = Awaited<ReturnType<typeof getUserNotifications>>['notifications'][number];
 type CreateWebSocketNotification = {
