@@ -3,7 +3,7 @@
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import { ResponseCreateParamsBase } from 'openai/resources/responses/responses.mjs';
 
-import { AI_PROVIDER, ChatCompletionRole } from '@/constants/ai';
+import { AI_PROVIDER, ChatCompletionRole } from '@/constants/ai/general';
 import { LocaleInfo } from '@/hooks/store/use-locale-store';
 
 import { getCurrentUser } from '../auth/get-current-user';

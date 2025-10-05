@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{lang}}">
   <head>
-    <title>Email</title>
+    <title>{{title}}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -41,12 +41,12 @@
       line-height: 1.6;
       color: #555555;
     }
-    .email-body-bottom {
+    .email-ignore-note {
         margin-top: 18px !important;
 		    font-size: 12px !important;
 		    color: #888888 !important;
     }
-    .confirm-button {
+    .analytics-button {
       display: inline-block;
       text-decoration: none;
       background-color: #6a0dad;
@@ -57,7 +57,7 @@
       font-weight: bold;
       margin-top: 20px;
     }
-    .confirm-button:hover {
+    .analytics-button:hover {
       background-color: #5a149d; 
     }
     .email-footer {
@@ -76,20 +76,18 @@
           src="https://nova-lms-portal.vercel.app/assets/logo.svg">
       </div>
       <div class="email-body">
-        <h1>Hello, {{username}}!</h1>
-        <p>
-          Thank you for registering at Nova Academy! To complete the process, please confirm your email by clicking the
-          button below.
-        </p>
-        <a href="{{verificationLink}}" class="confirm-button">
-          Confirm Email
+        <h1>{{greeting}}</h1>
+        <p>{{description}}</p>
+        <p><strong>{{idRequest}} </strong> {{payoutId}}</p>
+        <p><strong>{{amount}} </strong> {{totalAmount}}</p>
+        <p>{{gratitude}}</p>
+        <a href="{{analyticsLink}}" class="analytics-button">
+          {{analyticButton}}
         </a>
-        <p class="email-body-bottom">
-          If you did not register, please ignore this email.
-        </p>
+        <p class="email-ignore-note">{{ignoreNote}}</p>
       </div>
       <div class="email-footer">
-        <p>&#169; Nova Academy, {{year}}. All rights reserved.</p>
+        <p>&#169; Nova Academy, {{year}}. {{footerNote}}</p>
       </div>
     </div>
   </body>

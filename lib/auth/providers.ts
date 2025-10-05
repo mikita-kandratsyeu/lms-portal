@@ -12,7 +12,7 @@ import { getTranslations } from 'next-intl/server';
 import { UserRole } from '@/constants/auth';
 
 import { getValueFromMemoryCache, removeValueFromMemoryCache } from '../cache';
-import { db } from '../db';
+import db from '../db';
 
 export const providers = [
   CredentialsProvider({

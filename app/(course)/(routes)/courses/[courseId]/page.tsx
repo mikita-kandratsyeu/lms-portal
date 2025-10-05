@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 type CourseIdPageProps = {
   params: Promise<{ courseId: string }>;

@@ -2,7 +2,7 @@
 
 import OpenAI from 'openai';
 
-import { AI_PROVIDER } from '@/constants/ai';
+import { AI_PROVIDER } from '@/constants/ai/general';
 
 import { getAppConfig } from '../configs/get-app-config';
 

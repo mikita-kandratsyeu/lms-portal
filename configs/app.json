@@ -65,8 +65,8 @@
     }
   ],
   "auth": {
-    "isBlockedNewLogin": false,
-    "isBlockingNewSubscriptions": true,
+    "allowNewUsers": true,
+    "allowNewUserSubscriptions": false,
     "providers": {
       "github": true,
       "google": true,

@@ -6,7 +6,7 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getChatConversations } from '@/actions/chat/get-chat-conversations';
 import { getGlobalProgress } from '@/actions/courses/get-global-progress';
 import { getUserNotifications } from '@/actions/users/get-user-notifications';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { cn } from '@/lib/utils';
 
 import { ChatNavBar } from './_components/chat-navbar/chat-navbar';

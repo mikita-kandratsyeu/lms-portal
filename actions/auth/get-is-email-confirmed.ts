@@ -1,10 +1,12 @@
 'use server';
 
-import { getTranslations } from 'next-intl/server';
+import { getLocale } from 'next-intl/server';
 
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const getIsEmailConfirmed = async (userId: string) => {
+  const locale = await getLocale();
+
   const user = await db.user.findUnique({
     where: { id: userId },
     select: { isEmailConfirmed: true },
@@ -14,10 +16,12 @@ export const getIsEmailConfirmed = async (userId: string) => {
     return { success: true };
   }
 
-  const t = await getTranslations('email-notification.confirmation');
+  const translations = (await import(`/messages/email/${locale}.json`)).default[
+    'confirmation-email'
+  ];
 
   return {
     success: false,
-    message: t('warning'),
+    message: translations?.warning,
   };
 };

@@ -2,7 +2,7 @@
 
 import { TEN_MINUTE_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const getUpdatedUser = async (userId = '') => {
   const updatedUser = await fetchCachedData(

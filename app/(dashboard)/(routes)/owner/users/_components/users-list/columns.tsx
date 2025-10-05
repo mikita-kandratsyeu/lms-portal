@@ -2,17 +2,15 @@
 
 import { StripeSubscription, User, UserSettings } from '@prisma/client';
 import { Column, ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
 
 import { TextBadge } from '@/components/common/text-badge';
 import { DateColumn } from '@/components/data-table/columns/date-column';
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@/components/ui';
-import { TIMESTAMP_EMAIL_TEMPLATE } from '@/constants/common';
-import { fetcher } from '@/lib/fetcher';
 import { getFallbackName } from '@/lib/utils';
 
 import { ColumnActions } from './column-actions';
+import { RoleActions } from './role-actions';
 
 type UserWithSubscription = User & {
   settings: UserSettings | null;
@@ -100,51 +98,15 @@ export const columns: ColumnDef<UserWithSubscription>[] = [
     cell: ({ row }) => {
       const { id, role } = row.original;
 
-      return <ColumnActions userId={id} role={role} />;
+      return <RoleActions userId={id} role={role} />;
     },
   },
   {
-    id: 'extraInfo',
-    header: () => <span>Service info</span>,
-    cell: async ({ row }) => {
-      const handleGetInfo = async () => {
-        try {
-          const response = await fetcher.post(`/api/users/${row.original.id}/report`, {
-            headers: { 'Content-Type': 'application/json' },
-          });
+    id: 'columnActions',
+    cell: ({ row }) => {
+      const { id } = row.original;
 
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Failed to generate PDF: ${response.status} ${errorText}`);
-          }
-
-          const blob = await response.blob();
-
-          const url = window.URL.createObjectURL(blob);
-
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          a.download = `${row.original.email}_${format(new Date(), TIMESTAMP_EMAIL_TEMPLATE)}_report.pdf`;
-
-          document.body.appendChild(a);
-          a.click();
-
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-
-          return blob;
-        } catch (error) {
-          console.error('Error generating PDF:', error);
-          throw error;
-        }
-      };
-
-      return (
-        <Button variant="outline" onClick={handleGetInfo}>
-          Get
-        </Button>
-      );
+      return <ColumnActions userId={id} />;
     },
   },
 ];

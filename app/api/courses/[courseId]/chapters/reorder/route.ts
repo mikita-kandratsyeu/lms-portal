@@ -2,7 +2,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const PUT = async (req: NextRequest, props: { params: Promise<{ courseId: string }> }) => {
   const { courseId } = await props.params;

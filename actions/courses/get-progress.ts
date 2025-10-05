@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 type GetProgress = { userId: string; courseId: string; includeValidChapters?: boolean };
 

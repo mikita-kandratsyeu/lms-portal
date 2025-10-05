@@ -7,7 +7,7 @@ import { Conversation } from '@/actions/chat/get-chat-conversations';
 import { getChatInitial } from '@/actions/chat/get-chat-initial';
 import { ChatSkeleton } from '@/components/loaders/chat-skeleton';
 import { useToast } from '@/components/ui/use-toast';
-import { ChatCompletionRole } from '@/constants/ai';
+import { ChatCompletionRole } from '@/constants/ai/general';
 import { CONVERSATION_ACTION } from '@/constants/chat';
 import { useAppConfigStore } from '@/hooks/store/use-app-config-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';

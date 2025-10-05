@@ -2,7 +2,7 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getGlobalProgress } from '@/actions/courses/get-global-progress';
 import { getUserNotifications } from '@/actions/users/get-user-notifications';
 import { Footer } from '@/components/footer/footer';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 import { NavBar } from '../../components/navbar/navbar';
 import { SideBar } from '../../components/sidebar/sidebar';

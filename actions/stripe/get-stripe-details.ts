@@ -3,7 +3,7 @@
 import { PayoutRequest, User } from '@prisma/client';
 
 import { PAGE_SIZES } from '@/constants/paginations';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { stripe } from '@/server/stripe';
 
 type PayoutRequests = (Omit<PayoutRequest, 'connectAccount' | 'connectAccountId'> & {

@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { OAUTH } from '@/constants/auth';
 import { ONE_HOUR_SEC, ONE_MIN_MS } from '@/constants/common';
 import { setValueToMemoryCache } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
 import { absoluteUrl, encrypt } from '@/lib/utils';
 import { stripe } from '@/server/stripe';
@@ -62,12 +62,11 @@ export const loginUser = async (
     };
   }
 
-  if (config?.auth?.isBlockedNewLogin) {
+  if (!config?.auth?.allowNewUsers) {
     return null;
   }
 
   const t = await getTranslations('auth');
-  const emailT = await getTranslations('email-notification.confirmation');
 
   const user = await db.user.upsert({
     where: {
@@ -129,7 +128,6 @@ export const loginUser = async (
     await sentEmailByTemplate({
       emails: [user?.email ?? ''],
       params: emailParams,
-      subject: emailT('subject'),
       template: 'confirmation-email',
     });
   }

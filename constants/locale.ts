@@ -5,7 +5,7 @@ export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_LANGUAGE = 'en';
 export const DEFAULT_TIMEZONE = 'Etc/UTC';
 
-export const ALLOWED_CURRENCY = ['USD', 'EUR', 'BYN', 'GBP', 'PLN'];
+export const ALLOWED_CURRENCY = ['USD', 'EUR', 'BYN', 'GBP', 'PLN', 'RUB'];
 export const CURRENCY_BY_COUNTRY = {
   BY: 'BYN',
   DE: 'EUR',

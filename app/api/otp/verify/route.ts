@@ -6,7 +6,7 @@ import { authenticator } from 'otplib';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { ONE_DAY_MS } from '@/constants/common';
 import { OTP_SECRET_SECURE } from '@/constants/otp';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const POST = async (req: NextRequest) => {
   try {

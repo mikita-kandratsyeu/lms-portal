@@ -4,7 +4,7 @@ import groupBy from 'lodash.groupby';
 
 import { CHAPTER_XP } from '@/constants/courses';
 import { DELAY_MS } from '@/constants/paginations';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { isOwner as isOwnerFunc } from '@/lib/owner';
 import { getBatchedItems, sleep } from '@/lib/utils';
 

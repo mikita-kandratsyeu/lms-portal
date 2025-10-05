@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowDown, LoaderPinwheel } from 'lucide-react';
+import { ArrowDown, Loader } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, {
   createContext,
@@ -14,7 +14,7 @@ import React, {
 import ScrollToBottom, { useScrollToBottom, useSticky } from 'react-scroll-to-bottom';
 
 import { Button } from '@/components/ui';
-import { ChatCompletionRole } from '@/constants/ai';
+import { ChatCompletionRole } from '@/constants/ai/general';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { cn } from '@/lib/utils';
@@ -82,10 +82,9 @@ const ChatBodyComponent = ({
   const t = useTranslations('chat.body');
 
   const { user } = useCurrentUser();
-  const { chatMessages, conversationId, isImageGeneration } = useChatStore((state) => ({
+  const { chatMessages, conversationId } = useChatStore((state) => ({
     chatMessages: state.chatMessages,
     conversationId: state.conversationId,
-    isImageGeneration: state.isImageGeneration,
   }));
 
   const [sticky, setSticky] = useState(false);
@@ -144,10 +143,12 @@ const ChatBodyComponent = ({
               })}
 
               <div className="flex flex-1 text-base md:px-5 lg:px-1 xl:px-5 mx-auto gap-3 md:max-w-3xl lg:max-w-[40rem] xl:max-w-4xl px-4 first:mt-4 last:mb-6">
-                {!assistantMessage && isSubmitting && isImageGeneration && (
-                  <div className="flex gap-x-2 items-center justify-center w-full mt-4">
-                    <LoaderPinwheel className="h-4 w-4 animate-spin text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">{t('image-loading')}</p>
+                {!assistantMessage && isSubmitting && (
+                  <div className="flex gap-x-2 items-center px-6 w-full mt-4">
+                    <Loader className="h-4 w-4 animate-spin text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground animate-pulse">
+                      {t('image-loading')}
+                    </p>
                   </div>
                 )}
                 {assistantMessage && (

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { deleteFiles } from '@/actions/uploadthing/delete-files';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const DELETE = async (
   { nextUrl: { searchParams } }: NextRequest,

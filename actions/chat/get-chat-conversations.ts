@@ -2,7 +2,7 @@
 
 import { getTranslations } from 'next-intl/server';
 
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 import { getCurrentUser } from '../auth/get-current-user';
 

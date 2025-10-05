@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getCourses } from '@/actions/courses/get-courses';
 import { SearchInput } from '@/components/common/search-input';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 import { Categories } from '../_components/category/categories';
 import { CoursesList } from '../_components/courses/courses-list';

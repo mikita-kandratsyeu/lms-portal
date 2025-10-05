@@ -4,7 +4,7 @@ import { PayoutRequest, PurchaseDetails, User } from '@prisma/client';
 import groupBy from 'lodash.groupby';
 
 import { PayoutRequestStatus } from '@/constants/payments';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 import { getStripeConnect, getStripeConnectPayouts } from './get-stripe-connect';
 import { getStripeData } from './get-stripe-data';

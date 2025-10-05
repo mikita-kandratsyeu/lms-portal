@@ -1,7 +1,7 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { DataTable } from '@/components/data-table/data-table';
 import { PAGE_SIZES } from '@/constants/paginations';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 import { columns } from './_components/data-table/columns';
 

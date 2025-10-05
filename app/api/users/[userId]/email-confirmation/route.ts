@@ -1,6 +1,5 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
-import { getTranslations } from 'next-intl/server';
 import { v4 as uuidv4 } from 'uuid';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
@@ -19,8 +18,6 @@ export const POST = async (_: NextRequest, props: { params: Promise<{ userId: st
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    const t = await getTranslations('email-notification.confirmation');
-
     const secret = uuidv4();
     const key = `${userId}-email_confirmation_token`;
 
@@ -36,7 +33,6 @@ export const POST = async (_: NextRequest, props: { params: Promise<{ userId: st
     const sentEmailMessage = await sentEmailByTemplate({
       emails: [user?.email ?? ''],
       params: emailParams,
-      subject: t('subject'),
       template: 'confirmation-email',
     });
 

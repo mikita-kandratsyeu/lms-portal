@@ -2,7 +2,7 @@ import { Chapter, Course, UserProgress } from '@prisma/client';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { ProgressBar } from '@/components/common/progress-bar';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 import { CourseSideBarItem } from './course-sidebar-item';
 

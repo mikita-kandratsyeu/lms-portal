@@ -4,9 +4,10 @@ import { format } from 'date-fns';
 import Handlebars from 'handlebars';
 
 import { getEmailTemplate } from '@/actions/mailer/get-email-template';
-import { TIMESTAMP_EMAIL_TEMPLATE } from '@/constants/common';
+import { ONE_HOUR_SEC, TIMESTAMP_EMAIL_TEMPLATE } from '@/constants/common';
 import { DEFAULT_LOCALE } from '@/constants/locale';
-import { db } from '@/lib/db';
+import { fetchCachedData } from '@/lib/cache';
+import db from '@/lib/db';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 
 import { getBrowser } from '../virtualization/getBrowser';
@@ -40,72 +41,85 @@ Handlebars.registerHelper('formatCurrency', function (amount, currency) {
 });
 
 export const getUserReportBuffer = async (userId: string) => {
-  const user = await db.user.findUnique({
-    where: { id: userId },
-    include: {
-      conversations: {
-        select: {
-          id: true,
-          title: true,
-          createdAt: true,
-          messages: {
+  const data = await fetchCachedData(
+    `user-report_${userId}`,
+    async () => {
+      const user = await db.user.findUnique({
+        where: { id: userId },
+        include: {
+          conversations: {
             select: {
-              feedback: true,
+              id: true,
+              title: true,
               createdAt: true,
-              model: true,
-              role: true,
-              imageGeneration: true,
-              content: true,
+              messages: {
+                select: {
+                  feedback: true,
+                  createdAt: true,
+                  model: true,
+                  role: true,
+                  imageGeneration: true,
+                  content: true,
+                },
+              },
             },
           },
-        },
-      },
-      csmIssues: {
-        select: {
-          id: true,
-          createdAt: true,
-          description: true,
-          email: true,
-          status: true,
-          name: true,
-          attachments: {
+          csmIssues: {
             select: {
               id: true,
               createdAt: true,
+              description: true,
+              email: true,
+              status: true,
               name: true,
-              url: true,
+              attachments: {
+                select: {
+                  id: true,
+                  createdAt: true,
+                  name: true,
+                  url: true,
+                },
+              },
             },
           },
+          oauth: true,
+          stripeSubscription: true,
+          copilotRequestLimit: true,
         },
-      },
-      oauth: true,
-      stripeSubscription: true,
-      copilotRequestLimit: true,
+      });
+
+      const purchases = await db.purchase.findMany({
+        where: { userId },
+        include: {
+          details: true,
+        },
+      });
+
+      const courseIds = purchases.map((item) => item.courseId);
+      const courses = await db.course.findMany({ where: { id: { in: courseIds } } });
+
+      const userData = {
+        ...user,
+        purchases: purchases.map((item) => {
+          const courseTitle = courses.find((i) => i.id === item.courseId)?.title;
+          return { ...item, courseTitle };
+        }),
+      };
+
+      const aiSummary = await getUserSummary(userData);
+
+      return {
+        aiSummary,
+        userData,
+      };
     },
-  });
+    ONE_HOUR_SEC,
+  );
 
-  const purchases = await db.purchase.findMany({
-    where: { userId },
-    include: {
-      details: true,
-    },
-  });
-
-  const courseIds = purchases.map((item) => item.courseId);
-  const courses = await db.course.findMany({ where: { id: { in: courseIds } } });
-
-  const userData = {
-    ...user,
-    purchases: purchases.map((item) => {
-      const courseTitle = courses.find((i) => i.id === item.courseId)?.title;
-      return { ...item, courseTitle };
-    }),
-  };
-
-  const aiSummary = await getUserSummary(userData);
-  const templateContent = await getEmailTemplate('user-report', 'en');
-
+  const templateContent = await getEmailTemplate('user-report');
   const template = Handlebars.compile(templateContent);
+
+  const { aiSummary, userData } = data;
 
   const htmlContent = template({
     ...userData,

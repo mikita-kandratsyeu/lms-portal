@@ -6,7 +6,8 @@ import dynamic from 'next/dynamic';
 import { useLocale } from 'next-intl';
 import { useMemo, useState } from 'react';
 
-import { ChatCompletionRole, USER_TRANSLATE_PROMPT } from '@/constants/ai';
+import { ChatCompletionRole } from '@/constants/ai/general';
+import { USER_TRANSLATE_PROMPT } from '@/constants/ai/prompts';
 import { useCurrentUser } from '@/hooks/use-current-user';
 
 import { StreamText } from '../ai/stream-text';

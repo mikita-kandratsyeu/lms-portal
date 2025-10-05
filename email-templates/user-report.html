@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detailed User Activity Report">
+    <meta name="author" content="AI Generated">
+    <title>{{title}}</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 10mm 10mm 15mm;
+        @bottom-right {
+          content: "Page " counter(page) " of " counter(pages);
+          font-size: 8pt;
+          color: #666;
+          font-family: Arial, sans-serif;
+        }
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 10pt;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+      }
+
+      .container {
+        margin: 0 auto;
+        padding: 0 5mm;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+      }
+
+      .report-title {
+        font-size: 20pt;
+        font-weight: bold;
+        margin: 0;
+      }
+
+      .header-info {
+        text-align: right;
+        font-size: 9pt;
+        color: #555;
+        line-height: 1.2;
+      }
+
+      .user-info {
+        margin-bottom: 30px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        background: #f9f9f9;
+        border-radius: 5px;
+      }
+
+      .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+        object-fit: cover;
+        margin-right: 15px;
+        border: 1px solid #bbb;
+      }
+
+      .user-details {
+        flex: 1;
+      }
+
+      .user-name {
+        font-size: 16pt;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .user-meta {
+        font-size: 10pt;
+        color: #555;
+        margin: 5px 0;
+      }
+
+      .summary-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin: 30px 0;
+      }
+
+      .metric {
+        text-align: center;
+        padding: 15px;
+        border: 1px solid #ddd;
+        background: #f8f9fa;
+        border-radius: 5px;
+      }
+
+      .metric-value {
+        font-size: 14pt;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .metric-title {
+        font-size: 10pt;
+        color: #666;
+        text-transform: uppercase;
+      }
+
+      .ai-summary {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        background: #f4f6f8;
+        border-radius: 5px;
+      }
+
+      .ai-summary-title {
+        font-size: 14pt;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .ai-summary-content {
+        font-size: 10pt;
+        color: #444;
+        text-align: justify;
+      }
+
+      .section {
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        font-size: 14pt;
+        font-weight: bold;
+        border-bottom: 2px solid #ccc;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+      }
+
+      .item {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        background: #fff;
+      }
+
+      .item-title {
+        font-size: 12pt;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .item-meta {
+        font-size: 10pt;
+        margin: 5px 0;
+      }
+
+      .footer {
+        text-align: center;
+        font-size: 8pt;
+        color: #777;
+        border-top: 1px solid #aaa;
+        padding-top: 15px;
+        margin-top: 30px;
+      }
+
+      @media print {
+        .section {
+          page-break-before: always;
+        }
+
+        .item {
+          page-break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+      <!-- Header Section -->
+      <div class="header">
+        <div class="report-title">User Activity Report</div>
+        <div class="header-info">
+          <p>AI Generated</p>
+          <p>{{currentDate}}</p>
+          <p>Confidential Document</p>
+        </div>
+      </div>
+
+      <!-- User Information Section -->
+      <div class="user-info">
+        {{#if pictureUrl}}
+        <img src="{{pictureUrl}}" alt="User's Profile Picture" class="avatar">
+        {{/if}}
+        <div class="user-details">
+          <p class="user-name">{{name}}</p>
+          <p class="user-meta"><strong>ID:</strong> {{id}}</p>
+          <p class="user-meta"><strong>Email:</strong> {{email}}</p>
+          <p class="user-meta"><strong>Role:</strong> {{role}}</p>
+          <p class="user-meta"><strong>Registration Date:</strong> {{formatDate createdAt}}</p>
+          <p class="user-meta"><strong>Last Profile Update:</strong> {{formatDate updatedAt}}</p>
+        </div>
+      </div>
+
+      <!-- AI Summary Section -->
+      <div class="ai-summary">
+        <h2 class="ai-summary-title">AI Generated Summary</h2>
+        <p class="ai-summary-content">{{aiSummary}}</p>
+      </div>
+
+      <!-- Summary Metrics Section -->
+      <div class="summary-metrics">
+        <div class="metric">
+          <div class="metric-value">{{conversations.length}}</div>
+          <div class="metric-title">Chat conversations</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">{{csmIssues.length}}</div>
+          <div class="metric-title">CSM issues</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">{{purchases.length}}</div>
+          <div class="metric-title">Purchases</div>
+        </div>
+      </div>
+
+      <!-- Details Section -->
+      <div class="section">
+        <h2 class="section-title">AI Chat conversations</h2>
+        {{#each conversations}}
+        <div class="item">
+          <h3 class="item-title">{{title}}</h3>
+          {{#each messages}}
+          <p class="item-meta"><strong>{{role}}:</strong> {{content}}</p>
+          <p class="item-meta"><small><strong>Date:</strong> {{formatDate createdAt}}</small></p>
+          {{/each}}
+        </div>
+        {{/each}}
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">CSM issues</h2>
+        {{#each csmIssues}}
+        <div class="item">
+          <h3 class="item-title">{{name}}</h3>
+          <p class="item-meta"><strong>Status:</strong> {{status}}</p>
+          <p class="item-meta"><strong>Description:</strong> {{description}}</p>
+          <p class="item-meta"><strong>Created At:</strong> {{formatDate createdAt}}</p>
+          {{#if attachments.length}}
+          <p class="item-meta"><strong>Attachments:</strong></p>
+          <ul>
+            {{#each attachments}}
+            <li>{{name}} (<a href="{{url}}" target="_blank">View</a>)</li>
+            {{/each}}
+          </ul>
+          {{/if}}
+        </div>
+        {{/each}}
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Purchases</h2>
+        {{#each purchases}}
+        <div class="item">
+          <h3 class="item-title">{{courseTitle}}</h3>
+          <p class="item-meta"><strong>Price:</strong> {{formatCurrency details.price details.currency}}</p>
+          <p class="item-meta"><strong>Purchase Date:</strong> {{formatDate createdAt}}</p>
+          <p class="item-meta"><strong>Location:</strong> {{details.city}}, {{details.country}}</p>
+        </div>
+        {{/each}}
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">OAUTH connections</h2>
+        {{#each oauth}}
+        <div class="item">
+          <p class="item-meta"><strong>Provider:</strong> {{provider}}</p>
+          <p class="item-meta"><strong>Linked Email:</strong> {{email}}</p>
+          <p class="item-meta"><strong>Connected At:</strong> {{formatDate createdAt}}</p>
+          <p class="item-meta"><strong>Last Updated:</strong> {{formatDate updatedAt}}</p>
+        </div>
+        {{/each}}
+      </div>
+
+      <!-- Footer Section -->
+      <div class="footer">
+        <p>Confidential User Activity Report. Generated on {{currentDate}}.</p>
+        <p>&copy; {{year}} Nova Academy. All Rights Reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -5,7 +5,7 @@ import Stripe from 'stripe';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { PromoStatus } from '@/constants/payments';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
 import { isOwner } from '@/lib/owner';
 import { stripe } from '@/server/stripe';

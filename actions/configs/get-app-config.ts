@@ -17,9 +17,12 @@ export type GetAppConfig = {
     provider: string;
   }[];
   auth: {
-    isBlockedNewLogin: boolean;
-    isBlockingNewSubscriptions: boolean;
+    allowNewUsers: boolean;
+    allowNewUserSubscriptions: boolean;
     providers: Record<string, boolean>;
+  };
+  regional: {
+    availableCountryCodes: string[];
   };
   features: { christmas: boolean; testMode: boolean };
 };
@@ -44,8 +47,8 @@ export const getAppConfig = async (): Promise<GetAppConfig> => {
         },
       ],
       auth: {
-        isBlockedNewLogin: true,
-        isBlockingNewSubscriptions: true,
+        allowNewUsers: false,
+        allowNewUserSubscriptions: false,
         providers: {
           google: false,
           yandex: false,
@@ -56,6 +59,7 @@ export const getAppConfig = async (): Promise<GetAppConfig> => {
           github: true,
         },
       },
+      regional: { availableCountryCodes: [] },
       features: {
         christmas: false,
         testMode: false,

@@ -1,20 +1,17 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
-import { getLocale, getTranslations } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 
 import { sentEmailByTemplate } from '@/actions/mailer/sent-email-by-template';
 import { TEN_MINUTE_SEC } from '@/constants/common';
 import { OTP_LENGTH } from '@/constants/otp';
 import { fetchCachedData } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { getRandomInt, maskEmail } from '@/lib/utils';
 
 export const POST = async (req: NextRequest) => {
   try {
-    const locale = await getLocale();
-
     const t = await getTranslations('auth-form');
-    const emailT = await getTranslations('email-notification.login-code');
 
     const { email } = await req.json();
 
@@ -47,8 +44,6 @@ export const POST = async (req: NextRequest) => {
     if (isNewCreateKey) {
       sentEmail = await sentEmailByTemplate({
         emails: [email],
-        locale,
-        subject: emailT('subject', { code: cachedData.otp }),
         template: 'login-code',
         params: {
           code: cachedData.otp,

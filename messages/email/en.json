@@ -1,0 +1,39 @@
+{
+  "confirmation-email": {
+    "confirmEmail": "Confirm Email",
+    "description": "Thank you for registering at Nova Academy! To complete the process, please confirm your email by clicking the button below.",
+    "footerNote": "All rights reserved.",
+    "greeting": "Hello, {username}!",
+    "ignoreNote": "If you did not register, please ignore this email.",
+    "subject": "Email Confirmation",
+    "warning": "Confirm your email in the settings to enable the ability to make purchases."
+  },
+  "course-purchase": {
+    "footerNote": "All rights reserved.",
+    "courseButton": "Access the Course",
+    "description": "Thank you for your purchase and trust in Nova Academy! We hope this investment brings you great benefits.",
+    "greeting": "Hello, {username}!",
+    "ignoreNote": "If you have any questions, please feel free to contact our support team.",
+    "purchaseNote": "We are delighted to inform you that you have successfully purchased the course or workshop: ",
+    "subject": "Thank you for your purchase! Access to your course is now open 🔑"
+  },
+  "teacher-payout": {
+    "amount": "Payout amount: ",
+    "analyticButton": "View Analytics",
+    "description": "We are pleased to inform you that your withdrawal request has been processed. The funds have been successfully transferred to your account.",
+    "footerNote": "All rights reserved.",
+    "gratitude": "Thank you for your contribution and professionalism in working with the Nova Academy platform!",
+    "greeting": "Hello, {teacherName}!",
+    "idRequest": "Payment request ID: ",
+    "ignoreNote": "In the analytics section, you can check the status of your account and payment details.",
+    "subject": "Payment Confirmed 💸"
+  },
+  "login-code": {
+    "subject": "{{code}} - Your Nova Academy login code",
+    "description": "Enter this code to continue logging in without a password:",
+    "footerNote": "All rights reserved.",
+    "greeting": "Hey!",
+    "ignoreNote": "If you didn't attempt to log in, you can safely ignore this email.",
+    "validityNote": "This code is valid for 20 minutes and can only be used once."
+  }
+}

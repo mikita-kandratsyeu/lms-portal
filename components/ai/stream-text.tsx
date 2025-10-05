@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { BsStars } from 'react-icons/bs';
 
 import { useToast } from '@/components/ui/use-toast';
-import { SYSTEM_COURSE_PROMPT, SYSTEM_TRANSLATE_PROMPT } from '@/constants/ai';
+import { SYSTEM_COURSE_PROMPT, SYSTEM_TRANSLATE_PROMPT } from '@/constants/ai/prompts';
 import { TEN_MINUTE_SEC } from '@/constants/common';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { getValueFromMemoryCache, setValueToMemoryCache } from '@/lib/cache';

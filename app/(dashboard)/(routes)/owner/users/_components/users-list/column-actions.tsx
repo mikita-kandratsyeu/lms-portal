@@ -1,54 +1,66 @@
 'use client';
 
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { format } from 'date-fns/format';
+import { FileText, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
+import { BiLoaderAlt } from 'react-icons/bi';
 
 import {
   Button,
-  Command,
-  CommandGroup,
-  CommandItem,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
-import { UserRole } from '@/constants/auth';
+import { TIMESTAMP_EMAIL_TEMPLATE } from '@/constants/common';
 import { fetcher } from '@/lib/fetcher';
-import { capitalize, cn } from '@/lib/utils';
 
 type ColumnActionsProps = {
   userId: string;
-  role: string;
 };
 
-export const ColumnActions = ({ userId, role }: ColumnActionsProps) => {
+export const ColumnActions = ({ userId }: ColumnActionsProps) => {
   const { toast } = useToast();
   const router = useRouter();
-  const [pending, startTransition] = useTransition();
 
   const [isFetching, setIsFetching] = useState(false);
 
-  const [open, setOpen] = useState(false);
-  const [currentRole, setCurrentRole] = useState(role);
-
-  const handleAction = async (newRole: string) => {
+  const handleAction = (action: 'pdf') => async () => {
     try {
       setIsFetching(true);
 
-      await fetcher.patch(`/api/users/${userId}`, {
-        body: {
-          notification: {
-            title: 'Profile changes',
-            body: `Your user role has been updated with "${capitalize(role)}" on "${capitalize(newRole)}". The changes will take effect in 10 minutes.`,
-          },
-          role: newRole,
-        },
-      });
+      if (action === 'pdf') {
+        const response = await fetcher.post(`/api/users/${userId}/report`, {
+          headers: { 'Content-Type': 'application/json' },
+        });
 
-      toast({ title: 'User updated' });
-      startTransition(() => router.refresh());
+        if (!response.ok) {
+          const errorText = await response.text();
+
+          throw new Error(`Failed to generate PDF: ${response.status} ${errorText}`);
+        }
+
+        const blob = await response.blob();
+
+        const url = globalThis.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `${userId}_${format(new Date(), TIMESTAMP_EMAIL_TEMPLATE)}_report.pdf`;
+
+        document.body.appendChild(a);
+        a.click();
+
+        globalThis.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        return blob;
+      }
+
+      router.refresh();
     } catch (error) {
       toast({ isError: true });
     } finally {
@@ -57,41 +69,24 @@ export const ColumnActions = ({ userId, role }: ColumnActionsProps) => {
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          aria-expanded={open}
-          className="w-[180px] justify-between truncate"
-          disabled={isFetching || pending}
-        >
-          {capitalize(role)}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className="h-4 w-8 p-0" variant="ghost" disabled={isFetching}>
+          {isFetching && <BiLoaderAlt className="h-4 w-4 animate-spin" />}
+          {!isFetching && (
+            <>
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </>
+          )}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandGroup>
-            {Object.values(UserRole).map((role) => (
-              <CommandItem
-                key={role}
-                value={role}
-                onSelect={async (newRole) => {
-                  setOpen(false);
-
-                  await handleAction(newRole);
-                  setCurrentRole(newRole);
-                }}
-              >
-                <Check
-                  className={cn('mr-2 h-4 w-4', currentRole === role ? 'opacity-100' : 'opacity-0')}
-                />
-                {capitalize(role)}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem className="hover:cursor-pointer" onClick={handleAction('pdf')}>
+          <FileText className="h-4 w-4  mr-2" />
+          Get PDF
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };

@@ -6,7 +6,7 @@ import { ONE_MINUTE_SEC } from '@/constants/common';
 import { DEFAULT_LOCALE } from '@/constants/locale';
 import { DELAY_MS, PAGE_SIZES } from '@/constants/paginations';
 import { fetchCachedData } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 import { getBatchedItems, sleep } from '@/lib/utils';
 import { stripe } from '@/server/stripe';

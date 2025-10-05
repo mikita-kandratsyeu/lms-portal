@@ -11,7 +11,7 @@ import {
 } from '@prisma/client';
 
 import { PAGE_SIZES } from '@/constants/paginations';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 type GetUsers = {
   pageIndex?: string | number;

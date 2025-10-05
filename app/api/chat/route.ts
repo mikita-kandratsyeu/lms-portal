@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ChatCompletionRole as ChatRole } from 'openai/resources/index.mjs';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { ChatCompletionRole } from '@/constants/ai';
-import { db } from '@/lib/db';
+import { ChatCompletionRole } from '@/constants/ai/general';
+import db from '@/lib/db';
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -29,7 +29,7 @@ export const POST = async (req: NextRequest) => {
           conversationId,
           model,
           role,
-          // Necessary for the correct order of messages in DB
+          // WARNING: Necessary for the correct order of messages in DB
           createdAt: new Date(
             role === ChatCompletionRole.USER ? Date.now() : addMilliseconds(Date.now(), 10),
           ),

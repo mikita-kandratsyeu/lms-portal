@@ -249,7 +249,8 @@
     },
     "card": {
       "chapter": "{ amount, plural, =1 {# chapter} other {# chapters}}",
-      "premium": "Premium"
+      "new": "New",
+      "topSale": "Top sales"
     },
     "info-card": {
       "completed": "Completed",
@@ -314,7 +315,7 @@
   "chat": {
     "body": {
       "greeting": "Hello there!",
-      "image-loading": "Creating something interesting. A moment of patience...",
+      "image-loading": "I'm preparing an answer, wait a bit...",
       "title": "What can I assist you with today?"
     },
     "conversation": {
@@ -534,21 +535,6 @@
       "afternoon": "Good afternoon, { name } 👋",
       "evening": "Good evening, { name } 👋",
       "morning": "Good morning, { name } 👋"
-    }
-  },
-  "email-notification": {
-    "confirmation": {
-      "subject": "Email Confirmation",
-      "warning": "Confirm your email in the settings to enable the ability to make purchases."
-    },
-    "course-purchase": {
-      "subject": "Thank you for your purchase! Access to your course is now open 🔑"
-    },
-    "payout": {
-      "subject": "The payment has been confirmed 💸"
-    },
-    "login-code": {
-      "subject": "{code} - Your Nova Academy login code"
     }
   }
 }

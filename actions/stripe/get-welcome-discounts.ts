@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 export const getWelcomeDiscounts = async (userId: string) => {
   const purchases = await db.purchase.count({ where: { userId } });

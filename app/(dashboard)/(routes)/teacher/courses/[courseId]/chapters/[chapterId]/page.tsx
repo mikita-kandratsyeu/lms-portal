@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { Banner } from '@/components/common/banner';
 import { IconBadge } from '@/components/common/icon-badge';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 import { ChapterActions } from './_components/chapter-actions';
 import { ChapterAccessForm } from './_components/form/chapter-access-form';

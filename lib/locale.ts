@@ -3,6 +3,8 @@ import { be, enUS, ru } from 'date-fns/locale';
 
 import { LOCALE } from '@/constants/locale';
 
+import { isArray, isObject, isString } from './guard';
+
 export const getLocale = (locale?: string | null, restrictedLocales: string[] = []) => {
   if (!locale) {
     return LOCALE.EN;
@@ -37,3 +39,21 @@ export const getFormatLocale = (language: string) => {
       return enUS;
   }
 };
+
+export function replaceMessagePlaceholders<T>(obj: T, params: Record<string, string>): unknown {
+  if (isString(obj)) {
+    return obj.replace(/{(\w+)}/g, (_, key) => params[key] || `{${key}}`);
+  }
+
+  if (isArray<T>(obj)) {
+    return obj.map((item) => replaceMessagePlaceholders(item, params));
+  }
+
+  if (isObject(obj) && obj !== null) {
+    return Object.fromEntries(
+      Object.entries(obj).map(([key, value]) => [key, replaceMessagePlaceholders(value, params)]),
+    );
+  }
+
+  return obj;
+}

@@ -28,6 +28,18 @@ const nextConfig = {
       { protocol: 'https', hostname: 'utfs.io' },
     ],
   },
+  webpack: (config) => {
+    return {
+      ...config,
+      resolve: {
+        ...config.resolve,
+        alias: {
+          ...config.resolve.alias,
+          handlebars: 'handlebars/dist/handlebars.js',
+        },
+      },
+    };
+  },
 };
 
 export default withPlaiceholder(withNextIntl(nextConfig));

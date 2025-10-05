@@ -6,6 +6,6 @@ export enum CONVERSATION_ACTION {
   NEW = 'new',
 }
 
-export const LIMIT_CONVERSATIONS = 10;
+export const LIMIT_CONVERSATIONS = 50;
 export const LIMIT_CHAT_INPUT = 8000;
 export const LIMIT_CONVERSATION_TITLE = 100;

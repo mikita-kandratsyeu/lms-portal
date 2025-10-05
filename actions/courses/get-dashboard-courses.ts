@@ -3,7 +3,7 @@
 import { Category, Chapter, Course, UserProgress } from '@prisma/client';
 
 import { FilterStatus } from '@/constants/courses';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { getImagePlaceHolder } from '@/lib/image';
 
 import { getProgress } from './get-progress';

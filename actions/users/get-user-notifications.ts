@@ -3,7 +3,7 @@
 import { Notification } from '@prisma/client';
 
 import { PAGE_SIZES } from '@/constants/paginations';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 
 type GetUserNotifications = {
   pageIndex?: string | number;

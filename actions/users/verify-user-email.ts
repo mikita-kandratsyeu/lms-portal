@@ -3,7 +3,7 @@
 import { User, UserSettings } from '@prisma/client';
 
 import { getValueFromMemoryCache, removeValueFromMemoryCache } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { decrypt } from '@/lib/utils';
 
 type VerifyUserEmail = {

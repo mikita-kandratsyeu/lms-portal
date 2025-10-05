@@ -10,7 +10,7 @@ import { getAppConfig } from '@/actions/configs/get-app-config';
 import { getWelcomeDiscounts } from '@/actions/stripe/get-welcome-discounts';
 import { TEN_MINUTE_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
-import { db } from '@/lib/db';
+import db from '@/lib/db';
 import { getConvertedPrice, getScaledPrice } from '@/lib/format';
 import { getLocale } from '@/lib/locale';
 import { absoluteUrl } from '@/lib/utils';
@@ -73,7 +73,7 @@ export const POST = async (req: NextRequest) => {
 
     const t = await getTranslations('subscription');
 
-    if (config?.auth?.isBlockingNewSubscriptions) {
+    if (!config?.auth?.allowNewUserSubscriptions) {
       return NextResponse.json({ message: t('block') }, { status: StatusCodes.FORBIDDEN });
     }
 
