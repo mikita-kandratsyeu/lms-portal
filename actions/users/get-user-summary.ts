@@ -3,7 +3,8 @@
 import { getLocale } from 'next-intl/server';
 import { ChatCompletionUserMessageParam } from 'openai/resources/index.mjs';
 
-import { ChatCompletionRole, USER_SUMMARY } from '@/constants/ai';
+import { ChatCompletionRole } from '@/constants/ai/general';
+import { USER_SUMMARY } from '@/constants/ai/prompts';
 import { extractValidJson } from '@/lib/utils';
 
 import { generateCompletion } from '../ai/generate-completion';
