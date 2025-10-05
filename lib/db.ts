@@ -6,7 +6,6 @@ import { PrismaClient } from '@prisma/client';
 import ws from 'ws';
 
 neonConfig.webSocketConstructor = ws;
-
 neonConfig.poolQueryViaFetch = true;
 
 declare global {
