@@ -46,9 +46,9 @@ export const getCourses = async ({ categoryIds, hasSubscription, title, userId }
     courses.map(async (course) => {
       const imagePlaceholder = await getImagePlaceHolder(course.imageUrl!);
 
-      const purchasesUserIds = course.purchases.map((purchase) => purchase.userId);
+      const purchasesUserIds = course.purchases.filter((purchase) => purchase.userId === userId);
 
-      if (!userId || !purchasesUserIds.includes(userId)) {
+      if (!userId || !purchasesUserIds.length) {
         return {
           ...course,
           imagePlaceholder: imagePlaceholder.base64,
