@@ -8,7 +8,7 @@
   },
   "auth": {
     "welcomeBonus": {
-      "body": "Hi! Thank you for registering on our platform. A 5% promo code has already been applied for the first purchase.",
+      "body": "Thank you for signing up! A nice bonus is already waiting for you — a 5% promo code will automatically apply to your first purchase.",
       "title": "Welcome bonus"
     }
   },
