@@ -15,7 +15,7 @@ export const getLoginQuote = async () => {
 
   try {
     const response = await fetchCachedData(
-      `login-quote-[${locale}]`,
+      `login-quote_${locale}`,
       async () => {
         const response = await generateCompletion({
           instructions:

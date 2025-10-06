@@ -2,7 +2,7 @@
 
 import { getLocale } from 'next-intl/server';
 
-import { ONE_DAY_SEC } from '@/constants/common';
+import { ONE_HOUR_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
 
 import { getGlobalProgress } from '../courses/get-global-progress';
@@ -31,7 +31,7 @@ export const getNovaPulse = async (
 
   try {
     const response = await fetchCachedData(
-      `nova-pulse-[${locale}]::${userId}`,
+      `nova-pulse_${locale}_${userId}`,
       async () => {
         const globalProgress = await getGlobalProgress(userId);
         const totalSpentMoney = await getUserFullExpenses(userId);
@@ -46,7 +46,7 @@ export const getNovaPulse = async (
           xp: globalProgress?.total ?? 0,
         };
       },
-      ONE_DAY_SEC,
+      ONE_HOUR_SEC,
     );
 
     return response;

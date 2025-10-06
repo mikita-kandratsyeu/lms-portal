@@ -48,7 +48,7 @@ export const getStripeData = async ({ purchases, userId }: GetStripeData) => {
         const currentBatchCharges = await Promise.all(
           batch.map(async (pi) => {
             const data = await fetchCachedData(
-              `${userId}-${pi}`,
+              `${userId}_${pi}`,
               async () => {
                 const res = await stripe.charges.list({ payment_intent: pi as string });
 
@@ -82,7 +82,7 @@ export const getStripeData = async ({ purchases, userId }: GetStripeData) => {
       const currentBatchTransactions = await Promise.all(
         batch.map(async (sc: any) => {
           const data = await fetchCachedData(
-            `${userId}-${sc.id}`,
+            `${userId}_${sc.id}`,
             async () => {
               const res = await stripe.balanceTransactions.retrieve(sc.balance_transaction);
 

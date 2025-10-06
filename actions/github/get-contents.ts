@@ -18,7 +18,7 @@ export const getGithubContents = async ({
 }: GetGithubContents): Promise<string> => {
   try {
     const githubContents = await fetchCachedData(
-      `github-contents-[path:${path}]`,
+      `github-contents_path:${path}`,
       async () => {
         const res = await fetcher.get(
           `https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/contents/${path}?per_page=${pageSize}&page=${pageIndex}`,

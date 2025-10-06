@@ -25,7 +25,7 @@ export const POST = async (req: NextRequest) => {
 
     let isNewCreateKey = false;
 
-    const key = `${user.id}-auth_without_pass_token`;
+    const key = `auth-without-pass-token_${user.id}`;
     const cachedData = await fetchCachedData(
       key,
       async () => {

@@ -14,7 +14,7 @@ export const getChatInitial = async () => {
 
   try {
     const introMessages = await fetchCachedData(
-      `chat-initial-[${locale}]`,
+      `chat-initial_${locale}`,
       async () => {
         const response = await generateCompletion({
           instructions:

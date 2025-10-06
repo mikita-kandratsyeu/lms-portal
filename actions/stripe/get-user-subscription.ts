@@ -60,7 +60,7 @@ export const getUserSubscription = async (userId = '', noCache = false) => {
 
     const subscription = noCache
       ? await callback()
-      : await fetchCachedData(`user-subscription-[${userId}]`, callback, ONE_DAY_SEC);
+      : await fetchCachedData(`user-subscription_${userId}`, callback, ONE_DAY_SEC);
 
     return subscription;
   } catch (error: any) {

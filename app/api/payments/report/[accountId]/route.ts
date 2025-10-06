@@ -20,7 +20,7 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ accountI
 
     const { startDate, endDate, reportType } = await req.json();
 
-    const cacheKey = `${accountId}-${user.userId}-${reportType}`;
+    const cacheKey = `${accountId}_${reportType}_${user.userId}`;
 
     const cachedReportRun = await fetchCachedData(
       cacheKey,

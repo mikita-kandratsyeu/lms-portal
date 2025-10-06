@@ -125,7 +125,7 @@ export const getStripePromo = async ({
         const currentBatchStripePromos = await Promise.all(
           batch.map(async (code) => {
             const data = await fetchCachedData(
-              `${code.id}-${code.stripePromoId}`,
+              `${code.id}_${code.stripePromoId}`,
               async () => {
                 const res = await stripe.promotionCodes.retrieve(code.stripePromoId);
 
@@ -154,7 +154,7 @@ export const getStripePromo = async ({
         const currentBatchStripeCustomers = await Promise.all(
           batch.map(async (cs) => {
             const data = await fetchCachedData(
-              `${cs.stripeCustomerId}`,
+              `stripe-customers_${cs.stripeCustomerId}`,
               async () => {
                 const res = await stripe.customers.retrieve(cs.stripeCustomerId);
 

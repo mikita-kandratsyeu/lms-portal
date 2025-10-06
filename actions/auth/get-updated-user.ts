@@ -6,7 +6,7 @@ import db from '@/lib/db';
 
 export const getUpdatedUser = async (userId = '') => {
   const updatedUser = await fetchCachedData(
-    `updated-user-[${userId}]`,
+    `updated-user_${userId}`,
     async () => {
       const updatedUser = await db.user.findUnique({
         where: { id: userId },

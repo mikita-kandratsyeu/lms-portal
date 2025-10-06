@@ -30,7 +30,7 @@ export const UserHoverCard = ({ children, userId }: UserHoverCardProps) => {
   const fetchUserData = async () => {
     try {
       const userData = await fetchCachedData(
-        `user-hover-card::[${userId}]`,
+        `user-hover-card_${userId}`,
         async () => {
           const response = await fetcher.get(`/api/users/${userId}`, {
             responseType: 'json',
