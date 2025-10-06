@@ -31,10 +31,6 @@ export const getSummary = async <T>(data: T) => {
     );
     const model = response.model ?? '';
 
-    console.log({
-      text: response.completion.output_text ?? response.completion.choices[0].message.content,
-    });
-
     return {
       body: generatedSummary?.body ?? '',
       color: generatedSummary?.color ?? '',
