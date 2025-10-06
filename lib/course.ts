@@ -8,6 +8,7 @@ type Course = Awaited<ReturnType<typeof getCourses>>[0];
 
 export const getGroupedCourseList = (courses: Course[], specificFilter = false) => {
   const topPurchaseAmount = Math.max(...courses.map((course) => course._count.purchases ?? 0));
+
   const topCourseIds = courses
     .filter((course) => course._count.purchases === topPurchaseAmount)
     .map((course) => course.id)
@@ -15,8 +16,6 @@ export const getGroupedCourseList = (courses: Course[], specificFilter = false) 
   const newCourseIds = courses
     .filter((course) => {
       const difference = differenceInSeconds(course.updatedAt, Date.now());
-
-      console.log(Math.abs(difference));
 
       return Math.abs(difference) <= ONE_WEEK_SEC;
     })
