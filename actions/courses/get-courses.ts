@@ -39,7 +39,7 @@ export const getCourses = async ({ categoryIds, hasSubscription, title, userId }
       category: true,
       purchases: { select: { userId: true } },
     },
-    orderBy: [{ isPremium: 'desc' }, { createdAt: 'desc' }],
+    orderBy: [{ isPremium: 'desc' }, { updatedAt: 'desc' }],
   });
 
   const courseWithProgress: CourseWithProgressWithCategory[] = await Promise.all(

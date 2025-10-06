@@ -21,9 +21,6 @@ export type GetAppConfig = {
     allowNewUserSubscriptions: boolean;
     providers: Record<string, boolean>;
   };
-  regional: {
-    availableCountryCodes: string[];
-  };
   features: { christmas: boolean; testMode: boolean };
 };
 
@@ -59,7 +56,6 @@ export const getAppConfig = async (): Promise<GetAppConfig> => {
           github: true,
         },
       },
-      regional: { availableCountryCodes: [] },
       features: {
         christmas: false,
         testMode: false,

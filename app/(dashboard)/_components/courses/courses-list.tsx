@@ -28,8 +28,11 @@ export const CoursesList = ({ fees, items, specificFilter }: CoursesListProps) =
     <>
       {Object.keys(groupedCourseList).map((key, index) => {
         const items = groupedCourseList[key];
+
         const isPremium = items[0].isPremium;
-        const title = isPremium ? t(`labels.${key}`) : items[0].category?.name;
+
+        const useKey = specificFilter && isPremium;
+        const title = useKey ? t(`labels.${key}`) : items[0].category?.name;
 
         return (
           <div key={key}>

@@ -40,6 +40,7 @@ export const getDashboardCourses = async ({
         },
       },
     },
+    orderBy: { course: { updatedAt: 'desc' } },
   });
 
   if (!purchasedCourses) {

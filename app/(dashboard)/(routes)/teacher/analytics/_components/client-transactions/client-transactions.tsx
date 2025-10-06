@@ -13,7 +13,7 @@ export const ClientTransactions = ({ transactions }: ClientTransactionsProps) =>
   return (
     <div className="flex flex-col gap-4 mt-4">
       <div className="flex flex-col gap-1">
-        <p className="font-medium text-xl">Client Transactions</p>
+        <p className="font-medium text-xl">History</p>
       </div>
       <DataTable
         columns={columns}
