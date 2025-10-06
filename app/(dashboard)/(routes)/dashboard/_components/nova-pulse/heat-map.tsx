@@ -15,6 +15,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui';
 import { formatTimeInSeconds } from '@/lib/date';
+import { isArray } from '@/lib/guard';
 import { capitalize } from '@/lib/utils';
 
 type HeatmapProps = {
@@ -76,30 +77,36 @@ export const Heatmap = ({ data, summary }: HeatmapProps) => {
       <CardDescription className="text-xs my-4">
         <div className="flex flex-col gap-y-2">
           <p>{summary.body}</p>
-          <div>
-            <h4 className="text-sm font-semibold mb-2">{t('strengths')}</h4>
-            <ul className="list-disc list-inside space-y-1">
-              {summary.strengths.map((strength, index) => (
-                <li key={index}>{strength}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold mb-2">{t('weaknesses')}</h4>
-            <ul className="list-disc list-inside space-y-1">
-              {summary.weaknesses.map((weakness, index) => (
-                <li key={index}>{weakness}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold mb-2">{t('recommendations')}</h4>
-            <ul className="list-disc list-inside space-y-1">
-              {summary.recommendations.map((recommendation, index) => (
-                <li key={index}>{recommendation}</li>
-              ))}
-            </ul>
-          </div>
+          {isArray(summary.strengths) && (
+            <div>
+              <h4 className="text-sm font-semibold mb-2">{t('strengths')}</h4>
+              <ul className="list-disc list-inside space-y-1">
+                {summary.strengths.map((strength, index) => (
+                  <li key={index}>{strength}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {isArray(summary.weaknesses) && (
+            <div>
+              <h4 className="text-sm font-semibold mb-2">{t('weaknesses')}</h4>
+              <ul className="list-disc list-inside space-y-1">
+                {summary.weaknesses.map((weakness, index) => (
+                  <li key={index}>{weakness}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {isArray(summary.recommendations) && (
+            <div>
+              <h4 className="text-sm font-semibold mb-2">{t('recommendations')}</h4>
+              <ul className="list-disc list-inside space-y-1">
+                {summary.recommendations.map((recommendation, index) => (
+                  <li key={index}>{recommendation}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </CardDescription>
       <CardContent className="m-0 p-0">
