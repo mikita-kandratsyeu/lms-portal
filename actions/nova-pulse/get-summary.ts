@@ -35,7 +35,10 @@ export const getSummary = async <T>(data: T) => {
       body: generatedSummary?.body ?? '',
       color: generatedSummary?.color ?? '',
       model,
+      recommendations: generatedSummary?.recommendations ?? '',
+      strengths: generatedSummary?.strengths ?? '',
       title: generatedSummary?.title ?? '',
+      weaknesses: generatedSummary?.weaknesses ?? '',
     };
   } catch (error) {
     console.error('[GET_SUMMARY_ACTION]', error);
@@ -44,7 +47,10 @@ export const getSummary = async <T>(data: T) => {
       body: '',
       color: '',
       model: '',
+      recommendations: [],
+      strengths: [],
       title: '',
+      weaknesses: [],
     };
   }
 };

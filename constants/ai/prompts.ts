@@ -1,18 +1,33 @@
 import { TEXTAREA_MAX_LENGTH } from '../courses';
 
 export const SYSTEM_COURSE_PROMPT =
-  'You are the creator of various courses on a special learning platform.';
-export const SYSTEM_TRANSLATE_PROMPT = 'You are a translator';
+  'You are an expert course creator and educator on a specialized learning platform.';
+
+export const SYSTEM_TRANSLATE_PROMPT =
+  'You are a professional translator with deep knowledge of languages and cultures.';
 
 export const USER_COURSE_SHORT_DESCRIPTION_PROMPT = (originalDescription: string) =>
-  `Course short description: "${originalDescription}".\nUsing the course description provided above, generate a new one in other words. Maximum output symbols - ${Math.round(TEXTAREA_MAX_LENGTH / 1.4)}`;
+  `Rewrite the following course description using different words: "${originalDescription}". Ensure the new description is concise and engaging. Limit the output to ${Math.round(TEXTAREA_MAX_LENGTH / 1.4)} characters.`;
+
 export const USER_CHAPTER_DESCRIPTION_PROMPT = (originalDescription: string) =>
-  `Chapter description: "${originalDescription}".\nUsing the chapter description provided above, generate a new one in other words. Provide only answer without HTML tags.`;
+  `Rewrite the following chapter description using different wording: "${originalDescription}". Provide the new description in plain text without any formatting or HTML tags.`;
+
 export const USER_TRANSLATE_PROMPT = (originalText: string, targetLanguage: string) =>
-  `You have the following text: "${originalText}". Translate it in ${targetLanguage}. Provide only answer without quotation marks`;
+  `Translate the following text into ${targetLanguage}: "${originalText}". Provide only the translated text, without quotation marks or additional comments.`;
 
 export const NOVA_PULSE_SUMMARY = <T>(data: T, locale: string) =>
-  `Based on this data - ${JSON.stringify(data)}, make a conclusion about my academic performance. Return the response in JSON format - {title: "Short title which describe my result", color: "color which related to title. Available colors for select - green, lime, red, yellow.", body: "Conclusion on academic performance in 2-3 sentences"}. Translate it in ${locale}.`;
+  `Based on the provided data - ${JSON.stringify(data)}, analyze my academic performance and provide a detailed summary. Return the response in JSON format with the following structure:
+
+{
+  "title": "A concise title that reflects the overall conclusion about my academic performance (e.g., 'Excellent Performance', 'Average Level', 'Needs Improvement')",
+  "color": "A color that corresponds to the title. Choose one from: green (excellent), lime (good), yellow (satisfactory), red (poor).",
+  "strengths": "A list of key strengths based on the data (e.g., 'high grades in mathematics', 'consistent homework completion').",
+  "weaknesses": "A list of major areas for improvement (e.g., 'low performance in literature', 'frequent absences').",
+  "recommendations": "A brief list of actionable recommendations (no more than 2-3 points) to help improve academic performance.",
+  "body": "A general conclusion about academic performance in 2-3 sentences, summarizing the analysis."
+}
+
+Translate the entire response into ${locale}.`;
 
 export const USER_SUMMARY = <T>(
   data: T,

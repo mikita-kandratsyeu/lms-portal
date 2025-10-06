@@ -525,7 +525,10 @@
       "tooltip": {
         "xp": "Gained { xp } XP",
         "time": "Spent { time }"
-      }
+      },
+      "recommendations": "Recommendations",
+      "weaknesses": "Weaknesses",
+      "strengths": "Strengths"
     },
     "about": {
       "title": "Nova Pulse",

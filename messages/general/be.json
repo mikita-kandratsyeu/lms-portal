@@ -525,7 +525,10 @@
       "tooltip": {
         "xp": "Gained { xp } XP",
         "time": "Spent { time }"
-      }
+      },
+      "recommendations": "Рэкамендацыі",
+      "weaknesses": "Слабыя бакі",
+      "strengths": "Моцныя бакі"
     },
     "about": {
       "title": "Nova Pulse",

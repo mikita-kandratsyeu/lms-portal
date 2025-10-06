@@ -524,7 +524,10 @@
       "tooltip": {
         "xp": "Набрано { xp } XP",
         "time": "Потрачено { time }"
-      }
+      },
+      "recommendations": "Рекомендации",
+      "weaknesses": "Слабые стороны",
+      "strengths": "Сильные стороны"
     },
     "about": {
       "title": "Nova Pulse",

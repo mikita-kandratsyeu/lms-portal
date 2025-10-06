@@ -17,7 +17,10 @@ export const getNovaPulse = async (
     body: string;
     color: string;
     model: string;
+    recommendations: string[];
+    strengths: string[];
     title: string;
+    weaknesses: string[];
   };
   heatMap: Awaited<ReturnType<typeof getTimeMetric>>['heatMap'];
   totalSpentMoney: Awaited<ReturnType<typeof getUserFullExpenses>>;
@@ -56,7 +59,10 @@ export const getNovaPulse = async (
         body: '',
         color: '',
         model: '',
+        recommendations: [],
+        strengths: [],
         title: '',
+        weaknesses: [],
       },
       totalSpentMoney: [],
       totalSpentTimeInSec: 0,
