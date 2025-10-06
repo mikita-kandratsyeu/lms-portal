@@ -8,7 +8,7 @@ import { getImagePlaceHolder } from '@/lib/image';
 import { getProgress } from './get-progress';
 
 type CourseWithProgressWithCategory = Course & {
-  _count: { chapters: number; purchases?: number };
+  _count: { allPurchases?: number; chapters: number; purchases?: number };
   category: Category | null;
   imagePlaceholder: string;
   price: number | null;
@@ -33,12 +33,11 @@ export const getCourses = async ({ categoryIds, hasSubscription, title, userId }
     include: {
       _count: {
         select: {
-          ...(userId && { purchases: { where: { userId } } }),
           chapters: { where: { isPublished: true } },
-          purchases: true,
         },
       },
       category: true,
+      purchases: { select: { userId: true } },
     },
     orderBy: [{ isPremium: 'desc' }, { createdAt: 'desc' }],
   });
@@ -47,17 +46,33 @@ export const getCourses = async ({ categoryIds, hasSubscription, title, userId }
     courses.map(async (course) => {
       const imagePlaceholder = await getImagePlaceHolder(course.imageUrl!);
 
-      if (!course?._count.purchases || !userId) {
+      const purchasesUserIds = course.purchases.map((purchase) => purchase.userId);
+
+      if (!userId || !purchasesUserIds.includes(userId)) {
         return {
           ...course,
           imagePlaceholder: imagePlaceholder.base64,
           progress: null,
+          _count: {
+            ...course._count,
+            allPurchases: course.purchases.length,
+            purchases: purchasesUserIds.length,
+          },
         };
       }
 
       const { progressPercentage } = await getProgress({ userId, courseId: course.id });
 
-      return { ...course, imagePlaceholder: imagePlaceholder.base64, progress: progressPercentage };
+      return {
+        ...course,
+        imagePlaceholder: imagePlaceholder.base64,
+        progress: progressPercentage,
+        _count: {
+          ...course._count,
+          allPurchases: course.purchases.length,
+          purchases: purchasesUserIds.length,
+        },
+      };
     }),
   );
 

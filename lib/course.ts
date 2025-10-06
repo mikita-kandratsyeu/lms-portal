@@ -7,19 +7,31 @@ import { CourseLevel } from '@/constants/courses';
 type Course = Awaited<ReturnType<typeof getCourses>>[0];
 
 export const getGroupedCourseList = (courses: Course[], specificFilter = false) => {
-  const topPurchaseAmount = Math.max(...courses.map((course) => course._count.purchases ?? 0));
+  const topCourseIds: string[] = [];
+  const newCourseIds: string[] = [];
 
-  const topCourseIds = courses
-    .filter((course) => course._count.purchases === topPurchaseAmount)
-    .map((course) => course.id)
-    .slice(0, 3);
-  const newCourseIds = courses
-    .filter((course) => {
-      const difference = differenceInSeconds(course.updatedAt, Date.now());
+  if (specificFilter) {
+    const topPurchaseAmount = Math.max(
+      ...courses.map((course) => course._count?.allPurchases ?? 0),
+    );
 
-      return Math.abs(difference) <= ONE_WEEK_SEC;
-    })
-    .map((course) => course.id);
+    topCourseIds.push(
+      ...courses
+        .filter((course) => course._count?.allPurchases === topPurchaseAmount)
+        .map((course) => course.id)
+        .slice(0, 3),
+    );
+
+    newCourseIds.push(
+      ...courses
+        .filter((course) => {
+          const difference = differenceInSeconds(course.updatedAt, Date.now());
+
+          return Math.abs(difference) <= ONE_WEEK_SEC;
+        })
+        .map((course) => course.id),
+    );
+  }
 
   const groupedCourseList = courses.reduce<Record<string, Course[]>>((grouped, course) => {
     const categoryId =
