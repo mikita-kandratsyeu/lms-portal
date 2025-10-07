@@ -67,7 +67,7 @@ export const PATCH = async (
         isActive: isActive ?? false,
         isOnlyAuth: isOnlyAuth ?? false,
       },
-      select: { isActive: true, expireAt: true, isOnlyAuth: true },
+      select: { id: true, isActive: true, expireAt: true, isOnlyAuth: true },
     });
 
     return NextResponse.json(updatedSharedConversation);

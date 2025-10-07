@@ -138,7 +138,7 @@ export const CredentialsFrom = ({
             });
         }
       } catch (error) {
-        console.log({ error });
+        console.error({ error });
         toast({ isError: true });
       } finally {
         setIsDisabledButtons?.(false);

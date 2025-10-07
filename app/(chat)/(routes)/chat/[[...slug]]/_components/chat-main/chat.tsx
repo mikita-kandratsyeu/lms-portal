@@ -75,23 +75,28 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
     if (conversations.length) {
       const chatMessages = getChatMessages(conversations);
 
+      if (isShared) {
+        setConversationId(conversations[0].id);
+      }
+
       setCurrentModel(currentModel || TEXT_MODELS?.[0]?.value || '');
       setCurrentModelLabel(currentModelLabel || TEXT_MODELS?.[0]?.label || '');
       setChatMessages(chatMessages);
       setHasSearch(hasSearch || TEXT_MODELS?.[0]?.hasSearch || false);
     }
   }, [
+    TEXT_MODELS,
     conversations,
     currentModel,
     currentModelLabel,
-    TEXT_MODELS,
+    hasSearch,
+    isEmbed,
+    isShared,
+    setChatMessages,
     setConversationId,
     setCurrentModel,
     setCurrentModelLabel,
-    setChatMessages,
     setHasSearch,
-    hasSearch,
-    isEmbed,
   ]);
 
   const saveLastMessages = useCallback(
