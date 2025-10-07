@@ -16,8 +16,8 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogPortal,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { useCurrentUser } from '@/hooks/use-current-user';
@@ -39,8 +39,9 @@ import {
 import { useToast } from '../ui/use-toast';
 
 type CsmModalProps = {
-  categories: CsmCategory[];
-  children: React.ReactNode;
+  categories?: CsmCategory[];
+  open: boolean;
+  setOpen: (value: boolean) => void;
 };
 
 const formSchema = z.object({
@@ -50,7 +51,7 @@ const formSchema = z.object({
   files: z.array(z.object({ url: z.string(), name: z.string() })),
 });
 
-export const CsmModal = ({ categories, children }: CsmModalProps) => {
+export const CsmModal = ({ categories = [], open, setOpen }: CsmModalProps) => {
   const t = useTranslations('csm-modal');
 
   const { user } = useCurrentUser();
@@ -68,7 +69,6 @@ export const CsmModal = ({ categories, children }: CsmModalProps) => {
     },
   });
 
-  const [open, setOpen] = useState(false);
   const [files, setFiles] = useState<{ id: string; url: string; name: string }[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -93,140 +93,143 @@ export const CsmModal = ({ categories, children }: CsmModalProps) => {
 
       toast({ isError: true });
     } finally {
+      form.reset({ categoryId: '', description: '', files: [] });
+
+      setFiles([]);
       setIsEditing(false);
       setOpen(false);
-      setFiles([]);
-
-      form.reset({ categoryId: '', description: '', files: [] });
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[525px] sm:max-h-[625px] overflow-auto max-w-max sm:h-auto h-full sm:w-auto w-full flex flex-col justify-start pt-6">
-        <DialogHeader>
-          <DialogTitle>{t('title')}</DialogTitle>
-          <DialogDescription>{t('body')}</DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form className="space-y-4 mt-4" onSubmit={form.handleSubmit(handleSubmit)}>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <Input
-                    {...field}
-                    {...(user?.email && { value: user.email })}
-                    disabled={isSubmitting || Boolean(user?.userId)}
-                    placeholder={t('enterEmail')}
-                  />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="text-start">
-                        <SelectValue placeholder={t('selectReason')} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {sortedCategories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          <div className="flex flex-col">
-                            <span className="font-medium">{t(`categories.${category.name}`)}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                  <FormControl>
-                    <Editor {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="files"
-              render={() => (
-                <>
-                  <div className="font-medium flex items-center justify-between">
-                    {t('attachments')}
-                    <Button onClick={handleToggleEdit} variant="outline" size="sm" type="button">
-                      {isEditing && <>{t('cancel')}</>}
-                      {!isEditing && (
-                        <>
-                          <Paperclip className="h-4 w-4 mr-2" />
-                          {t('attach')}
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                  {!isEditing && (
-                    <>
-                      {files.length > 0 ? (
-                        <div className="space-y-2 mt-4">
-                          {files.map((file) => (
-                            <FileDownload
-                              key={file.id}
-                              fileName={file.name}
-                              onFileRemove={() => {
-                                setFiles((prev) => prev.filter((pr) => pr.id !== file.id));
-                              }}
-                              url={file.url}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-sm mt-2 text-neutral-500 italic text-center">
-                          {t('notFound')}
-                        </p>
-                      )}
-                    </>
-                  )}
-                  {isEditing && (
-                    <FileUpload
-                      endpoint="csmAttachments"
-                      onBegin={() => setIsUploading(true)}
-                      onChange={(files) => {
-                        if (files?.length) {
-                          setFiles(files.map((file) => ({ id: uuidv4(), ...file })));
-                          setIsEditing(false);
-                          setIsUploading(false);
-                        }
-                      }}
+      <DialogPortal>
+        <DialogContent className="sm:max-w-[525px] sm:max-h-[625px] overflow-auto max-w-max sm:h-auto h-full sm:w-auto w-full flex flex-col justify-start pt-6">
+          <DialogHeader>
+            <DialogTitle>{t('title')}</DialogTitle>
+            <DialogDescription>{t('body')}</DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form className="space-y-4 mt-4" onSubmit={form.handleSubmit(handleSubmit)}>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <Input
+                      {...field}
+                      {...(user?.email && { value: user.email })}
+                      disabled={isSubmitting || Boolean(user?.userId)}
+                      placeholder={t('enterEmail')}
                     />
-                  )}
-                </>
-              )}
-            />
-            <DialogFooter>
-              <Button
-                disabled={!isValid || isSubmitting || isUploading}
-                isLoading={isSubmitting}
-                type="submit"
-              >
-                {t('submit')}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="text-start">
+                          <SelectValue placeholder={t('selectReason')} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {sortedCategories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            <div className="flex flex-col">
+                              <span className="font-medium">
+                                {t(`categories.${category.name}`)}
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <Editor {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="files"
+                render={() => (
+                  <>
+                    <div className="font-medium flex items-center justify-between">
+                      {t('attachments')}
+                      <Button onClick={handleToggleEdit} variant="outline" size="sm" type="button">
+                        {isEditing && <>{t('cancel')}</>}
+                        {!isEditing && (
+                          <>
+                            <Paperclip className="h-4 w-4 mr-2" />
+                            {t('attach')}
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                    {!isEditing && (
+                      <>
+                        {files.length > 0 ? (
+                          <div className="space-y-2 mt-4">
+                            {files.map((file) => (
+                              <FileDownload
+                                key={file.id}
+                                fileName={file.name}
+                                onFileRemove={() => {
+                                  setFiles((prev) => prev.filter((pr) => pr.id !== file.id));
+                                }}
+                                url={file.url}
+                              />
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-sm mt-2 text-neutral-500 italic text-center">
+                            {t('notFound')}
+                          </p>
+                        )}
+                      </>
+                    )}
+                    {isEditing && (
+                      <FileUpload
+                        endpoint="csmAttachments"
+                        onBegin={() => setIsUploading(true)}
+                        onChange={(files) => {
+                          if (files?.length) {
+                            setFiles(files.map((file) => ({ id: uuidv4(), ...file })));
+                            setIsEditing(false);
+                            setIsUploading(false);
+                          }
+                        }}
+                      />
+                    )}
+                  </>
+                )}
+              />
+              <DialogFooter>
+                <Button
+                  disabled={!isValid || isSubmitting || isUploading}
+                  isLoading={isSubmitting}
+                  type="submit"
+                >
+                  {t('submit')}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </DialogPortal>
     </Dialog>
   );
 };

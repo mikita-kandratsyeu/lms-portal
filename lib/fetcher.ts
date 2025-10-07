@@ -89,9 +89,14 @@ class Fetcher {
     return fetch(url, fetchOptions);
   };
 
-  async delete(url: string) {
-    return fetch(url, { method: 'DELETE' });
-  }
+  delete: FetchMethod = async (url: string, options) => {
+    const fetchOptions = {
+      method: 'DELETE',
+      headers: options?.headers,
+    };
+
+    return fetch(url, fetchOptions);
+  };
 }
 
 export const fetcher = new Fetcher();

@@ -7,6 +7,7 @@ import {
   Landmark,
   Layout,
   List,
+  Logs,
   LucideIcon,
   Rss,
   Settings2,
@@ -105,6 +106,12 @@ const paymentsRoutes = [
     isProtected: true,
     label: 'users',
     icon: Users,
+  },
+  {
+    href: '/owner/csm',
+    isProtected: true,
+    label: 'csm',
+    icon: Logs,
   },
 ];
 
