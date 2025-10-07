@@ -3,6 +3,7 @@
 import { format, parseISO } from 'date-fns';
 
 import { CHAPTER_XP } from '@/constants/courses';
+import { isString } from '@/lib/guard';
 
 import { getDashboardCourses } from '../courses/get-dashboard-courses';
 
@@ -23,40 +24,51 @@ export const getTimeMetric = async (userId: string) => {
         const chapter = allChapters.find((c) => c.id === progress.chapterId);
         if (!chapter) return acc;
 
-        const date =
-          typeof progress.updatedAt === 'string'
-            ? parseISO(progress.updatedAt)
-            : progress.updatedAt;
+        const course = courses.filterCourses.find((course) => course.id === chapter.courseId);
+
+        const date = isString(progress.updatedAt)
+          ? parseISO(progress.updatedAt)
+          : progress.updatedAt;
         const dateKey = format(date, 'yyyy-MM');
 
         if (!acc[dateKey]) {
           acc[dateKey] = {
+            amountOfChapters: 0,
             chapters: [],
-            count: 0,
-            date,
             totalSpentTimeInSec: 0,
+            courses: [],
+            date,
             xp: 0,
           };
         }
 
-        acc[dateKey].count += 1;
+        acc[dateKey].amountOfChapters += 1;
         acc[dateKey].totalSpentTimeInSec += chapter.durationSec ?? 0;
         acc[dateKey].xp += CHAPTER_XP;
         acc[dateKey].chapters.push({
           id: chapter.id,
           title: chapter.title,
-          description: chapter.description,
         });
+        acc[dateKey].courses = [
+          ...acc[dateKey].courses,
+          {
+            chapterIds: course?.chapters.map((item) => item.id) ?? [],
+            description: course?.description ?? '',
+            id: course?.id ?? '',
+            title: course?.title ?? '',
+          },
+        ].filter((course, index, self) => self.findIndex((c) => c.id === course.id) === index);
 
         return acc;
       },
       {} as Record<
         string,
         {
-          chapters: { id: string; title: string; description: string | null }[];
-          count: number;
-          date: Date;
+          amountOfChapters: number;
+          chapters: { id: string; title: string }[];
           totalSpentTimeInSec: number;
+          courses: { id: string; chapterIds: string[]; description: string; title: string }[];
+          date: Date;
           xp: number;
         }
       >,
