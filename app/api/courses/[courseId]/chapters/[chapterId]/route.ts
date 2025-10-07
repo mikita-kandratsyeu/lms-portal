@@ -2,7 +2,6 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { deleteFiles } from '@/actions/uploadthing/delete-files';
 import db from '@/lib/db';
 
 export const DELETE = async (
@@ -42,13 +41,7 @@ export const DELETE = async (
       });
 
       if (existingMuxData) {
-        const fileName = existingMuxData?.videoUrl?.split('/').pop();
-
         await db.muxData.delete({ where: { id: existingMuxData.id } });
-
-        if (fileName) {
-          await deleteFiles([fileName]);
-        }
       }
     }
 
@@ -113,13 +106,7 @@ export const PATCH = async (
       });
 
       if (existingMuxData) {
-        const fileName = existingMuxData?.videoUrl?.split('/').pop();
-
         await db.muxData.delete({ where: { id: existingMuxData.id } });
-
-        if (fileName) {
-          await deleteFiles([fileName]);
-        }
       }
 
       await db.muxData.create({

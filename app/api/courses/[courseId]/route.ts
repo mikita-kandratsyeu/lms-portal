@@ -2,7 +2,6 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { deleteFiles } from '@/actions/uploadthing/delete-files';
 import db from '@/lib/db';
 
 export const PATCH = async (req: NextRequest, props: { params: Promise<{ courseId: string }> }) => {
@@ -50,30 +49,6 @@ export const DELETE = async (_: NextRequest, props: { params: Promise<{ courseId
     if (!course) {
       return new NextResponse(ReasonPhrases.NOT_FOUND, { status: StatusCodes.NOT_FOUND });
     }
-
-    const attachmentFiles = course.attachments.reduce<string[]>((urls, attachment) => {
-      const fileName = attachment?.url?.split('/').pop();
-
-      if (fileName) {
-        urls.push(fileName);
-      }
-      return urls;
-    }, []);
-
-    const videoFiles = course.chapters.reduce<string[]>((urls, chapter) => {
-      const fileName = chapter?.muxData?.videoUrl?.split('/').pop();
-
-      if (fileName) {
-        urls.push(fileName);
-      }
-      return urls;
-    }, []);
-
-    await deleteFiles([
-      ...attachmentFiles,
-      ...videoFiles,
-      ...(course?.imageUrl ? [course.imageUrl.split('/').pop()!] : []),
-    ]);
 
     const deletedCourse = await db.course.delete({ where: { id: courseId } });
 

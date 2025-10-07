@@ -2,19 +2,14 @@
 
 import { Course } from '@prisma/client';
 import { Column, ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal, Pencil } from 'lucide-react';
-import Link from 'next/link';
+import { ArrowUpDown } from 'lucide-react';
 
 import { TextBadge } from '@/components/common/text-badge';
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui';
+import { Button } from '@/components/ui';
 import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
+
+import { ColumnActions } from './column-actions';
 
 const handleSortingHeader = <T extends Column<Course, unknown>>(column: T, label: string) => {
   return (
@@ -73,24 +68,7 @@ export const columns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       const { id } = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="h-4 w-8 p-0" variant="ghost">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <Link href={`/teacher/courses/${id}`}>
-              <DropdownMenuItem className="hover:cursor-pointer">
-                <Pencil className="h-4 w-4  mr-2" />
-                Edit
-              </DropdownMenuItem>
-            </Link>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <ColumnActions courseId={id} />;
     },
   },
 ];
