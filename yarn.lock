@@ -9521,7 +9521,7 @@ __metadata:
     next-intl: "npm:^4.3.7"
     next-themes: "npm:^0.2.1"
     node-cache: "npm:^5.1.2"
-    nodemailer: "npm:^7.0.6"
+    nodemailer: "npm:^7.0.7"
     openai: "npm:^4.95.0"
     otplib: "npm:^12.0.1"
     plaiceholder: "npm:^3.0.0"
@@ -10935,10 +10935,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:^7.0.6":
-  version: 7.0.6
-  resolution: "nodemailer@npm:7.0.6"
-  checksum: 10c0/84d3bdca7baa048df538506726a3e63a116276b9ee1ad1e3cd55a8ccbdbf3dea34af0d9bfbe2fdb63cc83f9abe2dbab1737cd58562955e42cbf6cd46e82da49a
+"nodemailer@npm:^7.0.7":
+  version: 7.0.9
+  resolution: "nodemailer@npm:7.0.9"
+  checksum: 10c0/029af0c89d64a521aa9969196e44c13ef289c7f419264eed8d63682610999e06205b0fc264ab8ac65941dc3eefd3c435f23337a32880614cc199744c9be6209a
   languageName: node
   linkType: hard
 
