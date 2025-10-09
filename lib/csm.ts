@@ -2,7 +2,7 @@ import { CsmCategory, CsmStatus } from '@prisma/client';
 
 import { TextVariantsProps } from '@/components/common/text-badge';
 
-export const getSortedCategories = (categories: CsmCategory[]) => {
+export const getSortedCategories = (categories: CsmCategory[] = []) => {
   const otherCategory = categories.find((ct) => ct.name === 'other');
   const sortedCategories = categories.filter((ct) => ct.name !== 'other');
 

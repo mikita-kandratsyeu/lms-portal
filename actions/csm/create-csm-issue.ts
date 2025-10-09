@@ -5,6 +5,8 @@ import { getTranslations } from 'next-intl/server';
 import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
 
+import packageJson from '../../package.json';
+
 type CreateCsmIssue = {
   categoryId: string;
   description: string;
@@ -31,6 +33,7 @@ export const createCsmIssue = async ({
       description,
       email,
       name: issueNumber,
+      releaseVersion: `${packageJson?.name}:${packageJson?.version}`,
       userId,
     },
   });

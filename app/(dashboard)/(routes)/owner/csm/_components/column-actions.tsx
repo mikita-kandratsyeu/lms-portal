@@ -1,11 +1,12 @@
 'use client';
 
-import { MoreHorizontal, Pencil, XCircle } from 'lucide-react';
+import { KeyRound, Link, MoreHorizontal, Pencil, XCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiLoaderAlt } from 'react-icons/bi';
 
-import { CsmModal } from '@/components/modals/csm-modal';
+import { CsmIssueType } from '@/actions/csm/get-csm-issues';
+import { CsmModal } from '@/components/modals/csm/csm-modal';
 import {
   Button,
   DropdownMenu,
@@ -18,9 +19,10 @@ import { fetcher } from '@/lib/fetcher';
 
 type ColumnActionsProps = {
   csmId: string;
+  csmIssue: CsmIssueType;
 };
 
-export const ColumnActions = ({ csmId }: ColumnActionsProps) => {
+export const ColumnActions = ({ csmId, csmIssue }: ColumnActionsProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -66,7 +68,7 @@ export const ColumnActions = ({ csmId }: ColumnActionsProps) => {
 
   return (
     <>
-      {openModal && <CsmModal open={openModal} setOpen={setOpenModal} />}
+      {openModal && <CsmModal open={openModal} setOpen={setOpenModal} editIssue={csmIssue} />}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="h-4 w-8 p-0" variant="ghost" disabled={isFetching}>
@@ -83,6 +85,14 @@ export const ColumnActions = ({ csmId }: ColumnActionsProps) => {
           <DropdownMenuItem className="hover:cursor-pointer" onClick={handleAction('edit')}>
             <Pencil className="h-4 w-4  mr-2" />
             Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem className="hover:cursor-pointer" onClick={handleAction('edit')}>
+            <Link className="h-4 w-4  mr-2" />
+            Copy link
+          </DropdownMenuItem>
+          <DropdownMenuItem className="hover:cursor-pointer" onClick={handleAction('edit')}>
+            <KeyRound className="h-4 w-4  mr-2" />
+            Copy key
           </DropdownMenuItem>
           <DropdownMenuItem
             className="hover:cursor-pointer text-red-500"

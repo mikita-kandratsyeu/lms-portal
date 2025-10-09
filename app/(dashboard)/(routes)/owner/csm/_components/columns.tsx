@@ -86,6 +86,19 @@ export const getColumns = (t: (key: string) => string): ColumnDef<CsmIssueType>[
     },
   },
   {
+    accessorKey: 'releaseVersion',
+    header: ({ column }) => handleSortingHeader(column, 'Release'),
+    cell: ({ row }) => {
+      const version = row.original?.releaseVersion;
+
+      return version ? (
+        <p className="text-sm">{row.original.releaseVersion}</p>
+      ) : (
+        <p className="text-center">&mdash;</p>
+      );
+    },
+  },
+  {
     accessorKey: 'createdAt',
     header: ({ column }) => handleSortingHeader(column, 'Date of creation'),
     cell: ({ row }) => {
@@ -104,7 +117,7 @@ export const getColumns = (t: (key: string) => string): ColumnDef<CsmIssueType>[
     cell: ({ row }) => {
       const { id } = row.original;
 
-      return <ColumnActions csmId={id} />;
+      return <ColumnActions csmId={id} csmIssue={row.original} />;
     },
   },
 ];

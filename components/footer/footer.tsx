@@ -14,7 +14,7 @@ import { LanguageSwitcher } from '../common/language-switcher';
 import { LegalMenu } from '../common/legal-menu';
 import { MadeWithLove } from '../common/made-with-love';
 import { ThemeSwitcher } from '../common/theme-switcher';
-import { CsmModal } from '../modals/csm-modal';
+import { CsmModal } from '../modals/csm/csm-modal';
 
 type FooterProps = {
   categories: CsmCategory[];
