@@ -44,7 +44,7 @@ export const ColumnActions = ({ csmId, csmIssue }: ColumnActionsProps) => {
       }
 
       if (action === 'link') {
-        navigator.clipboard.writeText(absoluteUrl(`owner/csm?issueId=${csmIssue.id}`));
+        navigator.clipboard.writeText(absoluteUrl(`/owner/csm?issueId=${csmIssue.id}`));
       }
 
       if (action === 'key') {
