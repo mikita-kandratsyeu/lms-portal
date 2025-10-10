@@ -16,6 +16,7 @@ import {
 } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { fetcher } from '@/lib/fetcher';
+import { absoluteUrl } from '@/lib/utils';
 
 type ColumnActionsProps = {
   csmId: string;
@@ -34,12 +35,20 @@ export const ColumnActions = ({ csmId, csmIssue }: ColumnActionsProps) => {
     document.body.style.removeProperty('pointer-events');
   }, [openModal]);
 
-  const handleAction = (action: 'edit' | 'remove') => async () => {
+  const handleAction = (action: 'edit' | 'remove' | 'link' | 'key') => async () => {
     try {
       setIsFetching(true);
 
       if (action === 'edit') {
         setOpenModal(true);
+      }
+
+      if (action === 'link') {
+        navigator.clipboard.writeText(absoluteUrl(`owner/csm?issueId=${csmIssue.id}`));
+      }
+
+      if (action === 'key') {
+        navigator.clipboard.writeText(csmIssue.name);
       }
 
       if (action === 'remove') {
@@ -86,11 +95,11 @@ export const ColumnActions = ({ csmId, csmIssue }: ColumnActionsProps) => {
             <Pencil className="h-4 w-4  mr-2" />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem className="hover:cursor-pointer" onClick={handleAction('edit')}>
+          <DropdownMenuItem className="hover:cursor-pointer" onClick={handleAction('link')}>
             <Link className="h-4 w-4  mr-2" />
             Copy link
           </DropdownMenuItem>
-          <DropdownMenuItem className="hover:cursor-pointer" onClick={handleAction('edit')}>
+          <DropdownMenuItem className="hover:cursor-pointer" onClick={handleAction('key')}>
             <KeyRound className="h-4 w-4  mr-2" />
             Copy key
           </DropdownMenuItem>
