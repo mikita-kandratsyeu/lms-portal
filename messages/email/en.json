@@ -35,5 +35,9 @@
     "greeting": "Hey!",
     "ignoreNote": "If you didn't attempt to log in, you can safely ignore this email.",
     "validityNote": "This code is valid for 20 minutes and can only be used once."
+  },
+  "csm-issue-resolution": {
+    "subject": "{ticketID}",
+    "footerNote": "All rights reserved."
   }
 }

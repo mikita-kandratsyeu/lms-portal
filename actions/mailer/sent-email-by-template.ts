@@ -12,7 +12,7 @@ import { sentEmailTo } from './sent-email-to';
 type SentEmailByTemplate = {
   attachments?: Mail.Attachment[];
   emails: string[];
-  locale?: string;
+  locale?: string | null;
   params: Record<string, string>;
   subject?: string;
   template: string;

@@ -1,6 +1,6 @@
 'use server';
 
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
@@ -22,6 +22,7 @@ export const createCsmIssue = async ({
   files = [],
   userId,
 }: CreateCsmIssue) => {
+  const locale = await getLocale();
   const t = await getTranslations('csm-modal.notifications');
 
   const lastIssueInDb = await db.csmIssue.findMany({ orderBy: { createdAt: 'desc' }, take: 1 });
@@ -32,6 +33,7 @@ export const createCsmIssue = async ({
       categoryId,
       description,
       email,
+      locale,
       name: issueNumber,
       releaseVersion: `${packageJson?.name}:${packageJson?.version}`,
       userId,

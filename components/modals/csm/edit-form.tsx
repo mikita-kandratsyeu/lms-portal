@@ -20,6 +20,7 @@ import {
   Textarea,
 } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
+import { DEFAULT_LANGUAGE } from '@/constants/locale';
 import { fetcher } from '@/lib/fetcher';
 import { capitalize } from '@/lib/utils';
 
@@ -41,12 +42,15 @@ export const EditForm = ({ callback, editIssue }: EditFormProps) => {
     setIsFetching(true);
 
     try {
-      const issue = await fetcher.patch(`/api/csm/${editIssue.id}`, {
+      const response = await fetcher.patch(`/api/csm/${editIssue.id}`, {
         body: { values: { status, resolutionComment }, settings: { emailCheckBox } },
         responseType: 'json',
       });
 
-      toast({ description: 'Issue has been updated', title: `${issue.name}`.toUpperCase() });
+      toast({
+        description: 'Issue has been updated',
+        title: `${response?.issue?.name}`.toUpperCase(),
+      });
       router.refresh();
     } catch (error) {
       console.error('[CSM_FORM_EDIT]', error);
@@ -70,7 +74,9 @@ export const EditForm = ({ callback, editIssue }: EditFormProps) => {
         </div>
         <div className="flex flex-col gap-y-2">
           <h4 className="font-semibold">Release version</h4>
-          <p className="text-sm text-muted-foreground">{editIssue.releaseVersion ?? 'Unknown'}</p>
+          <p className="text-sm text-muted-foreground">
+            {editIssue.releaseVersion ?? 'Unknown'} ({editIssue.locale ?? DEFAULT_LANGUAGE})
+          </p>
         </div>
         <div className="flex flex-col gap-y-2">
           <h4 className="font-semibold">Status</h4>

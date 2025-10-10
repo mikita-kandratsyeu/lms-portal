@@ -304,6 +304,7 @@ model CsmIssue {
   createdAt         DateTime        @default(now())
   description       String
   email             String?
+  locale            String?
   name              String
   releaseVersion    String?
   resolutionComment String?
