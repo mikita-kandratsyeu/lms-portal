@@ -49,7 +49,7 @@ export const Footer = ({ categories }: FooterProps) => {
             <MadeWithLove className="mt-2" />
           </div>
           <div className="gap-1 md:gap-3 font-semibold flex flex-col md:flex-row">
-            <button className="hover:cursor-pointer" onClick={() => setOpen(true)}>
+            <button className="hover:cursor-pointer text-start" onClick={() => setOpen(true)}>
               {t('reportIssue')}
             </button>
             <Link href={`mailto:${OWNER_EMAIL}`} target="_blank">

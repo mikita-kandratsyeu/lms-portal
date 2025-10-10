@@ -1,6 +1,9 @@
 'use server';
 
 import { IconName } from 'lucide-react/dynamic';
+import { headers } from 'next/headers';
+
+import db from '@/lib/db';
 
 export type RouteItem = {
   customLabel?: string;
@@ -11,6 +14,19 @@ export type RouteItem = {
 };
 
 export const getSideBarRoutes = async (): Promise<Record<string, RouteItem[]>> => {
+  const headerList = await headers();
+  const pathname = headerList.get('x-pathname');
+
+  const isPaymentsPage = pathname?.includes('/owner');
+
+  let users = 0;
+  let csmIssues = 0;
+
+  if (isPaymentsPage) {
+    csmIssues = await db.csmIssue.count();
+    users = await db.user.count();
+  }
+
   const studentRoutes = [
     {
       href: '/',
@@ -82,12 +98,14 @@ export const getSideBarRoutes = async (): Promise<Record<string, RouteItem[]>> =
       label: 'promo',
     },
     {
+      customLabel: users > 0 ? users.toString() : '',
       href: '/owner/users',
       icon: 'users',
       isProtected: true,
       label: 'users',
     },
     {
+      customLabel: csmIssues > 0 ? csmIssues.toString() : '',
       href: '/owner/csm',
       icon: 'logs',
       isProtected: true,

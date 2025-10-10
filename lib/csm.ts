@@ -22,7 +22,7 @@ export const getStatusLabelStyle = (
   if (status === CsmStatus.progress) {
     return {
       label: 'In Progress',
-      variant: 'indigo',
+      variant: 'yellow',
     };
   }
 
