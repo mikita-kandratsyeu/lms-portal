@@ -297,18 +297,21 @@ model CsmAttachment {
 }
 
 model CsmIssue {
-  id          String          @id @default(uuid())
-  attachments CsmAttachment[]
-  category    CsmCategory?    @relation(fields: [categoryId], references: [id])
-  categoryId  String?
-  createdAt   DateTime        @default(now())
-  description String
-  email       String?
-  name        String
-  status      CsmStatus       @default(new)
-  updatedAt   DateTime        @updatedAt
-  user        User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String?
+  id                String          @id @default(uuid())
+  attachments       CsmAttachment[]
+  category          CsmCategory?    @relation(fields: [categoryId], references: [id])
+  categoryId        String?
+  createdAt         DateTime        @default(now())
+  description       String
+  email             String?
+  locale            String?
+  name              String
+  releaseVersion    String?
+  resolutionComment String?
+  status            CsmStatus       @default(new)
+  updatedAt         DateTime        @updatedAt
+  user              User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String?
 
   @@index([categoryId])
 }

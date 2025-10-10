@@ -9,5 +9,5 @@ type DateColumnProps = {
 };
 
 export const DateColumn = ({ date }: DateColumnProps) => {
-  return <span>{format(date, TIMESTAMP_TEMPLATE)}</span>;
+  return <p>{format(date, TIMESTAMP_TEMPLATE)}</p>;
 };

@@ -1,137 +1,20 @@
 'use client';
 
-import {
-  BarChart4,
-  Compass,
-  Crown,
-  Landmark,
-  Layout,
-  List,
-  LucideIcon,
-  Rss,
-  Settings2,
-  Tags,
-  Users,
-  Wallet2,
-} from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
+import { RouteItem } from '@/actions/routes/get-sidebar-routes';
 import { AuthStatus } from '@/constants/auth';
 import { useCurrentUser } from '@/hooks/use-current-user';
 
 import { SubscriptionBanner } from '../common/subscription-banner';
 import { SideBarItem } from './sidebar-item';
 
-type RouteItem = {
-  href: string;
-  icon?: LucideIcon;
-  isProtected: boolean;
-  label: string;
+type SideBarRoutesProps = {
+  routes: Record<string, RouteItem[]>;
 };
 
-const studentRoutes = [
-  {
-    href: '/',
-    icon: Compass,
-    isProtected: false,
-    label: 'browse',
-  },
-  {
-    href: '/dashboard',
-    icon: Layout,
-    isProtected: true,
-    label: 'dashboard',
-  },
-  {
-    href: '/leaderboard',
-    icon: Crown,
-    isProtected: true,
-    label: 'leaderboard',
-  },
-];
-
-const teacherRoutes = [
-  {
-    href: '/teacher/courses',
-    icon: List,
-    isProtected: true,
-    label: 'courses',
-  },
-  {
-    href: '/teacher/analytics',
-    isProtected: true,
-    icon: BarChart4,
-    label: 'analytics',
-  },
-];
-
-const settingsRoutes = [
-  {
-    href: '/settings/general',
-    icon: Settings2,
-    isProtected: true,
-    label: 'general',
-  },
-  {
-    href: '/settings/billing',
-    icon: Wallet2,
-    isProtected: true,
-    label: 'billingAndSubscription',
-  },
-  {
-    href: '/settings/notifications',
-    icon: Rss,
-    isProtected: true,
-    label: 'notifications',
-  },
-];
-
-const paymentsRoutes = [
-  {
-    href: '/owner',
-    icon: Landmark,
-    isProtected: true,
-    label: 'payments',
-  },
-  {
-    href: '/owner/promo',
-    isProtected: true,
-    label: 'promo',
-    icon: Tags,
-  },
-  {
-    href: '/owner/users',
-    isProtected: true,
-    label: 'users',
-    icon: Users,
-  },
-];
-
-const docsRoutes = [
-  {
-    href: '/docs/cookies-policy',
-    isProtected: false,
-    label: 'cookies-policy',
-  },
-  {
-    href: '/docs/terms',
-    isProtected: false,
-    label: 'terms',
-  },
-  {
-    href: '/docs/privacy-policy',
-    isProtected: false,
-    label: 'privacy-policy',
-  },
-  {
-    href: '/docs/releases',
-    isProtected: false,
-    label: 'releases',
-  },
-];
-
-export const SideBarRoutes = () => {
+export const SideBarRoutes = ({ routes }: SideBarRoutesProps) => {
   const { user, status } = useCurrentUser();
   const pathname = usePathname();
 
@@ -142,27 +25,38 @@ export const SideBarRoutes = () => {
 
   const isLoading = status === AuthStatus.LOADING;
 
-  const routes: RouteItem[] = useMemo(() => {
+  const mapRoutes = useMemo(() => {
     if (isSettingsPage) {
-      return settingsRoutes;
+      return routes.settingsRoutes;
     }
 
     if (isPaymentsPage) {
-      return paymentsRoutes;
+      return routes.paymentsRoutes;
     }
 
     if (isDocsPage) {
-      return docsRoutes;
+      return routes.docsRoutes;
     }
 
-    return isTeacherPage ? teacherRoutes : studentRoutes;
-  }, [isDocsPage, isPaymentsPage, isSettingsPage, isTeacherPage]);
+    return isTeacherPage ? routes.teacherRoutes : routes.studentRoutes;
+  }, [
+    isDocsPage,
+    isPaymentsPage,
+    isSettingsPage,
+    isTeacherPage,
+    routes.docsRoutes,
+    routes.paymentsRoutes,
+    routes.settingsRoutes,
+    routes.studentRoutes,
+    routes.teacherRoutes,
+  ]);
 
   return (
     <div className="flex flex-col w-full h-full p-3 justify-between">
       <div className="flex flex-col w-full space-y-1.5">
-        {routes.map((route) => (
+        {mapRoutes.map((route) => (
           <SideBarItem
+            customLabel={route?.customLabel}
             href={route.href}
             icon={route?.icon}
             isProtected={route.isProtected}

@@ -1,8 +1,8 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getGlobalProgress } from '@/actions/courses/get-global-progress';
+import { getCsmCategories } from '@/actions/csm/get-csm-categories';
 import { getUserNotifications } from '@/actions/users/get-user-notifications';
 import { Footer } from '@/components/footer/footer';
-import db from '@/lib/db';
 
 import { NavBar } from '../../components/navbar/navbar';
 import { SideBar } from '../../components/sidebar/sidebar';
@@ -18,8 +18,7 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
     userId: user?.userId,
     take: 5,
   });
-
-  const categories = await db.csmCategory.findMany({ orderBy: { name: 'asc' } });
+  const categories = await getCsmCategories();
 
   return (
     <div className="h-full flex flex-col">

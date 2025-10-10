@@ -44,6 +44,7 @@ interface DataTableProps<TData, TValue> {
   coupons?: Coupon[];
   customers?: Customer[];
   data: TData[];
+  isCsmPage?: boolean;
   isNotificationPage?: boolean;
   isPromoPage?: boolean;
   isServerSidePagination?: boolean;
@@ -58,6 +59,7 @@ export function DataTable<TData, TValue>({
   coupons = [],
   customers = [],
   data,
+  isCsmPage = false,
   isNotificationPage = false,
   isPromoPage = false,
   isServerSidePagination = true,
@@ -118,21 +120,27 @@ export function DataTable<TData, TValue>({
       return 'Filter users email...';
     }
 
+    if (isCsmPage) {
+      return 'Filter csm issues...';
+    }
+
     return '';
   })();
 
   return (
     <div>
-      {(isTeacherCoursesPage || isPromoPage || isNotificationPage || isUsersPage) && (
+      {(isTeacherCoursesPage || isPromoPage || isNotificationPage || isUsersPage || isCsmPage) && (
         <div className="flex sm:items-center pb-4 justify-between sm:space-x-2 sm:flex-row flex-col gap-y-4">
           <div className="flex gap-x-2 w-full">
             <Input
               placeholder={filterPlaceholder}
               value={
-                isUsersPage ? search : (table.getColumn('title')?.getFilterValue() as string) ?? ''
+                isUsersPage || isCsmPage
+                  ? search
+                  : (table.getColumn('title')?.getFilterValue() as string) ?? ''
               }
               onChange={(event) => {
-                if (!isUsersPage) {
+                if (!(isUsersPage || isCsmPage)) {
                   table.getColumn('title')?.setFilterValue(event.target.value);
                 }
 

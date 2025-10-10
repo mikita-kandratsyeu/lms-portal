@@ -1,6 +1,6 @@
 'use client';
 
-import { LucideIcon } from 'lucide-react';
+import { DynamicIcon, IconName } from 'lucide-react/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
@@ -9,15 +9,17 @@ import { useCurrentUser } from '@/hooks/use-current-user';
 import { cn } from '@/lib/utils';
 
 import { AuthRedirect } from '../auth/auth-redirect';
+import { TextBadge } from '../common/text-badge';
 
 type SideBarItemProps = {
+  customLabel?: string;
   href: string;
-  icon?: LucideIcon;
+  icon?: IconName;
   isProtected?: boolean;
   label: string;
 };
 
-export const SideBarItem = ({ href, icon: Icon, isProtected, label }: SideBarItemProps) => {
+export const SideBarItem = ({ customLabel, href, icon, isProtected, label }: SideBarItemProps) => {
   const t = useTranslations('sidebar');
 
   const { user } = useCurrentUser();
@@ -53,17 +55,21 @@ export const SideBarItem = ({ href, icon: Icon, isProtected, label }: SideBarIte
         )}
       >
         <div className="flex justify-between items-center w-full text-left">
-          <div className="flex items-center gap-x-2">
-            {Icon && (
-              <Icon
-                size={20}
-                className={cn(
-                  'h-5 w-5 font-medium',
-                  isActive && 'text-primary font-medium animate-spin-once',
-                )}
-              />
-            )}
-            {t(label)}
+          <div className="flex justify-between items-center gap-x-2 flex-1">
+            <p className="flex items-center gap-x-2 flex-1">
+              {icon && (
+                <DynamicIcon
+                  name={icon}
+                  size={20}
+                  className={cn(
+                    'h-5 w-5 font-medium',
+                    isActive && 'text-primary font-medium animate-spin-once',
+                  )}
+                />
+              )}
+              {t(label)}
+            </p>
+            {customLabel && <TextBadge label={customLabel} />}
           </div>
         </div>
       </button>
