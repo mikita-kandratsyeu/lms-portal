@@ -61,7 +61,7 @@ export const CsmModal = ({ categories = [], editIssue, open, setOpen }: CsmModal
               )}
             </DialogDescription>
           </DialogHeader>
-          {editIssue && <EditForm editIssue={editIssue} />}
+          {editIssue && <EditForm editIssue={editIssue} callback={() => setOpen(false)} />}
           {!editIssue && <CreateForm categories={categories} callback={() => setOpen(false)} />}
         </DialogContent>
       </DialogPortal>
