@@ -21,7 +21,7 @@ import { EditForm } from './edit-form';
 
 type CsmModalProps = {
   categories?: CsmCategory[];
-  editIssue?: CsmIssueType;
+  editIssue?: CsmIssueType | null;
   open: boolean;
   setOpen: (value: boolean) => void;
 };
