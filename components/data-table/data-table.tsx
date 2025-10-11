@@ -13,6 +13,7 @@ import {
 } from '@tanstack/react-table';
 import { PlusCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
 
@@ -68,6 +69,8 @@ export function DataTable<TData, TValue>({
   noLabel,
   pageCount = 0,
 }: Readonly<DataTableProps<TData, TValue>>) {
+  const searchParams = useSearchParams();
+
   const notificationsT = useTranslations('notifications.table-data');
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -76,6 +79,7 @@ export function DataTable<TData, TValue>({
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: PAGE_SIZES[0],
+    ...Object.fromEntries(searchParams.entries()),
   });
 
   const [search, setSearch] = React.useState('');

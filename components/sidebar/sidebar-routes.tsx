@@ -16,8 +16,8 @@ type SideBarRoutesProps = {
 
 export const SideBarRoutes = ({ routes }: SideBarRoutesProps) => {
   const { user, status } = useCurrentUser();
-  const pathname = usePathname();
 
+  const pathname = usePathname();
   const isSettingsPage = pathname?.includes('/settings');
   const isTeacherPage = pathname?.includes('/teacher');
   const isPaymentsPage = pathname?.includes('/owner');

@@ -3,7 +3,7 @@ import { getCsmIssue } from '@/actions/csm/get-csm-issues';
 import { CsmList } from './_components/csm-list';
 
 type CsmPageProps = {
-  searchParams: Promise<{ pageIndex: string; pageSize: string; search?: string }>;
+  searchParams: Promise<{ pageIndex: string; pageSize: string; search?: string; issueId?: string }>;
 };
 
 const CsmPage = async (props: CsmPageProps) => {

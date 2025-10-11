@@ -25,10 +25,10 @@ type ColumnActionsProps = {
 
 export const ColumnActions = ({ csmId, csmIssue }: ColumnActionsProps) => {
   const { toast } = useToast();
+
   const router = useRouter();
 
   const [isFetching, setIsFetching] = useState(false);
-
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
