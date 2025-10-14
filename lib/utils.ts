@@ -85,6 +85,23 @@ export const base64ToBlob = (base64: string, contentType: string = '') => {
   return new Blob([byteArray], { type: contentType });
 };
 
+export const blobUrlToBase64 = async (blobUrl: string): Promise<string> => {
+  const response = await fetch(blobUrl);
+  const blob = await response.blob();
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64data = reader.result as string;
+      resolve(base64data.includes(',') ? base64data.split(',')[1] : base64data);
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
+
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const getBatchedItems = <T>(items: T[]) =>
@@ -138,4 +155,12 @@ export const maskEmail = (email: string) => {
       : primaryDomain;
 
   return `${maskedLocalPart}@${maskedPrimaryDomain}.${topLevelDomain}`;
+};
+
+export const readFile = (file: File): Promise<string | ArrayBuffer | null> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => resolve(reader.result), false);
+    reader.readAsDataURL(file);
+  });
 };

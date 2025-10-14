@@ -17,8 +17,9 @@ import {
 } from '@/components/ui/dialog';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
-import { UploadButton } from '@/lib/uploadthing';
+import { blobUrlToBase64 } from '@/lib/utils';
 
+import { ImageCrop } from '../image/image-crop';
 import { Button } from '../ui';
 import { useToast } from '../ui/use-toast';
 
@@ -42,9 +43,12 @@ export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalPro
     setIsFetching(true);
 
     try {
-      await fetcher.patch(`/api/users/${user?.userId}`, { body: values });
+      const response = await fetcher.patch(`/api/users/${user?.userId}`, {
+        body: values,
+        responseType: 'json',
+      });
 
-      await update(values);
+      await update(response);
 
       toast({ title: t('accInfoUpdated') });
       router.refresh();
@@ -65,14 +69,20 @@ export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalPro
           <DialogDescription>{t('body')}</DialogDescription>
         </DialogHeader>
         <div className="w-full flex flex-col gap-y-2 my-4">
-          <UploadButton
-            disabled={isFetching}
-            endpoint="profilePicture"
-            onClientUploadComplete={(res) => {
-              handleSubmit({ pictureUrl: res?.[0]?.url ?? null });
-            }}
-            onUploadError={(error: Error) => {
-              toast({ title: String(error?.message) });
+          <ImageCrop
+            isFetching={isFetching}
+            buttonLabel={t('upload')}
+            uploadLabel={t('upload')}
+            callback={async ({ blob, error }) => {
+              if (error) {
+                toast({ title: error });
+                return;
+              }
+
+              if (blob) {
+                const base64 = await blobUrlToBase64(blob);
+                handleSubmit({ base64 });
+              }
             }}
           />
           <Button

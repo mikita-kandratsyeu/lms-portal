@@ -12,8 +12,10 @@ import { TextBadge, TextVariantsProps } from '@/components/common/text-badge';
 import { UpdateProfileImageModal } from '@/components/modals/update-profile-image-modal';
 import { Avatar, AvatarFallback, AvatarImage, Input } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
+import { AuthStatus } from '@/constants/auth';
 import { TIMESTAMP_USER_PROFILE_TEMPLATE } from '@/constants/common';
 import { useLocaleStore } from '@/hooks/store/use-locale-store';
+import { useCurrentUser } from '@/hooks/use-current-user';
 import { useDebounce } from '@/hooks/use-debounce';
 import { fetcher } from '@/lib/fetcher';
 import { getFallbackName } from '@/lib/utils';
@@ -30,6 +32,8 @@ export const GeneralSettingsForm = ({
   const t = useTranslations('settings.generalForm');
 
   const localeInfo = useLocaleStore((state) => state.localeInfo);
+
+  const { status } = useCurrentUser();
 
   const { toast } = useToast();
   const { update } = useSession();
@@ -107,7 +111,7 @@ export const GeneralSettingsForm = ({
       </div>
       <div className="flex items-center gap-x-4 w-full">
         <UpdateProfileImageModal>
-          <button disabled={isFetching}>
+          <button disabled={isFetching || status === AuthStatus.LOADING}>
             <Avatar className="border dark:border-muted-foreground w-24 h-24">
               <AvatarImage src={initialData?.pictureUrl ?? ''} />
               <AvatarFallback>{getFallbackName(initialData?.name || '')}</AvatarFallback>

@@ -58,7 +58,7 @@ export const POST = async (req: NextRequest) => {
 
     return NextResponse.json({
       revisedPrompt: response.image.data[0].revised_prompt,
-      url: files[0].data?.url,
+      url: files[0].data?.ufsUrl,
     });
   } catch (error) {
     console.error('[OPEN_AI_IMAGE]', error);
