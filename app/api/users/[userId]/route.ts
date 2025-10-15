@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { createCsmIssue } from '@/actions/csm/create-csm-issue';
+import { deleteFiles } from '@/actions/uploadthing/delete-files';
 import { uploadFiles } from '@/actions/uploadthing/upload-files';
 import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
@@ -52,7 +53,7 @@ export const PATCH = async (req: NextRequest, props: RequestProps) => {
 
     const { notification, settings, base64, pictureUrl, ...values } = await req.json();
 
-    let picture = pictureUrl;
+    let updatedPicture = pictureUrl;
 
     if (base64) {
       const files = await uploadFiles([
@@ -63,12 +64,16 @@ export const PATCH = async (req: NextRequest, props: RequestProps) => {
         },
       ]);
 
-      picture = files[0].data?.ufsUrl ?? pictureUrl;
+      updatedPicture = files[0].data?.ufsUrl ?? pictureUrl;
+    }
+
+    if (pictureUrl === null || base64) {
+      await deleteFiles([user?.image?.split('/')?.pop() ?? '']);
     }
 
     const updatedUser = await db.user.update({
       where: { id: userId },
-      data: { ...values, pictureUrl: picture },
+      data: { ...values, pictureUrl: updatedPicture },
     });
 
     if (settings) {
