@@ -10,7 +10,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -93,12 +92,10 @@ export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalPro
             {t('delete')}
           </Button>
         </div>
-        <DialogFooter>
-          <div className="flex gap-x-2">
-            <Info className="w-4-h-4 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">{t('footer')}</p>
-          </div>
-        </DialogFooter>
+        <div className="flex gap-x-2 items-center justify-center">
+          <Info className="w-4 h-4 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">{t('footer')}</p>
+        </div>
       </DialogContent>
     </Dialog>
   );
