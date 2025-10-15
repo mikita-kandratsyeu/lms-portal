@@ -1,11 +1,11 @@
 'use client';
 
-import imageCompression from 'browser-image-compression';
 import { ImagePlus } from 'lucide-react';
 import { useState } from 'react';
 import Cropper, { Area } from 'react-easy-crop';
 
 import { getCroppedImg } from '@/lib/image/canvas';
+import { compressImage } from '@/lib/image/compress-image';
 import { readFile } from '@/lib/utils';
 
 import { Button } from '../ui';
@@ -45,24 +45,9 @@ export const ImageCrop = ({ buttonLabel, callback, isFetching, uploadLabel }: Im
     if (e.target.files && e.target.files.length > 0) {
       const imageFile = e.target.files[0];
 
-      // eslint-disable-next-line no-console
-      console.log('OriginalFile instanceof Blob', imageFile instanceof Blob);
-      // eslint-disable-next-line no-console
-      console.log(`OriginalFile size ${imageFile.size / 1024 / 1024} MB`);
-
       try {
-        const compressedFile = await imageCompression(imageFile, {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true,
-        });
+        const imageDataUrl = await compressImage(imageFile, readFile);
 
-        // eslint-disable-next-line no-console
-        console.log('CompressedFile instanceof Blob', compressedFile instanceof Blob);
-        // eslint-disable-next-line no-console
-        console.log(`CompressedFile size ${compressedFile.size / 1024 / 1024} MB`);
-
-        const imageDataUrl = await readFile(compressedFile);
         setImageSrc(imageDataUrl as string);
       } catch (error) {
         console.log('[FILE_CHANGE_ERROR]', error);
