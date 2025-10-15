@@ -17,10 +17,9 @@ import {
 } from '@/components/ui/dialog';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
-import { UploadButton } from '@/lib/uploadthing';
+import { blobUrlToBase64 } from '@/lib/utils';
 
-// import { blobUrlToBase64 } from '@/lib/utils';
-// import { ImageCrop } from '../image/image-crop';
+import { ImageCrop } from '../image/image-crop';
 import { Button } from '../ui';
 import { useToast } from '../ui/use-toast';
 
@@ -70,8 +69,7 @@ export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalPro
           <DialogDescription>{t('body')}</DialogDescription>
         </DialogHeader>
         <div className="w-full flex flex-col gap-y-2 my-4">
-          {/* FIXME: Big size of images */}
-          {/* <ImageCrop
+          <ImageCrop
             isFetching={isFetching}
             buttonLabel={t('upload')}
             uploadLabel={t('upload')}
@@ -85,16 +83,6 @@ export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalPro
                 const base64 = await blobUrlToBase64(blob);
                 handleSubmit({ base64 });
               }
-            }}
-          /> */}
-          <UploadButton
-            disabled={isFetching}
-            endpoint="profilePicture"
-            onClientUploadComplete={(res) => {
-              handleSubmit({ pictureUrl: res?.[0]?.url ?? null });
-            }}
-            onUploadError={(error: Error) => {
-              toast({ title: String(error?.message) });
             }}
           />
           <Button

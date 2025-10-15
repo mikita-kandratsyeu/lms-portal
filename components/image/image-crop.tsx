@@ -1,5 +1,6 @@
 'use client';
 
+import imageCompression from 'browser-image-compression';
 import { ImagePlus } from 'lucide-react';
 import { useState } from 'react';
 import Cropper, { Area } from 'react-easy-crop';
@@ -36,16 +37,33 @@ export const ImageCrop = ({ buttonLabel, callback, isFetching, uploadLabel }: Im
       }
     } catch (error) {
       callback?.({ error: String(error) });
-      console.error(['IMAGE_CROP'], error);
+      console.error(['IMAGE_CROP_ERROR'], error);
     }
   };
 
-  const onFileChange = async (e: any) => {
+  const handleFileChange = async (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const imageDataUrl = await readFile(file);
+      const imageFile = e.target.files[0];
 
-      setImageSrc(imageDataUrl as string);
+      console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+      console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+      console.log(imageFile);
+
+      try {
+        const compressedFile = await imageCompression(imageFile, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        });
+        console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+        console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+        console.log(compressedFile);
+
+        const imageDataUrl = await readFile(compressedFile);
+        setImageSrc(imageDataUrl as string);
+      } catch (error) {
+        console.log('[FILE_CHANGE_ERROR]', error);
+      }
     }
   };
 
@@ -83,7 +101,7 @@ export const ImageCrop = ({ buttonLabel, callback, isFetching, uploadLabel }: Im
               {uploadLabel ?? 'Upload'}
             </span>
           </div>
-          <input type="file" onChange={onFileChange} accept="image/*" className="hidden" />
+          <input type="file" onChange={handleFileChange} accept="image/*" className="hidden" />
         </label>
       )}
     </div>
