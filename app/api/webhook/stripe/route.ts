@@ -60,7 +60,7 @@ export const POST = async (req: NextRequest) => {
         },
       });
 
-      await removeValueFromMemoryCache(`user-subscription-[${userId}]`);
+      await removeValueFromMemoryCache(`user-subscription_${userId}`);
 
       return new NextResponse(JSON.stringify(response));
     } else {
