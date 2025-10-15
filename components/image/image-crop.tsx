@@ -45,9 +45,10 @@ export const ImageCrop = ({ buttonLabel, callback, isFetching, uploadLabel }: Im
     if (e.target.files && e.target.files.length > 0) {
       const imageFile = e.target.files[0];
 
-      console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
-      console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
-      console.log(imageFile);
+      // eslint-disable-next-line no-console
+      console.log('OriginalFile instanceof Blob', imageFile instanceof Blob);
+      // eslint-disable-next-line no-console
+      console.log(`OriginalFile size ${imageFile.size / 1024 / 1024} MB`);
 
       try {
         const compressedFile = await imageCompression(imageFile, {
@@ -55,9 +56,11 @@ export const ImageCrop = ({ buttonLabel, callback, isFetching, uploadLabel }: Im
           maxWidthOrHeight: 1920,
           useWebWorker: true,
         });
-        console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-        console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-        console.log(compressedFile);
+
+        // eslint-disable-next-line no-console
+        console.log('CompressedFile instanceof Blob', compressedFile instanceof Blob);
+        // eslint-disable-next-line no-console
+        console.log(`CompressedFile size ${compressedFile.size / 1024 / 1024} MB`);
 
         const imageDataUrl = await readFile(compressedFile);
         setImageSrc(imageDataUrl as string);
