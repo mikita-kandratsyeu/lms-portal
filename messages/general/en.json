@@ -129,7 +129,7 @@
     "accInfoUpdated": "Account information updated",
     "body": "Add a photo, it will make your profile more attractive and interesting.",
     "delete": "Delete a profile picture",
-    "footer": "You can upload an image in JPG, GIF or PNG format. The maximum file size is 8 MB",
+    "footer": "You can upload an image in JPG, GIF or PNG format.",
     "title": "Profile Picture",
     "upload": "Upload a new profile picture"
   },
