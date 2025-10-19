@@ -84,7 +84,11 @@ export const CreateOtpModal = ({ children, qrCode, secret }: CreateOtpModalProps
               {qrCode && <Image src={qrCode} alt="QR" width={500} height={500} priority />}
               {!qrCode && <Skeleton className="w-full h-full rounded" />}
             </div>
-            <OtpInput disabled={isFetching} errorMessage={errorMessage} setToken={setToken} />
+            <OtpInput
+              disabled={isFetching || !qrCode}
+              errorMessage={errorMessage}
+              setToken={setToken}
+            />
           </div>
           <DialogFooter>
             <Button
