@@ -53,7 +53,7 @@ export const UpdatePhotoModal = ({ type, children }: UpdatePhotoModalProps) => {
           body: {
             base64,
             contentType: 'image/png',
-            name: `${user?.userId}_${Date.now()}_profile-picture.png`,
+            name: `${user?.userId}_${Date.now()}_${type === 'profile' ? 'profile-picture' : 'ai-agent-picture'}.png`,
           },
           responseType: 'json',
         });
