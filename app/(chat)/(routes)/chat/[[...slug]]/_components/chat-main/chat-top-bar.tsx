@@ -4,7 +4,6 @@ import { Eraser, Info, PanelRight, Share } from 'lucide-react';
 import { memo } from 'react';
 
 import { AgentConfiguration } from '@/components/ai/agent-configuration';
-import { AiModelSwitcher } from '@/components/chat/chat-model-switcher';
 import { Button, Separator } from '@/components/ui';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { cn } from '@/lib/utils';
@@ -29,7 +28,6 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
             <p className="line-clamp-1 font-semibold text-sm">Nova Copilot</p>
             <p className="text-muted-foreground text-xs">deepseek-chat</p>
           </div>
-          {/* <ChatModelSwitcher className="flex items-center justify-center w-full gap-x-2" /> */}
           <div className="flex gap-x-2 items-center">
             <Button variant="outline" title="Info">
               <Info className="h-4 w-4" />
