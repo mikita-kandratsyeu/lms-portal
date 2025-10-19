@@ -5,12 +5,12 @@ import { formatDistanceToNow } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { memo, useState, useTransition } from 'react';
-import { BiLoaderAlt } from 'react-icons/bi';
 
 import { useToast } from '@/components/ui/use-toast';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
 import { cn } from '@/lib/utils';
+import { Spinner } from '../ui/spinner';
 
 type NotificationCardsProps = {
   isFetching?: boolean;
@@ -67,7 +67,7 @@ const NotificationCard = ({ isFetching = false, notification, userId }: Notifica
         <p>{formatDistanceToNow(notification.createdAt, { addSuffix: true })}</p>
         {!notification.isRead && (
           <>
-            {(isLoading || pending) && <BiLoaderAlt className="h-4 w-4 animate-spin" />}
+            {(isLoading || pending) && <Spinner className="h-4 w-4" />}
             {!isLoading && !pending && (
               <button
                 className="hover:underline"

@@ -4,9 +4,9 @@ import { Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { BiLoaderAlt } from 'react-icons/bi';
 
 import { VideoPlayer } from '@/components/common/video-player';
+import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/components/ui/use-toast';
 import { useConfettiStore } from '@/hooks/store/use-confetti-store';
 import { fetcher } from '@/lib/fetcher';
@@ -65,7 +65,7 @@ export const ChapterVideoPlayer = ({
     <div className="relative aspect-w-16 aspect-h-9">
       {!isReady && !isLocked && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted gap-y-2 ">
-          <BiLoaderAlt className="h-8 w-8 animate-spin text-secondary-foreground" />
+          <Spinner className="h-8 w-8 text-secondary-foreground" />
           <p className="text-sm">{t('loading')}</p>
         </div>
       )}

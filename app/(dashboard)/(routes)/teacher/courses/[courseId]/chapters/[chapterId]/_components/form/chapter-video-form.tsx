@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BiLoader } from 'react-icons/bi';
 import * as z from 'zod';
 
 import { FileUpload } from '@/components/common/file-upload';
@@ -15,6 +14,7 @@ import { VideoPlayer } from '@/components/common/video-player';
 import { Input, Switch } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/components/ui/use-toast';
 import { fetcher } from '@/lib/fetcher';
 
@@ -116,7 +116,7 @@ export const ChapterVideoForm = ({ initialData, chapterId, courseId }: ChapterVi
               />
               {!isVideoReady && (
                 <div className="absolute h-full w-full bg-muted border top-0 right-0 rounded-md flex items-center justify-center">
-                  <BiLoader className="h-6 w-6 animate-spin text-primary" />
+                  <Spinner className="h-6 w-6 text-primary" />
                 </div>
               )}
             </div>

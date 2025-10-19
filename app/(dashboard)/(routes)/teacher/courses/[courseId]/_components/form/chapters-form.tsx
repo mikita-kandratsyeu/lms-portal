@@ -6,12 +6,12 @@ import { PlusCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BiLoader } from 'react-icons/bi';
 import * as z from 'zod';
 
 import { Input } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/components/ui/use-toast';
 import { TEXTAREA_MAX_LENGTH } from '@/constants/courses';
 import { formatTimeInSeconds } from '@/lib/date';
@@ -89,7 +89,7 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
     <div className="relative mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
       {isUpdating && (
         <div className="absolute h-full w-full bg-neutral-500/20 top-0 right-0 rounded-md flex items-center justify-center">
-          <BiLoader className="h-6 w-6 animate-spin text-primary" />
+          <Spinner className="h-6 w-6 animate-spin text-primary" />
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
