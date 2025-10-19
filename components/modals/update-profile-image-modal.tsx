@@ -38,12 +38,28 @@ export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalPro
   const [open, setOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
-  const handleSubmit = async (values: Record<string, string | null>) => {
+  const handleSubmit = async ({ blob }: Record<string, string | null>) => {
     setIsFetching(true);
 
     try {
+      let pictureUrl = null;
+
+      if (blob) {
+        const base64 = await blobUrlToBase64(blob);
+        const response = await fetcher.post('/api/uploadthing/upload', {
+          body: {
+            base64,
+            contentType: 'image/png',
+            name: `${user?.userId}_${Date.now()}_profile-picture.png`,
+          },
+          responseType: 'json',
+        });
+
+        pictureUrl = response?.pictureUrl;
+      }
+
       const response = await fetcher.patch(`/api/users/${user?.userId}`, {
-        body: values,
+        body: { pictureUrl },
         responseType: 'json',
       });
 
@@ -79,14 +95,13 @@ export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalPro
               }
 
               if (blob) {
-                const base64 = await blobUrlToBase64(blob);
-                handleSubmit({ base64 });
+                handleSubmit({ blob });
               }
             }}
           />
           <Button
             variant="outline"
-            onClick={() => handleSubmit({ pictureUrl: null })}
+            onClick={() => handleSubmit({ blob: null })}
             disabled={isFetching}
           >
             {t('delete')}
