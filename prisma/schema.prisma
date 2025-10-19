@@ -436,16 +436,18 @@ model AiModel {
   providerName   String
   updatedAt      DateTime         @updatedAt
   value          String
+  AiAgent        AiAgent[]
 }
 
 model AiAgent {
   id                       String                     @id @default(uuid())
+  aiModel                  AiModel                    @relation(fields: [aiModelId], references: [id], onDelete: Cascade)
+  aiModelId                String
   chatConversationStarters ChatConversationStarters[]
   chatConversations        ChatConversation[]
   createdAt                DateTime                   @default(now())
   description              String
   isPublic                 String
-  model                    String
   systemInstructions       String
   title                    String
   updatedAt                DateTime                   @updatedAt

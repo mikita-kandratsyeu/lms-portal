@@ -14,6 +14,7 @@ import React, {
 import ScrollToBottom, { useScrollToBottom, useSticky } from 'react-scroll-to-bottom';
 
 import { Button } from '@/components/ui';
+import { Spinner } from '@/components/ui/spinner';
 import { ChatCompletionRole } from '@/constants/ai/general';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
@@ -145,7 +146,7 @@ const ChatBodyComponent = ({
               <div className="flex flex-1 text-base md:px-5 lg:px-1 xl:px-5 mx-auto gap-3 md:max-w-3xl lg:max-w-[40rem] xl:max-w-4xl px-4 first:mt-4 last:mb-6">
                 {!assistantMessage && isSubmitting && (
                   <div className="flex gap-x-2 items-center px-6 w-full mt-4">
-                    <Loader className="h-4 w-4 animate-spin text-muted-foreground" />
+                    <Spinner className="h-4 w-4 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground animate-pulse">
                       {t('image-loading')}
                     </p>

@@ -8,20 +8,20 @@ type ChatMessages = Record<string, Conversation['messages']>;
 type ChatStore = {
   chatMessages: ChatMessages;
   conversationId: string;
-  currentModel: string;
-  currentModelLabel: string;
-  hasSearch: boolean;
+  currentModel: string; // delete
+  currentModelLabel: string; // delete
+  hasSearch: boolean; // delete
   isFetching: boolean;
-  isImageGeneration?: boolean;
-  isSearchMode: boolean;
+  isImageGeneration?: boolean; // delete
+  isSearchMode: boolean; // delete
   setChatMessages: (messages: ChatMessages) => void;
   setConversationId: (conversationId: string) => void;
-  setCurrentModel: (model: string) => void;
-  setCurrentModelLabel: (label: string) => void;
-  setHasSearch: (value: boolean) => void;
+  setCurrentModel: (model: string) => void; // delete
+  setCurrentModelLabel: (label: string) => void; // delete
+  setHasSearch: (value: boolean) => void; // delete
   setIsFetching: (value: boolean) => void;
-  setIsImageGeneration: (value: boolean) => void;
-  setIsSearchMode: (value: boolean) => void;
+  setIsImageGeneration: (value: boolean) => void; // delete
+  setIsSearchMode: (value: boolean) => void; // delete
 };
 
 export const useChatStore = create<ChatStore, any>(
@@ -45,7 +45,7 @@ export const useChatStore = create<ChatStore, any>(
       setIsSearchMode: (value) => set({ isSearchMode: value }),
     }),
     {
-      name: 'chat-storage',
+      name: 'chat-store',
       partialize: (state) => ({
         currentModel: state.currentModel,
         currentModelLabel: state.currentModelLabel,

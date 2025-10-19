@@ -20,7 +20,7 @@ export const ChatSideBar = ({ conversations }: ChatSideBarProps) => {
 
   return (
     <div className="h-full border-r flex flex-col justify-between shadow-sm bg-white dark:bg-neutral-900 md:pt-[80px]">
-      <ChatSideBarTop amountOfConversations={conversations.length} />
+      <ChatSideBarTop />
       <div className="flex flex-col w-full overflow-y-auto h-full">
         <ChatSideBarItems conversations={conversations} />
       </div>

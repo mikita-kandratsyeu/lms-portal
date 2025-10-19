@@ -12,8 +12,8 @@ import { useChatStore } from '@/hooks/store/use-chat-store';
 import { getValueFromMemoryCache, setValueToMemoryCache } from '@/lib/cache';
 import { fetcher } from '@/lib/fetcher';
 
-import { ChatModelSwitcher } from '../chat/chat-model-switcher';
 import { Button } from '../ui';
+import { AiModelSwitcher } from './ai-model-switcher';
 
 type StreamTextProps = {
   cacheKey?: string;
@@ -156,7 +156,7 @@ export const StreamText = ({
 
   return (
     <div className="flex gap-x-2">
-      {showModelSelector && <ChatModelSwitcher className="hidden md:block" />}
+      {showModelSelector && <AiModelSwitcher className="hidden md:block" />}
       <button
         disabled={isSubmitting || !isValid}
         onClick={isImproving ? handleAbortGenerating : handleGenerate}
