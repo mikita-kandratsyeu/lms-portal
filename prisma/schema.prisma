@@ -10,6 +10,7 @@ datasource db {
 // User
 model User {
   id                  String                   @id @default(uuid())
+  aiAgents            AiAgent[]
   conversations       ChatConversation[]
   copilotRequestLimit CopilotRequestLimit?
   courses             Course[]
@@ -375,6 +376,8 @@ model ChatImageGenerationMessage {
 
 model ChatConversation {
   id        String                  @id @default(uuid())
+  aiAgent   AiAgent?                @relation(fields: [aiAgentId], references: [id], onDelete: Cascade)
+  aiAgentId String?
   createdAt DateTime                @default(now())
   messages  ChatMessage[]
   position  Int
@@ -400,4 +403,54 @@ model ChatSharedConversation {
   userId         String?
 
   @@index([conversationId])
+}
+
+model ChatConversationStarters {
+  id        String   @id @default(uuid())
+  aiAgent   AiAgent? @relation(fields: [aiAgentId], references: [id], onDelete: Cascade)
+  aiAgentId String?
+  createdAt DateTime @default(now())
+  language  String?  @default("en")
+  text      String
+  updatedAt DateTime @updatedAt
+
+  @@index([aiAgentId])
+}
+
+// AI Agents
+enum AiModelFeature {
+  imageGeneration
+  imageRecognition
+  reasoning
+  textGeneration
+  webSearch
+}
+
+model AiModel {
+  id             String           @id @default(uuid())
+  createdAt      DateTime         @default(now())
+  features       AiModelFeature[] @default([])
+  isSubscription Boolean?         @default(false)
+  name           String
+  provider       String
+  providerName   String
+  updatedAt      DateTime         @updatedAt
+  value          String
+}
+
+model AiAgent {
+  id                       String                     @id @default(uuid())
+  chatConversationStarters ChatConversationStarters[]
+  chatConversations        ChatConversation[]
+  createdAt                DateTime                   @default(now())
+  description              String
+  isPublic                 String
+  model                    String
+  systemInstructions       String
+  title                    String
+  updatedAt                DateTime                   @updatedAt
+  user                     User?                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                   String?
+
+  @@index([userId])
 }
