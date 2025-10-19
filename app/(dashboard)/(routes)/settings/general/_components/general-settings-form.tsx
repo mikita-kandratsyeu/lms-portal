@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { TextBadge, TextVariantsProps } from '@/components/common/text-badge';
-import { UpdateProfileImageModal } from '@/components/modals/update-profile-image-modal';
+import { UpdatePhotoModal } from '@/components/modals/update-photo-modal';
 import { Avatar, AvatarFallback, AvatarImage, Input } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { AuthStatus } from '@/constants/auth';
@@ -110,14 +110,14 @@ export const GeneralSettingsForm = ({
         )}
       </div>
       <div className="flex items-center gap-x-4 w-full">
-        <UpdateProfileImageModal>
+        <UpdatePhotoModal type="profile">
           <button disabled={isFetching || status === AuthStatus.LOADING}>
             <Avatar className="border dark:border-muted-foreground w-24 h-24">
               <AvatarImage src={initialData?.pictureUrl ?? ''} />
               <AvatarFallback>{getFallbackName(initialData?.name || '')}</AvatarFallback>
             </Avatar>
           </button>
-        </UpdateProfileImageModal>
+        </UpdatePhotoModal>
         <div className="flex flex-col gap-y-4 flex-1">
           <div className="flex flex-col gap-y-2">
             <div className="text-xs text-muted-foreground font-medium">{t('name')}</div>

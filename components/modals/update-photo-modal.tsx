@@ -22,11 +22,14 @@ import { ImageCrop } from '../image/image-crop';
 import { Button } from '../ui';
 import { useToast } from '../ui/use-toast';
 
-type UpdateProfileImageModalProps = {
+type PhotoType = 'profile' | 'ai-agent';
+
+type UpdatePhotoModalProps = {
   children: React.ReactNode;
+  type: PhotoType;
 };
 
-export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalProps) => {
+export const UpdatePhotoModal = ({ type, children }: UpdatePhotoModalProps) => {
   const t = useTranslations('profile-image-modal');
 
   const { user } = useCurrentUser();
@@ -58,14 +61,17 @@ export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalPro
         pictureUrl = response?.pictureUrl;
       }
 
-      const response = await fetcher.patch(`/api/users/${user?.userId}`, {
-        body: { pictureUrl },
-        responseType: 'json',
-      });
+      if (type === 'profile') {
+        const response = await fetcher.patch(`/api/users/${user?.userId}`, {
+          body: { pictureUrl },
+          responseType: 'json',
+        });
 
-      await update(response);
+        await update(response);
 
-      toast({ title: t('accInfoUpdated') });
+        toast({ title: t('accInfoUpdated') });
+      }
+
       router.refresh();
     } catch (error) {
       toast({ isError: true });
@@ -81,7 +87,7 @@ export const UpdateProfileImageModal = ({ children }: UpdateProfileImageModalPro
       <DialogContent className="sm:max-w-[525px] sm:max-h-[625px] overflow-auto max-w-max sm:h-auto h-full sm:w-auto w-full flex flex-col justify-start pt-6">
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
-          <DialogDescription>{t('body')}</DialogDescription>
+          <DialogDescription>{t(type === 'profile' ? 'body' : 'agentBody')}</DialogDescription>
         </DialogHeader>
         <div className="w-full flex flex-col gap-y-2 my-4">
           <ImageCrop

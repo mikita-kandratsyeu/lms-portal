@@ -127,10 +127,11 @@
   },
   "profile-image-modal": {
     "accInfoUpdated": "Account information updated",
+    "agentBody": "Add a photo, it will make your AI agent more attractive and interesting.",
     "body": "Add a photo, it will make your profile more attractive and interesting.",
-    "delete": "Delete a profile picture",
+    "delete": "Delete picture",
     "footer": "You can upload an image in JPG, GIF or PNG format.",
-    "title": "Profile Picture",
+    "title": "Add a photo",
     "upload": "Upload picture"
   },
   "footer": {
