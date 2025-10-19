@@ -10,6 +10,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
 import { cn } from '@/lib/utils';
+
 import { Spinner } from '../ui/spinner';
 
 type NotificationCardsProps = {
