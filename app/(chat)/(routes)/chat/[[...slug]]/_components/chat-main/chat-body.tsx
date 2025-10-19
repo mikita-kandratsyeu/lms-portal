@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowDown, Loader } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, {
   createContext,
