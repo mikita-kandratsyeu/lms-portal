@@ -1,10 +1,11 @@
+import { AiAgent } from '@prisma/client';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 type AiAgentStore = {
-  currentAgent: string | null;
+  currentAgent: AiAgent | null;
   currentModel: string | null;
-  setCurrentAgent: (agent: string) => void;
+  setCurrentAgent: (agent: AiAgent) => void;
   setCurrentModel: (model: string) => void;
 };
 

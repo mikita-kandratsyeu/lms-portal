@@ -4,11 +4,11 @@ import { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } fro
 import { v4 as uuidv4 } from 'uuid';
 
 import { Conversation } from '@/actions/chat/get-chat-conversations';
-import { getChatInitial } from '@/actions/chat/get-chat-initial';
 import { ChatSkeleton } from '@/components/loaders/chat-skeleton';
 import { useToast } from '@/components/ui/use-toast';
 import { ChatCompletionRole } from '@/constants/ai/general';
 import { CONVERSATION_ACTION } from '@/constants/chat';
+import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
 import { useAppConfigStore } from '@/hooks/store/use-app-config-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useLocaleStore } from '@/hooks/store/use-locale-store';
@@ -25,29 +25,29 @@ type Message = Conversation['messages'][0];
 
 type ChatProps = {
   conversations?: Conversation[];
-  initialData: Awaited<ReturnType<typeof getChatInitial>>;
   isEmbed?: boolean;
   isShared?: boolean;
 };
 
-export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: ChatProps) => {
+export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
   const { toast } = useToast();
 
   const {
     chatMessages,
     conversationId,
-    currentModel,
     currentModelLabel,
     hasSearch,
     isImageGeneration,
     isSearchMode,
     setChatMessages,
     setConversationId,
-    setCurrentModel,
     setCurrentModelLabel,
     setHasSearch,
     setIsFetching,
   } = useChatStore();
+
+  const { currentModel, setCurrentModel } = useAiAgentStore();
+
   const { config: appConfig } = useAppConfigStore((state) => ({
     config: state.config,
   }));
@@ -346,7 +346,6 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
           <ChatBody
             assistantImage={assistantImage}
             assistantMessage={assistantMessage}
-            introMessages={initialData.introMessages}
             isShared={isShared}
             isSubmitting={isSubmitting}
             onSubmit={handleSubmit}

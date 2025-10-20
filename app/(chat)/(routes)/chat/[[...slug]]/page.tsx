@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 
 import { getChatConversations } from '@/actions/chat/get-chat-conversations';
-import { getChatInitial } from '@/actions/chat/get-chat-initial';
 
 import { Chat } from './_components/chat-main/chat';
 
@@ -15,7 +14,6 @@ const ChatPage = async ({ params }: ChatPageProps) => {
   const isEmbed = slug?.includes('embed');
   const isShared = slug?.includes('shared');
 
-  const initialData = await getChatInitial();
   const conversations =
     isEmbed || isShared
       ? await getChatConversations({
@@ -29,12 +27,7 @@ const ChatPage = async ({ params }: ChatPageProps) => {
 
   return (
     <div className="w-full h-full overflow-hidden">
-      <Chat
-        conversations={conversations}
-        initialData={initialData}
-        isEmbed={isEmbed}
-        isShared={isShared}
-      />
+      <Chat conversations={conversations} isEmbed={isEmbed} isShared={isShared} />
     </div>
   );
 };

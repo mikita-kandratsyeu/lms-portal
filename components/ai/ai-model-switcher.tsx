@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui';
 import { AI_PROVIDER } from '@/constants/ai/general';
+import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
 import { useAppConfigStore } from '@/hooks/store/use-app-config-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
@@ -33,7 +34,9 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
   const { config: appConfig } = useAppConfigStore((state) => ({
     config: state.config,
   }));
-  const { currentModel, setCurrentModel, setCurrentModelLabel, setHasSearch } = useChatStore();
+  const { setCurrentModelLabel, setHasSearch } = useChatStore();
+
+  const { currentModel, setCurrentModel } = useAiAgentStore();
 
   const [paidModels, freeModels] = useMemo(
     () =>
@@ -85,7 +88,7 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
                 className="text-sm hover:bg-muted transition-colors duration-200 ease-in-out hover:cursor-pointer"
                 value={model.value}
               >
-                <p className="font-semibold">{model.label}</p>
+                <p>{model.label}</p>
               </SelectItem>
             ))}
           </SelectGroup>
@@ -99,7 +102,7 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
                 key={model.value}
                 value={model.value}
               >
-                <p className="font-semibold">{model.label}</p>
+                <p>{model.label}</p>
               </SelectItem>
             ))}
           </SelectGroup>

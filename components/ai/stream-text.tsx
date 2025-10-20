@@ -1,6 +1,6 @@
 'use client';
 
-import { Languages, StopCircle } from 'lucide-react';
+import { Languages, PanelRight, StopCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { BsStars } from 'react-icons/bs';
@@ -8,11 +8,12 @@ import { BsStars } from 'react-icons/bs';
 import { useToast } from '@/components/ui/use-toast';
 import { SYSTEM_COURSE_PROMPT, SYSTEM_TRANSLATE_PROMPT } from '@/constants/ai/prompts';
 import { TEN_MINUTE_SEC } from '@/constants/common';
-import { useChatStore } from '@/hooks/store/use-chat-store';
+import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
 import { getValueFromMemoryCache, setValueToMemoryCache } from '@/lib/cache';
 import { fetcher } from '@/lib/fetcher';
 
 import { Button } from '../ui';
+import { AgentConfiguration } from './agent-configuration';
 import { AiModelSwitcher } from './ai-model-switcher';
 
 type StreamTextProps = {
@@ -38,7 +39,7 @@ export const StreamText = ({
 
   const { toast } = useToast();
 
-  const { currentModel } = useChatStore((state) => ({ currentModel: state.currentModel }));
+  const { currentModel } = useAiAgentStore((state) => ({ currentModel: state.currentModel }));
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -156,7 +157,6 @@ export const StreamText = ({
 
   return (
     <div className="flex gap-x-2">
-      {showModelSelector && <AiModelSwitcher className="hidden md:block" />}
       <button
         disabled={isSubmitting || !isValid}
         onClick={isImproving ? handleAbortGenerating : handleGenerate}
@@ -169,6 +169,13 @@ export const StreamText = ({
           </div>
         </div>
       </button>
+      {showModelSelector && (
+        <AgentConfiguration>
+          <Button variant="outline" title="Configuration" size="sm">
+            <PanelRight className="h-4 w-4" />
+          </Button>
+        </AgentConfiguration>
+      )}
     </div>
   );
 };

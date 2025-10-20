@@ -57,7 +57,6 @@ const Content = ({ children }: ContentProps) => {
 type ChatBodyProps = {
   assistantImage?: string;
   assistantMessage?: string;
-  introMessages: string[];
   isShared?: boolean;
   isSubmitting?: boolean;
   onSubmit: (
@@ -73,7 +72,6 @@ type ChatBodyProps = {
 const ChatBodyComponent = ({
   assistantImage,
   assistantMessage,
-  introMessages,
   isShared,
   isSubmitting,
   onSubmit,
@@ -103,7 +101,7 @@ const ChatBodyComponent = ({
     <ChatScrollContext.Provider value={value}>
       {!hasMessages && !isShared && (
         <div className="flex flex-col items-center justify-start gap-y-2 h-full">
-          <ChatIntro introMessages={introMessages} onSubmit={onSubmit} />
+          <ChatIntro introMessages={[]} onSubmit={onSubmit} />
         </div>
       )}
       <div className={cn(isShared ? 'h-[calc(100%-4rem)]' : 'h-[calc(100%-17rem)]', 'relative')}>
