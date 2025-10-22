@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { memo, useState } from 'react';
 
 import { AgentConfiguration } from '@/components/ai/agent-configuration';
+import { ChatConversationModal } from '@/components/modals/chat-conversation-modal';
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button, Separator } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
@@ -21,15 +22,22 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
-  const { chatMessages, conversationId, setChatMessages } = useChatStore((state) => ({
-    chatMessages: state.chatMessages,
-    conversationId: state.conversationId,
-    setChatMessages: state.setChatMessages,
-  }));
+  const { chatMessages, conversationId, conversations, setChatMessages } = useChatStore(
+    (state) => ({
+      chatMessages: state.chatMessages,
+      conversationId: state.conversationId,
+      conversations: state.conversations,
+      setChatMessages: state.setChatMessages,
+    }),
+  );
 
   const [isFetching, setIsFetching] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const messages = chatMessages[conversationId] ?? [];
+  const currentConversation = conversations.find(
+    (conversation) => conversation.id === conversationId,
+  );
 
   const handleChatAction = async (action: 'clear' | 'share') => {
     setIsFetching(true);
@@ -57,35 +65,50 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   };
 
   return (
-    <div className={cn('w-full h-[75px]', !messages.length && 'h-full')}>
-      {!isEmbed && (
-        <div className="flex flex-1 text-base pt-4 px-4 items-center justify-between gap-x-4">
-          <div className="flex flex-col  justify-center">
-            <p className="line-clamp-1 font-semibold text-sm">Nova Copilot</p>
-            <p className="text-muted-foreground text-xs">deepseek-chat</p>
-          </div>
-          <div className="flex gap-x-2 items-center">
-            <Button variant="outline" title="Info" disabled={isFetching}>
-              <Info className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" title="Share" disabled={isFetching}>
-              <Share className="h-4 w-4" />
-            </Button>
-            <ConfirmModal onConfirm={() => handleChatAction('clear')}>
-              <Button variant="outline" title="Clear" disabled={isFetching}>
-                <Eraser className="h-4 w-4" />
-              </Button>
-            </ConfirmModal>
-            <Separator orientation="vertical" className="mx-2 h-8" />
-            <AgentConfiguration>
-              <Button variant="outline" title="Configuration" disabled={isFetching}>
-                <PanelRight className="h-4 w-4" />
-              </Button>
-            </AgentConfiguration>
-          </div>
-        </div>
+    <>
+      {open && (
+        <ChatConversationModal
+          initialData={currentConversation}
+          isShare
+          open={open}
+          setOpen={setOpen}
+        />
       )}
-    </div>
+      <div className={cn('w-full h-[75px]', !messages.length && 'h-full')}>
+        {!isEmbed && (
+          <div className="flex flex-1 text-base pt-4 px-4 items-center justify-between gap-x-4">
+            <div className="flex flex-col  justify-center">
+              <p className="line-clamp-1 font-semibold text-sm">Nova Copilot</p>
+              <p className="text-muted-foreground text-xs">deepseek-chat</p>
+            </div>
+            <div className="flex gap-x-2 items-center">
+              <Button variant="outline" title="Info" disabled={isFetching}>
+                <Info className="h-4 w-4" />
+              </Button>
+              <Button
+                disabled={isFetching}
+                onClick={() => setOpen(true)}
+                title="Share"
+                variant="outline"
+              >
+                <Share className="h-4 w-4" />
+              </Button>
+              <ConfirmModal onConfirm={() => handleChatAction('clear')}>
+                <Button variant="outline" title="Clear" disabled={isFetching}>
+                  <Eraser className="h-4 w-4" />
+                </Button>
+              </ConfirmModal>
+              <Separator orientation="vertical" className="mx-2 h-8" />
+              <AgentConfiguration>
+                <Button variant="outline" title="Configuration" disabled={isFetching}>
+                  <PanelRight className="h-4 w-4" />
+                </Button>
+              </AgentConfiguration>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
