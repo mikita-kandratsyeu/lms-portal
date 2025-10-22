@@ -1,6 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import {
   Sheet,
@@ -19,6 +20,8 @@ type AgentConfigurationProps = {
 };
 
 export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
+  const t = useTranslations('ai-agent.sheet');
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -26,7 +29,7 @@ export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
         <SheetHeader>
           <SheetTitle>
             <div className="flex justify-between items-center">
-              <h2>General</h2>
+              <h2>{t('general')}</h2>
               <SheetClose asChild>
                 <Button variant="outline">
                   <X className="h-4 w-4" />
@@ -38,7 +41,7 @@ export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
         <div className="h-full">
           <div className="flex flex-col gap-y-4 mt-4">
             <div className="flex flex-col gap-y-2">
-              <h4 className="text-sm text-muted-foreground">Primary LLM Engine</h4>
+              <h4 className="text-sm text-muted-foreground">{t('primaryLLM')}</h4>
               <AiModelSwitcher className="flex items-center w-full gap-x-2" />
             </div>
           </div>

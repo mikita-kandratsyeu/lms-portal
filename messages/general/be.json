@@ -541,5 +541,11 @@
       "evening": "Добры вечар, { name } 👋",
       "morning": "Добрай раніцы, { name } 👋"
     }
+  },
+  "ai-agent": {
+    "sheet": {
+      "general": "Агульныя",
+      "primaryLLM": "Асноўная LLM мадэль"
+    }
   }
 }

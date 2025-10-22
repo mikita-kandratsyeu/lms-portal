@@ -541,5 +541,11 @@
       "evening": "Good evening, { name } 👋",
       "morning": "Good morning, { name } 👋"
     }
+  },
+  "ai-agent": {
+    "sheet": {
+      "general": "General",
+      "primaryLLM": "Primary LLM Model"
+    }
   }
 }
