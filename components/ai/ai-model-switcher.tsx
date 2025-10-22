@@ -20,6 +20,8 @@ import { useAppConfigStore } from '@/hooks/store/use-app-config-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
 
+import { TextBadge } from '../common/text-badge';
+
 type Model = GetAppConfig['ai'][0]['text-models'][0];
 
 type AiModelSwitcherProps = {
@@ -30,6 +32,7 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
   const { user } = useCurrentUser();
 
   const t = useTranslations('chat.top-bar');
+  const tProfile = useTranslations('profileButton');
 
   const { config: appConfig } = useAppConfigStore((state) => ({
     config: state.config,
@@ -94,7 +97,12 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
           </SelectGroup>
           <SelectSeparator />
           <SelectGroup>
-            <SelectLabel className="text-xs text-muted-foreground">Preview</SelectLabel>
+            <SelectLabel className="text-xs text-muted-foreground">
+              <div className="flex gap-x-2 items-center">
+                <p>Preview</p>
+                <TextBadge label={tProfile('premium')} variant="lime" />
+              </div>
+            </SelectLabel>
             {paidModels.map((model) => (
               <SelectItem
                 className="text-sm hover:bg-muted transition-colors duration-200 ease-in-out hover:cursor-pointer"

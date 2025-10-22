@@ -1,6 +1,6 @@
 'use client';
 
-import { Eraser, Info, PanelRight, Share } from 'lucide-react';
+import { Eraser, PanelRight, Share } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { memo, useState } from 'react';
 
@@ -10,6 +10,7 @@ import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button, Separator } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { CONVERSATION_ACTION } from '@/constants/chat';
+import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { fetcher } from '@/lib/fetcher';
 import { cn } from '@/lib/utils';
@@ -30,6 +31,8 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
       setChatMessages: state.setChatMessages,
     }),
   );
+
+  const { currentModel } = useAiAgentStore((state) => ({ currentModel: state.currentModel }));
 
   const [isFetching, setIsFetching] = useState(false);
   const [open, setOpen] = useState(false);
@@ -79,12 +82,9 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
           <div className="flex flex-1 text-base pt-4 px-4 items-center justify-between gap-x-4">
             <div className="flex flex-col  justify-center">
               <p className="line-clamp-1 font-semibold text-sm">Nova Copilot</p>
-              <p className="text-muted-foreground text-xs">deepseek-chat</p>
+              <p className="text-muted-foreground text-xs">{currentModel}</p>
             </div>
             <div className="flex gap-x-2 items-center">
-              <Button variant="outline" title="Info" disabled={isFetching}>
-                <Info className="h-4 w-4" />
-              </Button>
               <Button
                 disabled={isFetching}
                 onClick={() => setOpen(true)}
