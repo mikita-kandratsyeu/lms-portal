@@ -54,6 +54,16 @@ export const ourFileRouter = {
     },
     video: { maxFileSize: '512MB', maxFileCount: 1 },
   }).onUploadComplete(() => {}),
+  chatAttachments: f({
+    pdf: {
+      maxFileSize: '8MB',
+      maxFileCount: 1,
+    },
+    image: {
+      maxFileSize: '8MB',
+      maxFileCount: 1,
+    },
+  }).onUploadComplete(() => {}),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

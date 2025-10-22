@@ -134,6 +134,10 @@
     "title": "Add a photo",
     "upload": "Upload picture"
   },
+  "file-upload-modal": {
+    "footer": "You can upload an image or a PDF file.",
+    "title": "Upload File"
+  },
   "footer": {
     "and": "and",
     "contact": "Contact",
