@@ -1,11 +1,16 @@
 'use client';
 
 import { Eraser, Info, PanelRight, Share } from 'lucide-react';
-import { memo } from 'react';
+import { useRouter } from 'next/navigation';
+import { memo, useState } from 'react';
 
 import { AgentConfiguration } from '@/components/ai/agent-configuration';
+import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button, Separator } from '@/components/ui';
+import { useToast } from '@/components/ui/use-toast';
+import { CONVERSATION_ACTION } from '@/constants/chat';
 import { useChatStore } from '@/hooks/store/use-chat-store';
+import { fetcher } from '@/lib/fetcher';
 import { cn } from '@/lib/utils';
 
 type ChatTopBarProps = {
@@ -13,12 +18,43 @@ type ChatTopBarProps = {
 };
 
 const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
-  const { chatMessages, conversationId } = useChatStore((state) => ({
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const { chatMessages, conversationId, setChatMessages } = useChatStore((state) => ({
     chatMessages: state.chatMessages,
     conversationId: state.conversationId,
+    setChatMessages: state.setChatMessages,
   }));
 
+  const [isFetching, setIsFetching] = useState(false);
+
   const messages = chatMessages[conversationId] ?? [];
+
+  const handleChatAction = async (action: 'clear' | 'share') => {
+    setIsFetching(true);
+    try {
+      if (action === 'clear' && conversationId) {
+        const updatedChatMessages = {
+          ...chatMessages,
+          [conversationId]: [],
+        };
+
+        await fetcher.patch(
+          `/api/chat/conversations/${conversationId}?action=${CONVERSATION_ACTION.EMPTY_MESSAGES}`,
+        );
+
+        setChatMessages(updatedChatMessages);
+      }
+
+      router.refresh();
+    } catch (error) {
+      console.error('[CHAT_TOP_BAR_ACTION]', error);
+      toast({ isError: true });
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
   return (
     <div className={cn('w-full h-[75px]', !messages.length && 'h-full')}>
@@ -29,18 +65,20 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
             <p className="text-muted-foreground text-xs">deepseek-chat</p>
           </div>
           <div className="flex gap-x-2 items-center">
-            <Button variant="outline" title="Info">
+            <Button variant="outline" title="Info" disabled={isFetching}>
               <Info className="h-4 w-4" />
             </Button>
-            <Button variant="outline" title="Share">
+            <Button variant="outline" title="Share" disabled={isFetching}>
               <Share className="h-4 w-4" />
             </Button>
-            <Button variant="outline" title="Clear">
-              <Eraser className="h-4 w-4" />
-            </Button>
+            <ConfirmModal onConfirm={() => handleChatAction('clear')}>
+              <Button variant="outline" title="Clear" disabled={isFetching}>
+                <Eraser className="h-4 w-4" />
+              </Button>
+            </ConfirmModal>
             <Separator orientation="vertical" className="mx-2 h-8" />
             <AgentConfiguration>
-              <Button variant="outline" title="Configuration">
+              <Button variant="outline" title="Configuration" disabled={isFetching}>
                 <PanelRight className="h-4 w-4" />
               </Button>
             </AgentConfiguration>

@@ -4,7 +4,6 @@ import { EllipsisVertical, Globe, GlobeLock, Pencil, Trash2 } from 'lucide-react
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { GrClearOption } from 'react-icons/gr';
 
 import { Conversation } from '@/actions/chat/get-chat-conversations';
 import { ChatConversationModal } from '@/components/modals/chat-conversation-modal';
@@ -16,7 +15,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
-import { CONVERSATION_ACTION } from '@/constants/chat';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { getChatMessages } from '@/lib/chat';
 import { fetcher } from '@/lib/fetcher';
@@ -74,29 +72,6 @@ export const ChatSideBarItems = ({ conversations }: ChatSideBarItemsProps) => {
 
     if (editTitleId.length && id !== editTitleId) {
       setEditTitleId('');
-    }
-  };
-
-  const handleDeleteMessages = async (id: string) => {
-    setIsFetching(true);
-
-    try {
-      const updatedChatMessages = {
-        ...chatMessages,
-        [id]: [],
-      };
-
-      await fetcher.patch(
-        `/api/chat/conversations/${id}?action=${CONVERSATION_ACTION.EMPTY_MESSAGES}`,
-      );
-
-      setChatMessages(updatedChatMessages);
-    } catch (error) {
-      console.error('[CHAT-SIDEBAR-ITEMS]', error);
-
-      toast({ isError: true });
-    } finally {
-      setIsFetching(false);
     }
   };
 
@@ -182,14 +157,6 @@ export const ChatSideBarItems = ({ conversations }: ChatSideBarItemsProps) => {
                         >
                           <Pencil className="h-4 w-4 mr-2" />
                           {t('edit')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="hover:cursor-pointer"
-                          disabled={isFetching}
-                          onClick={() => handleDeleteMessages(conversation.id)}
-                        >
-                          <GrClearOption className="h-4 w-4 mr-2" />
-                          {t('clear')}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="hover:cursor-pointer text-red-500"
