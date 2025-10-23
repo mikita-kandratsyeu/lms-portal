@@ -548,7 +548,7 @@
   },
   "ai-agent": {
     "sheet": {
-      "general": "Агульныя",
+      "general": "Канфігурацыя",
       "primaryLLM": "Асноўная LLM мадэль"
     }
   }

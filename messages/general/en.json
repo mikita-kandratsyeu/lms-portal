@@ -548,7 +548,7 @@
   },
   "ai-agent": {
     "sheet": {
-      "general": "General",
+      "general": "Configuration",
       "primaryLLM": "Primary LLM Model"
     }
   }
