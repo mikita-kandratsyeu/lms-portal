@@ -1,8 +1,9 @@
 'use client';
 
-import { Globe, ImageIcon, SendHorizonal, StopCircle } from 'lucide-react';
+import { Globe, Paperclip, SendHorizonal, StopCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { FileUploadModal } from '@/components/modals/file-upload-modal';
 import { Badge, Button, Separator } from '@/components/ui';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { cn } from '@/lib/utils';
@@ -62,7 +63,7 @@ export const ChatInputFooter = ({
             />
           </button>
         )}
-        <button
+        {/* <button
           type="button"
           className="mr-3"
           disabled={isSubmitting}
@@ -77,7 +78,12 @@ export const ChatInputFooter = ({
               isImageGeneration && 'text-purple-500',
             )}
           />
-        </button>
+        </button> */}
+        <FileUploadModal endpoint="chatAttachments" onChange={() => {}} onBegin={() => {}}>
+          <button type="button" className="mr-3" disabled={isSubmitting}>
+            <Paperclip className={'w-4 h-4 text-muted-foreground transition-colors duration-300'} />
+          </button>
+        </FileUploadModal>
         <Separator orientation="vertical" className="mr-4 ml-2 h-6" />
         <Button
           className={cn(

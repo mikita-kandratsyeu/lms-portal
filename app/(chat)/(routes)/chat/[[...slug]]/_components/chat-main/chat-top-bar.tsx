@@ -4,7 +4,7 @@ import { Eraser, PanelRight, Share } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { memo, useState } from 'react';
 
-import { AgentConfiguration } from '@/components/ai/agent-configuration';
+import { AgentConfiguration } from '@/components/ai-agents/agent-configuration';
 import { ChatConversationModal } from '@/components/modals/chat-conversation-modal';
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button, Separator } from '@/components/ui';

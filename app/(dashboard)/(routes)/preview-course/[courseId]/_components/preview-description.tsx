@@ -6,7 +6,7 @@ import { BookA, BookOpen, CalendarDays, Clock9, Languages } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-import { StreamText } from '@/components/ai/stream-text';
+import { StreamText } from '@/components/ai-agents/stream-text';
 import { IconBadge } from '@/components/common/icon-badge';
 import { Price } from '@/components/common/price';
 import { TextBadge } from '@/components/common/text-badge';

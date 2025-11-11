@@ -73,6 +73,8 @@ export const ChatSideBarItems = ({ conversations }: ChatSideBarItemsProps) => {
     if (editTitleId.length && id !== editTitleId) {
       setEditTitleId('');
     }
+
+    router.replace('/chat');
   };
 
   const handleRemoveConversation = async (id: string) => {

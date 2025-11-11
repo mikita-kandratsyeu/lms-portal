@@ -17,14 +17,17 @@ export const PrettyLoader = ({ isCopilot = false }: PrettyLoaderProps) => {
   const pathname = usePathname();
 
   const isChatPage = pathname?.startsWith('/chat');
+  const isAiAgentsPage = pathname?.startsWith('/ai-agents');
+
+  const isCopilotFlow = isChatPage || isAiAgentsPage || isCopilot;
 
   return (
     <div className="w-full h-full flex items-center justify-center gap-2">
-      <Logo onlyLogoIcon isLoader isCopilot={isChatPage || isCopilot} />
+      <Logo onlyLogoIcon isLoader isCopilot={isCopilotFlow} />
       <div className={baloo2.className}>
         <div className="flex items-center gap-2">
           <p className="font-semibold text-base text-neutral-700 dark:text-neutral-300">
-            {isChatPage || isCopilot ? 'Nova Copilot' : t('name')}
+            {isCopilotFlow ? 'Nova Copilot' : t('name')}
           </p>
           <div className="flex">
             <span className="w-1 h-1 mr-1 rounded-full bg-neutral-400 inline-block animate-flash"></span>
@@ -34,7 +37,7 @@ export const PrettyLoader = ({ isCopilot = false }: PrettyLoaderProps) => {
         </div>
 
         <p className="text-xs text-muted-foreground">
-          {t(isChatPage || isCopilot ? 'description-ai' : 'description')}
+          {t(isCopilotFlow ? 'description-ai' : 'description')}
         </p>
       </div>
     </div>

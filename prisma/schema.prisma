@@ -420,7 +420,7 @@ model ChatConversationStarters {
 // AI Agents
 enum AiModelFeature {
   imageGeneration
-  imageRecognition
+  fileRecognition
   reasoning
   textGeneration
   webSearch

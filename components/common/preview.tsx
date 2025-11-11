@@ -10,7 +10,7 @@ import { ChatCompletionRole } from '@/constants/ai/general';
 import { USER_TRANSLATE_PROMPT } from '@/constants/ai/prompts';
 import { useCurrentUser } from '@/hooks/use-current-user';
 
-import { StreamText } from '../ai/stream-text';
+import { StreamText } from '../ai-agents/stream-text';
 
 type PreviewProps = {
   enableTranslate?: boolean;

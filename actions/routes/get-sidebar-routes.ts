@@ -1,7 +1,6 @@
 'use server';
 
 import { IconName } from 'lucide-react/dynamic';
-import { headers } from 'next/headers';
 
 import db from '@/lib/db';
 
@@ -13,11 +12,8 @@ export type RouteItem = {
   label: string;
 };
 
-export const getSideBarRoutes = async (): Promise<Record<string, RouteItem[]>> => {
-  const headerList = await headers();
-  const pathname = headerList.get('x-pathname');
-
-  const isPaymentsPage = pathname?.includes('/owner');
+export const getSideBarRoutes = async (referer: string): Promise<Record<string, RouteItem[]>> => {
+  const isPaymentsPage = referer?.includes('/owner');
 
   let users = 0;
   let csmIssues = 0;
@@ -136,7 +132,23 @@ export const getSideBarRoutes = async (): Promise<Record<string, RouteItem[]>> =
     },
   ];
 
+  const aiAgentsRoutes = [
+    {
+      href: '/ai-agents/general',
+      isProtected: false,
+      label: 'ai-agents',
+      icon: 'cpu',
+    },
+    {
+      href: '/ai-agents/analytic',
+      isProtected: false,
+      icon: 'bar-chart-4',
+      label: 'analytics',
+    },
+  ] as RouteItem[];
+
   return {
+    aiAgentsRoutes,
     docsRoutes,
     paymentsRoutes,
     settingsRoutes,

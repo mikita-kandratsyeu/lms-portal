@@ -157,6 +157,11 @@ export const ChatConversationModal = ({
             });
 
       setConversationId(response?.id ?? '');
+
+      if (!isEdit && !isShare) {
+        router.replace('/chat');
+      }
+
       router.refresh();
     } catch (error) {
       toast({ isError: true });

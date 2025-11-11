@@ -10,7 +10,7 @@ import Markdown from 'react-markdown';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import * as z from 'zod';
 
-import { StreamText } from '@/components/ai/stream-text';
+import { StreamText } from '@/components/ai-agents/stream-text';
 import { CopyClipboard } from '@/components/common/copy-clipboard';
 import { Editor } from '@/components/common/editor';
 import { Preview } from '@/components/common/preview';

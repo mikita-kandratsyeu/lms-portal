@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { StreamText } from '@/components/ai/stream-text';
+import { StreamText } from '@/components/ai-agents/stream-text';
 import { Button } from '@/components/ui/button';
 import {
   Form,

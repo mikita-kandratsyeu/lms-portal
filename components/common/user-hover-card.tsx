@@ -57,8 +57,8 @@ export const UserHoverCard = ({ children, userId }: UserHoverCardProps) => {
       </HoverCardTrigger>
       <HoverCardContent className="w-70">
         {user && (
-          <div className="flex justify-center space-x-4">
-            <Avatar className="border dark:border-muted-foreground w-12 h-12">
+          <div className="flex space-x-4 items-center mb-4">
+            <Avatar className="border dark:border-muted-foreground w-10 h-10">
               <AvatarImage src={user.pictureUrl ?? ''} />
               <AvatarFallback>{getFallbackName(user.name ?? '')}</AvatarFallback>
             </Avatar>
