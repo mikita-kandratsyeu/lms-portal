@@ -16,7 +16,7 @@ export const AgentFilter = () => {
           className="sm:max-w-sm"
         />
       </div>
-      <Link href="/teacher/create">
+      <Link href="/ai-agents/create">
         <Button>
           <PlusCircle className="h-4 w-4" />
           <span className="hidden sm:flex sm:ml-2"> Create Agent</span>

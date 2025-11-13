@@ -3,7 +3,9 @@ import { redirect } from 'next/navigation';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getGlobalProgress } from '@/actions/courses/get-global-progress';
+import { getCsmCategories } from '@/actions/csm/get-csm-categories';
 import { getUserNotifications } from '@/actions/users/get-user-notifications';
+import { Footer } from '@/components/footer/footer';
 import { SideBar } from '@/components/sidebar/sidebar';
 
 import { ChatNavBar } from '../(chat)/(routes)/chat/[[...slug]]/_components/chat-navbar/chat-navbar';
@@ -32,6 +34,7 @@ const AiAgentsLayout = async ({ children }: AiAgentsLayoutProps) => {
     userId: user?.userId,
     take: 5,
   });
+  const categories = await getCsmCategories();
 
   return (
     <div className="h-full flex flex-col">
@@ -48,6 +51,7 @@ const AiAgentsLayout = async ({ children }: AiAgentsLayoutProps) => {
         </div>
         <main className="md:pl-64 pt-[80px] h-full">{children}</main>
       </div>
+      <Footer categories={categories} />
     </div>
   );
 };

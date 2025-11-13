@@ -156,6 +156,7 @@
     }
   },
   "sidebar": {
+    "ai-agents": "ИИ агенты",
     "analytics": "Аналитика",
     "billingAndSubscription": "Оплата и подписка",
     "browse": "Обзор",
@@ -324,6 +325,7 @@
       "title": "Как я могу помочь вам сегодня?"
     },
     "conversation": {
+      "ai-agents": "ИИ агенты",
       "add": "Новый диалог",
       "clear": "Очистить диалог",
       "conversations": "Диалоги",
@@ -333,7 +335,7 @@
       "removed-conversation": "Диалог \"{ conversation }\" был успешно удален.",
       "share": "Поделиться",
       "title": "Новый диалог",
-      "view": "Просмотреть все диалоги"
+      "view": "Все диалоги"
     },
     "input": {
       "ask": "Спросить",

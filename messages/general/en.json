@@ -157,6 +157,7 @@
     }
   },
   "sidebar": {
+    "ai-agents": "AI agents",
     "analytics": "Analytics",
     "billingAndSubscription": "Billing & Subscription",
     "browse": "Browse",
@@ -325,6 +326,7 @@
       "title": "What can I assist you with today?"
     },
     "conversation": {
+      "ai-agents": "AI agents",
       "add": "New conversation",
       "clear": "Clear the conversation",
       "conversations": "Conversations",
@@ -334,7 +336,7 @@
       "removed-conversation": "The conversation \"{conversation}\" has been successfully deleted.",
       "share": "Share",
       "title": "New conversation",
-      "view": "View all conversations"
+      "view": "All conversations"
     },
     "input": {
       "ask": "Ask",

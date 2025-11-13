@@ -157,6 +157,7 @@
     }
   },
   "sidebar": {
+    "ai-agents": "ИИ агенты",
     "analytics": "Аналітыка",
     "billingAndSubscription": "Аплата і падпіска",
     "browse": "Прагляд",
@@ -325,6 +326,7 @@
       "title": "Як я магу вам дапамагчы сёння?"
     },
     "conversation": {
+      "ai-agents": "ИИ агенты",
       "add": "Новы дыялог",
       "clear": "Ачысціць дыялог",
       "conversations": "Дыялогі",
@@ -334,7 +336,7 @@
       "removed-conversation": "Дыялог \"{ conversation }\" быў паспяхова выдалены.",
       "share": "Падзяліцца",
       "title": "Новы дыялог",
-      "view": "Прагледзець усе дыялогі"
+      "view": "Усе дыялогі"
     },
     "input": {
       "ask": "Спытайце",
