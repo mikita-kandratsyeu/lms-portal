@@ -25,6 +25,8 @@ const SearchPage = async (props: SearchPageProps) => {
     userId: user?.userId,
   });
 
+  const filteredCourses = courses.filter((course) => searchParams?.categoryIds?.includes(course.id));
+
   return (
     <>
       <Suspense>
@@ -34,7 +36,7 @@ const SearchPage = async (props: SearchPageProps) => {
       </Suspense>
       <div className="p-6 space-y-4">
         <Categories items={categories} />
-        <CoursesList items={courses} fees={fees} specificFilter />
+        <CoursesList items={filteredCourses} fees={fees} specificFilter />
       </div>
     </>
   );

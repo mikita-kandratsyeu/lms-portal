@@ -16,17 +16,15 @@ type CourseWithProgressWithCategory = Course & {
 };
 
 type GetCourses = {
-  categoryIds?: string;
   hasSubscription?: boolean;
   title?: string;
   userId?: string;
 };
 
-export const getCourses = async ({ categoryIds, hasSubscription, title, userId }: GetCourses) => {
+export const getCourses = async ({ hasSubscription, title, userId }: GetCourses) => {
   const courses = await db.course.findMany({
     where: {
       ...(!hasSubscription && { isPremium: false }),
-      ...(categoryIds && { categoryId: { in: JSON.parse(categoryIds ?? '[]') } }),
       isPublished: true,
       title: { contains: title, mode: 'insensitive' },
     },
@@ -45,7 +43,6 @@ export const getCourses = async ({ categoryIds, hasSubscription, title, userId }
   const courseWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
     courses.map(async (course) => {
       const imagePlaceholder = await getImagePlaceHolder(course.imageUrl!);
-
       const purchasesUserIds = course.purchases.filter((purchase) => purchase.userId === userId);
 
       if (!userId || !purchasesUserIds.length) {
