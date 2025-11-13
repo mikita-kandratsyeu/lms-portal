@@ -25,7 +25,9 @@ const SearchPage = async (props: SearchPageProps) => {
     userId: user?.userId,
   });
 
-  const filteredCourses = courses.filter((course) => searchParams?.categoryIds?.includes(course.id));
+  const filteredCourses = courses.filter((course) =>
+    searchParams?.categoryIds?.includes(course.id),
+  );
 
   return (
     <>
