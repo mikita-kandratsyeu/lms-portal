@@ -9,7 +9,7 @@ import { Categories } from '../_components/category/categories';
 import { CoursesList } from '../_components/courses/courses-list';
 
 type SearchPageProps = {
-  searchParams: Promise<{ title: string; categoryIds: string }>;
+  searchParams: Promise<{ title: string }>;
 };
 
 const SearchPage = async (props: SearchPageProps) => {
@@ -25,10 +25,6 @@ const SearchPage = async (props: SearchPageProps) => {
     userId: user?.userId,
   });
 
-  const filteredCourses = courses.filter((course) =>
-    searchParams?.categoryIds?.includes(course.id),
-  );
-
   return (
     <>
       <Suspense>
@@ -38,7 +34,7 @@ const SearchPage = async (props: SearchPageProps) => {
       </Suspense>
       <div className="p-6 space-y-4">
         <Categories items={categories} />
-        <CoursesList items={filteredCourses} fees={fees} specificFilter />
+        <CoursesList items={courses} fees={fees} specificFilter />
       </div>
     </>
   );

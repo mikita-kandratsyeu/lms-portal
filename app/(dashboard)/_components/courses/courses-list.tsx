@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { MdWorkspacePremium } from 'react-icons/md';
 
 import { getCourses } from '@/actions/courses/get-courses';
+import { useCourseStore } from '@/hooks/store/use-course-store';
 import { getGroupedCourseList } from '@/lib/course';
 import { cn } from '@/lib/utils';
 
@@ -19,8 +20,14 @@ type CoursesListProps = {
 export const CoursesList = ({ fees, items, specificFilter }: CoursesListProps) => {
   const t = useTranslations('courses.list');
 
+  const { categoryIds } = useCourseStore((state) => ({ categoryIds: state.categoryIds }));
+
+  const filteredItems = categoryIds.length
+    ? items.filter((item) => categoryIds.includes(item.categoryId ?? ''))
+    : items;
+
   const { groupedCourseList, topCourseIds, newCourseIds } = getGroupedCourseList(
-    items,
+    filteredItems,
     specificFilter,
   );
 
@@ -61,7 +68,7 @@ export const CoursesList = ({ fees, items, specificFilter }: CoursesListProps) =
           </div>
         );
       })}
-      {!items.length && (
+      {!filteredItems.length && (
         <div className="text-center text-sm text-muted-foreground mt-10">{t('notFound')}</div>
       )}
     </>

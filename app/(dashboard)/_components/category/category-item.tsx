@@ -1,9 +1,7 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import qs from 'query-string';
-
 import { Button } from '@/components/ui';
+import { useCourseStore } from '@/hooks/store/use-course-store';
 import { cn } from '@/lib/utils';
 
 type CategoryItemProps = {
@@ -12,32 +10,18 @@ type CategoryItemProps = {
 };
 
 export const CategoryItem = ({ label, value = 'all' }: CategoryItemProps) => {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { categoryIds, removeCategoryId, resetCategoryIds, setCategoryId } = useCourseStore();
 
-  const currentCategoryIds = JSON.parse(searchParams.get('categoryIds') ?? '[]');
-  const currentTitle = searchParams.get('title');
-  const isSelected =
-    currentCategoryIds.includes(value) || (value === 'all' && !currentCategoryIds?.length);
+  const isSelected = categoryIds.includes(value) || (value === 'all' && !categoryIds?.length);
 
   const handleClick = () => {
-    const categoryIds = isSelected
-      ? currentCategoryIds.filter((item: string) => item !== value)
-      : [...currentCategoryIds, value];
-
-    const url = qs.stringifyUrl(
-      {
-        url: pathname,
-        query: {
-          categoryIds: value === 'all' || !categoryIds.length ? null : JSON.stringify(categoryIds),
-          title: currentTitle,
-        },
-      },
-      { skipNull: true, skipEmptyString: true },
-    );
-
-    router.push(url);
+    if (value === 'all') {
+      resetCategoryIds();
+    } else if (isSelected) {
+      removeCategoryId(value);
+    } else {
+      setCategoryId(value);
+    }
   };
 
   return (
