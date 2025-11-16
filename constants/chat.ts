@@ -1,5 +1,4 @@
 export enum CONVERSATION_ACTION {
-  CREATE = 'create',
   DELETE_ALL = 'delete-all',
   EDIT = 'edit',
   EMPTY_MESSAGES = 'empty-messages',

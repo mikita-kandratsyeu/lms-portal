@@ -122,7 +122,7 @@ export const GeneralSettingsForm = ({
           <div className="flex flex-col gap-y-2">
             <div className="text-xs text-muted-foreground font-medium">{t('name')}</div>
             <Input
-              disabled={isFetching}
+              disabled={isFetching || status === AuthStatus.LOADING}
               placeholder={t('enterName')}
               value={name}
               onChange={(event) => setName(event.target.value)}

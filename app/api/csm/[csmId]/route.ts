@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { sentEmailByTemplate } from '@/actions/mailer/sent-email-by-template';
 import db from '@/lib/db';
-import { isOwner } from '@/lib/owner';
+import { isBusinessOwner } from '@/lib/owner';
 import { capitalize } from '@/lib/utils';
 
 export const PATCH = async (req: NextRequest, props: { params: Promise<{ csmId: string }> }) => {
@@ -13,7 +13,7 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ csmId: 
   try {
     const user = await getCurrentUser();
 
-    if (!isOwner(user?.userId)) {
+    if (!isBusinessOwner(user?.userId)) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
@@ -61,7 +61,7 @@ export const DELETE = async (_: NextRequest, props: { params: Promise<{ csmId: s
   try {
     const user = await getCurrentUser();
 
-    if (!isOwner(user?.userId)) {
+    if (!isBusinessOwner(user?.userId)) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 

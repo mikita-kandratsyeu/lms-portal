@@ -16,9 +16,7 @@ export enum UserRole {
 }
 
 export const enum AuthStatus {
-  AUTHENTICATED = 'authenticated',
   LOADING = 'loading',
-  UNAUTHENTICATED = 'unauthenticated',
 }
 
 export const OAUTH_LABELS = {

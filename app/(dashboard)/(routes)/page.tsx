@@ -9,7 +9,7 @@ import { Categories } from '../_components/category/categories';
 import { CoursesList } from '../_components/courses/courses-list';
 
 type SearchPageProps = {
-  searchParams: Promise<{ title: string; categoryIds: string }>;
+  searchParams: Promise<{ title: string }>;
 };
 
 const SearchPage = async (props: SearchPageProps) => {

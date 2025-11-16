@@ -8,7 +8,7 @@ import { Provider, UserRole } from '@/constants/auth';
 import { OTP_SECRET_SECURE } from '@/constants/otp';
 
 import { isString } from '../guard';
-import { isOwner } from '../owner';
+import { isBusinessOwner } from '../owner';
 import { absoluteUrl, encrypt } from '../utils';
 
 export const callbacks: NextAuthOptions['callbacks'] = {
@@ -89,7 +89,7 @@ export const callbacks: NextAuthOptions['callbacks'] = {
       const userId = session?.user?.userId;
 
       const updatedToken = await getUpdatedUser(userId);
-      const userSubscription = isOwner(userId) || (await getUserSubscription(userId));
+      const userSubscription = isBusinessOwner(userId) || (await getUserSubscription(userId));
 
       if (updatedToken?.role && updatedToken.role !== session?.user?.role) {
         session.user.role = updatedToken.role;

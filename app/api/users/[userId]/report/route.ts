@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { sentEmailTo } from '@/actions/mailer/sent-email-to';
 import { getUserReportBuffer } from '@/actions/users/get-user-report';
-import { isOwner } from '@/lib/owner';
+import { isBusinessOwner } from '@/lib/owner';
 
 export async function POST(_: NextRequest, props: { params: Promise<{ userId: string }> }) {
   const { userId } = await props.params;
@@ -12,7 +12,7 @@ export async function POST(_: NextRequest, props: { params: Promise<{ userId: st
   try {
     const user = await getCurrentUser();
 
-    if (!isOwner(user?.userId)) {
+    if (!isBusinessOwner(user?.userId)) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
