@@ -1,12 +1,12 @@
 'use client';
 
-import { BookMarked, Gitlab, LogIn, LogOut, Settings2 } from 'lucide-react';
+import { BookMarked, BriefcaseBusiness, LogIn, LogOut, Settings2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { UserRole } from '@/constants/auth';
 import { useCurrentUser } from '@/hooks/use-current-user';
-import { isOwner } from '@/lib/owner';
+import { isBusinessOwner } from '@/lib/owner';
 import { getFallbackName } from '@/lib/utils';
 
 import { LanguageSwitcher } from '../common/language-switcher';
@@ -89,9 +89,9 @@ export const UserProfileButton = ({ globalProgress }: UserProfileButtonProps) =>
             <DropdownMenuSeparator className="-mx-1 my-1 h-px bg-muted" />
           </>
         )}
-        {isOwner(user.userId) && (
+        {isBusinessOwner(user.userId) && (
           <DropdownMenuItem className="hover:cursor-pointer" onClick={() => router.push('/owner')}>
-            <Gitlab className="h-4 w-4 mr-2" />
+            <BriefcaseBusiness className="h-4 w-4 mr-2" />
             {t('owner')}
           </DropdownMenuItem>
         )}

@@ -7,14 +7,14 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { PromoStatus } from '@/constants/payments';
 import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
-import { isOwner } from '@/lib/owner';
+import { isBusinessOwner } from '@/lib/owner';
 import { stripe } from '@/server/stripe';
 
 export const POST = async (req: NextRequest) => {
   try {
     const user = await getCurrentUser();
 
-    if (!user || !isOwner(user.userId)) {
+    if (!user || !isBusinessOwner(user.userId)) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 

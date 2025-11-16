@@ -5,13 +5,13 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { TEN_MINUTE_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
 import db from '@/lib/db';
-import { isOwner } from '@/lib/owner';
+import { isBusinessOwner } from '@/lib/owner';
 
 export const GET = async (req: NextRequest) => {
   try {
     const user = await getCurrentUser();
 
-    if (!isOwner(user?.userId)) {
+    if (!isBusinessOwner(user?.userId)) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 

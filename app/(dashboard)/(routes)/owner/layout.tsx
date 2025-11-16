@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { PLATFORM_DESCRIPTION } from '@/constants/common';
-import { isOwner } from '@/lib/owner';
+import { isBusinessOwner } from '@/lib/owner';
 
 export const metadata: Metadata = {
   title: 'Owner',
@@ -17,7 +17,7 @@ type OwnerLayoutProps = Readonly<{
 const OwnerLayout = async ({ children }: OwnerLayoutProps) => {
   const user = await getCurrentUser();
 
-  if (!isOwner(user?.userId)) {
+  if (!isBusinessOwner(user?.userId)) {
     return redirect('/');
   }
 

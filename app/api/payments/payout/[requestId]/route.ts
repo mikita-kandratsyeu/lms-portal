@@ -9,7 +9,7 @@ import { PayoutRequestStatus } from '@/constants/payments';
 import db from '@/lib/db';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 import { createWebSocketNotification } from '@/lib/notifications';
-import { isOwner } from '@/lib/owner';
+import { isBusinessOwner } from '@/lib/owner';
 import { absoluteUrl } from '@/lib/utils';
 import { stripe } from '@/server/stripe';
 
@@ -22,7 +22,7 @@ export const POST = async (
   try {
     const user = await getCurrentUser();
 
-    if (!user || !isOwner(user.userId)) {
+    if (!user || !isBusinessOwner(user.userId)) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
