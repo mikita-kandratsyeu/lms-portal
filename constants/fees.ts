@@ -4,6 +4,5 @@ export const enum CalculationMethod {
 }
 
 export const enum FeeType {
-  SERVICE = 'service',
   STRIPE = 'stripe',
 }

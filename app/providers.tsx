@@ -9,7 +9,7 @@ import ReactConfetti from 'react-confetti';
 import Snowfall from 'react-snowfall';
 
 import { GetAppConfig } from '@/actions/configs/get-app-config';
-import { Toaster as ToastProvider } from '@/components/ui/toaster';
+import { Toaster as ToasterProvider } from '@/components/ui/sonner';
 import { useConfettiStore } from '@/hooks/store/use-confetti-store';
 import { useUserSettingsStore } from '@/hooks/store/use-user-settings.store';
 import { useAppConfig } from '@/hooks/use-app-config';
@@ -99,7 +99,7 @@ export const Providers = ({
         <AuthProvider>
           {config?.features?.christmas && <ChristmasProvider />}
           <ConfettiProvider />
-          <ToastProvider />
+          <ToasterProvider />
           {children}
         </AuthProvider>
       </NextIntlClientProvider>
