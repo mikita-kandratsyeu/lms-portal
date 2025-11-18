@@ -148,8 +148,8 @@ export const getSideBarRoutes = async (referer: string): Promise<Record<string, 
   ] as RouteItem[];
 
   return {
-    businessOwnerRoutes,
     aiAgentsRoutes,
+    businessOwnerRoutes,
     docsRoutes,
     settingsRoutes,
     studentRoutes,
