@@ -89,7 +89,7 @@ export const NotificationsComponent = ({ userNotifications = [] }: Notifications
   const buttonClassName = useMemo(
     () =>
       cn(
-        'group flex w-full text-sm text-muted-foreground items-center p-2 hover:bg-muted rounded-lg transition-background group duration-300 ease-in-out border hover:text-primary dark:border-muted-foreground',
+        'group flex text-sm text-muted-foreground items-center p-2 hover:bg-muted rounded-lg transition-background group duration-300 ease-in-out border hover:text-primary dark:border-muted-foreground',
         open && 'bg-muted text-primary font-medium',
       ),
     [open],

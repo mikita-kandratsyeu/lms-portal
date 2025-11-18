@@ -1,30 +1,22 @@
 'use client';
 
-import { Cpu, MoreHorizontal } from 'lucide-react';
+import { Cpu } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { IoChatboxEllipsesOutline } from 'react-icons/io5';
 
 import { absoluteUrl } from '@/lib/utils';
 
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../ui';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui';
 
-export const ChatContextMenu = () => {
+type ChatContextMenuProps = { children: React.ReactNode };
+
+export const ChatContextMenu = ({ children }: ChatContextMenuProps) => {
   const t = useTranslations('chat.conversation');
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button className="w-full" variant="outline">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <Link href={absoluteUrl('/chat')} target="_blank">
           <DropdownMenuItem className="hover:cursor-pointer">
