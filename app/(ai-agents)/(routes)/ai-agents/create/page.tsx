@@ -53,9 +53,9 @@ const CreatePage = () => {
   return (
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div>
-        <h1 className="text-2xl">Name your AI agent</h1>
+        <h1 className="text-2xl">Name Your AI Agent</h1>
         <p className="text-sm text-muted-foreground">
-          What would you like to name your agent? Do not worry, you can change this latter.
+          What would you like to name your agent? Don’t worry, you can always change it later.
         </p>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 mt-8">
