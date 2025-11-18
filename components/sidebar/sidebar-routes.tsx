@@ -20,7 +20,7 @@ export const SideBarRoutes = ({ routes }: SideBarRoutesProps) => {
   const pathname = usePathname();
   const isSettingsPage = pathname?.includes('/settings');
   const isTeacherPage = pathname?.includes('/teacher');
-  const isPaymentsPage = pathname?.includes('/owner');
+  const isBusinessOwnerPage = pathname?.includes('/owner');
   const isDocsPage = pathname?.includes('/docs');
 
   const isLoading = status === AuthStatus.LOADING;
@@ -30,8 +30,8 @@ export const SideBarRoutes = ({ routes }: SideBarRoutesProps) => {
       return routes.settingsRoutes;
     }
 
-    if (isPaymentsPage) {
-      return routes.paymentsRoutes;
+    if (isBusinessOwnerPage) {
+      return routes.businessOwnerRoutes;
     }
 
     if (isDocsPage) {
@@ -41,11 +41,12 @@ export const SideBarRoutes = ({ routes }: SideBarRoutesProps) => {
     return isTeacherPage ? routes.teacherRoutes : routes.studentRoutes;
   }, [
     isDocsPage,
-    isPaymentsPage,
+    isBusinessOwnerPage,
     isSettingsPage,
     isTeacherPage,
+    routes.aiAgentsRoutes,
+    routes.businessOwnerRoutes,
     routes.docsRoutes,
-    routes.paymentsRoutes,
     routes.settingsRoutes,
     routes.studentRoutes,
     routes.teacherRoutes,

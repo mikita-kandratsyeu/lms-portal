@@ -6,6 +6,7 @@ import { toast as soonerToast } from 'sonner';
 type Toast = {
   action?: { label: string; onClick: () => void };
   description?: string;
+  duration?: number;
   isError?: boolean;
   promiseData?: {
     promise: Promise<any>;
@@ -21,7 +22,15 @@ type Toast = {
 
 const toast =
   (t: (key: string) => string) =>
-  ({ action, description, isError = false, promiseData, title = '', type = 'info' }: Toast) => {
+  ({
+    action,
+    description,
+    duration,
+    isError = false,
+    promiseData,
+    title = '',
+    type = 'info',
+  }: Toast) => {
     if (isError) {
       return soonerToast.error(t('error.title'), { description: t('error.body') });
     }
@@ -35,6 +44,7 @@ const toast =
     return toast(title, {
       action,
       description,
+      duration,
     });
   };
 

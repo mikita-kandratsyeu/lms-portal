@@ -84,7 +84,7 @@ export const getSideBarRoutes = async (): Promise<Record<string, RouteItem[]>> =
     },
   ] as RouteItem[];
 
-  const paymentsRoutes = [
+  const businessOwnerRoutes = [
     {
       href: '/owner',
       icon: 'landmark',
@@ -137,8 +137,8 @@ export const getSideBarRoutes = async (): Promise<Record<string, RouteItem[]>> =
   ];
 
   return {
+    businessOwnerRoutes,
     docsRoutes,
-    paymentsRoutes,
     settingsRoutes,
     studentRoutes,
     teacherRoutes,

@@ -52,7 +52,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
           timeZone={timeZone}
           userSettings={userSettings}
         >
-          {appConfig.features.testMode && <TestModeDeclaimer />}
+          {appConfig.features.testMode && <TestModeDeclaimer useToast />}
           {children}
           <CookieConsent />
         </Providers>
