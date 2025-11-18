@@ -6,7 +6,7 @@ import { PLATFORM_DESCRIPTION } from '@/constants/common';
 import { isBusinessOwner } from '@/lib/owner';
 
 export const metadata: Metadata = {
-  title: 'Owner',
+  title: 'Business',
   description: PLATFORM_DESCRIPTION,
 };
 
