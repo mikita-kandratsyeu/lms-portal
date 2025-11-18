@@ -19,7 +19,6 @@ export const Chat = () => {
   const { currentModelLabel } = useChatStore((state) => ({
     currentModelLabel: state.currentModelLabel,
   }));
-
   const { isCopilotInNewTab } = useUserSettingsStore((state) => ({
     isCopilotInNewTab: state.isCopilotInNewTab,
   }));
@@ -44,7 +43,7 @@ export const Chat = () => {
             </div>
           </button>
           <ChatContextMenu>
-            <button className={buttonStyles} aria-label="More Options">
+            <button className={cn(buttonStyles, 'px-2')} aria-label="More Options">
               <MoreHorizontalIcon className="w-4 h-4" />
             </button>
           </ChatContextMenu>
@@ -62,7 +61,7 @@ export const Chat = () => {
                 <p className={'text-muted-foreground text-xs'}>{currentModelLabel}</p>
               </div>
               <div className="flex gap-x-2">
-                <ChatContextMenu>
+                <ChatContextMenu isNewTab>
                   <Button className="w-full" variant="outline">
                     <MoreHorizontalIcon className="h-4 w-4" />
                   </Button>
