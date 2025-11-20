@@ -419,11 +419,11 @@ model ChatConversationStarters {
 
 // AI Agents
 enum AiModelFeature {
-  imageGeneration
-  fileRecognition
+  image
+  file
   reasoning
-  textGeneration
-  webSearch
+  text
+  search
 }
 
 model AiModel {
