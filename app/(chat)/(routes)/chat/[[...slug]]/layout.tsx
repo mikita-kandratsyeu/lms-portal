@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: 'Nova Copilot',
   description: 'Nova Copilot',
   icons: {
-    icon: '/assets/copilot.ico',
+    icon: '/assets/copilot.svg',
   },
 };
 

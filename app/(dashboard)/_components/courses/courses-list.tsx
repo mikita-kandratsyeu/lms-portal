@@ -2,6 +2,7 @@
 
 import { Fee } from '@prisma/client';
 import { useTranslations } from 'next-intl';
+import { Fragment } from 'react';
 import { MdWorkspacePremium } from 'react-icons/md';
 
 import { getCourses } from '@/actions/courses/get-courses';
@@ -42,7 +43,7 @@ export const CoursesList = ({ fees, items, specificFilter }: CoursesListProps) =
         const title = useKey ? t(`labels.${key}`) : items[0].category?.name;
 
         return (
-          <div key={key}>
+          <Fragment key={key}>
             {title && (
               <div className={cn(index > 0 && 'mt-8', 'flex gap-x-2 items-center mb-4')}>
                 {specificFilter && isPremium && (
@@ -65,7 +66,7 @@ export const CoursesList = ({ fees, items, specificFilter }: CoursesListProps) =
                 />
               ))}
             </div>
-          </div>
+          </Fragment>
         );
       })}
       {!filteredItems.length && (

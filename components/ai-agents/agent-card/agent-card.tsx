@@ -1,6 +1,6 @@
 'use client';
 
-import { ChartColumn, CirclePlus } from 'lucide-react';
+import { ChartColumnIcon, PlugIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { TextBadge } from '@/components/common/text-badge';
@@ -43,11 +43,11 @@ export const AgentCard = () => {
         </div>
         <div className="flex justify-between items-center gap-x-4">
           <Button variant="outline" size="sm">
-            <CirclePlus className="w-4 h-4 mr-2" />
-            <span>Add</span>
+            <PlugIcon className="w-4 h-4 mr-2" />
+            <span>Connect</span>
           </Button>
           <div className="flex gap-x-2 items-center text-muted-foreground">
-            <ChartColumn className="w-4 h-4" />
+            <ChartColumnIcon className="w-4 h-4" />
             <span className="text-xs">123 total uses</span>
           </div>
         </div>

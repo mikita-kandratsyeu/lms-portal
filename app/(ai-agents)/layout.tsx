@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: 'AI Agents',
   description: 'AI Agents',
   icons: {
-    icon: '/assets/copilot.ico',
+    icon: '/assets/copilot.svg',
   },
 };
 
