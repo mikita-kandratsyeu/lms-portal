@@ -44,7 +44,7 @@ const CreatePage = () => {
 
       toast({ title: 'AI agent has been created' });
 
-      router.push(`/ai-agents/general/${data.id}`);
+      router.push(`/ai-agents/general/${data.id}/edit`);
     } catch (error) {
       toast({ isError: true });
     }
