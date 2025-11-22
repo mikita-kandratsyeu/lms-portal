@@ -20,7 +20,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { fetcher } from '@/lib/fetcher';
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: 'Name is required' }),
+  name: z.string().min(1, { message: 'Agent name is required' }),
 });
 
 const CreatePage = () => {
@@ -35,16 +35,16 @@ const CreatePage = () => {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const data = await fetcher.post('/api/courses', {
+      const data = await fetcher.post('/api/ai/agents', {
         body: {
           ...values,
         },
         responseType: 'json',
       });
 
-      toast({ title: 'Course has been created' });
+      toast({ title: 'AI agent has been created' });
 
-      router.push(`/teacher/courses/${data.id}`);
+      router.push(`/ai-agents/general/${data.id}`);
     } catch (error) {
       toast({ isError: true });
     }
@@ -66,11 +66,7 @@ const CreatePage = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isSubmitting}
-                      placeholder="e.g 'Advanced Web Development'"
-                    />
+                    <Input {...field} disabled={isSubmitting} placeholder="e.g 'Nova Copilot'" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

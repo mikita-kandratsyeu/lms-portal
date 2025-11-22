@@ -428,15 +428,16 @@ enum AiModelFeature {
 
 model AiModel {
   id             String           @id @default(uuid())
+  AiAgent        AiAgent[]
   createdAt      DateTime         @default(now())
   features       AiModelFeature[] @default([])
+  isDefault      Boolean?         @default(false)
   isSubscription Boolean?         @default(false)
   name           String
   provider       String
   providerName   String
   updatedAt      DateTime         @updatedAt
   value          String
-  AiAgent        AiAgent[]
 }
 
 model AiAgent {
@@ -446,10 +447,11 @@ model AiAgent {
   chatConversationStarters ChatConversationStarters[]
   chatConversations        ChatConversation[]
   createdAt                DateTime                   @default(now())
-  description              String
-  isPublic                 String
-  systemInstructions       String
-  title                    String
+  description              String?                    @db.Text
+  isDraft                  Boolean                    @default(true)
+  isPublic                 Boolean                    @default(false)
+  name                     String                     @db.Text
+  systemInstructions       String?                    @db.Text
   updatedAt                DateTime                   @updatedAt
   user                     User?                      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                   String?
