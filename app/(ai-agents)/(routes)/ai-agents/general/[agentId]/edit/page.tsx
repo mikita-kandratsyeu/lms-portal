@@ -1,10 +1,9 @@
 import {
-  ArrowLeft,
-  BadgeDollarSign,
-  Files,
-  Hash,
+  ArrowLeftIcon,
+  BracketsIcon,
+  FlaskConicalIcon,
   LayoutDashboardIcon,
-  ListChecks,
+  MessageCircleMoreIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -14,16 +13,7 @@ import { Banner } from '@/components/common/banner';
 import { IconBadge } from '@/components/common/icon-badge';
 import db from '@/lib/db';
 
-import { Actions } from './_components/actions';
-import { AdvancedOptionsForm } from './_components/form/advanced-options-form';
-import { AttachmentForm } from './_components/form/attachment-form';
-import { CategoryForm } from './_components/form/category-form';
-import { ChaptersForm } from './_components/form/chapters-form';
-import { CustomTagsForm } from './_components/form/custom-tags-form';
-import { DescriptionForm } from './_components/form/description-form';
-import { ImageForm } from './_components/form/image-form';
-import { PriceForm } from './_components/form/price-form';
-import { TitleForm } from './_components/form/title-form';
+import { ModelsForm } from './_components/form/models-form';
 
 type AgentIdPageProps = { params: Promise<{ agentId: string }> };
 
@@ -37,29 +27,27 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
       id: agentId,
       userId: user!.userId,
     },
-    // include: {
-    //   _count: {
-    //     select: { purchases: true },
-    //   },
-    //   attachments: { orderBy: { createdAt: 'desc' } },
-    //   chapters: { orderBy: { position: 'asc' } },
-    // },
+    include: {
+      aiModels: { orderBy: [{ isDefault: 'desc' }, { providerName: 'asc' }, { name: 'asc' }] },
+    },
   });
 
-  // const fees = await db.fee.findMany({ orderBy: { name: 'asc' } });
-
-  // const categories = await db.category.findMany({ orderBy: { name: 'asc' } });
-
   if (!agent) {
-    redirect('/');
+    redirect('/ai-agents/general');
   }
+
+  const models = await db.aiModel.findMany({
+    orderBy: [{ isDefault: 'desc' }, { providerName: 'asc' }, { name: 'asc' }],
+  });
 
   const requiredFields = [
     // course.categoryId,
     // course.chapters.some((chapter) => chapter.isPublished),
     agent.description,
     // course.imageUrl,
+    agent.pictureUrl,
     agent.name,
+    agent.aiModels.length,
   ];
 
   const totalFields = requiredFields.length;
@@ -68,14 +56,14 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
 
   const completionText = `(${completedFields}/${totalFields})`;
 
-  // const commonFormProps = {
-  //   courseId: course.id,
-  //   initialData: course,
-  // };
+  const commonFormProps = {
+    agentId,
+    initialData: agent,
+  };
 
   return (
     <>
-      {!agent.isDraft && (
+      {agent.isDraft && (
         <Banner label="This agent has not been published. It will not be visible for you or other members." />
       )}
       <div className="p-6">
@@ -85,7 +73,7 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
               className="flex items-center text-sm hover:opacity-75 transition duration-300 mb-6"
               href={'/ai-agents/general'}
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeftIcon className="h-4 w-4 mr-2" />
               Back to agents
             </Link>
             <div className="flex items-center justify-between w-full">
@@ -105,12 +93,14 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-          <div>
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={LayoutDashboardIcon} />
-              <h2 className="text-xl">Customize your agent</h2>
-            </div>
-            {/* <TitleForm {...commonFormProps} />
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={LayoutDashboardIcon} />
+                <h2 className="text-xl">Customize your agent</h2>
+              </div>
+              <p>Name, Description, Picture</p>
+              {/* <TitleForm {...commonFormProps} />
             <DescriptionForm {...commonFormProps} />
             <ImageForm {...commonFormProps} />
             <CategoryForm
@@ -118,35 +108,29 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
               options={categories.map((category) => ({ label: category.name, value: category.id }))}
             />
             <AdvancedOptionsForm {...commonFormProps} /> */}
+            </div>
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={MessageCircleMoreIcon} />
+                <h2 className="text-xl">Conversation starters</h2>
+              </div>
+              <p>list for all langs in APP</p>
+            </div>
           </div>
           <div className="space-y-6">
             <div>
               <div className="flex items-center gap-x-2">
-                <IconBadge icon={ListChecks} />
-                <h2 className="text-xl">Course chapters</h2>
+                <IconBadge icon={BracketsIcon} />
+                <h2 className="text-xl">Select LLM models</h2>
               </div>
-              {/* <ChaptersForm {...commonFormProps} /> */}
+              <ModelsForm {...commonFormProps} models={models} />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
-                <IconBadge icon={BadgeDollarSign} />
-                <h2 className="text-xl">Sell your course</h2>
+                <IconBadge icon={FlaskConicalIcon} />
+                <h2 className="text-xl">Experimental features</h2>
               </div>
-              {/* <PriceForm {...commonFormProps} fees={fees} /> */}
-            </div>
-            <div>
-              <div className="flex items-center gap-x-2">
-                <IconBadge icon={Files} />
-                <h2 className="text-xl">Recourses & Attachments</h2>
-              </div>
-              {/* <AttachmentForm {...commonFormProps} /> */}
-            </div>
-            <div>
-              <div className="flex items-center gap-x-2">
-                <IconBadge icon={Hash} />
-                <h2 className="text-xl">Custom tags</h2>
-              </div>
-              {/* <CustomTagsForm {...commonFormProps} /> */}
+              <p>Own API Key, Own API server (Ollama), temperature (0.7), system instruction</p>
             </div>
           </div>
         </div>

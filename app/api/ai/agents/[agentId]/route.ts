@@ -5,7 +5,9 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import db from '@/lib/db';
 import { isBusinessOwner } from '@/lib/owner';
 
-export const POST = async (req: NextRequest) => {
+export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId: string }> }) => {
+  const { agentId } = await props.params;
+
   try {
     const user = await getCurrentUser();
 
@@ -17,27 +19,33 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
     }
 
-    const { name } = await req.json();
+    const values = await req.json();
+
     const defaultModel = await db.aiModel.findFirst({ where: { isDefault: true } });
 
-    if (defaultModel) {
-      const agent = await db.aiAgent.create({
-        data: {
-          userId: user.userId,
-          aiModels: {
-            connect: [{ id: defaultModel.id }],
-          },
-          name,
-          isDraft: true,
+    const updatedAgent = await db.aiAgent.update({
+      where: { id: agentId, userId: user.userId },
+      data: {
+        aiModels: {
+          set: [
+            ...values?.modelIds?.map((id: string) => ({
+              id,
+            })),
+            defaultModel && { id: defaultModel.id },
+          ],
         },
-      });
+      },
+      select: {
+        id: true,
+        updatedAt: true,
+        name: true,
+        aiModels: { select: { id: true, value: true } },
+      },
+    });
 
-      return NextResponse.json(agent);
-    }
-
-    return new NextResponse(ReasonPhrases.BAD_REQUEST, { status: StatusCodes.BAD_REQUEST });
+    return NextResponse.json(updatedAgent);
   } catch (error) {
-    console.error('[POST_CREATE_AI_AGENT]', error);
+    console.error('[AGENT_ID_PATCH]', error);
 
     return new NextResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, {
       status: StatusCodes.INTERNAL_SERVER_ERROR,

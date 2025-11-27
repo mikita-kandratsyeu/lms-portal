@@ -62,7 +62,7 @@ const CourseIdPage = async (props: CourseIdPageProps) => {
   const completionText = `(${completedFields}/${totalFields})`;
 
   const commonFormProps = {
-    courseId: course.id,
+    courseId,
     initialData: course,
   };
 

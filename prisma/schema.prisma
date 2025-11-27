@@ -427,7 +427,7 @@ enum AiModelFeature {
 
 model AiModel {
   id             String           @id @default(uuid())
-  AiAgent        AiAgent[]
+  aiAgents       AiAgent[]
   createdAt      DateTime         @default(now())
   features       AiModelFeature[] @default([])
   isDefault      Boolean?         @default(false)
@@ -441,8 +441,7 @@ model AiModel {
 
 model AiAgent {
   id                       String                     @id @default(uuid())
-  aiModel                  AiModel                    @relation(fields: [aiModelId], references: [id], onDelete: Cascade)
-  aiModelId                String
+  aiModels                 AiModel[]
   chatConversationStarters ChatConversationStarters[]
   chatConversations        ChatConversation[]
   createdAt                DateTime                   @default(now())
