@@ -15,7 +15,7 @@ export const getSummary = async <T>(data: T) => {
   try {
     const response: any = await generateCompletion({
       instructions:
-        'You are a machine that only returns JSON object format without unnecessary symbols.',
+        'You are a machine that returns ONLY with valid JSON format without unnecessary symbols.',
       input: [
         {
           content: NOVA_PULSE_SUMMARY(data, locale),

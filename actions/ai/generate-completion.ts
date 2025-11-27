@@ -1,27 +1,31 @@
 'use server';
 
-import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
-import { ResponseCreateParamsBase } from 'openai/resources/responses/responses.mjs';
+import { ChatCompletionMessageParam, ChatCompletionTool } from 'openai/resources/index.mjs';
+import { ResponseCreateParamsBase, Tool } from 'openai/resources/responses/responses.mjs';
 
-import { AI_PROVIDER, ChatCompletionRole } from '@/constants/ai/general';
+import { AI_PROVIDER, ChatCompletionRole, DEFAULT_TEMPERATURE } from '@/constants/ai/general';
 import { LocaleInfo } from '@/hooks/store/use-locale-store';
 
 import { getCurrentUser } from '../auth/get-current-user';
 import { getTargetProvider } from './get-target-provider';
 
 type GenerateCompletion = Omit<ResponseCreateParamsBase, 'model'> & {
+  customTools?: unknown[];
   isSearch?: boolean;
   localeInfo?: LocaleInfo;
   model?: string;
+  temperature?: number;
 };
 
 export const generateCompletion = async ({
+  customTools = [],
   input,
   instructions,
   isSearch = false,
   localeInfo,
   model,
   stream = false,
+  temperature = DEFAULT_TEMPERATURE,
 }: GenerateCompletion) => {
   const user = await getCurrentUser();
 
@@ -31,6 +35,25 @@ export const generateCompletion = async ({
     return { completion: null, model: targetTextModel.value };
   }
 
+  const tools = [
+    ...customTools,
+    ...(isSearch
+      ? [
+          {
+            type: 'web_search_preview' as const,
+            user_location: localeInfo
+              ? {
+                  type: 'approximate' as const,
+                  country: localeInfo.details.countryCode,
+                  city: localeInfo.details.city,
+                  region: localeInfo.details.country,
+                }
+              : null,
+          },
+        ]
+      : []),
+  ];
+
   const completion =
     providerName === AI_PROVIDER.openai
       ? await provider.responses.create({
@@ -38,23 +61,9 @@ export const generateCompletion = async ({
           instructions,
           model: targetTextModel.value,
           stream,
-          tools: [
-            ...(isSearch
-              ? [
-                  {
-                    type: 'web_search_preview' as const,
-                    user_location: localeInfo
-                      ? {
-                          type: 'approximate' as const,
-                          country: localeInfo.details.countryCode,
-                          city: localeInfo.details.city,
-                          region: localeInfo.details.country,
-                        }
-                      : null,
-                  },
-                ]
-              : []),
-          ],
+          temperature,
+          tool_choice: 'auto',
+          tools: tools as unknown as Tool[],
         })
       : await provider.chat.completions.create({
           messages: [
@@ -63,6 +72,9 @@ export const generateCompletion = async ({
           ] as ChatCompletionMessageParam[],
           model: targetTextModel.value,
           stream,
+          temperature,
+          tool_choice: 'auto',
+          tools: tools as unknown as ChatCompletionTool[],
         });
 
   if (stream) {

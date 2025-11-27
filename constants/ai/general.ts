@@ -15,3 +15,5 @@ export const enum REQUEST_STATUS {
   ALLOW = 'allow',
   FORBIDDEN = 'forbidden',
 }
+
+export const DEFAULT_TEMPERATURE = 0.7;

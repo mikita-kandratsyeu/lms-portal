@@ -19,7 +19,7 @@ export const getLoginQuote = async () => {
       async () => {
         const response = await generateCompletion({
           instructions:
-            'You are a machine that only returns JSON object format without unnecessary symbols.',
+            'You are a machine that returns ONLY with valid JSON format without unnecessary symbols.',
           input: [
             {
               content: `Generate a quote from a famous philosopher. Language code is ${locale}. Write it down in JSON format - {"quote": "Quote", "author": "Quote the author"}`,
