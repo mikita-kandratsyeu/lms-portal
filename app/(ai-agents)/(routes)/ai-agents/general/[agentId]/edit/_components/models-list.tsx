@@ -38,7 +38,7 @@ export const ModelsList = ({
         key={model.id}
         className={cn(
           'flex items-center gap-x-2 bg-neutral-200 border-neutral-200 border text-neutral-700 rounded-md mb-4 text-sm dark:bg-muted dark:text-primary dark:border-muted p-3',
-          model.isDefault &&
+          isSelected &&
             'bg-blue-500/15 border-blue-500/20 text-blue-700 dark:text-blue-400 dark:bg-blue-500/15 dark:border-blue-500/20',
         )}
       >

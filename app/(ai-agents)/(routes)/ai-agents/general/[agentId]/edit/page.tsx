@@ -13,6 +13,7 @@ import { Banner } from '@/components/common/banner';
 import { IconBadge } from '@/components/common/icon-badge';
 import db from '@/lib/db';
 
+import { Actions } from './_components/actions';
 import { ModelsForm } from './_components/form/models-form';
 
 type AgentIdPageProps = { params: Promise<{ agentId: string }> };
@@ -83,12 +84,7 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
                   Complete all fields {completionText}
                 </span>
               </div>
-              {/* <Actions
-                courseId={courseId}
-                disabled={!isCompleted}
-                hasPurchases={Boolean(course?._count?.purchases)}
-                isPublished={course.isPublished}
-              /> */}
+              <Actions agentId={agentId} isDisabled={!isCompleted} isPublished={!agent.isDraft} />
             </div>
           </div>
         </div>

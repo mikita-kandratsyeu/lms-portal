@@ -1,9 +1,9 @@
 'use client';
 
-import { Cpu } from 'lucide-react';
+import { CpuIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { IoChatboxEllipsesOutline } from 'react-icons/io5';
+import { IoChatboxEllipsesOutline as IoChatboxEllipsesOutlineIcon } from 'react-icons/io5';
 
 import { absoluteUrl } from '@/lib/utils';
 
@@ -22,13 +22,13 @@ export const ChatContextMenu = ({ children, isNewTab }: ChatContextMenuProps) =>
       <DropdownMenuContent align="end">
         <Link href={absoluteUrl('/chat')} target={target}>
           <DropdownMenuItem className="hover:cursor-pointer">
-            <IoChatboxEllipsesOutline className="h-4 w-4 mr-2" />
+            <IoChatboxEllipsesOutlineIcon className="h-4 w-4 mr-2" />
             <span>{t('view')}</span>
           </DropdownMenuItem>
         </Link>
         <Link href={absoluteUrl('/ai-agents/general')} target={target}>
           <DropdownMenuItem className="hover:cursor-pointer">
-            <Cpu className="h-4 w-4 mr-2" />
+            <CpuIcon className="h-4 w-4 mr-2" />
             <span>{t('ai-agents')}</span>
           </DropdownMenuItem>
         </Link>
