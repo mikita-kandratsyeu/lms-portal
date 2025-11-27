@@ -29,12 +29,12 @@ async function main() {
         {
           period: 'monthly',
           points: ['unlock-premium-courses', 'get-access-nova-ai', 'cancel-anytime'],
-          price: 4900,
+          price: 5000,
         },
         {
           period: 'yearly',
           points: ['unlock-premium-courses', 'get-access-nova-ai', 'cancel-anytime'],
-          price: 2400,
+          price: 4500,
         },
       ],
     });

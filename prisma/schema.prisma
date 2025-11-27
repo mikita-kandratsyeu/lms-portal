@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
 }
 
 // User
@@ -448,6 +447,7 @@ model AiAgent {
   chatConversations        ChatConversation[]
   createdAt                DateTime                   @default(now())
   description              String?                    @db.Text
+  isDefault                Boolean?                   @default(false)
   isDraft                  Boolean                    @default(true)
   isPublic                 Boolean                    @default(false)
   name                     String                     @db.Text
