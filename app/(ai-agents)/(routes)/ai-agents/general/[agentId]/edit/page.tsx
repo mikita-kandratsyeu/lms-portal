@@ -117,7 +117,7 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={BracketsIcon} />
-                <h2 className="text-xl">Select LLM models</h2>
+                <h2 className="text-xl">Select LLM engine</h2>
               </div>
               <ModelsForm {...commonFormProps} models={models} />
             </div>
