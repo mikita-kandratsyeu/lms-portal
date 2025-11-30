@@ -44,7 +44,6 @@ export const getChatConversations = async ({ sharedConversationId }: GetChatConv
         {
           id: conversation.id,
           messages: conversation.messages,
-          position: conversation.position,
           title: conversation.title,
           shared: {
             expiredAt: conversation.shared?.expireAt,
@@ -61,11 +60,10 @@ export const getChatConversations = async ({ sharedConversationId }: GetChatConv
 
     const conversations = await db.chatConversation.findMany({
       where: { userId: user?.userId },
-      orderBy: { position: 'asc' },
+      orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         title: true,
-        position: true,
         shared: true,
         user: true,
         messages: {
@@ -78,13 +76,11 @@ export const getChatConversations = async ({ sharedConversationId }: GetChatConv
     if (!conversations.length) {
       const newChatConversation = await db.chatConversation.create({
         data: {
-          position: 0,
           title: t('title'),
           userId: user?.userId,
         },
         select: {
           id: true,
-          position: true,
           title: true,
         },
       });
@@ -93,7 +89,6 @@ export const getChatConversations = async ({ sharedConversationId }: GetChatConv
         {
           id: newChatConversation.id,
           messages: [],
-          position: newChatConversation.position,
           title: newChatConversation.title,
           shared: {
             expiredAt: null,

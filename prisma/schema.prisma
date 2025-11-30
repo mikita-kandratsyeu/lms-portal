@@ -362,7 +362,6 @@ model ChatConversation {
   aiAgentId String?
   createdAt DateTime                @default(now())
   messages  ChatMessage[]
-  position  Int
   shared    ChatSharedConversation?
   title     String
   updatedAt DateTime                @updatedAt
