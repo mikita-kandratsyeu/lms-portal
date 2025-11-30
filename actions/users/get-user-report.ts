@@ -54,7 +54,6 @@ export const getUserReportBuffer = async (userId: string) => {
               createdAt: true,
               messages: {
                 select: {
-                  feedback: true,
                   createdAt: true,
                   model: true,
                   role: true,

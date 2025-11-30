@@ -10,8 +10,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
 import { ChatCompletionRole } from '@/constants/ai/general';
 import { getFallbackName } from '@/lib/utils';
 
-import { ChatFeedback } from './chat-feedback';
-
 type ChatBubbleProps = {
   isShared?: boolean;
   isSubmitting?: boolean;
@@ -20,7 +18,6 @@ type ChatBubbleProps = {
     content: string;
     model?: string;
     id?: string;
-    feedback?: { feedback: string } | null;
     imageGeneration?: {
       model: string;
       revisedPrompt: string;
@@ -83,9 +80,6 @@ export const ChatBubble = ({
                     <Download className="h-4 w-4" />
                   </button>
                 </Link>
-              )}
-              {!isShared && (
-                <ChatFeedback messageId={message.id} state={message.feedback?.feedback} />
               )}
             </div>
           )}

@@ -317,11 +317,6 @@ model CsmIssue {
 }
 
 // Copilot & Chat
-enum ChatFeedback {
-  positive
-  negative
-}
-
 model CopilotRequestLimit {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now())
@@ -340,24 +335,12 @@ model ChatMessage {
   conversation    ChatConversation?           @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId  String?
   createdAt       DateTime                    @default(now())
-  feedback        ChatMessageFeedback?
   imageGeneration ChatImageGenerationMessage?
   model           String
   role            String
   updatedAt       DateTime                    @updatedAt
 
   @@index([conversationId])
-}
-
-model ChatMessageFeedback {
-  id        String       @id @default(uuid())
-  createdAt DateTime     @default(now())
-  feedback  ChatFeedback
-  message   ChatMessage  @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  messageId String       @unique
-  updatedAt DateTime     @updatedAt
-
-  @@index([messageId])
 }
 
 model ChatImageGenerationMessage {
