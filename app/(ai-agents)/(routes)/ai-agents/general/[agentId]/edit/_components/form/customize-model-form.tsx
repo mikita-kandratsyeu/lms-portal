@@ -25,7 +25,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { DEFAULT_TEMPERATURE } from '@/constants/ai/general';
 import { fetcher } from '@/lib/fetcher';
-import { isNumber } from '@/lib/guard';
+import { isNumber, isString } from '@/lib/guard';
 import { cn } from '@/lib/utils';
 
 type CustomizeModelFormProps = {
@@ -87,10 +87,7 @@ export const CustomizeModelForm = ({ agentId, initialData }: CustomizeModelFormP
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         <div className="flex gap-x-2 items-center">
-          <span>LLM customize</span>
-          {isNumber(initialData?.temperature) && (
-            <TextBadge label={String(initialData.temperature)} variant="indigo" />
-          )}
+          <span>LLM customization</span>
         </div>
         <div className="flex gap-x-2 items-center">
           <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
@@ -122,10 +119,16 @@ export const CustomizeModelForm = ({ agentId, initialData }: CustomizeModelFormP
             !initialData?.systemInstruction && 'text-neutral-500 italic',
           )}
         >
-          {initialData?.systemInstruction && (
+          {isString(initialData?.systemInstruction) && (
             <>
               <h4 className="mb-2 font-semibold">System instruction</h4>
               <Markdown>{initialData?.systemInstruction}</Markdown>
+            </>
+          )}
+          {isNumber(initialData?.temperature) && (
+            <>
+              <h4 className="mb-2 mt-4 font-semibold">Temperature</h4>
+              <TextBadge label={String(initialData.temperature)} variant="indigo" />
             </>
           )}
           {!initialData?.systemInstruction && <span>No system instruction for LLM engine.</span>}

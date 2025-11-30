@@ -43,7 +43,7 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
     orderBy: [{ isDefault: 'desc' }, { providerName: 'asc' }, { name: 'asc' }],
   });
 
-  const requiredFields = [agent.description, agent.pictureUrl, agent.name, agent.aiModels.length];
+  const requiredFields = [!agent.description, agent.name, agent.aiModels.length];
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;

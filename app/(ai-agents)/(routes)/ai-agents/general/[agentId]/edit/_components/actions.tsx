@@ -32,17 +32,19 @@ export const Actions = ({ agentId, isDisabled = false, isPublished = false }: Ac
 
   const handleOpenConfetti = useConfettiStore((state) => state.onOpen);
 
-  const handleTogglePublication = async () => {
+  const handleTogglePublication = async (isPublic = false) => {
     setIsFetching(true);
 
     try {
-      await fetcher.patch(`/api/courses/${agentId}/${isPublished ? 'unpublish' : 'publish'}`);
+      await fetcher.patch(`/api/ai/agents/${agentId}/${isPublished ? 'unpublish' : 'publish'}`, {
+        body: { isPublic },
+      });
 
       if (isPublished) {
-        toast({ title: 'Course unpublished' });
+        toast({ title: 'Agent unpublished' });
       } else {
         handleOpenConfetti();
-        toast({ title: 'Course has been published' });
+        toast({ title: 'Agent has been published' });
       }
 
       router.refresh();
@@ -75,7 +77,12 @@ export const Actions = ({ agentId, isDisabled = false, isPublished = false }: Ac
   return (
     <div className="flex items-center gap-x-2">
       <ButtonGroup>
-        <Button variant="outline" size="sm" disabled={isDisabledButton}>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={isDisabledButton}
+          onClick={() => handleTogglePublication(true)}
+        >
           {isPublished ? 'Unpublish' : 'Publish'}
         </Button>
         <DropdownMenu>
@@ -86,7 +93,10 @@ export const Actions = ({ agentId, isDisabled = false, isPublished = false }: Ac
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuGroup>
-              <DropdownMenuItem className="hover:cursor-pointer">
+              <DropdownMenuItem
+                className="hover:cursor-pointer"
+                onClick={() => handleTogglePublication(false)}
+              >
                 <span>Publish as private</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
