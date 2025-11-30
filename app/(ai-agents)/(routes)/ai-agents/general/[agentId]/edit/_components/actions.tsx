@@ -49,7 +49,16 @@ export const Actions = ({ agentId, isDisabled = false, isPublished = false }: Ac
 
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      if (error instanceof Error) {
+        toast({
+          isError: true,
+          description: error?.message,
+        });
+      } else {
+        toast({
+          isError: true,
+        });
+      }
     } finally {
       setIsFetching(false);
     }
