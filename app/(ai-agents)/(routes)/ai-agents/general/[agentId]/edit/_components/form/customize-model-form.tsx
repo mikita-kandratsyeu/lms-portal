@@ -113,25 +113,18 @@ export const CustomizeModelForm = ({ agentId, initialData }: CustomizeModelFormP
         </div>
       </div>
       {!isEditing && (
-        <div
-          className={cn(
-            'text-sm mr-2 mt-4',
-            !initialData?.systemInstruction && 'text-neutral-500 italic',
-          )}
-        >
+        <div className={'text-sm mr-2 mt-4'}>
+          <h4 className="mb-2 font-semibold">System instruction</h4>
           {isString(initialData?.systemInstruction) && (
-            <>
-              <h4 className="mb-2 font-semibold">System instruction</h4>
-              <Markdown>{initialData?.systemInstruction}</Markdown>
-            </>
+            <Markdown>{initialData?.systemInstruction}</Markdown>
           )}
+          {!initialData?.systemInstruction && (
+            <span className="text-neutral-500 italic">No system instruction for LLM engine.</span>
+          )}
+          <h4 className="mb-2 mt-4 font-semibold">Temperature</h4>
           {isNumber(initialData?.temperature) && (
-            <>
-              <h4 className="mb-2 mt-4 font-semibold">Temperature</h4>
-              <TextBadge label={String(initialData.temperature)} variant="indigo" />
-            </>
+            <TextBadge label={String(initialData.temperature)} variant="indigo" />
           )}
-          {!initialData?.systemInstruction && <span>No system instruction for LLM engine.</span>}
         </div>
       )}
       {isEditing && (
