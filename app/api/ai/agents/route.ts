@@ -27,8 +27,8 @@ export const POST = async (req: NextRequest) => {
           aiModels: {
             connect: [{ id: defaultModel.id }],
           },
-          name,
           isDraft: true,
+          name,
         },
       });
 

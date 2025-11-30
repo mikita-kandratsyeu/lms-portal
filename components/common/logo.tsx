@@ -25,15 +25,19 @@ export const Logo = ({
   const Logo = () => (
     <div
       className={cn(
-        'items-center gap-x-3 md:flex',
+        'items-center gap-x-3 md:flex group',
         !isLoader && 'hidden',
         !onlyLogoIcon && 'hover:opacity-75 transition-opacity',
       )}
     >
       <Image
-        src={`/assets/${isCopilot ? 'copilot' : 'logo'}.svg`}
         alt={`${isCopilot ? 'Copilot' : t('name')} Logo`}
+        className={cn(
+          isCopilot && isLoader && 'animate-spin',
+          isCopilot && 'group-hover:animate-spin',
+        )}
         height={40}
+        src={`/assets/${isCopilot ? 'copilot' : 'logo'}.svg`}
         width={40}
       />
       {!onlyLogoIcon && (

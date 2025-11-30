@@ -19,33 +19,63 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
     }
 
-    const values = await req.json();
+    const { modelIds, systemInstruction, temperature } = await req.json();
 
     const defaultModel = await db.aiModel.findFirst({ where: { isDefault: true } });
+
+    const aiModelsData = Boolean(modelIds?.length) && {
+      aiModels: {
+        set: [
+          ...modelIds.map((id: string) => ({ id })),
+          ...(defaultModel ? [{ id: defaultModel.id }] : []),
+        ],
+      },
+    };
 
     const updatedAgent = await db.aiAgent.update({
       where: { id: agentId, userId: user.userId },
       data: {
-        aiModels: {
-          set: [
-            ...values?.modelIds?.map((id: string) => ({
-              id,
-            })),
-            defaultModel && { id: defaultModel.id },
-          ],
-        },
+        ...aiModelsData,
+        systemInstruction,
+        temperature,
       },
       select: {
-        id: true,
-        updatedAt: true,
-        name: true,
         aiModels: { select: { id: true, value: true } },
+        id: true,
+        name: true,
+        updatedAt: true,
       },
     });
 
     return NextResponse.json(updatedAgent);
   } catch (error) {
     console.error('[AGENT_ID_PATCH]', error);
+
+    return new NextResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, {
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+};
+
+export const DELETE = async (_: NextRequest, props: { params: Promise<{ agentId: string }> }) => {
+  const { agentId } = await props.params;
+
+  try {
+    const user = await getCurrentUser();
+
+    if (!user) {
+      return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
+    }
+
+    if (!user.hasSubscription || !isBusinessOwner(user.userId)) {
+      return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
+    }
+
+    const deletedAgent = await db.aiAgent.delete({ where: { id: agentId }, select: { id: true } });
+
+    return NextResponse.json({ ...deletedAgent, success: true });
+  } catch (error) {
+    console.error('[AGENT_ID_DELETE]', error);
 
     return new NextResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, {
       status: StatusCodes.INTERNAL_SERVER_ERROR,

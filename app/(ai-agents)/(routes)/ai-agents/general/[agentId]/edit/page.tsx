@@ -1,9 +1,10 @@
 import {
   ArrowLeftIcon,
-  BracketsIcon,
   FlaskConicalIcon,
   LayoutDashboardIcon,
   MessageCircleMoreIcon,
+  ServerIcon,
+  SlidersHorizontalIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -14,6 +15,7 @@ import { IconBadge } from '@/components/common/icon-badge';
 import db from '@/lib/db';
 
 import { Actions } from './_components/actions';
+import { CustomizeModelForm } from './_components/form/customize-model-form';
 import { ModelsForm } from './_components/form/models-form';
 
 type AgentIdPageProps = { params: Promise<{ agentId: string }> };
@@ -41,15 +43,7 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
     orderBy: [{ isDefault: 'desc' }, { providerName: 'asc' }, { name: 'asc' }],
   });
 
-  const requiredFields = [
-    // course.categoryId,
-    // course.chapters.some((chapter) => chapter.isPublished),
-    agent.description,
-    // course.imageUrl,
-    agent.pictureUrl,
-    agent.name,
-    agent.aiModels.length,
-  ];
+  const requiredFields = [agent.description, agent.pictureUrl, agent.name, agent.aiModels.length];
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
@@ -65,7 +59,7 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
   return (
     <>
       {agent.isDraft && (
-        <Banner label="This agent has not been published. It will not be visible for you or other members." />
+        <Banner label="This agent has not been published. It will not be available for you or other members." />
       )}
       <div className="p-6">
         <div className="flex items-center justify-between">
@@ -116,17 +110,25 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
           <div className="space-y-6">
             <div>
               <div className="flex items-center gap-x-2">
-                <IconBadge icon={BracketsIcon} />
+                <IconBadge icon={ServerIcon} />
                 <h2 className="text-xl">Select LLM engine</h2>
               </div>
               <ModelsForm {...commonFormProps} models={models} />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
+                <IconBadge icon={SlidersHorizontalIcon} />
+                <h2 className="text-xl">Customize LLM engine</h2>
+              </div>
+              <CustomizeModelForm {...commonFormProps} />
+              {/* <ModelsForm {...commonFormProps} models={models} /> */}
+            </div>
+            <div>
+              <div className="flex items-center gap-x-2">
                 <IconBadge icon={FlaskConicalIcon} />
                 <h2 className="text-xl">Experimental features</h2>
               </div>
-              <p>Own API Key, Own API server (Ollama), temperature (0.7), system instruction</p>
+              <p>Own API server (Ollama)</p>
             </div>
           </div>
         </div>

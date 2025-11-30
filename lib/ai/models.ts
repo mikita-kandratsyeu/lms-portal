@@ -28,7 +28,7 @@ export const getModelFeaturesStyle = (
   }
 
   if (modelFeature === AiModelFeature.image) {
-    variant = 'green';
+    variant = 'red';
   }
 
   return {

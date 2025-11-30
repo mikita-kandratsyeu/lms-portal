@@ -37,8 +37,15 @@ export const Chat = () => {
       <SheetTrigger className="hover:opacity-75 transition duration-300">
         <ButtonGroup>
           <button className={buttonStyles} aria-label="Copilot">
-            <div className="h-5 flex justify-center items-center gap-x-2">
-              <Image src="/assets/copilot.svg" alt="Copilot Logo" height={18} width={18} priority />
+            <div className="h-5 flex justify-center items-center gap-x-2 group">
+              <Image
+                alt="Copilot Logo"
+                className="group-hover:animate-spin"
+                height={18}
+                priority
+                src="/assets/copilot.svg"
+                width={18}
+              />
               <span className="font-semibold">Copilot</span>
             </div>
           </button>

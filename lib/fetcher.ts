@@ -8,94 +8,95 @@ type Options = {
 
 type FetchMethod = (url: string, options?: Options) => Promise<any>;
 
+class ApiError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+    this.name = 'ApiError';
+  }
+}
+
+const handleResponse = async (res: Response, responseType?: Options['responseType']) => {
+  if (!res.ok) {
+    let message = '';
+
+    try {
+      message = await res.text();
+    } catch {
+      message = res.statusText || 'Request Failed';
+    }
+
+    throw new ApiError(message || `HTTP ${res.status}`, res.status);
+  }
+
+  switch (responseType) {
+    case 'json':
+      return res.json();
+    case 'text':
+      return res.text();
+    case 'arrayBuffer':
+      return res.arrayBuffer();
+    case 'stream':
+      return res.body;
+    default:
+      return res;
+  }
+};
+
 class Fetcher {
   get: FetchMethod = async (url, options) => {
-    if (options?.responseType === 'json') {
-      const res = await fetch(url, { headers: options.headers });
-
-      return await res.json();
-    }
-
-    if (options?.responseType === 'text') {
-      const res = await fetch(url, {
-        cache: options?.cache ?? 'force-cache',
-        headers: options.headers,
-      });
-
-      return await res.text();
-    }
-
-    if (options?.responseType === 'arrayBuffer') {
-      const res = await fetch(url, {
-        cache: options?.cache ?? 'force-cache',
-        headers: options.headers,
-      });
-
-      return await res.arrayBuffer();
-    }
-
-    return fetch(url);
-  };
-
-  post: FetchMethod = async (url, options) => {
-    const fetchOptions = {
-      method: 'POST',
-      body: JSON.stringify(options?.body),
+    const res = await fetch(url, {
       cache: options?.cache ?? 'force-cache',
       headers: options?.headers,
       signal: options?.signal,
-    };
+    });
 
-    if (options?.responseType === 'json') {
-      const res = await fetch(url, fetchOptions);
+    return handleResponse(res, options?.responseType);
+  };
 
-      return await res.json();
-    }
+  post: FetchMethod = async (url, options) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      body: options?.body ? JSON.stringify(options.body) : undefined,
+      cache: options?.cache ?? 'force-cache',
+      headers: options?.headers,
+      signal: options?.signal,
+    });
 
-    return fetch(url, fetchOptions);
+    return handleResponse(res, options?.responseType);
   };
 
   put: FetchMethod = async (url, options) => {
-    const fetchOptions = {
-      body: JSON.stringify(options?.body),
-      headers: options?.headers,
+    const res = await fetch(url, {
       method: 'PUT',
+      body: options?.body ? JSON.stringify(options.body) : undefined,
+      headers: options?.headers,
       signal: options?.signal,
-    };
+    });
 
-    if (options?.responseType === 'json') {
-      const res = await fetch(url, fetchOptions);
-
-      return await res.json();
-    }
-
-    return fetch(url, fetchOptions);
+    return handleResponse(res, options?.responseType);
   };
 
   patch: FetchMethod = async (url, options) => {
-    const fetchOptions = {
+    const res = await fetch(url, {
       method: 'PATCH',
-      body: JSON.stringify(options?.body),
+      body: options?.body ? JSON.stringify(options.body) : undefined,
       headers: options?.headers,
       signal: options?.signal,
-    };
+    });
 
-    if (options?.responseType === 'json') {
-      const res = await fetch(url, fetchOptions);
-
-      return await res.json();
-    }
-
-    return fetch(url, fetchOptions);
+    return handleResponse(res, options?.responseType);
   };
 
-  delete: FetchMethod = async (url: string, options) => {
-    const fetchOptions = {
+  delete: FetchMethod = async (url, options) => {
+    const res = await fetch(url, {
       method: 'DELETE',
       headers: options?.headers,
-    };
+      signal: options?.signal,
+    });
 
-    return fetch(url, fetchOptions);
+    return handleResponse(res, options?.responseType);
   };
 }
 

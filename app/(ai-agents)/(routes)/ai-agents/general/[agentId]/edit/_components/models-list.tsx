@@ -1,6 +1,7 @@
 'use client';
 
 import { AiModel } from '@prisma/client';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { AgentFeatures } from '@/components/ai-agents/agent-card/agent-features';
@@ -21,7 +22,11 @@ export const ModelsList = ({
   onUpdate,
   models = [],
 }: ModelsListProps) => {
-  const [modelIds, setModelIds] = useState(selectedModels.map((model) => model.id));
+  const tProfile = useTranslations('profileButton');
+
+  const selectedModelIds = selectedModels.map((model) => model.id);
+
+  const [modelIds, setModelIds] = useState(selectedModelIds);
 
   const isEdit = models.length > 0;
   const allModels = selectedModels.length > 0 && isEdit ? models : selectedModels;
@@ -31,7 +36,8 @@ export const ModelsList = ({
   }, [modelIds, modelIds.length, onUpdate]);
 
   return allModels.map((model) => {
-    const isSelected = Boolean(model.isDefault) || modelIds.includes(model.id);
+    const isSelected =
+      Boolean(model.isDefault) || (isEdit ? modelIds : selectedModelIds).includes(model.id);
 
     return (
       <div
@@ -60,8 +66,8 @@ export const ModelsList = ({
           <div className="flex gap-x-2 items-center">
             <strong>{model.name}</strong>
             {model.isDefault && <TextBadge label="Default" />}
+            {model.isSubscription && <TextBadge label={tProfile('premium')} variant="lime" />}
           </div>
-
           <p className="text-xs font-light">{model.value}</p>
         </div>
         <div className="ml-auto flex items-center gap-x-2">

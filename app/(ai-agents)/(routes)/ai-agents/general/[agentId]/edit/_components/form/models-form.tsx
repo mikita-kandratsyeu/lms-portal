@@ -40,11 +40,13 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
     try {
       await fetcher.patch(`/api/ai/agents/${agentId}`, { body: values });
 
+      toast({ title: 'LLM engine has been updated' });
       handleToggleEdit();
 
-      toast({ title: 'LLM models has been updated' });
       router.refresh();
     } catch (error) {
+      console.error('[MODELS_FORM]', error);
+
       toast({ isError: true });
     } finally {
       setIsFetching(false);
@@ -87,8 +89,10 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
             !initialData.aiModels.length && 'text-neutral-500 italic',
           )}
         >
-          {!initialData.aiModels.length && <p>No selected LLM models</p>}
-          <ModelsList selectedModels={initialData.aiModels} />
+          {!initialData.aiModels.length && <span>No selected LLM engine.</span>}
+          {Boolean(initialData.aiModels.length) && (
+            <ModelsList selectedModels={initialData.aiModels} />
+          )}
         </div>
       )}
       {isEditing && (
@@ -100,7 +104,7 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
             selectedModels={initialData.aiModels}
           />
           <div className="flex text-xs items-start justify-between">
-            <div className="text-muted-foreground mt-4">Select LLM models for your agent</div>
+            <div className="text-muted-foreground mt-4">Select LLM engine for your agent</div>
           </div>
         </div>
       )}

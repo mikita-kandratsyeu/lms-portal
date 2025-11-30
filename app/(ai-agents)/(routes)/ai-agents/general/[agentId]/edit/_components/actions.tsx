@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDownIcon, Trash2, TrashIcon, VolumeOffIcon } from 'lucide-react';
+import { ChevronDownIcon, Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -12,7 +12,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
@@ -58,11 +57,11 @@ export const Actions = ({ agentId, isDisabled = false, isPublished = false }: Ac
     setIsFetching(true);
 
     try {
-      await fetcher.delete(`/api/courses/${agentId}`);
+      await fetcher.delete(`/api/ai/agents/${agentId}`);
 
-      toast({ title: 'Course deleted' });
+      toast({ title: 'Agent has been deleted' });
 
-      router.push(`/teacher/courses`);
+      router.push(`/ai-agents/general`);
       router.refresh();
     } catch (error) {
       toast({ isError: true });
@@ -71,28 +70,17 @@ export const Actions = ({ agentId, isDisabled = false, isPublished = false }: Ac
     }
   };
 
+  const isDisabledButton = isDisabled || isFetching;
+
   return (
     <div className="flex items-center gap-x-2">
-      {/* <Button
-        onClick={handleTogglePublication}
-        disabled={disabled || isLoading}
-        variant="outline"
-        size="sm"
-      >
-        {isPublished ? 'Unpublish' : 'Publish'}
-      </Button> */}
       <ButtonGroup>
-        <Button variant="outline" size="sm" disabled={isDisabled || isFetching}>
+        <Button variant="outline" size="sm" disabled={isDisabledButton}>
           {isPublished ? 'Unpublish' : 'Publish'}
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="!pl-2"
-              size="sm"
-              disabled={isDisabled || isFetching}
-            >
+            <Button variant="outline" className="!pl-2" size="sm" disabled={isDisabledButton}>
               <ChevronDownIcon className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -107,7 +95,7 @@ export const Actions = ({ agentId, isDisabled = false, isPublished = false }: Ac
       </ButtonGroup>
       <ConfirmModal onConfirm={handleDelete}>
         <Button disabled={isFetching} size="sm">
-          <Trash2 className="h-4 w-4" />
+          <Trash2Icon className="h-4 w-4" />
         </Button>
       </ConfirmModal>
     </div>
