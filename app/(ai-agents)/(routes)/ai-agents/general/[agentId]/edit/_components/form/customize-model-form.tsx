@@ -26,7 +26,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { DEFAULT_TEMPERATURE } from '@/constants/ai/general';
 import { fetcher } from '@/lib/fetcher';
 import { isNumber, isString } from '@/lib/guard';
-import { cn } from '@/lib/utils';
 
 type CustomizeModelFormProps = {
   agentId: string;
