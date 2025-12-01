@@ -34,7 +34,7 @@ export const Logo = ({
         alt={`${isCopilot ? 'Copilot' : t('name')} Logo`}
         className={cn(
           isCopilot && isLoader && 'animate-spin',
-          isCopilot && 'group-hover:animate-spin',
+          isCopilot && 'group-hover:animate-spin-once',
         )}
         height={40}
         src={`/assets/${isCopilot ? 'copilot' : 'logo'}.svg`}

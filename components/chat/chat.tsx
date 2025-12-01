@@ -40,7 +40,7 @@ export const Chat = () => {
             <div className="h-5 flex justify-center items-center gap-x-2 group">
               <Image
                 alt="Copilot Logo"
-                className="group-hover:animate-spin"
+                className="group-hover:animate-spin-once"
                 height={18}
                 priority
                 src="/assets/copilot.svg"
