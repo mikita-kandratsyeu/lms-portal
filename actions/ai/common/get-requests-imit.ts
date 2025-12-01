@@ -4,12 +4,11 @@ import { addWeeks, compareAsc, format } from 'date-fns';
 import { ReasonPhrases } from 'http-status-codes';
 import { getLocale, getTranslations } from 'next-intl/server';
 
+import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { LIMIT_REQUESTS_PER_WEEK, REQUEST_STATUS } from '@/constants/ai/general';
 import { TIMESTAMP_REQUESTS_LIMIT_TEMPLATE } from '@/constants/common';
 import db from '@/lib/db';
 import { getFormatLocale } from '@/lib/locale';
-
-import { getCurrentUser } from '../auth/get-current-user';
 
 const handleRequestLimitExceeded = async (copilotRequests: any, userId: string) => {
   if (!copilotRequests.expiredAt) {

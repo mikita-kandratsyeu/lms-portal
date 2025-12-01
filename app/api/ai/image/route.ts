@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getTranslations } from 'next-intl/server';
 import { v4 as uuidv4 } from 'uuid';
 
-import { generateImage } from '@/actions/ai/generate-image';
-import { getRequestsLimit } from '@/actions/ai/get-requests-imit';
+import { generateImage } from '@/actions/ai/common/generate-image';
+import { getRequestsLimit } from '@/actions/ai/common/get-requests-imit';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { uploadFiles } from '@/actions/uploadthing/upload-files';
 import { REQUEST_STATUS } from '@/constants/ai/general';

@@ -2,8 +2,8 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 import { getTranslations } from 'next-intl/server';
 
-import { generateCompletion } from '@/actions/ai/generate-completion';
-import { getRequestsLimit } from '@/actions/ai/get-requests-imit';
+import { generateCompletion } from '@/actions/ai/common/generate-completion';
+import { getRequestsLimit } from '@/actions/ai/common/get-requests-imit';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { REQUEST_STATUS } from '@/constants/ai/general';
 

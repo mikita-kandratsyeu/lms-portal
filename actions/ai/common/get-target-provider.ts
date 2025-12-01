@@ -2,9 +2,8 @@
 
 import OpenAI from 'openai';
 
+import { getAppConfig } from '@/actions/configs/get-app-config';
 import { AI_PROVIDER } from '@/constants/ai/general';
-
-import { getAppConfig } from '../configs/get-app-config';
 
 const AIProvider = (provider: string) => {
   let options = {};

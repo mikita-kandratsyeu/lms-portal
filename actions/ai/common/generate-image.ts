@@ -2,7 +2,8 @@
 
 import { ImageGenerateParams } from 'openai/resources/images.mjs';
 
-import { getCurrentUser } from '../auth/get-current-user';
+import { getCurrentUser } from '@/actions/auth/get-current-user';
+
 import { getTargetProvider } from './get-target-provider';
 
 type GenerateImage = Omit<ImageGenerateParams, 'model'> & {

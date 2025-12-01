@@ -3,10 +3,10 @@
 import { ChatCompletionMessageParam, ChatCompletionTool } from 'openai/resources/index.mjs';
 import { ResponseCreateParamsBase, Tool } from 'openai/resources/responses/responses.mjs';
 
+import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { AI_PROVIDER, ChatCompletionRole, DEFAULT_TEMPERATURE } from '@/constants/ai/general';
 import { LocaleInfo } from '@/hooks/store/use-locale-store';
 
-import { getCurrentUser } from '../auth/get-current-user';
 import { getTargetProvider } from './get-target-provider';
 
 type GenerateCompletion = Omit<ResponseCreateParamsBase, 'model'> & {

@@ -8,7 +8,7 @@ import { TEN_MINUTE_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
 import { extractValidJson } from '@/lib/utils';
 
-import { generateCompletion } from '../ai/generate-completion';
+import { generateCompletion } from '../ai/common/generate-completion';
 
 export const getLoginQuote = async () => {
   const locale = await getLocale();

@@ -7,7 +7,7 @@ import { ChatCompletionRole } from '@/constants/ai/general';
 import { NOVA_PULSE_SUMMARY } from '@/constants/ai/prompts';
 import { extractValidJson } from '@/lib/utils';
 
-import { generateCompletion } from '../ai/generate-completion';
+import { generateCompletion } from '../ai/common/generate-completion';
 
 export const getSummary = async <T>(data: T) => {
   const locale = await getLocale();

@@ -39,16 +39,6 @@ const nextConfig = {
       },
     };
   },
-  rewrites: () => [
-    {
-      source: '/ai-agents/general/:agentId/edit',
-      destination: '/ai-agents/general/:agentId/edit',
-    },
-    {
-      source: '/ai-agents/general/:agentId',
-      destination: '/ai-agents/general/:agentId/edit',
-    },
-  ],
 };
 
 export default withPlaiceholder(withNextIntl(nextConfig));
