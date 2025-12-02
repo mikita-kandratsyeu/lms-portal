@@ -11,13 +11,23 @@ import { cn, getFallbackName } from '@/lib/utils';
 
 type AgentCardProps = {
   description?: string | null;
+  isDraft?: boolean;
   isEdit?: boolean;
+  isPublic?: boolean;
   name: string;
   pictureUrl?: string | null;
   user: { userId?: string | null; name?: string | null };
 };
 
-export const AgentCard = ({ description, isEdit, name, pictureUrl, user }: AgentCardProps) => {
+export const AgentCard = ({
+  description,
+  isDraft,
+  isEdit,
+  isPublic,
+  name,
+  pictureUrl,
+  user,
+}: AgentCardProps) => {
   const content = (
     <div
       className={cn(
@@ -34,7 +44,9 @@ export const AgentCard = ({ description, isEdit, name, pictureUrl, user }: Agent
           <div className="flex flex-col space-y-1">
             <div className="flex items-center gap-x-2">
               <h4 className="font-semibold">{name}</h4>
-              {!isEdit && <TextBadge label={'Draft'} />}
+              {isDraft && <TextBadge label={'Draft'} />}
+              {isEdit && isPublic && <TextBadge label={'Public'} variant="lime" />}
+              {isEdit && !isPublic && !isDraft && <TextBadge label={'Private'} variant="indigo" />}
             </div>
             {user?.userId && user?.name && (
               <UserHoverCard userId={user.userId}>

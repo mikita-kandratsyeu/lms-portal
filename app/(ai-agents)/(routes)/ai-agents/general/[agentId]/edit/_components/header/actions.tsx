@@ -96,7 +96,12 @@ export const Actions = ({ agentId, isDisabled = false, isPublished = false }: Ac
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="!pl-2" size="sm" disabled={isDisabledButton}>
+            <Button
+              className="!pl-2"
+              disabled={isDisabledButton || isPublished}
+              size="sm"
+              variant="outline"
+            >
               <ChevronDownIcon className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>

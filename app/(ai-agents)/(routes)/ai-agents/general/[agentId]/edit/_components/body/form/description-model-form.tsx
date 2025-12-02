@@ -118,7 +118,9 @@ export const DescriptionModelForm = ({ agentId, initialData }: DescriptionModelF
         <div className="mt-4">
           <AgentCard
             description={initialData?.description}
+            isDraft={initialData.isDraft}
             isEdit
+            isPublic={initialData.isPublic}
             name={initialData?.name}
             pictureUrl={initialData?.pictureUrl}
             user={{ userId: user?.userId, name: user?.name }}
