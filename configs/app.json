@@ -78,7 +78,7 @@
     }
   },
   "features": {
-    "christmas": false,
+    "christmas": true,
     "testMode": true
   }
 }
