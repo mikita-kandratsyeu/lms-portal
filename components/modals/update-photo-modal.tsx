@@ -2,7 +2,6 @@
 
 import { Info } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
@@ -25,17 +24,17 @@ import { useToast } from '../ui/use-toast';
 type PhotoType = 'profile' | 'ai-agent';
 
 type UpdatePhotoModalProps = {
+  callback?: (pictureUrl: string | null) => void;
   children: React.ReactNode;
   type: PhotoType;
 };
 
-export const UpdatePhotoModal = ({ type, children }: UpdatePhotoModalProps) => {
+export const UpdatePhotoModal = ({ callback, children, type }: UpdatePhotoModalProps) => {
   const t = useTranslations('profile-image-modal');
 
   const { user } = useCurrentUser();
 
   const { toast } = useToast();
-  const { update } = useSession();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
@@ -61,16 +60,7 @@ export const UpdatePhotoModal = ({ type, children }: UpdatePhotoModalProps) => {
         pictureUrl = response?.pictureUrl;
       }
 
-      if (type === 'profile') {
-        const response = await fetcher.patch(`/api/users/${user?.userId}`, {
-          body: { pictureUrl },
-          responseType: 'json',
-        });
-
-        await update(response);
-
-        toast({ title: t('accInfoUpdated') });
-      }
+      callback?.(pictureUrl);
 
       router.refresh();
     } catch (error) {

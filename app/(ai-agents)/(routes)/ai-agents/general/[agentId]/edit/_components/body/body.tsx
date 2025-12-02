@@ -12,6 +12,7 @@ import {
 import { IconBadge } from '@/components/common/icon-badge';
 
 import { CustomizeModelForm } from './form/customize-model-form';
+import { DescriptionModelForm } from './form/description-model-form';
 import { ModelsForm } from './form/models-form';
 
 type BodyProps = {
@@ -29,15 +30,7 @@ export const Body = ({ agentId, initialData, models }: BodyProps) => {
             <IconBadge icon={LayoutDashboardIcon} />
             <h2 className="text-xl">Customize your agent</h2>
           </div>
-          <p>Name, Description, Picture</p>
-          {/* <TitleForm {...commonFormProps} />
-            <DescriptionForm {...commonFormProps} />
-            <ImageForm {...commonFormProps} />
-            <CategoryForm
-              {...commonFormProps}
-              options={categories.map((category) => ({ label: category.name, value: category.id }))}
-            />
-            <AdvancedOptionsForm {...commonFormProps} /> */}
+          <DescriptionModelForm agentId={agentId} initialData={initialData} />
         </div>
         <div>
           <div className="flex items-center gap-x-2">

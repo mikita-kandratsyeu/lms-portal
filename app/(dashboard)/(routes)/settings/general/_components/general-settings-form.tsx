@@ -31,9 +31,9 @@ export const GeneralSettingsForm = ({
 }: GeneralSettingsFormProps) => {
   const t = useTranslations('settings.generalForm');
 
-  const localeInfo = useLocaleStore((state) => state.localeInfo);
+  const { user, status } = useCurrentUser();
 
-  const { status } = useCurrentUser();
+  const localeInfo = useLocaleStore((state) => state.localeInfo);
 
   const { toast } = useToast();
   const { update } = useSession();
@@ -43,6 +43,13 @@ export const GeneralSettingsForm = ({
   const [isFetching, setIsFetching] = useState(false);
 
   const debouncedValue = useDebounce(name);
+
+  useEffect(() => {
+    if (debouncedValue.length > 0 && debouncedValue !== initialData.name) {
+      handleSubmit({ name: debouncedValue, pictureUrl: initialData?.pictureUrl ?? '' });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedValue]);
 
   const handleSubmit = async (values: Record<string, string | null>) => {
     setIsFetching(true);
@@ -76,12 +83,25 @@ export const GeneralSettingsForm = ({
     }
   };
 
-  useEffect(() => {
-    if (debouncedValue.length > 0 && debouncedValue !== initialData.name) {
-      handleSubmit({ name: debouncedValue, pictureUrl: initialData?.pictureUrl ?? '' });
+  const handleUpdatePicture = async (pictureUrl: string | null) => {
+    setIsFetching(true);
+
+    try {
+      const response = await fetcher.patch(`/api/users/${user?.userId}`, {
+        body: { pictureUrl },
+        responseType: 'json',
+      });
+
+      await update(response);
+
+      toast({ title: t('accInfoUpdated') });
+      router.refresh();
+    } catch (error) {
+      toast({ isError: true });
+    } finally {
+      setIsFetching(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedValue]);
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -110,7 +130,7 @@ export const GeneralSettingsForm = ({
         )}
       </div>
       <div className="flex items-center gap-x-4 w-full">
-        <UpdatePhotoModal type="profile">
+        <UpdatePhotoModal type="profile" callback={handleUpdatePicture}>
           <button disabled={isFetching || status === AuthStatus.LOADING}>
             <Avatar className="border dark:border-muted-foreground w-24 h-24">
               <AvatarImage src={initialData?.pictureUrl ?? ''} />

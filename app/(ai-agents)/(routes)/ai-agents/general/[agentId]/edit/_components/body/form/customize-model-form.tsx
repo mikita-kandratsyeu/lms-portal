@@ -112,7 +112,7 @@ export const CustomizeModelForm = ({ agentId, initialData }: CustomizeModelFormP
         </div>
       </div>
       {!isEditing && (
-        <div className={'text-sm mr-2 mt-4'}>
+        <div className="text-sm mr-2 mt-4">
           <h4 className="mb-2 font-semibold">System instruction</h4>
           {isString(initialData?.systemInstruction) && (
             <Markdown>{initialData?.systemInstruction}</Markdown>

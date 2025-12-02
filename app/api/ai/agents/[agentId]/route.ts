@@ -19,7 +19,8 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
     }
 
-    const { modelIds, systemInstruction, temperature } = await req.json();
+    const { modelIds, description, name, pictureUrl, systemInstruction, temperature } =
+      await req.json();
 
     const defaultModel = await db.aiModel.findFirst({ where: { isDefault: true } });
 
@@ -36,6 +37,9 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       where: { id: agentId, userId: user.userId },
       data: {
         ...aiModelsData,
+        description,
+        name,
+        pictureUrl,
         systemInstruction,
         temperature,
       },
