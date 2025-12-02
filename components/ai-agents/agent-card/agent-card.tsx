@@ -2,7 +2,6 @@
 
 import { ChartColumnIcon, PlugIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 
 import { TextBadge } from '@/components/common/text-badge';
 import { UserHoverCard } from '@/components/common/user-hover-card';
