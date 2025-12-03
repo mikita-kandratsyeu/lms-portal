@@ -1,6 +1,5 @@
 'use client';
 
-import { AiAgent, AiModel } from '@prisma/client';
 import {
   FlaskConicalIcon,
   LayoutDashboardIcon,
@@ -9,6 +8,7 @@ import {
   SlidersHorizontalIcon,
 } from 'lucide-react';
 
+import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
 import { IconBadge } from '@/components/common/icon-badge';
 
 import { CustomizeModelForm } from './form/customize-model-form';
@@ -17,8 +17,8 @@ import { ModelsForm } from './form/models-form';
 
 type BodyProps = {
   agentId: string;
-  initialData: AiAgent & { aiModels: AiModel[] };
-  models: AiModel[];
+  initialData: GetAgentData['agent'];
+  models: GetAgentData['models'];
 };
 
 export const Body = ({ agentId, initialData, models }: BodyProps) => {

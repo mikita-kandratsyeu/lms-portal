@@ -10,12 +10,12 @@ import { cn, getFallbackName } from '@/lib/utils';
 
 type AgentCardProps = {
   description?: string | null;
-  isDraft?: boolean;
+  isDraft?: boolean | null;
   isEdit?: boolean;
-  isPublic?: boolean;
-  name: string;
+  isPublic?: boolean | null;
+  name?: string;
   pictureUrl?: string | null;
-  user: { userId?: string | null; name?: string | null };
+  user?: { userId?: string | null; name?: string | null } | null;
 };
 
 export const AgentCard = ({
@@ -37,7 +37,7 @@ export const AgentCard = ({
       <div className="flex space-x-4 items-center mb-4">
         <Avatar className="border dark:border-muted-foreground w-12 h-12">
           <AvatarImage src={pictureUrl || ''} />
-          <AvatarFallback>{getFallbackName(name)}</AvatarFallback>
+          <AvatarFallback>{getFallbackName(name || '')}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col space-y-2">
           <div className="flex flex-col space-y-1">

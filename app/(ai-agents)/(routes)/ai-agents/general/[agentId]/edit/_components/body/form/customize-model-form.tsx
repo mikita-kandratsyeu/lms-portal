@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AiAgent, AiModel } from '@prisma/client';
 import { PencilLineIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -9,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import Markdown from 'react-markdown';
 import * as z from 'zod';
 
+import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
 import { TextBadge } from '@/components/common/text-badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,7 +29,7 @@ import { isNumber, isString } from '@/lib/guard';
 
 type CustomizeModelFormProps = {
   agentId: string;
-  initialData: AiAgent & { aiModels: AiModel[] };
+  initialData: GetAgentData['agent'];
 };
 
 const formSchema = z.object({

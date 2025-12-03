@@ -1,11 +1,11 @@
 'use client';
 
-import { AiAgent, AiModel } from '@prisma/client';
 import { CirclePlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import * as z from 'zod';
 
+import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
 import { AgentFeatures } from '@/components/ai-agents/agent-card/agent-features';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -16,8 +16,8 @@ import { ModelsList } from '../models-list';
 
 type ModelsProps = {
   agentId: string;
-  initialData: AiAgent & { aiModels: AiModel[] };
-  models: AiModel[];
+  initialData: GetAgentData['agent'];
+  models: GetAgentData['models'];
 };
 
 const formSchema = z.object({
@@ -58,7 +58,7 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
       <div className="font-medium flex items-center justify-between">
         <div className="flex gap-x-2 items-center">
           <span>LLM engine</span>
-          {!isEditing && <AgentFeatures models={initialData.aiModels} />}
+          {!isEditing && <AgentFeatures models={initialData?.aiModels ?? []} />}
         </div>
         <div className="flex gap-x-2 items-center">
           <Button onClick={handleToggleEdit} variant="outline" size="sm" disabled={isFetching}>
@@ -86,12 +86,12 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
         <div
           className={cn(
             'text-sm mr-2 mt-4',
-            !initialData.aiModels.length && 'text-neutral-500 italic',
+            !initialData?.aiModels?.length && 'text-neutral-500 italic',
           )}
         >
-          {!initialData.aiModels.length && <span>No selected LLM engine.</span>}
-          {Boolean(initialData.aiModels.length) && (
-            <ModelsList selectedModels={initialData.aiModels} />
+          {!initialData?.aiModels?.length && <span>No selected LLM engine.</span>}
+          {Boolean(initialData?.aiModels?.length) && (
+            <ModelsList selectedModels={initialData?.aiModels ?? []} />
           )}
         </div>
       )}
@@ -101,7 +101,7 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
             isFetching={isFetching}
             models={models}
             onUpdate={setSelectedModelIds}
-            selectedModels={initialData.aiModels}
+            selectedModels={initialData?.aiModels ?? []}
           />
           <div className="flex text-xs items-start justify-between">
             <div className="text-muted-foreground mt-4">Select LLM engine for your agent</div>

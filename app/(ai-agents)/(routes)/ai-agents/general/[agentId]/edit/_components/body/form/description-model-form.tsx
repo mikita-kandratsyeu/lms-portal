@@ -1,13 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AiAgent, AiModel } from '@prisma/client';
 import { PencilLineIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
+import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
 import { AgentCard } from '@/components/ai-agents/agent-card/agent-card';
 import { UpdatePhotoModal } from '@/components/modals/update-photo-modal';
 import { Avatar, AvatarFallback, AvatarImage, Button, Input, Textarea } from '@/components/ui';
@@ -21,13 +21,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
-import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
 import { getFallbackName } from '@/lib/utils';
 
 type DescriptionModelFormProps = {
   agentId: string;
-  initialData: AiAgent & { aiModels: AiModel[] };
+  initialData: GetAgentData['agent'];
 };
 
 const formSchema = z.object({
@@ -37,8 +36,6 @@ const formSchema = z.object({
 });
 
 export const DescriptionModelForm = ({ agentId, initialData }: DescriptionModelFormProps) => {
-  const { user } = useCurrentUser();
-
   const { toast } = useToast();
   const router = useRouter();
 
@@ -118,12 +115,12 @@ export const DescriptionModelForm = ({ agentId, initialData }: DescriptionModelF
         <div className="mt-4">
           <AgentCard
             description={initialData?.description}
-            isDraft={initialData.isDraft}
+            isDraft={initialData?.isDraft}
             isEdit
-            isPublic={initialData.isPublic}
+            isPublic={initialData?.isPublic}
             name={initialData?.name}
             pictureUrl={initialData?.pictureUrl}
-            user={{ userId: user?.userId, name: user?.name }}
+            user={initialData?.user}
           />
         </div>
       )}

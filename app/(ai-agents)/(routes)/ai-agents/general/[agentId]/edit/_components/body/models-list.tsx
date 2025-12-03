@@ -1,9 +1,9 @@
 'use client';
 
-import { AiModel } from '@prisma/client';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
 import { AgentFeatures } from '@/components/ai-agents/agent-card/agent-features';
 import { TextBadge } from '@/components/common/text-badge';
 import { Checkbox } from '@/components/ui';
@@ -11,9 +11,9 @@ import { cn } from '@/lib/utils';
 
 type ModelsListProps = {
   isFetching?: boolean;
-  models?: AiModel[];
+  models?: GetAgentData['models'];
   onUpdate?: (modelIds: string[]) => void;
-  selectedModels: AiModel[];
+  selectedModels: GetAgentData['models'];
 };
 
 export const ModelsList = ({
