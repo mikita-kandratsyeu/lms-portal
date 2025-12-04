@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage, Button } from '@/components/ui';
 import { cn, getFallbackName } from '@/lib/utils';
 
 type AgentCardProps = {
+  agentId?: string;
   description?: string | null;
   isDraft?: boolean | null;
   isEdit?: boolean;
@@ -19,6 +20,7 @@ type AgentCardProps = {
 };
 
 export const AgentCard = ({
+  agentId,
   description,
   isDraft,
   isEdit,
@@ -85,7 +87,7 @@ export const AgentCard = ({
   return isEdit ? (
     content
   ) : (
-    <Link href={'/'} title={'Nova Copilot'}>
+    <Link href={`/ai-agents/general/${agentId}`} title={name}>
       {content}
     </Link>
   );

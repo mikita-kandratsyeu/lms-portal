@@ -121,6 +121,7 @@ export const DescriptionModelForm = ({
       {!isEditing && (
         <div className="mt-4">
           <AgentCard
+            agentId={initialData?.id}
             description={initialData?.description}
             isDraft={initialData?.isDraft}
             isEdit
