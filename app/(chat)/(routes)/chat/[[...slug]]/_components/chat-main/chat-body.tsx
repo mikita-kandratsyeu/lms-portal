@@ -13,6 +13,7 @@ import React, {
 } from 'react';
 import ScrollToBottom, { useScrollToBottom, useSticky } from 'react-scroll-to-bottom';
 
+import { ChatStarters } from '@/components/chat/chat-starters';
 import { Button } from '@/components/ui';
 import { Spinner } from '@/components/ui/spinner';
 import { ChatCompletionRole } from '@/constants/ai/general';
@@ -21,7 +22,7 @@ import { useCurrentUser } from '@/hooks/use-current-user';
 import { cn } from '@/lib/utils';
 
 import { ChatBubble } from './chat-bubble';
-import { ChatIntro } from './chat-intro';
+import { ChatGreeting } from './chat-greeting';
 
 const ChatScrollContext = createContext({
   sticky: false,
@@ -100,8 +101,11 @@ const ChatBodyComponent = ({
   return (
     <ChatScrollContext.Provider value={value}>
       {!hasMessages && !isShared && (
-        <div className="flex flex-col items-center justify-start gap-y-2 h-full">
-          <ChatIntro introMessages={[]} onSubmit={onSubmit} />
+        <div className="flex flex-col items-center justify-center gap-y-2 h-full w-full">
+          <div className="h-full flex flex-col gap-y-2">
+            <ChatGreeting />
+            <ChatStarters />
+          </div>
         </div>
       )}
       <div className={cn(isShared ? 'h-[calc(100%-4rem)]' : 'h-[calc(100%-17rem)]', 'relative')}>

@@ -6,12 +6,12 @@ export const ChatGreeting = () => {
   const t = useTranslations('chat.body');
 
   return (
-    <div className="mx-auto px-8 size-full flex flex-col justify-center mb-4">
+    <div className="px-4 size-full flex flex-col justify-center mb-4">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.4 }}
         className="text-2xl font-semibold"
       >
         {t('greeting')}
@@ -20,7 +20,7 @@ export const ChatGreeting = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
-        transition={{ delay: 0.6 }}
+        transition={{ delay: 0.3 }}
         className="text-2xl text-zinc-500"
       >
         {t('title')}
