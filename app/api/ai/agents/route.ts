@@ -2,6 +2,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
+import { DEFAULT_TEMPERATURE } from '@/constants/ai/general';
 import db from '@/lib/db';
 import { isBusinessOwner } from '@/lib/owner';
 
@@ -29,6 +30,7 @@ export const POST = async (req: NextRequest) => {
           },
           isDraft: true,
           name,
+          temperature: DEFAULT_TEMPERATURE,
         },
       });
 

@@ -123,6 +123,7 @@ export const DescriptionModelForm = ({
           <AgentCard
             agentId={initialData?.id}
             description={initialData?.description}
+            isDefault={initialData?.isDefault}
             isDraft={initialData?.isDraft}
             isEdit
             isPublic={initialData?.isPublic}

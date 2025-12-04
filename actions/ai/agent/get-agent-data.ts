@@ -16,7 +16,10 @@ export type GetAgentData = {
   models: AiModel[];
 };
 
-export const getAgentData = async (agentId: string): Promise<GetAgentData> => {
+export const getAgentData = async (
+  agentId: string,
+  isPreviewPage = false,
+): Promise<GetAgentData> => {
   const user = await getCurrentUser();
 
   const agent = await db.aiAgent.findUnique({
@@ -35,9 +38,13 @@ export const getAgentData = async (agentId: string): Promise<GetAgentData> => {
     return { agent: null, models: [] };
   }
 
-  const models = await db.aiModel.findMany({
-    orderBy: [{ isDefault: 'desc' }, { providerName: 'asc' }, { name: 'asc' }],
-  });
+  let models: AiModel[] = [];
+
+  if (!isPreviewPage) {
+    models = await db.aiModel.findMany({
+      orderBy: [{ isDefault: 'desc' }, { providerName: 'asc' }, { name: 'asc' }],
+    });
+  }
 
   return {
     agent,

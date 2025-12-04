@@ -48,7 +48,8 @@ export const Header = ({ agentId, initialData, isPreviewPage }: HeaderProps) => 
           </div>
           <Actions
             agentId={agentId}
-            isDisabled={!isCompleted}
+            isDefault={initialData?.isDefault}
+            isDisabled={!isCompleted && !isPreviewPage}
             isOwner={initialData.userId === user?.userId}
             isPreviewPage={isPreviewPage}
             isPublished={!initialData.isDraft}

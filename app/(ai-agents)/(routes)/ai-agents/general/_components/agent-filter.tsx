@@ -1,19 +1,26 @@
 'use client';
 
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, SearchIcon, XIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button, Input } from '@/components/ui';
 
 export const AgentFilter = () => {
+  const value = '';
   return (
     <div className="flex items-center pb-4 justify-between space-x-2 flex-row gap-y-4">
-      <div className="flex gap-x-2 w-full">
+      <div className="relative w-full">
+        <SearchIcon className="h-4 w-4 absolute top-3 left-3 text-primary" />
+        {Boolean(value) && (
+          <span className="hover:cursor-pointer" onClick={() => {}}>
+            <XIcon className="h-4 w-4 absolute top-3 right-3 text-primary" />
+          </span>
+        )}
         <Input
-          placeholder={'AI agents filter...'}
-          value={''}
-          onChange={(event) => {}}
-          className="sm:max-w-sm"
+          className="w-full md:w-[264px] pl-9 pr-9 rounded-lg bg-neutral-100 dark:bg-neutral-900 focus-visible:ring-neutral-200 dark:focus-visible:ring-neutral-900/40 sm:max-w-sm"
+          placeholder={'Search for an agent...'}
+          // value={value}
+          // onChange={(event) => setValue(event.target.value)}
         />
       </div>
       <Link href="/ai-agents/create">

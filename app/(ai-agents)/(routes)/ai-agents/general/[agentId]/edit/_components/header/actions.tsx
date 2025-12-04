@@ -21,6 +21,7 @@ import { fetcher } from '@/lib/fetcher';
 
 type ActionsProps = {
   agentId: string;
+  isDefault?: boolean | null;
   isDisabled?: boolean;
   isOwner?: boolean;
   isPreviewPage?: boolean;
@@ -29,6 +30,7 @@ type ActionsProps = {
 
 export const Actions = ({
   agentId,
+  isDefault = false,
   isDisabled = false,
   isOwner = false,
   isPreviewPage = false,
@@ -111,7 +113,7 @@ export const Actions = ({
           <DropdownMenuTrigger asChild>
             <Button
               className="!pl-2"
-              disabled={isDisabledButton || isPublished}
+              disabled={isDisabledButton || (!isPreviewPage && isPublished)}
               size="sm"
               variant="outline"
             >
@@ -155,7 +157,7 @@ export const Actions = ({
           </DropdownMenuContent>
         </DropdownMenu>
       </ButtonGroup>
-      {isOwner && (
+      {isOwner && !isDefault && (
         <ConfirmModal onConfirm={handleDelete}>
           <Button disabled={isFetching} size="sm">
             <Trash2Icon className="h-4 w-4" />
