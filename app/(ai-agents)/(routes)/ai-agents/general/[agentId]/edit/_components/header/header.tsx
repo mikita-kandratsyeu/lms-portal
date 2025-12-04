@@ -4,11 +4,19 @@ import { AiAgent, AiModel } from '@prisma/client';
 import { ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 
+import { useCurrentUser } from '@/hooks/use-current-user';
+
 import { Actions } from './actions';
 
-type HeaderProps = { agentId: string; initialData: AiAgent & { aiModels: AiModel[] } };
+type HeaderProps = {
+  agentId: string;
+  initialData: AiAgent & { aiModels: AiModel[] };
+  isPreviewPage?: boolean;
+};
 
-export const Header = ({ agentId, initialData }: HeaderProps) => {
+export const Header = ({ agentId, initialData, isPreviewPage }: HeaderProps) => {
+  const { user } = useCurrentUser();
+
   const requiredFields = [initialData.description, initialData.name, initialData.aiModels.length];
 
   const isCompleted = requiredFields.every(Boolean);
@@ -29,12 +37,22 @@ export const Header = ({ agentId, initialData }: HeaderProps) => {
         </Link>
         <div className="flex items-center justify-between w-full">
           <div className="flex flex-col gap-y-2">
-            <h1 className="text-2xl font-medium">Agent setup</h1>
-            <span className="text-sm text-muted-foreground">
-              Complete all fields {completionText}
-            </span>
+            <h1 className="text-2xl font-medium">
+              {isPreviewPage ? 'Agent preview' : 'Agent setup'}
+            </h1>
+            {!isPreviewPage && (
+              <span className="text-sm text-muted-foreground">
+                Complete all fields {completionText}
+              </span>
+            )}
           </div>
-          <Actions agentId={agentId} isDisabled={!isCompleted} isPublished={!initialData.isDraft} />
+          <Actions
+            agentId={agentId}
+            isDisabled={!isCompleted}
+            isOwner={initialData.userId === user?.userId}
+            isPreviewPage={isPreviewPage}
+            isPublished={!initialData.isDraft}
+          />
         </div>
       </div>
     </div>

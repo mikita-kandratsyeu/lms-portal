@@ -30,6 +30,7 @@ import { isNumber, isString } from '@/lib/guard';
 type CustomizeModelFormProps = {
   agentId: string;
   initialData: GetAgentData['agent'];
+  isPreviewPage?: boolean;
 };
 
 const formSchema = z.object({
@@ -37,7 +38,11 @@ const formSchema = z.object({
   temperature: z.number().default(DEFAULT_TEMPERATURE),
 });
 
-export const CustomizeModelForm = ({ agentId, initialData }: CustomizeModelFormProps) => {
+export const CustomizeModelForm = ({
+  agentId,
+  initialData,
+  isPreviewPage,
+}: CustomizeModelFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -89,15 +94,17 @@ export const CustomizeModelForm = ({ agentId, initialData }: CustomizeModelFormP
           <span>LLM customization</span>
         </div>
         <div className="flex gap-x-2 items-center">
-          <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
-            {isEditing && <>Cancel</>}
-            {!isEditing && (
-              <>
-                <PencilLineIcon className="h-4 w-4 mr-2" />
-                Edit
-              </>
-            )}
-          </Button>
+          {!isPreviewPage && (
+            <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
+              {isEditing && <>Cancel</>}
+              {!isEditing && (
+                <>
+                  <PencilLineIcon className="h-4 w-4 mr-2" />
+                  Edit
+                </>
+              )}
+            </Button>
+          )}
           {isEditing && (
             <Button
               disabled={!isValid || isSubmitting}

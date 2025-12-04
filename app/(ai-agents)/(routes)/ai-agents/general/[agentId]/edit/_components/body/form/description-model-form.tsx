@@ -27,6 +27,7 @@ import { getFallbackName } from '@/lib/utils';
 type DescriptionModelFormProps = {
   agentId: string;
   initialData: GetAgentData['agent'];
+  isPreviewPage?: boolean;
 };
 
 const formSchema = z.object({
@@ -35,7 +36,11 @@ const formSchema = z.object({
   pictureUrl: z.string().optional(),
 });
 
-export const DescriptionModelForm = ({ agentId, initialData }: DescriptionModelFormProps) => {
+export const DescriptionModelForm = ({
+  agentId,
+  initialData,
+  isPreviewPage,
+}: DescriptionModelFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -89,15 +94,17 @@ export const DescriptionModelForm = ({ agentId, initialData }: DescriptionModelF
           <span>Agent description</span>
         </div>
         <div className="flex gap-x-2 items-center">
-          <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
-            {isEditing && <>Cancel</>}
-            {!isEditing && (
-              <>
-                <PencilLineIcon className="h-4 w-4 mr-2" />
-                Edit
-              </>
-            )}
-          </Button>
+          {!isPreviewPage && (
+            <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
+              {isEditing && <>Cancel</>}
+              {!isEditing && (
+                <>
+                  <PencilLineIcon className="h-4 w-4 mr-2" />
+                  Edit
+                </>
+              )}
+            </Button>
+          )}
           {isEditing && (
             <Button
               disabled={!isValid || isSubmitting}

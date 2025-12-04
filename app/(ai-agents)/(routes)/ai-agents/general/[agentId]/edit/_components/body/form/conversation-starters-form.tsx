@@ -25,6 +25,7 @@ import { fetcher } from '@/lib/fetcher';
 type ConversationStartersFormProps = {
   agentId: string;
   initialData: GetAgentData['agent'];
+  isPreviewPage?: boolean;
 };
 
 type ConversationStarter = {
@@ -48,6 +49,7 @@ const formSchema = z.object({
 export const ConversationStartersForm = ({
   agentId,
   initialData,
+  isPreviewPage,
 }: ConversationStartersFormProps) => {
   const { toast } = useToast();
 
@@ -139,15 +141,17 @@ export const ConversationStartersForm = ({
             isDisabled={isSubmitting}
             value={selectedLocale}
           />
-          <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
-            {isEditing && <>Cancel</>}
-            {!isEditing && (
-              <>
-                <PencilLineIcon className="h-4 w-4 mr-2" />
-                Edit
-              </>
-            )}
-          </Button>
+          {!isPreviewPage && (
+            <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
+              {isEditing && <>Cancel</>}
+              {!isEditing && (
+                <>
+                  <PencilLineIcon className="h-4 w-4 mr-2" />
+                  Edit
+                </>
+              )}
+            </Button>
+          )}
           {isEditing && (
             <Button
               disabled={!isValid || isSubmitting}

@@ -17,6 +17,7 @@ import { ModelsList } from '../models-list';
 type ModelsProps = {
   agentId: string;
   initialData: GetAgentData['agent'];
+  isPreviewPage?: boolean;
   models: GetAgentData['models'];
 };
 
@@ -24,7 +25,7 @@ const formSchema = z.object({
   modelIds: z.array(z.string()),
 });
 
-export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
+export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: ModelsProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -61,15 +62,17 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
           {!isEditing && <AgentFeatures models={initialData?.aiModels ?? []} />}
         </div>
         <div className="flex gap-x-2 items-center">
-          <Button onClick={handleToggleEdit} variant="outline" size="sm" disabled={isFetching}>
-            {isEditing && <>Cancel</>}
-            {!isEditing && (
-              <>
-                <CirclePlusIcon className="h-4 w-4 mr-2" />
-                Select
-              </>
-            )}
-          </Button>
+          {!isPreviewPage && (
+            <Button onClick={handleToggleEdit} variant="outline" size="sm" disabled={isFetching}>
+              {isEditing && <>Cancel</>}
+              {!isEditing && (
+                <>
+                  <CirclePlusIcon className="h-4 w-4 mr-2" />
+                  Select
+                </>
+              )}
+            </Button>
+          )}
           {isEditing && (
             <Button
               size="sm"

@@ -22,6 +22,7 @@ import { fetcher } from '@/lib/fetcher';
 type ActionsProps = {
   agentId: string;
   isDisabled?: boolean;
+  isOwner?: boolean;
   isPreviewPage?: boolean;
   isPublished?: boolean;
 };
@@ -29,6 +30,7 @@ type ActionsProps = {
 export const Actions = ({
   agentId,
   isDisabled = false,
+  isOwner = false,
   isPreviewPage = false,
   isPublished = false,
 }: ActionsProps) => {
@@ -81,7 +83,7 @@ export const Actions = ({
 
       toast({ title: 'Agent has been deleted' });
 
-      router.push(`/ai-agents/general`);
+      router.push('/ai-agents/general');
       router.refresh();
     } catch (error) {
       toast({ isError: true });
@@ -99,9 +101,11 @@ export const Actions = ({
           variant="outline"
           size="sm"
           disabled={isDisabledButton}
-          onClick={() => handleTogglePublication(true)}
+          onClick={() => (isPreviewPage ? {} : handleTogglePublication(true))}
         >
-          {isPublished ? 'Unpublish' : 'Publish'}
+          {isPreviewPage && 'Connect'}
+          {!isPreviewPage && isPublished && 'Unpublish'}
+          {!isPreviewPage && !isPublished && 'Publish'}
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -116,20 +120,30 @@ export const Actions = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuGroup>
-              <DropdownMenuItem
-                className="hover:cursor-pointer"
-                onClick={() => handleTogglePublication(false)}
-              >
-                <span>Publish as private</span>
-              </DropdownMenuItem>
+              {!isPreviewPage && (
+                <DropdownMenuItem
+                  className="hover:cursor-pointer"
+                  onClick={() => (isPreviewPage ? {} : handleTogglePublication(false))}
+                >
+                  <span>Publish as private</span>
+                </DropdownMenuItem>
+              )}
               {isPreviewPage && (
                 <>
-                  <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
+                  <DropdownMenuItem
+                    className="hover:cursor-pointer"
+                    onClick={() => router.push(`/chat?agentId=${agentId}`)}
+                  >
                     <span>Chat now</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
-                    <span>Edit</span>
-                  </DropdownMenuItem>
+                  {isOwner && (
+                    <DropdownMenuItem
+                      className="hover:cursor-pointer"
+                      onClick={() => router.push(`/ai-agents/general/${agentId}/edit`)}
+                    >
+                      <span>Edit</span>
+                    </DropdownMenuItem>
+                  )}
                   {user?.hasSubscription && (
                     <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
                       <span>Clone</span>
@@ -141,11 +155,13 @@ export const Actions = ({
           </DropdownMenuContent>
         </DropdownMenu>
       </ButtonGroup>
-      <ConfirmModal onConfirm={handleDelete}>
-        <Button disabled={isFetching} size="sm">
-          <Trash2Icon className="h-4 w-4" />
-        </Button>
-      </ConfirmModal>
+      {isOwner && (
+        <ConfirmModal onConfirm={handleDelete}>
+          <Button disabled={isFetching} size="sm">
+            <Trash2Icon className="h-4 w-4" />
+          </Button>
+        </ConfirmModal>
+      )}
     </div>
   );
 };
