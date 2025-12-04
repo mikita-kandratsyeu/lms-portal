@@ -37,7 +37,7 @@ export const ChapterTitle = ({
           {chapter.title}
         </h2>
         {durationInSec > 0 && (
-          <div className="flex items-center gap-x-1 text-neutral-500 md:my-1 mb-6 justify-center md:justify-start">
+          <div className="flex items-center gap-x-1 text-muted-foreground md:my-1 mb-6 justify-center md:justify-start">
             <Clock9 className="h-4 w-4" />
             <span className="text-xs">{formatTimeInSeconds(durationInSec)}</span>
           </div>

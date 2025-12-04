@@ -111,7 +111,10 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
       </div>
       {!isEditing && (
         <p
-          className={cn('text-sm mt-4', !initialData.description && 'text-neutral-500 italic mt-2')}
+          className={cn(
+            'text-sm mt-4',
+            !initialData.description && 'text-muted-foreground italic mt-2',
+          )}
         >
           {initialData.description || 'No description'}
         </p>

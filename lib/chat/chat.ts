@@ -1,6 +1,6 @@
 import { Conversation } from '@/actions/chat/get-chat-conversations';
 
-import { getRandomInt } from './utils';
+import { getRandomInt } from '../utils';
 
 export const getChatMessages = (conversations: Conversation[]) =>
   conversations.reduce<Record<string, Conversation['messages']>>((acc, conversation) => {

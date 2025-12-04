@@ -30,8 +30,9 @@ export const AgentCard = ({
   const content = (
     <div
       className={cn(
-        'group hover:shadow-sm transition duration-300 overflow-hidden rounded-lg h-full dark:bg-neutral-900 hover:bg-blue-500/10 dark:hover:bg-neutral-900/75 relative',
-        !isEdit && 'border p-4',
+        'group overflow-hidden rounded-lg h-full dark:bg-neutral-900 relative',
+        !isEdit &&
+          'border p-4 hover:shadow-sm transition duration-300 hover:bg-blue-500/10 dark:hover:bg-neutral-900/75',
       )}
     >
       <div className="flex space-x-4 items-center mb-4">
@@ -49,7 +50,7 @@ export const AgentCard = ({
             </div>
             {user?.userId && user?.name && (
               <UserHoverCard userId={user.userId}>
-                <button className="flex items-center justify-start gap-x-1 text-neutral-500 p-0 font-normal hover:underline">
+                <button className="flex items-center justify-start gap-x-1 text-muted-foreground p-0 font-normal hover:underline">
                   <span className="text-xs">{`by ${user.name}`}</span>
                 </button>
               </UserHoverCard>

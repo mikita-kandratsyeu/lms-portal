@@ -1,3 +1,4 @@
+import { ChatConversationStarters } from '@prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -19,8 +20,15 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
     }
 
-    const { modelIds, description, name, pictureUrl, systemInstruction, temperature } =
-      await req.json();
+    const {
+      chatConversationStarters,
+      description,
+      modelIds,
+      name,
+      pictureUrl,
+      systemInstruction,
+      temperature,
+    } = await req.json();
 
     const defaultModel = await db.aiModel.findFirst({ where: { isDefault: true } });
 
@@ -33,10 +41,23 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       },
     };
 
+    const chatConversationStartersData = Boolean(chatConversationStarters?.length) && {
+      chatConversationStarters: {
+        deleteMany: {},
+        createMany: {
+          data: chatConversationStarters.map((starter: ChatConversationStarters) => ({
+            language: starter.language,
+            text: starter.text,
+          })),
+        },
+      },
+    };
+
     const updatedAgent = await db.aiAgent.update({
       where: { id: agentId, userId: user.userId },
       data: {
         ...aiModelsData,
+        ...chatConversationStartersData,
         description,
         name,
         pictureUrl,
@@ -45,6 +66,7 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       },
       select: {
         aiModels: { select: { id: true, value: true } },
+        chatConversationStarters: { select: { id: true, text: true, language: true } },
         id: true,
         name: true,
         updatedAt: true,

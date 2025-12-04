@@ -1,12 +1,18 @@
 'use server';
 
-import { AiAgent, AiModel, User } from '@prisma/client';
+import { AiAgent, AiModel, ChatConversationStarters, User } from '@prisma/client';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import db from '@/lib/db';
 
 export type GetAgentData = {
-  agent: (AiAgent & { aiModels: AiModel[]; user: Pick<User, 'id' | 'name'> | null }) | null;
+  agent:
+    | (AiAgent & {
+        aiModels: AiModel[];
+        chatConversationStarters: ChatConversationStarters[];
+        user: Pick<User, 'id' | 'name'> | null;
+      })
+    | null;
   models: AiModel[];
 };
 
@@ -20,6 +26,7 @@ export const getAgentData = async (agentId: string): Promise<GetAgentData> => {
     },
     include: {
       aiModels: { orderBy: [{ isDefault: 'desc' }, { providerName: 'asc' }, { name: 'asc' }] },
+      chatConversationStarters: true,
       user: { select: { id: true, name: true } },
     },
   });

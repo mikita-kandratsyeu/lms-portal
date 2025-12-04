@@ -72,7 +72,7 @@ export const UserHoverCard = ({ children, userId }: UserHoverCardProps) => {
               <p className="text-xs leading-none text-muted-foreground">{t(user?.role)}</p>
               <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
               <div className="flex items-center pt-2">
-                <CalendarDays className="mr-1 h-4 w-4 text-neutral-500" />
+                <CalendarDays className="mr-1 h-4 w-4 text-muted-foreground" />
                 <span className="text-xs text-muted-foreground">
                   {t('joined', { date: format(user.createdAt, TIMESTAMP_PREVIEW_TEMPLATE) })}
                 </span>

@@ -1,12 +1,10 @@
 'use client';
 
+import { ChatConversationStarters } from '@prisma/client';
 import { motion } from 'framer-motion';
+import { useCallback } from 'react';
 
-const questions = [
-  'How to create a product roadmap?',
-  'What are the most useful estimation techniques?',
-  'Can you convert EST 11:00 AM to Kyiv time?',
-];
+import { CopyClipboard } from '../common/copy-clipboard';
 
 const bubbleVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -21,20 +19,36 @@ const bubbleVariants = {
   }),
 };
 
-export const ChatStarters = () => {
+type ChatStartersProps = {
+  callback?: (text: string) => void;
+  isAnimated?: boolean;
+  showCopyButton?: boolean;
+  starters: Pick<ChatConversationStarters, 'id' | 'language' | 'text'>[];
+};
+
+export const ChatStarters = ({
+  callback,
+  isAnimated,
+  showCopyButton,
+  starters,
+}: ChatStartersProps) => {
+  const handleClick = useCallback((text: string) => (callback ? callback(text) : {}), [callback]);
+
   return (
     <div className="flex items-center">
-      <div className="flex flex-col gap-3 px-4">
-        {questions.map((q, i) => (
+      <div className="flex flex-col gap-3 w-full">
+        {starters.map((starter, index) => (
           <motion.button
             animate="visible"
-            className="inline-flex max-w-full rounded-lg bg-muted px-5 py-3 text-left text-sm md:text-base text-muted-foreground"
-            custom={i}
+            className="inline-flex max-w-full rounded-lg bg-muted px-5 py-3 text-left text-sm md:text-base text-muted-foreground line-clamp-2 border justify-between items-center gap-x-2"
+            custom={index}
             initial="hidden"
-            key={q}
-            variants={bubbleVariants}
+            key={starter.id}
+            variants={isAnimated ? bubbleVariants : undefined}
+            onClick={() => handleClick(starter.text)}
           >
-            {q}
+            {starter.text}
+            {showCopyButton && <CopyClipboard textToCopy={starter.text} />}
           </motion.button>
         ))}
       </div>

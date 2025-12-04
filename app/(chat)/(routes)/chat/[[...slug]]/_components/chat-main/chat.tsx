@@ -13,7 +13,7 @@ import { useAppConfigStore } from '@/hooks/store/use-app-config-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useLocaleStore } from '@/hooks/store/use-locale-store';
 import { useHydration } from '@/hooks/use-hydration';
-import { getChatMessages } from '@/lib/chat';
+import { getChatMessages } from '@/lib/chat/chat';
 import { fetcher } from '@/lib/fetcher';
 
 import { ChatBody } from './chat-body';

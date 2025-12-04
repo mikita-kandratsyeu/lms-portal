@@ -104,7 +104,7 @@ export const ChapterVideoForm = ({ initialData, chapterId, courseId }: ChapterVi
         <>
           {!initialData?.videoUrl && !initialData?.imageUrl && (
             <div className="flex items-center justify-center h-60 bg-neutral-200 dark:bg-neutral-800 rounded-md mt-4">
-              <Video className="h-10 w-10 text-neutral-500" />
+              <Video className="h-10 w-10 text-muted-foreground" />
             </div>
           )}
           {initialData?.videoUrl && (

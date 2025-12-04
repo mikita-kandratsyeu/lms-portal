@@ -65,7 +65,7 @@ export const PreviewDescription = ({
   return (
     <div className="border rounded-lg p-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-x-1 text-neutral-500 mb-1">
+        <div className="flex items-center gap-x-1 text-muted-foreground mb-1">
           <IconBadge size="sm" icon={BookOpen} />
           <span className="text-xs">{t('chapter', { amount: chaptersLength })}</span>
         </div>
@@ -103,7 +103,7 @@ export const PreviewDescription = ({
         {author && authorUserId && (
           <UserHoverCard userId={authorUserId}>
             <Button
-              className="flex items-center gap-x-1 text-neutral-500 p-0 font-normal"
+              className="flex items-center gap-x-1 text-muted-foreground p-0 font-normal"
               variant="link"
             >
               <BookA className="h-4 w-4" />
@@ -112,13 +112,13 @@ export const PreviewDescription = ({
           </UserHoverCard>
         )}
         {durationInSec > 0 && (
-          <div className="flex items-center gap-x-1 text-neutral-500 my-1">
+          <div className="flex items-center gap-x-1 text-muted-foreground my-1">
             <Clock9 className="h-4 w-4" />
             <span className="text-xs">{formatTimeInSeconds(durationInSec)}</span>
           </div>
         )}
         {languageTitle && (
-          <div className="flex items-center gap-x-1 text-neutral-500 mb-4">
+          <div className="flex items-center gap-x-1 text-muted-foreground mb-4">
             <Languages className="h-4 w-4" />
             <span className="text-xs">
               {t('lang', {
@@ -127,7 +127,7 @@ export const PreviewDescription = ({
             </span>
           </div>
         )}
-        <div className="flex items-center gap-x-1 text-neutral-500 mb-1">
+        <div className="flex items-center gap-x-1 text-muted-foreground mb-1">
           <CalendarDays className="h-4 w-4" />
           <span className="text-xs">
             {t('lastUpdated')}&nbsp;{format(lastUpdate, TIMESTAMP_PREVIEW_TEMPLATE)}

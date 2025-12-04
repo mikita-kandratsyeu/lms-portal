@@ -104,7 +104,7 @@ const ChatBodyComponent = ({
         <div className="flex flex-col items-center justify-center gap-y-2 h-full w-full">
           <div className="h-full flex flex-col gap-y-2">
             <ChatGreeting />
-            <ChatStarters />
+            <ChatStarters starters={[]} />
           </div>
         </div>
       )}

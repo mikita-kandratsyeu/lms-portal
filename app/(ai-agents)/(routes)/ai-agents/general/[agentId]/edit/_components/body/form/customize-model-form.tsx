@@ -84,7 +84,7 @@ export const CustomizeModelForm = ({ agentId, initialData }: CustomizeModelFormP
 
   return (
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
+      <div className="font-medium flex items-center justify-between gap-x-2">
         <div className="flex gap-x-2 items-center">
           <span>LLM customization</span>
         </div>
@@ -118,7 +118,9 @@ export const CustomizeModelForm = ({ agentId, initialData }: CustomizeModelFormP
             <Markdown>{initialData?.systemInstruction}</Markdown>
           )}
           {!initialData?.systemInstruction && (
-            <span className="text-neutral-500 italic">No system instruction for LLM engine.</span>
+            <span className="text-muted-foreground italic">
+              No system instruction for LLM engine.
+            </span>
           )}
           <h4 className="mb-2 mt-4 font-semibold">Temperature</h4>
           {isNumber(initialData?.temperature) && (

@@ -84,7 +84,7 @@ export const DescriptionModelForm = ({ agentId, initialData }: DescriptionModelF
 
   return (
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
+      <div className="font-medium flex items-center justify-between gap-x-2">
         <div className="flex gap-x-2 items-center">
           <span>Agent description</span>
         </div>

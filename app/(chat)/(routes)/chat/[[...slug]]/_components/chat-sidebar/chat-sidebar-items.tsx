@@ -16,7 +16,7 @@ import {
 } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { useChatStore } from '@/hooks/store/use-chat-store';
-import { getChatMessages } from '@/lib/chat';
+import { getChatMessages } from '@/lib/chat/chat';
 import { fetcher } from '@/lib/fetcher';
 import { cn } from '@/lib/utils';
 

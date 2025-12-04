@@ -60,10 +60,9 @@ export const MarkdownText = ({ className, text }: MarkdownTextProps) => {
           },
           a: ({ children, href }) => {
             return (
-              <Link href={href} target="_blank">
+              <Link href={href} target="_blank" title={children}>
                 <div className="text-xs py-0.5 px-2 rounded-full inline-flex justify-center items-center gap-x-1 text-muted-foreground font-light bg-muted">
                   <LinkIcon className="h-3 w-3" />
-                  {children}
                 </div>
               </Link>
             );

@@ -55,7 +55,7 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
 
   return (
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
+      <div className="font-medium flex items-center justify-between gap-x-2">
         <div className="flex gap-x-2 items-center">
           <span>LLM engine</span>
           {!isEditing && <AgentFeatures models={initialData?.aiModels ?? []} />}
@@ -86,7 +86,7 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
         <div
           className={cn(
             'text-sm mr-2 mt-4',
-            !initialData?.aiModels?.length && 'text-neutral-500 italic',
+            !initialData?.aiModels?.length && 'text-muted-foreground italic',
           )}
         >
           {!initialData?.aiModels?.length && <span>No selected LLM engine.</span>}
@@ -103,7 +103,7 @@ export const ModelsForm = ({ agentId, initialData, models }: ModelsProps) => {
             onUpdate={setSelectedModelIds}
             selectedModels={initialData?.aiModels ?? []}
           />
-          <div className="flex text-xs items-start justify-between">
+          <div className="flex text-sm items-start justify-between">
             <div className="text-muted-foreground mt-4">Select LLM engine for your agent</div>
           </div>
         </div>

@@ -83,7 +83,9 @@ export const CategoryForm = ({ courseId, initialData, options }: CategoryFormPro
         </Button>
       </div>
       {!isEditing && (
-        <p className={cn('text-sm mt-2', !initialData.categoryId && 'text-neutral-500 italic')}>
+        <p
+          className={cn('text-sm mt-2', !initialData.categoryId && 'text-muted-foreground italic')}
+        >
           {selectedOption?.label || 'No category'}
         </p>
       )}

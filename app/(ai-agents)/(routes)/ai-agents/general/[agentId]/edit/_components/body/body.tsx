@@ -11,6 +11,7 @@ import {
 import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
 import { IconBadge } from '@/components/common/icon-badge';
 
+import { ConversationStartersForm } from './form/conversation-starters-form';
 import { CustomizeModelForm } from './form/customize-model-form';
 import { DescriptionModelForm } from './form/description-model-form';
 import { ModelsForm } from './form/models-form';
@@ -35,9 +36,9 @@ export const Body = ({ agentId, initialData, models }: BodyProps) => {
         <div>
           <div className="flex items-center gap-x-2">
             <IconBadge icon={MessageCircleMoreIcon} />
-            <h2 className="text-xl">Conversation starters</h2>
+            <h2 className="text-xl">Set conversation starters</h2>
           </div>
-          <p>list for all langs in APP</p>
+          <ConversationStartersForm agentId={agentId} initialData={initialData} />
         </div>
       </div>
       <div className="space-y-6">
