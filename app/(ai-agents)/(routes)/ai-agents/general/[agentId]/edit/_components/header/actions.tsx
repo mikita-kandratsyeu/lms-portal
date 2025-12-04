@@ -16,16 +16,25 @@ import {
 } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { useConfettiStore } from '@/hooks/store/use-confetti-store';
+import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
 
 type ActionsProps = {
   agentId: string;
   isDisabled?: boolean;
+  isPreviewPage?: boolean;
   isPublished?: boolean;
 };
 
-export const Actions = ({ agentId, isDisabled = false, isPublished = false }: ActionsProps) => {
+export const Actions = ({
+  agentId,
+  isDisabled = false,
+  isPreviewPage = false,
+  isPublished = false,
+}: ActionsProps) => {
   const { toast } = useToast();
+
+  const { user } = useCurrentUser();
   const router = useRouter();
 
   const [isFetching, setIsFetching] = useState(false);
@@ -113,6 +122,21 @@ export const Actions = ({ agentId, isDisabled = false, isPublished = false }: Ac
               >
                 <span>Publish as private</span>
               </DropdownMenuItem>
+              {isPreviewPage && (
+                <>
+                  <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
+                    <span>Chat now</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
+                    <span>Edit</span>
+                  </DropdownMenuItem>
+                  {user?.hasSubscription && (
+                    <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
+                      <span>Clone</span>
+                    </DropdownMenuItem>
+                  )}
+                </>
+              )}
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
