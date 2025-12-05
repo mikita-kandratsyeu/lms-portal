@@ -1,11 +1,11 @@
 import { redirect } from 'next/navigation';
 
 import { getAgentData } from '@/actions/ai/agent/get-agent-data';
+import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { Banner } from '@/components/common/banner';
 
 import { Body } from './_components/body/body';
 import { Header } from './_components/header/header';
-import { getCurrentUser } from '@/actions/auth/get-current-user';
 
 type AgentIdPageProps = { params: Promise<{ agentId: string }> };
 
@@ -13,14 +13,14 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
   const user = await getCurrentUser();
 
   if (!user?.hasSubscription) {
-    redirect('/ai-agents/general');
+    redirect('/');
   }
 
   const { agentId } = await props.params;
   const { agent, models } = await getAgentData(agentId);
 
   if (!agent) {
-    redirect('/ai-agents/general');
+    redirect('/');
   }
 
   const commonFormProps = {

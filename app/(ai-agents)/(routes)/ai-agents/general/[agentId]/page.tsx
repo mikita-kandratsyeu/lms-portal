@@ -12,7 +12,7 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
   const { agent } = await getAgentData(agentId, true);
 
   if (!agent) {
-    redirect('/ai-agents/general');
+    redirect('/');
   }
 
   const commonFormProps = {
