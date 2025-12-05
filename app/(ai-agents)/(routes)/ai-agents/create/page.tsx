@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -18,7 +18,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { fetcher } from '@/lib/fetcher';
-import { useCurrentUser } from '@/hooks/use-current-user';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Agent name is required' }),

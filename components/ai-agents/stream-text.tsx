@@ -14,7 +14,6 @@ import { fetcher } from '@/lib/fetcher';
 
 import { Button } from '../ui';
 import { AgentConfiguration } from './agent-configuration';
-import { AiModelSwitcher } from './ai-model-switcher';
 
 type StreamTextProps = {
   cacheKey?: string;
