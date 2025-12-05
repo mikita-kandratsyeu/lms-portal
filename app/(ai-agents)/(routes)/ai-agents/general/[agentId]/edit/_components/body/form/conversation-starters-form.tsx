@@ -15,7 +15,7 @@ import { LanguageSwitcher } from '@/components/common/language-switcher';
 import { Button, Input } from '@/components/ui';
 import { Form, FormField } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
-import { LIMIT_CONVERSATION_STARTERS } from '@/constants/chat';
+import { LIMIT_CONVERSATION_STARTERS } from '@/constants/ai/general';
 import {
   getConversationStartersByLanguage,
   mapConversationStarters,

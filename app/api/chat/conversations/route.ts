@@ -2,7 +2,8 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { CONVERSATION_ACTION, LIMIT_CONVERSATION_TITLE } from '@/constants/chat';
+import { LIMIT_CONVERSATION_TITLE } from '@/constants/ai/general';
+import { CONVERSATION_ACTION } from '@/constants/chat';
 import { generateConversationTitle } from '@/lib/chat/chat';
 import db from '@/lib/db';
 

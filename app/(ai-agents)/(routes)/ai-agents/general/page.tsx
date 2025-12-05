@@ -20,7 +20,7 @@ const GeneralPage = async () => {
         <>
           <div className="flex gap-x-2 items-center my-6">
             <HousePlugIcon className="w-6 h-6" />
-            <h2 className="text-xl font-semibold">Connected agents</h2>
+            <h2 className="text-xl font-semibold">Connected agents (0/5)</h2>
           </div>
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
             {defaultAgent && (
@@ -36,7 +36,7 @@ const GeneralPage = async () => {
         <>
           <div className="flex gap-x-2 items-center mt-8 mb-4">
             <LockKeyholeIcon className="w-6 h-6" />
-            <h2 className="text-xl font-semibold">Private agents</h2>
+            <h2 className="text-xl font-semibold">Private agents (0/5)</h2>
           </div>
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
             {privateOrDraftAgents.map((agent) => (

@@ -11,6 +11,10 @@ export const enum AI_PROVIDER {
 }
 
 export const LIMIT_REQUESTS_PER_WEEK = 5;
+export const LIMIT_CHAT_INPUT = 8000;
+export const LIMIT_CONVERSATION_TITLE = 100;
+export const LIMIT_CONVERSATION_STARTERS = 5;
+
 export const enum REQUEST_STATUS {
   ALLOW = 'allow',
   FORBIDDEN = 'forbidden',

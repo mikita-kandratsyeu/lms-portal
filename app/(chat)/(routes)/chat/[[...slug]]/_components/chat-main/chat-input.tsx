@@ -4,11 +4,12 @@ import { useTranslations } from 'next-intl';
 import { memo, SyntheticEvent, useState } from 'react';
 
 import { Textarea } from '@/components/ui';
-import { LIMIT_CHAT_INPUT } from '@/constants/chat';
+
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { cn } from '@/lib/utils';
 
 import { ChatInputFooter } from './chat-input-footer';
+import { LIMIT_CHAT_INPUT } from '@/constants/ai/general';
 
 type ChatInputProps = {
   currenMessage: string;

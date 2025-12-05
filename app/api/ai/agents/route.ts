@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { DEFAULT_TEMPERATURE } from '@/constants/ai/general';
 import db from '@/lib/db';
-import { isBusinessOwner } from '@/lib/owner';
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -14,7 +13,7 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    if (!user.hasSubscription || !isBusinessOwner(user.userId)) {
+    if (!user.hasSubscription) {
       return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
     }
 

@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import db from '@/lib/db';
-import { isBusinessOwner } from '@/lib/owner';
 
 export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId: string }> }) => {
   const { agentId } = await props.params;
@@ -16,7 +15,7 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    if (!user.hasSubscription || !isBusinessOwner(user.userId)) {
+    if (!user.hasSubscription) {
       return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
     }
 
@@ -93,7 +92,7 @@ export const DELETE = async (_: NextRequest, props: { params: Promise<{ agentId:
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    if (!user.hasSubscription || !isBusinessOwner(user.userId)) {
+    if (!user.hasSubscription) {
       return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
     }
 
