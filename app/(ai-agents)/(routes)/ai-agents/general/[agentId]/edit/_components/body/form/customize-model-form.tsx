@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import Markdown from 'react-markdown';
 import * as z from 'zod';
 
-import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
+import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
 import { TextBadge } from '@/components/common/text-badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,7 +29,7 @@ import { isNumber, isString } from '@/lib/guard';
 
 type CustomizeModelFormProps = {
   agentId: string;
-  initialData: GetAgentData['agent'];
+  initialData: GetAgentDataResponse['agent'];
   isPreviewPage?: boolean;
 };
 

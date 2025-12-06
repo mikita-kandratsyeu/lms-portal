@@ -1,35 +1,47 @@
 'use server';
 
-import { AiAgent, AiModel, ChatConversationStarters, User } from '@prisma/client';
+import {
+  AiAgent,
+  AiAgentConnection,
+  AiModel,
+  ChatConversationStarters,
+  User,
+} from '@prisma/client';
 
-import { getCurrentUser } from '@/actions/auth/get-current-user';
 import db from '@/lib/db';
 
-export type GetAgentData = {
+export type GetAgentDataResponse = {
   agent:
     | (AiAgent & {
         aiModels: AiModel[];
         chatConversationStarters: ChatConversationStarters[];
         user: Pick<User, 'id' | 'name'> | null;
+        connectedUsers: Pick<AiAgentConnection, 'userId'>[];
       })
     | null;
   models: AiModel[];
 };
 
-export const getAgentData = async (
-  agentId: string,
-  isPreviewPage = false,
-): Promise<GetAgentData> => {
-  const user = await getCurrentUser();
+type GetAgentDataArgs = {
+  agentId: string;
+  isPreviewPage?: boolean;
+  userId?: string;
+};
 
+export const getAgentData = async ({
+  agentId,
+  isPreviewPage,
+  userId,
+}: GetAgentDataArgs): Promise<GetAgentDataResponse> => {
   const agent = await db.aiAgent.findUnique({
     where: {
       id: agentId,
-      userId: user!.userId,
+      userId,
     },
     include: {
       aiModels: { orderBy: [{ isDefault: 'desc' }, { providerName: 'asc' }, { name: 'asc' }] },
       chatConversationStarters: true,
+      connectedUsers: { select: { userId: true } },
       user: { select: { id: true, name: true } },
     },
   });

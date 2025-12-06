@@ -8,7 +8,7 @@ import {
   SlidersHorizontalIcon,
 } from 'lucide-react';
 
-import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
+import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
 import { IconBadge } from '@/components/common/icon-badge';
 
 import { ConversationStartersForm } from './form/conversation-starters-form';
@@ -18,9 +18,9 @@ import { ModelsForm } from './form/models-form';
 
 type BodyProps = {
   agentId: string;
-  initialData: GetAgentData['agent'];
+  initialData: GetAgentDataResponse['agent'];
   isPreviewPage?: boolean;
-  models?: GetAgentData['models'];
+  models?: GetAgentDataResponse['models'];
 };
 
 export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyProps) => {
@@ -53,6 +53,19 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
             isPreviewPage={isPreviewPage}
           />
         </div>
+        <div>
+          {!isPreviewPage && (
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={SlidersHorizontalIcon} />
+              <h2 className="text-xl">Customize LLM engine</h2>
+            </div>
+          )}
+          <CustomizeModelForm
+            agentId={agentId}
+            initialData={initialData}
+            isPreviewPage={isPreviewPage}
+          />
+        </div>
       </div>
       <div className="space-y-6">
         <div>
@@ -67,19 +80,6 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
             initialData={initialData}
             isPreviewPage={isPreviewPage}
             models={models}
-          />
-        </div>
-        <div>
-          {!isPreviewPage && (
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={SlidersHorizontalIcon} />
-              <h2 className="text-xl">Customize LLM engine</h2>
-            </div>
-          )}
-          <CustomizeModelForm
-            agentId={agentId}
-            initialData={initialData}
-            isPreviewPage={isPreviewPage}
           />
         </div>
         {!isPreviewPage && (

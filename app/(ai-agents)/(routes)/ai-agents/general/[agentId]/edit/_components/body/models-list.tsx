@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
+import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
 import { AgentFeatures } from '@/components/ai-agents/agent-card/agent-features';
 import { TextBadge } from '@/components/common/text-badge';
 import { Checkbox } from '@/components/ui';
@@ -11,9 +11,9 @@ import { cn } from '@/lib/utils';
 
 type ModelsListProps = {
   isFetching?: boolean;
-  models?: GetAgentData['models'];
+  models?: GetAgentDataResponse['models'];
   onUpdate?: (modelIds: string[]) => void;
-  selectedModels: GetAgentData['models'];
+  selectedModels: GetAgentDataResponse['models'];
 };
 
 export const ModelsList = ({

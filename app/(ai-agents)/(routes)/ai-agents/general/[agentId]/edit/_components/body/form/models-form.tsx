@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import * as z from 'zod';
 
-import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
+import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
 import { AgentFeatures } from '@/components/ai-agents/agent-card/agent-features';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -16,9 +16,9 @@ import { ModelsList } from '../models-list';
 
 type ModelsProps = {
   agentId: string;
-  initialData: GetAgentData['agent'];
+  initialData: GetAgentDataResponse['agent'];
   isPreviewPage?: boolean;
-  models: GetAgentData['models'];
+  models: GetAgentDataResponse['models'];
 };
 
 const formSchema = z.object({

@@ -3,10 +3,15 @@
 import { AiModel } from '@prisma/client';
 import { ChartColumnIcon, PlugIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { SyntheticEvent, useState } from 'react';
 
 import { TextBadge } from '@/components/common/text-badge';
 import { UserHoverCard } from '@/components/common/user-hover-card';
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@/components/ui';
+import { useToast } from '@/components/ui/use-toast';
+import { AGENT_ACTION } from '@/constants/ai/general';
+import { fetcher } from '@/lib/fetcher';
 import { cn, getFallbackName } from '@/lib/utils';
 
 import { AgentFeatures } from './agent-features';
@@ -15,12 +20,14 @@ type AgentCardProps = {
   agentId?: string;
   aiModels?: AiModel[];
   description?: string | null;
+  isConnected?: boolean;
   isDefault?: boolean | null;
   isDraft?: boolean | null;
   isEdit?: boolean;
   isPublic?: boolean | null;
   name?: string;
   pictureUrl?: string | null;
+  totalUses?: number;
   user?: { id?: string | null; name?: string | null } | null;
 };
 
@@ -28,14 +35,45 @@ export const AgentCard = ({
   agentId,
   aiModels = [],
   description,
+  isConnected,
   isDefault,
   isDraft,
   isEdit,
   isPublic,
   name,
   pictureUrl,
+  totalUses,
   user,
 }: AgentCardProps) => {
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const [isFetching, setIsFetching] = useState(false);
+
+  const handleConnection = async (event: SyntheticEvent) => {
+    event.preventDefault();
+
+    setIsFetching(true);
+
+    try {
+      await fetcher.post(`/api/ai/agents/${agentId}/connection`, {
+        body: { action: isConnected ? AGENT_ACTION.DISCONNECT : AGENT_ACTION.CONNECT },
+      });
+
+      toast({
+        title: `${name} Agent has been ${isConnected ? 'disconnected' : 'connected'}.`,
+      });
+
+      router.refresh();
+    } catch (error) {
+      console.error('[AGENT_CONNECTION]', error);
+
+      toast({ isError: true });
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   const content = (
     <div
       className={cn(
@@ -57,10 +95,8 @@ export const AgentCard = ({
                   <h4 className="font-semibold">{name}</h4>
                   {isDraft && <TextBadge label={'Draft'} />}
                   {isDefault && <TextBadge label={'Default'} />}
+                  {!isPublic && !isDraft && <TextBadge label={'Private'} variant="indigo" />}
                   {isEdit && isPublic && <TextBadge label={'Public'} variant="lime" />}
-                  {isEdit && !isPublic && !isDraft && (
-                    <TextBadge label={'Private'} variant="indigo" />
-                  )}
                 </div>
                 {user?.id && user?.name && (
                   <UserHoverCard userId={user.id}>
@@ -80,14 +116,23 @@ export const AgentCard = ({
         {!isEdit && (
           <div>
             <div className="flex justify-between items-center gap-x-4">
-              <Button variant="outline" size="sm" disabled={Boolean(isDefault)}>
-                <PlugIcon className="w-4 h-4 mr-2" />
-                <span>Connect</span>
+              <Button
+                disabled={Boolean(isDefault) || isFetching || Boolean(isDraft)}
+                isLoading={isFetching}
+                onClick={handleConnection}
+                size="sm"
+                type="button"
+                variant="outline"
+              >
+                {!isFetching && <PlugIcon className="w-4 h-4 mr-2" />}
+                <span>{isConnected || isDefault ? 'Disconnect' : 'Connect'}</span>
               </Button>
-              <div className="flex gap-x-2 items-center text-muted-foreground">
-                <ChartColumnIcon className="w-4 h-4" />
-                <span className="text-xs">123 total uses</span>
-              </div>
+              {!isDraft && Boolean(totalUses) && (
+                <div className="flex gap-x-1 items-center text-muted-foreground">
+                  <ChartColumnIcon className="w-4 h-4" />
+                  <span className="text-xs">{totalUses} total uses</span>
+                </div>
+              )}
             </div>
           </div>
         )}

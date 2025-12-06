@@ -10,6 +10,7 @@ datasource db {
 model User {
   id                  String                   @id @default(uuid())
   aiAgents            AiAgent[]
+  connectedAiAgents   AiAgentConnection[]      @relation("ConnectedAiAgents")
   conversations       ChatConversation[]
   copilotRequestLimit CopilotRequestLimit?
   courses             Course[]
@@ -426,6 +427,7 @@ model AiAgent {
   aiModels                 AiModel[]
   chatConversationStarters ChatConversationStarters[]
   chatConversations        ChatConversation[]
+  connectedUsers           AiAgentConnection[]        @relation("ConnectedUsers")
   createdAt                DateTime                   @default(now())
   description              String?                    @db.Text
   isDefault                Boolean?                   @default(false)
@@ -439,5 +441,18 @@ model AiAgent {
   user                     User?                      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                   String?
 
+  @@index([userId])
+}
+
+model AiAgentConnection {
+  id        String   @id @default(uuid())
+  aiAgent   AiAgent  @relation("ConnectedUsers", fields: [aiAgentId], references: [id], onDelete: Cascade)
+  aiAgentId String
+  createdAt DateTime @default(now())
+  user      User     @relation("ConnectedAiAgents", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@unique([userId, aiAgentId])
+  @@index([aiAgentId])
   @@index([userId])
 }

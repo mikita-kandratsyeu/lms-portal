@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
 import { getAgentData } from '@/actions/ai/agent/get-agent-data';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
@@ -13,14 +13,14 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
   const user = await getCurrentUser();
 
   if (!user?.hasSubscription) {
-    redirect('/');
+    notFound();
   }
 
   const { agentId } = await props.params;
-  const { agent, models } = await getAgentData(agentId);
+  const { agent, models } = await getAgentData({ agentId, userId: user?.userId });
 
   if (!agent) {
-    redirect('/');
+    notFound();
   }
 
   const commonFormProps = {

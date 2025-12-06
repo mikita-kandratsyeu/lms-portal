@@ -1,23 +1,27 @@
 'use client';
 
-import { AiAgent, AiModel } from '@prisma/client';
 import { ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 
+import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
 import { useCurrentUser } from '@/hooks/use-current-user';
 
 import { Actions } from './actions';
 
 type HeaderProps = {
   agentId: string;
-  initialData: AiAgent & { aiModels: AiModel[] };
+  initialData: GetAgentDataResponse['agent'];
   isPreviewPage?: boolean;
 };
 
 export const Header = ({ agentId, initialData, isPreviewPage }: HeaderProps) => {
   const { user } = useCurrentUser();
 
-  const requiredFields = [initialData.description, initialData.name, initialData.aiModels.length];
+  const requiredFields = [
+    initialData?.description,
+    initialData?.name,
+    initialData?.aiModels?.length,
+  ];
 
   const isCompleted = requiredFields.every(Boolean);
   const totalFields = requiredFields.length;
@@ -50,9 +54,14 @@ export const Header = ({ agentId, initialData, isPreviewPage }: HeaderProps) => 
             agentId={agentId}
             isDefault={initialData?.isDefault}
             isDisabled={!isCompleted && !isPreviewPage}
-            isOwner={initialData.userId === user?.userId}
+            isOwner={initialData?.userId === user?.userId}
             isPreviewPage={isPreviewPage}
-            isPublished={!initialData.isDraft}
+            isPublished={!initialData?.isDraft}
+            isConnected={Boolean(
+              initialData?.connectedUsers.find(
+                (connectedUser) => connectedUser.userId === user?.userId,
+              )?.userId,
+            )}
           />
         </div>
       </div>

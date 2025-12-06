@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import * as z from 'zod';
 
-import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
+import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
 import { ChatStarters } from '@/components/chat/chat-starters';
 import { LanguageSwitcher } from '@/components/common/language-switcher';
 import { Button, Input } from '@/components/ui';
@@ -24,7 +24,7 @@ import { fetcher } from '@/lib/fetcher';
 
 type ConversationStartersFormProps = {
   agentId: string;
-  initialData: GetAgentData['agent'];
+  initialData: GetAgentDataResponse['agent'];
   isPreviewPage?: boolean;
 };
 

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { GetAgentData } from '@/actions/ai/agent/get-agent-data';
+import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
 import { AgentCard } from '@/components/ai-agents/agent-card/agent-card';
 import { UpdatePhotoModal } from '@/components/modals/update-photo-modal';
 import { Avatar, AvatarFallback, AvatarImage, Button, Input, Textarea } from '@/components/ui';
@@ -26,7 +26,7 @@ import { getFallbackName } from '@/lib/utils';
 
 type DescriptionModelFormProps = {
   agentId: string;
-  initialData: GetAgentData['agent'];
+  initialData: GetAgentDataResponse['agent'];
   isPreviewPage?: boolean;
 };
 

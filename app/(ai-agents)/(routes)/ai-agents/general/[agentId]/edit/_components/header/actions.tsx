@@ -15,12 +15,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
+import { AGENT_ACTION } from '@/constants/ai/general';
 import { useConfettiStore } from '@/hooks/store/use-confetti-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
 
 type ActionsProps = {
   agentId: string;
+  isConnected?: boolean;
   isDefault?: boolean | null;
   isDisabled?: boolean;
   isOwner?: boolean;
@@ -30,6 +32,7 @@ type ActionsProps = {
 
 export const Actions = ({
   agentId,
+  isConnected = false,
   isDefault = false,
   isDisabled = false,
   isOwner = false,
@@ -94,6 +97,28 @@ export const Actions = ({
     }
   };
 
+  const handleConnection = async () => {
+    setIsFetching(true);
+
+    try {
+      await fetcher.post(`/api/ai/agents/${agentId}/connection`, {
+        body: { action: isConnected ? AGENT_ACTION.DISCONNECT : AGENT_ACTION.CONNECT },
+      });
+
+      toast({
+        title: `${name} Agent has been ${isConnected ? 'disconnected' : 'connected'}.`,
+      });
+
+      router.refresh();
+    } catch (error) {
+      console.error('[AGENT_CONNECTION]', error);
+
+      toast({ isError: true });
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   const isDisabledButton = isDisabled || isFetching;
 
   return (
@@ -102,12 +127,12 @@ export const Actions = ({
         <Button
           variant="outline"
           size="sm"
-          disabled={isDisabledButton}
-          onClick={() => (isPreviewPage ? {} : handleTogglePublication(true))}
+          disabled={isDisabledButton || (isPreviewPage && Boolean(isDefault))}
+          onClick={() => (isPreviewPage ? handleConnection() : handleTogglePublication(true))}
         >
-          {isPreviewPage && 'Connect'}
-          {!isPreviewPage && isPublished && 'Unpublish'}
-          {!isPreviewPage && !isPublished && 'Publish'}
+          {isPreviewPage && <span>{isConnected || isDefault ? 'Disconnect' : 'Connect'}</span>}
+          {!isPreviewPage && isPublished && <span>Unpublish</span>}
+          {!isPreviewPage && !isPublished && <span>Publish</span>}
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

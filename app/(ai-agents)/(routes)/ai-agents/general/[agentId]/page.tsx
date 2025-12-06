@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
 import { getAgentData } from '@/actions/ai/agent/get-agent-data';
 
@@ -9,10 +9,10 @@ type AgentIdPageProps = { params: Promise<{ agentId: string }> };
 
 const AgentIdPage = async (props: AgentIdPageProps) => {
   const { agentId } = await props.params;
-  const { agent } = await getAgentData(agentId, true);
+  const { agent } = await getAgentData({ agentId, isPreviewPage: true });
 
   if (!agent) {
-    redirect('/');
+    notFound();
   }
 
   const commonFormProps = {
