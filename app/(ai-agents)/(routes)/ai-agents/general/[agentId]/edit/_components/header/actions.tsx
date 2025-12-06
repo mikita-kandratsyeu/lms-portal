@@ -67,6 +67,8 @@ export const Actions = ({
 
       router.refresh();
     } catch (error) {
+      console.error('[AGENT_PUBLICATION]', error);
+
       toast({
         isError: true,
         description: (error as Error)?.message,
@@ -87,6 +89,8 @@ export const Actions = ({
       router.push('/ai-agents/general');
       router.refresh();
     } catch (error) {
+      console.error('[AGENT_DELETE]', error);
+
       toast({ isError: true });
     } finally {
       setIsFetching(false);
@@ -109,6 +113,33 @@ export const Actions = ({
       router.refresh();
     } catch (error) {
       console.error('[AGENT_CONNECTION]', error);
+
+      toast({
+        isError: true,
+        description: (error as Error)?.message,
+      });
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const handleClone = async () => {
+    setIsFetching(true);
+
+    try {
+      const response = await fetcher.post(`/api/ai/agents/${agentId}/clone`, {
+        responseType: 'json',
+      });
+
+      if (response?.id) {
+        router.push(`/ai-agents/general/${response.id}`);
+      } else {
+        toast({
+          isError: true,
+        });
+      }
+    } catch (error) {
+      console.error('[AGENT_CLONE]', error);
 
       toast({
         isError: true,
@@ -171,7 +202,7 @@ export const Actions = ({
                       >
                         <span>Edit</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
+                      <DropdownMenuItem className="hover:cursor-pointer" onClick={handleClone}>
                         <span>Clone</span>
                       </DropdownMenuItem>
                     </>
