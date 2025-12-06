@@ -14,10 +14,6 @@ export const PATCH = async (_: NextRequest, props: { params: Promise<{ agentId: 
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    if (!user.hasSubscription) {
-      return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
-    }
-
     const agent = await db.aiAgent.findUnique({
       where: { id: agentId, userId: user.userId },
       include: { aiModels: true },

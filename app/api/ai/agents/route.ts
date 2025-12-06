@@ -2,7 +2,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { DEFAULT_TEMPERATURE } from '@/constants/ai/general';
+import { DEFAULT_TEMPERATURE, LIMIT_CONNECTED_AI_AGENTS } from '@/constants/ai/general';
 import db from '@/lib/db';
 
 export const POST = async (req: NextRequest) => {
@@ -13,7 +13,12 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    if (!user.hasSubscription) {
+    const ownAgents = !user.hasSubscription
+      ? (await db.user.findUnique({ where: { id: user.userId }, select: { aiAgents: true } }))
+          ?.aiAgents ?? []
+      : [];
+
+    if (!user.hasSubscription && ownAgents?.length >= LIMIT_CONNECTED_AI_AGENTS) {
       return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
     }
 

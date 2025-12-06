@@ -15,10 +15,6 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    if (!user.hasSubscription) {
-      return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
-    }
-
     const {
       chatConversationStarters,
       description,
@@ -90,10 +86,6 @@ export const DELETE = async (_: NextRequest, props: { params: Promise<{ agentId:
 
     if (!user) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
-    }
-
-    if (!user.hasSubscription) {
-      return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
     }
 
     const deletedAgent = await db.aiAgent.delete({ where: { id: agentId }, select: { id: true } });
