@@ -18,6 +18,8 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
     const {
       chatConversationStarters,
       description,
+      isSystem,
+      language,
       modelIds,
       name,
       pictureUrl,
@@ -54,6 +56,8 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
         ...aiModelsData,
         ...chatConversationStartersData,
         description,
+        isSystem,
+        language,
         name,
         pictureUrl,
         systemInstruction,

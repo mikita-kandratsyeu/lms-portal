@@ -433,6 +433,8 @@ model AiAgent {
   isDefault                Boolean?                   @default(false)
   isDraft                  Boolean                    @default(true)
   isPublic                 Boolean                    @default(false)
+  isSystem                 Boolean?                   @default(false)
+  language                 String?                    @default("en")
   name                     String                     @db.Text
   pictureUrl               String?
   systemInstruction        String?                    @db.Text

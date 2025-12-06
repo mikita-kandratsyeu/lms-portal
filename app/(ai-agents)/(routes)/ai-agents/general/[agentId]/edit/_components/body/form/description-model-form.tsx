@@ -9,8 +9,17 @@ import * as z from 'zod';
 
 import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
 import { AgentCard } from '@/components/ai-agents/agent-card/agent-card';
+import { LanguageSwitcher } from '@/components/common/language-switcher';
 import { UpdatePhotoModal } from '@/components/modals/update-photo-modal';
-import { Avatar, AvatarFallback, AvatarImage, Button, Input, Textarea } from '@/components/ui';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  Input,
+  Switch,
+  Textarea,
+} from '@/components/ui';
 import {
   Form,
   FormControl,
@@ -21,7 +30,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
+import { DEFAULT_LANGUAGE } from '@/constants/locale';
+import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
+import { isBusinessOwner } from '@/lib/owner';
 import { getFallbackName } from '@/lib/utils';
 
 type DescriptionModelFormProps = {
@@ -32,6 +44,8 @@ type DescriptionModelFormProps = {
 
 const formSchema = z.object({
   description: z.string().min(1),
+  isSystem: z.boolean().default(false).optional(),
+  language: z.string().default(DEFAULT_LANGUAGE),
   name: z.string().min(1),
   pictureUrl: z.string().optional(),
 });
@@ -41,6 +55,8 @@ export const DescriptionModelForm = ({
   initialData,
   isPreviewPage,
 }: DescriptionModelFormProps) => {
+  const { user } = useCurrentUser();
+
   const { toast } = useToast();
   const router = useRouter();
 
@@ -48,6 +64,8 @@ export const DescriptionModelForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       description: initialData?.description || '',
+      isSystem: Boolean(initialData?.isSystem),
+      language: initialData?.language || DEFAULT_LANGUAGE,
       name: initialData?.name || '',
       pictureUrl: initialData?.pictureUrl || '',
     },
@@ -60,10 +78,19 @@ export const DescriptionModelForm = ({
   useEffect(() => {
     form.reset({
       description: initialData?.description || '',
+      isSystem: Boolean(initialData?.isSystem),
+      language: initialData?.language || DEFAULT_LANGUAGE,
       name: initialData?.name || '',
       pictureUrl: initialData?.pictureUrl || '',
     });
-  }, [form, initialData?.description, initialData?.name, initialData?.pictureUrl]);
+  }, [
+    form,
+    initialData?.description,
+    initialData?.isSystem,
+    initialData?.language,
+    initialData?.name,
+    initialData?.pictureUrl,
+  ]);
 
   const handleToggleEdit = () => {
     setIsEditing((prev) => !prev);
@@ -120,17 +147,7 @@ export const DescriptionModelForm = ({
       </div>
       {!isEditing && (
         <div className="mt-4">
-          <AgentCard
-            agentId={initialData?.id}
-            description={initialData?.description}
-            isDefault={initialData?.isDefault}
-            isDraft={initialData?.isDraft}
-            isEdit
-            isPublic={initialData?.isPublic}
-            name={initialData?.name}
-            pictureUrl={initialData?.pictureUrl}
-            user={initialData?.user}
-          />
+          <AgentCard agentId={initialData?.id} isEdit {...initialData} />
         </div>
       )}
       {isEditing && (
@@ -184,6 +201,52 @@ export const DescriptionModelForm = ({
                     />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            {isBusinessOwner(user?.userId) && (
+              <FormField
+                control={form.control}
+                name="isSystem"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between space-x-3 space-y-0 rounded-md border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel>System agent</FormLabel>
+                      <FormDescription className="text-xs">
+                        The agent will be displayed as a system agent.
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        aria-readonly
+                        checked={field.value}
+                        disabled={!isValid || isSubmitting}
+                        onCheckedChange={field.onChange}
+                        type="button"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            )}
+            <FormField
+              control={form.control}
+              name="language"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between space-x-3 space-y-0 rounded-md border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel>Agent language</FormLabel>
+                    <FormDescription className="text-xs">
+                      Specify the default language.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <LanguageSwitcher
+                      callback={field.onChange}
+                      isDisabled={isSubmitting}
+                      value={field.value}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />

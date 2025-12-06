@@ -1,6 +1,6 @@
 'use client';
 
-import { AiModel } from '@prisma/client';
+import { AiAgent, AiModel } from '@prisma/client';
 import { ChartColumnIcon, PlugIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -11,22 +11,29 @@ import { UserHoverCard } from '@/components/common/user-hover-card';
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { AGENT_ACTION } from '@/constants/ai/general';
+import { DEFAULT_LANGUAGE, SUPPORTED_LOCALES } from '@/constants/locale';
 import { fetcher } from '@/lib/fetcher';
 import { cn, getFallbackName } from '@/lib/utils';
 
 import { AgentFeatures } from './agent-features';
 
-type AgentCardProps = {
+type AgentCardProps = Partial<
+  Pick<
+    AiAgent,
+    | 'description'
+    | 'isDefault'
+    | 'isDraft'
+    | 'isPublic'
+    | 'isSystem'
+    | 'language'
+    | 'name'
+    | 'pictureUrl'
+  >
+> & {
   agentId?: string;
   aiModels?: AiModel[];
-  description?: string | null;
   isConnected?: boolean;
-  isDefault?: boolean | null;
-  isDraft?: boolean | null;
   isEdit?: boolean;
-  isPublic?: boolean | null;
-  name?: string;
-  pictureUrl?: string | null;
   totalUses?: number;
   user?: { id?: string | null; name?: string | null } | null;
 };
@@ -40,6 +47,8 @@ export const AgentCard = ({
   isDraft,
   isEdit,
   isPublic,
+  isSystem,
+  language = DEFAULT_LANGUAGE,
   name,
   pictureUrl,
   totalUses,
@@ -49,6 +58,9 @@ export const AgentCard = ({
   const router = useRouter();
 
   const [isFetching, setIsFetching] = useState(false);
+
+  const agentLanguage =
+    SUPPORTED_LOCALES.find(({ key }) => key === language)?.title ?? DEFAULT_LANGUAGE;
 
   const handleConnection = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -94,6 +106,7 @@ export const AgentCard = ({
               <div className="flex flex-col space-y-1">
                 <div className="flex items-center gap-x-2">
                   <h4 className="font-semibold">{name}</h4>
+                  {isEdit && <TextBadge label={agentLanguage} variant="yellow" />}
                   {isDraft && <TextBadge label={'Draft'} />}
                   {isDefault && <TextBadge label={'Default'} />}
                   {!isPublic && !isDraft && <TextBadge label={'Private'} variant="indigo" />}
@@ -102,7 +115,7 @@ export const AgentCard = ({
                 {user?.id && user?.name && (
                   <UserHoverCard userId={user.id}>
                     <button className="flex items-center justify-start gap-x-1 text-muted-foreground p-0 font-normal hover:underline">
-                      <span className="text-xs">{`by ${user.name}`}</span>
+                      <span className="text-xs">{`by ${isSystem ? 'System' : user.name}`}</span>
                     </button>
                   </UserHoverCard>
                 )}
