@@ -32,9 +32,12 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
     }),
   );
 
+  const { isFetching, setIsFetching } = useChatStore((state) => ({
+    isFetching: state.isFetching,
+    setIsFetching: state.setIsFetching,
+  }));
   const { currentModel } = useAiAgentStore((state) => ({ currentModel: state.currentModel }));
 
-  const [isFetching, setIsFetching] = useState(false);
   const [open, setOpen] = useState(false);
 
   const messages = chatMessages[conversationId] ?? [];

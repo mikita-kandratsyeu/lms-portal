@@ -13,10 +13,11 @@ import { ChatSideBarItems } from './chat-sidebar-items';
 import { ChatSideBarTop } from './chat-sidebar-top';
 
 type ChatSideBarProps = {
+  agentsAmount?: number;
   conversations: Conversation[];
 };
 
-export const ChatSideBar = ({ conversations }: ChatSideBarProps) => {
+export const ChatSideBar = ({ agentsAmount, conversations }: ChatSideBarProps) => {
   const { user, status } = useCurrentUser();
 
   const { setConversations } = useChatStore((state) => ({
@@ -32,7 +33,7 @@ export const ChatSideBar = ({ conversations }: ChatSideBarProps) => {
 
   return (
     <div className="h-full border-r flex flex-col justify-between shadow-sm bg-white dark:bg-neutral-900 md:pt-[80px]">
-      <ChatSideBarTop />
+      <ChatSideBarTop agentsAmount={agentsAmount} />
       <div className="flex flex-col w-full overflow-y-auto h-full">
         <ChatSideBarItems conversations={conversations} />
       </div>

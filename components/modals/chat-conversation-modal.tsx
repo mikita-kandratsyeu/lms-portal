@@ -271,13 +271,15 @@ export const ChatConversationModal = ({
                       </div>
                     </Button>
                   )}
-                  <Button
-                    disabled={!isValid || isSubmitting || isUpdatingSharedLink}
-                    isLoading={isSubmitting}
-                    type="submit"
-                  >
-                    {t('submit')}
-                  </Button>
+                  {!isShare && (
+                    <Button
+                      disabled={!isValid || isSubmitting || isUpdatingSharedLink}
+                      isLoading={isSubmitting}
+                      type="submit"
+                    >
+                      {t('submit')}
+                    </Button>
+                  )}
                 </div>
               </DialogFooter>
             </form>

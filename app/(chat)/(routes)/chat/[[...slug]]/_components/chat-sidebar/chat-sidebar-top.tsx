@@ -11,7 +11,11 @@ import { Button } from '@/components/ui';
 import { Spinner } from '@/components/ui/spinner';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 
-export const ChatSideBarTop = () => {
+type ChatSideBarTopProps = {
+  agentsAmount?: number;
+};
+
+export const ChatSideBarTop = ({ agentsAmount }: ChatSideBarTopProps) => {
   const t = useTranslations('chat.conversation');
 
   const isFetching = useChatStore((state) => state.isFetching);
@@ -36,18 +40,20 @@ export const ChatSideBarTop = () => {
           <Plus className="w-4 h-4 mr-2" />
           {t('add')}
         </Button>
-        <Link
-          className="w-full flex items-center mt-8 justify-between gap-x-2"
-          href="/ai-agents/general"
-          target="_blank"
-          title="Explore"
-        >
-          <div className="w-full flex gap-x-2 items-center">
-            <Blocks className="w-4 h-4" />
-            <span className="text-sm font-semibold line-clamp-1">Explore AI Agents</span>
-          </div>
-          <TextBadge label="5" />
-        </Link>
+        {Boolean(agentsAmount) && (
+          <Link
+            className="w-full flex items-center mt-8 justify-between gap-x-2"
+            href="/ai-agents/general"
+            target="_blank"
+            title="Explore"
+          >
+            <div className="w-full flex gap-x-2 items-center">
+              <Blocks className="w-4 h-4" />
+              <span className="text-sm font-semibold line-clamp-1">Explore AI Agents</span>
+            </div>
+            <TextBadge label={String(agentsAmount)} />
+          </Link>
+        )}
         <div className="flex justify-between items-center mt-4 text-xs text-muted-foreground">
           <div className="flex gap-x-1 items-center">
             <span>{t('conversations')}</span>
