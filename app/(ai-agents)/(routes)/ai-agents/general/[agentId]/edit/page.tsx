@@ -12,10 +12,6 @@ type AgentIdPageProps = { params: Promise<{ agentId: string }> };
 const AgentIdPage = async (props: AgentIdPageProps) => {
   const user = await getCurrentUser();
 
-  if (!user?.hasSubscription) {
-    notFound();
-  }
-
   const { agentId } = await props.params;
   const { agent, models } = await getAgentData({ agentId, userId: user?.userId });
 

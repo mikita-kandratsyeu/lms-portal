@@ -62,13 +62,14 @@ export const AgentCard = ({
 
       toast({
         title: `${name} Agent has been ${isConnected ? 'disconnected' : 'connected'}.`,
+        type: isConnected ? 'warning' : 'success',
       });
 
       router.refresh();
     } catch (error) {
       console.error('[AGENT_CONNECTION]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message });
     } finally {
       setIsFetching(false);
     }

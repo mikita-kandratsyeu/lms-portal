@@ -13,13 +13,14 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    const ownAgents = !user.hasSubscription
-      ? (await db.user.findUnique({ where: { id: user.userId }, select: { aiAgents: true } }))
-          ?.aiAgents ?? []
-      : [];
+    const ownAgentsAmount = !user.hasSubscription
+      ? await db.aiAgent.count({ where: { userId: user.userId } })
+      : -1;
 
-    if (!user.hasSubscription && ownAgents?.length >= LIMIT_CONNECTED_AI_AGENTS) {
-      return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
+    if (ownAgentsAmount >= LIMIT_CONNECTED_AI_AGENTS) {
+      return new NextResponse('The maximum number of agents created has been reached.', {
+        status: StatusCodes.FORBIDDEN,
+      });
     }
 
     const { name } = await req.json();

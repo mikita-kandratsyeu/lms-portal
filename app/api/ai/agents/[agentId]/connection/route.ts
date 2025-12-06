@@ -17,15 +17,14 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ agentId:
     const { action } = await req.json();
 
     if (action === AGENT_ACTION.CONNECT) {
-      const connections = !user.hasSubscription
-        ? await db.aiAgentConnection.findMany({
-            where: { userId: user.userId },
-            select: { aiAgentId: true },
-          })
-        : [];
+      const connectionsAmount = await db.aiAgentConnection.count({
+        where: { userId: user.userId },
+      });
 
-      if (!user.hasSubscription && connections.length >= LIMIT_CONNECTED_AI_AGENTS) {
-        return new NextResponse(ReasonPhrases.FORBIDDEN, { status: StatusCodes.FORBIDDEN });
+      if (connectionsAmount >= LIMIT_CONNECTED_AI_AGENTS) {
+        return new NextResponse('The maximum number of connected agents has been reached.', {
+          status: StatusCodes.FORBIDDEN,
+        });
       }
 
       const connectedAgent = await db.aiAgentConnection.create({

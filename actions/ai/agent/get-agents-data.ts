@@ -90,7 +90,7 @@ export const getAgentsData = async (search?: string): Promise<GetAgentsData> => 
     connectedAgents,
     defaultAgent: defaultAgent ?? null,
     privateOrDraftAgents: privateOrDraftsAgents.filter(
-      (agent) => agent.isDraft && !connectedAgentIds.includes(agent.id),
+      (agent) => !connectedAgentIds.includes(agent.id),
     ),
     publicAgents: publicAgents.filter((agent) => !connectedAgentIds.includes(agent.id)),
   };

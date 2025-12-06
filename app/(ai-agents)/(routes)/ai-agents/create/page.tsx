@@ -46,7 +46,7 @@ const CreatePage = () => {
 
       router.push(`/ai-agents/general/${data.id}/edit`);
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

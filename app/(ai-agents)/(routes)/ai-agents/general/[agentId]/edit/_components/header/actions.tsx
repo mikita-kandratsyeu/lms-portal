@@ -17,7 +17,6 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { AGENT_ACTION } from '@/constants/ai/general';
 import { useConfettiStore } from '@/hooks/store/use-confetti-store';
-import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
 
 type ActionsProps = {
@@ -41,7 +40,6 @@ export const Actions = ({
 }: ActionsProps) => {
   const { toast } = useToast();
 
-  const { user } = useCurrentUser();
   const router = useRouter();
 
   const [isFetching, setIsFetching] = useState(false);
@@ -60,21 +58,19 @@ export const Actions = ({
         toast({ title: 'Agent unpublished' });
       } else {
         handleOpenConfetti();
-        toast({ title: 'Agent has been published' });
+
+        toast({
+          title: isPublished ? 'Agent unpublished' : 'Agent has been published',
+          type: isPublished ? 'warning' : 'success',
+        });
       }
 
       router.refresh();
     } catch (error) {
-      if (error instanceof Error) {
-        toast({
-          isError: true,
-          description: error?.message,
-        });
-      } else {
-        toast({
-          isError: true,
-        });
-      }
+      toast({
+        isError: true,
+        description: (error as Error)?.message,
+      });
     } finally {
       setIsFetching(false);
     }
@@ -86,7 +82,7 @@ export const Actions = ({
     try {
       await fetcher.delete(`/api/ai/agents/${agentId}`);
 
-      toast({ title: 'Agent has been deleted' });
+      toast({ title: 'Agent has been deleted', type: 'warning' });
 
       router.push('/ai-agents/general');
       router.refresh();
@@ -107,13 +103,17 @@ export const Actions = ({
 
       toast({
         title: `${name} Agent has been ${isConnected ? 'disconnected' : 'connected'}.`,
+        type: isConnected ? 'warning' : 'success',
       });
 
       router.refresh();
     } catch (error) {
       console.error('[AGENT_CONNECTION]', error);
 
-      toast({ isError: true });
+      toast({
+        isError: true,
+        description: (error as Error)?.message,
+      });
     } finally {
       setIsFetching(false);
     }
@@ -164,17 +164,17 @@ export const Actions = ({
                     <span>Chat now</span>
                   </DropdownMenuItem>
                   {isOwner && (
-                    <DropdownMenuItem
-                      className="hover:cursor-pointer"
-                      onClick={() => router.push(`/ai-agents/general/${agentId}/edit`)}
-                    >
-                      <span>Edit</span>
-                    </DropdownMenuItem>
-                  )}
-                  {user?.hasSubscription && (
-                    <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
-                      <span>Clone</span>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem
+                        className="hover:cursor-pointer"
+                        onClick={() => router.push(`/ai-agents/general/${agentId}/edit`)}
+                      >
+                        <span>Edit</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
+                        <span>Clone</span>
+                      </DropdownMenuItem>
+                    </>
                   )}
                 </>
               )}
