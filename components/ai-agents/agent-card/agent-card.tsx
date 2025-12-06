@@ -97,7 +97,7 @@ export const AgentCard = ({
                   {isDraft && <TextBadge label={'Draft'} />}
                   {isDefault && <TextBadge label={'Default'} />}
                   {!isPublic && !isDraft && <TextBadge label={'Private'} variant="indigo" />}
-                  {isEdit && isPublic && <TextBadge label={'Public'} variant="lime" />}
+                  {isPublic && <TextBadge label={'Public'} variant="lime" />}
                 </div>
                 {user?.id && user?.name && (
                   <UserHoverCard userId={user.id}>

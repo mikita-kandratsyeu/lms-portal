@@ -87,7 +87,7 @@ const GeneralPage = async (props: GeneralPageProps) => {
         <>
           <div className="flex gap-x-2 items-center mt-8 mb-4">
             <GlobeIcon className="w-6 h-6" />
-            <h2 className="text-xl font-semibold">Public agents</h2>
+            <h2 className="text-xl font-semibold">Publicly available agents</h2>
           </div>
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
             {publicAgents.map((agent) => (

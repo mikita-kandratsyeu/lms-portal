@@ -5,10 +5,9 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getGlobalProgress } from '@/actions/courses/get-global-progress';
 import { getCsmCategories } from '@/actions/csm/get-csm-categories';
 import { getUserNotifications } from '@/actions/users/get-user-notifications';
+import { ChatNavBar } from '@/app/(chat)/(routes)/chat/[[...slug]]/_components/chat-navbar/chat-navbar';
 import { Footer } from '@/components/footer/footer';
 import { SideBar } from '@/components/sidebar/sidebar';
-
-import { ChatNavBar } from '../(chat)/(routes)/chat/[[...slug]]/_components/chat-navbar/chat-navbar';
 
 export const metadata: Metadata = {
   title: 'AI Agents',

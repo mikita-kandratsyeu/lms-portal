@@ -150,7 +150,7 @@ export const Actions = ({
               {!isPreviewPage && (
                 <DropdownMenuItem
                   className="hover:cursor-pointer"
-                  onClick={() => (isPreviewPage ? {} : handleTogglePublication(false))}
+                  onClick={() => handleTogglePublication(false)}
                 >
                   <span>Publish as private</span>
                 </DropdownMenuItem>

@@ -86,7 +86,7 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
           <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={FlaskConicalIcon} />
-              <h2 className="text-xl">Experimental features</h2>
+              <h2 className="text-xl">Add experimental features</h2>
             </div>
             <p>Own API server (Ollama)</p>
           </div>
