@@ -11,7 +11,6 @@ import { UserHoverCard } from '@/components/common/user-hover-card';
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { AGENT_ACTION } from '@/constants/ai/general';
-import { DEFAULT_LANGUAGE } from '@/constants/locale';
 import { fetcher } from '@/lib/fetcher';
 import { cn, getFallbackName } from '@/lib/utils';
 
@@ -48,7 +47,6 @@ export const AgentCard = ({
   isEdit,
   isPublic,
   isSystem,
-  language = DEFAULT_LANGUAGE,
   name,
   pictureUrl,
   totalUses,
