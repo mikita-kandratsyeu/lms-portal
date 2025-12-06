@@ -17,15 +17,20 @@ import { TextBadge } from './text-badge';
 
 type UserHoverCardProps = {
   children: React.ReactNode;
+  isDisabledHover?: boolean;
   userId: string;
 };
 
-export const UserHoverCard = ({ children, userId }: UserHoverCardProps) => {
+export const UserHoverCard = ({ children, isDisabledHover, userId }: UserHoverCardProps) => {
   const t = useTranslations('profileButton');
 
   const { toast } = useToast();
 
   const [user, setUser] = useState<(User & { hasSubscription?: boolean }) | null>(null);
+
+  if (isDisabledHover) {
+    return children;
+  }
 
   const fetchUserData = async () => {
     try {

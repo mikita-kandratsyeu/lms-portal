@@ -113,7 +113,7 @@ export const AgentCard = ({
                   {isPublic && <TextBadge label={'Public'} variant="lime" />}
                 </div>
                 {user?.id && user?.name && (
-                  <UserHoverCard userId={user.id}>
+                  <UserHoverCard userId={user.id} isDisabledHover={Boolean(isSystem)}>
                     <button className="flex items-center justify-start gap-x-1 text-muted-foreground p-0 font-normal hover:underline">
                       <span className="text-xs">{`by ${isSystem ? 'System' : user.name}`}</span>
                     </button>
