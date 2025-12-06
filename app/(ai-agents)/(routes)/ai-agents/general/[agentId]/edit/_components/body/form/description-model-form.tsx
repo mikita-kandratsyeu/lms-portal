@@ -48,6 +48,7 @@ const formSchema = z.object({
   language: z.string().default(DEFAULT_LANGUAGE),
   name: z.string().min(1),
   pictureUrl: z.string().optional(),
+  systemTag: z.string().optional(),
 });
 
 export const DescriptionModelForm = ({
@@ -68,6 +69,7 @@ export const DescriptionModelForm = ({
       language: initialData?.language || DEFAULT_LANGUAGE,
       name: initialData?.name || '',
       pictureUrl: initialData?.pictureUrl || '',
+      systemTag: initialData?.systemTag || '',
     },
   });
 
@@ -82,6 +84,7 @@ export const DescriptionModelForm = ({
       language: initialData?.language || DEFAULT_LANGUAGE,
       name: initialData?.name || '',
       pictureUrl: initialData?.pictureUrl || '',
+      systemTag: initialData?.systemTag || '',
     });
   }, [
     form,
@@ -90,6 +93,7 @@ export const DescriptionModelForm = ({
     initialData?.language,
     initialData?.name,
     initialData?.pictureUrl,
+    initialData?.systemTag,
   ]);
 
   const handleToggleEdit = () => {
@@ -153,7 +157,7 @@ export const DescriptionModelForm = ({
       {isEditing && (
         <Form {...form}>
           <form className="space-y-4 mt-4" onSubmit={form.handleSubmit(handleSubmit)}>
-            <div className="flex gap-x-4">
+            <div className="flex gap-x-4 items-center">
               <FormField
                 control={form.control}
                 name="pictureUrl"
@@ -172,20 +176,41 @@ export const DescriptionModelForm = ({
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="mb-4">Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} disabled={isSubmitting} placeholder="e.g. 'Nova Copilot'" />
-                    </FormControl>
-                    <FormDescription>Come up with a name for your agent</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+              <div className="flex flex-col gap-y-2">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="mb-4">Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          disabled={isSubmitting}
+                          placeholder="e.g. 'Nova Copilot'"
+                        />
+                      </FormControl>
+                      <FormDescription>Come up with a name for your agent</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {form.watch('isSystem') && (
+                  <FormField
+                    control={form.control}
+                    name="systemTag"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="mb-4">System tag</FormLabel>
+                        <FormControl>
+                          <Input {...field} disabled={isSubmitting} placeholder="e.g. 'copilot'" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 )}
-              />
+              </div>
             </div>
             <FormField
               control={form.control}

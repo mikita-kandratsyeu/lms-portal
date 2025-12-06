@@ -35,17 +35,18 @@ export const POST = async (_: NextRequest, props: { params: Promise<{ agentId: s
 
     const clonedAgent = await db.aiAgent.create({
       data: {
-        userId: user.userId,
-        name: `[CLONE] ${agent.name}`,
         description: agent.description,
-        pictureUrl: agent.pictureUrl,
-        systemInstruction: agent.systemInstruction,
-        temperature: agent.temperature,
+        isDefault: false,
         isDraft: true,
         isPublic: false,
-        language: agent.language,
-        isDefault: false,
         isSystem: false,
+        language: agent.language,
+        name: `[CLONE] ${agent.name}`,
+        pictureUrl: agent.pictureUrl,
+        systemInstruction: agent.systemInstruction,
+        systemTag: '',
+        temperature: agent.temperature,
+        userId: user.userId,
       },
     });
 

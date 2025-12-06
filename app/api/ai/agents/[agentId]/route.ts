@@ -24,6 +24,7 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       name,
       pictureUrl,
       systemInstruction,
+      systemTag,
       temperature,
     } = await req.json();
 
@@ -61,6 +62,7 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
         name,
         pictureUrl,
         systemInstruction,
+        systemTag,
         temperature,
       },
       select: {
