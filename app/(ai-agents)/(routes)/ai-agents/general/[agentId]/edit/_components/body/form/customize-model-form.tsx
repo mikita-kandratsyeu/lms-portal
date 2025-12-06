@@ -5,10 +5,10 @@ import { PencilLineIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Markdown from 'react-markdown';
 import * as z from 'zod';
 
 import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
+import { MarkdownText } from '@/components/common/markdown-text';
 import { TextBadge } from '@/components/common/text-badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -122,7 +122,7 @@ export const CustomizeModelForm = ({
         <div className="text-sm mr-2 mt-4">
           <h4 className="mb-2 font-semibold">System instruction</h4>
           {isString(initialData?.systemInstruction) && (
-            <Markdown>{initialData?.systemInstruction}</Markdown>
+            <MarkdownText text={initialData?.systemInstruction} />
           )}
           {!initialData?.systemInstruction && (
             <span className="text-muted-foreground italic">

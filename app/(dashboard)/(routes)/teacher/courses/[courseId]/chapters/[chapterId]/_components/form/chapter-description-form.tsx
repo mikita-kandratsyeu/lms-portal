@@ -13,6 +13,7 @@ import * as z from 'zod';
 import { StreamText } from '@/components/ai-agents/stream-text';
 import { CopyClipboard } from '@/components/common/copy-clipboard';
 import { Editor } from '@/components/common/editor';
+import { MarkdownText } from '@/components/common/markdown-text';
 import { Preview } from '@/components/common/preview';
 import { Textarea } from '@/components/ui';
 import { Button } from '@/components/ui/button';
@@ -155,7 +156,7 @@ export const ChapterDescriptionForm = ({
             followButtonClassName="scroll-to-bottom-button"
           >
             <p className="text-sm prose dark:prose-invert prose-a:text-accent-primary prose-a:no-underline hover:prose-a:underline m-4">
-              <Markdown>{newDescription}</Markdown>
+              <MarkdownText text={newDescription} />
             </p>
           </ScrollToBottom>
         </div>
