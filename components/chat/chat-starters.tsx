@@ -34,23 +34,34 @@ export const ChatStarters = ({
 }: ChatStartersProps) => {
   const handleClick = useCallback((text: string) => (callback ? callback(text) : {}), [callback]);
 
+  const styles =
+    'inline-flex max-w-full rounded-lg bg-muted px-5 py-3 text-left text-sm md:text-base text-muted-foreground line-clamp-2 border justify-between items-center gap-x-2';
+
   return (
     <div className="flex items-center">
       <div className="flex flex-col gap-3 w-full">
-        {starters.map((starter, index) => (
-          <motion.button
-            animate="visible"
-            className="inline-flex max-w-full rounded-lg bg-muted px-5 py-3 text-left text-sm md:text-base text-muted-foreground line-clamp-2 border justify-between items-center gap-x-2"
-            custom={index}
-            initial="hidden"
-            key={starter.id}
-            variants={isAnimated ? bubbleVariants : undefined}
-            onClick={() => handleClick(starter.text)}
-          >
-            {starter.text}
-            {showCopyButton && <CopyClipboard textToCopy={starter.text} />}
-          </motion.button>
-        ))}
+        {starters.map((starter, index) => {
+          if (isAnimated) {
+            <motion.button
+              animate="visible"
+              className={styles}
+              custom={index}
+              initial="hidden"
+              key={starter.id}
+              variants={bubbleVariants}
+              onClick={() => handleClick(starter.text)}
+            >
+              {starter.text}
+            </motion.button>;
+          }
+
+          return (
+            <div className={styles} key={starter.id}>
+              {starter.text}
+              {showCopyButton && <CopyClipboard textToCopy={starter.text} />}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
