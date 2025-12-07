@@ -39,6 +39,9 @@ const nextConfig = {
       },
     };
   },
+  rewrites: async () => {
+    return [{ source: '/ai-agents', destination: '/ai-agents/general' }];
+  },
 };
 
 export default withPlaiceholder(withNextIntl(nextConfig));
