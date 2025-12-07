@@ -46,7 +46,10 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
     setIsFetching,
   } = useChatStore();
 
-  const { currentModel, setCurrentModel } = useAiAgentStore();
+  const { currentModel, setCurrentModel } = useAiAgentStore((state) => ({
+    currentModel: state.currentModel,
+    setCurrentModel: state.setCurrentModel,
+  }));
 
   const { config: appConfig } = useAppConfigStore((state) => ({
     config: state.config,
@@ -79,7 +82,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
         setConversationId(conversations[0].id);
       }
 
-      setCurrentModel(currentModel || TEXT_MODELS?.[0]?.value || '');
+      // setCurrentModel(currentModel || TEXT_MODELS?.[0]?.value || '');
       setCurrentModelLabel(currentModelLabel || TEXT_MODELS?.[0]?.label || '');
       setChatMessages(chatMessages);
       setHasSearch(hasSearch || TEXT_MODELS?.[0]?.hasSearch || false);
@@ -117,7 +120,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
               }
             : null,
           messages: [userMessage, assistMessage],
-          model: currentModel,
+          model: currentModel?.value,
         },
         responseType: 'json',
       });
@@ -238,7 +241,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
               ),
               isSearch: isSearchMode,
               localeInfo,
-              model: currentModel,
+              model: currentModel?.value,
               stream: true,
             },
             cache: 'no-cache',

@@ -6,6 +6,7 @@ import type { Metadata, Viewport } from 'next';
 import { Noto_Sans } from 'next/font/google';
 import { getLocale, getMessages, getTimeZone } from 'next-intl/server';
 
+import { getConnectedAgents } from '@/actions/ai/agent/get-connected-agents';
 import { getAppConfig } from '@/actions/configs/get-app-config';
 import { getUserSettings } from '@/actions/users/get-user-settings';
 import { CookieConsent } from '@/components/common/cookie-consent';
@@ -42,11 +43,14 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
   const locale = await getLocale();
   const timeZone = await getTimeZone();
 
+  const connectedAgents = await getConnectedAgents();
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={cn('min-h-full bg-background font-sans antialiased', notoSans.className)}>
         <Providers
           appConfig={appConfig}
+          connectedAgents={connectedAgents}
           locale={locale}
           messages={messages}
           timeZone={timeZone}

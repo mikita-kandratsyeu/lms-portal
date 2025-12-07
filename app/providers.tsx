@@ -8,11 +8,13 @@ import { useEffect } from 'react';
 import ReactConfetti from 'react-confetti';
 import Snowfall from 'react-snowfall';
 
+import { GetConnectedAgents } from '@/actions/ai/agent/get-connected-agents';
 import { GetAppConfig } from '@/actions/configs/get-app-config';
 import { Toaster as ToasterProvider } from '@/components/ui/sonner';
 import { useConfettiStore } from '@/hooks/store/use-confetti-store';
 import { useUserSettingsStore } from '@/hooks/store/use-user-settings.store';
 import { useAppConfig } from '@/hooks/use-app-config';
+import { useConnectedAgents } from '@/hooks/use-connected-agents';
 import { useUserLocation } from '@/hooks/use-user-location';
 import { useUserSettings } from '@/hooks/use-user-settings';
 import { switchLanguage } from '@/lib/locale';
@@ -69,6 +71,7 @@ const ChristmasProvider = () => {
 type ProvidersProps = Readonly<{
   appConfig: GetAppConfig;
   children: React.ReactNode;
+  connectedAgents: GetConnectedAgents;
   locale: string;
   messages: AbstractIntlMessages;
   timeZone: string;
@@ -78,6 +81,7 @@ type ProvidersProps = Readonly<{
 export const Providers = ({
   appConfig,
   children,
+  connectedAgents,
   locale,
   messages,
   timeZone,
@@ -87,6 +91,7 @@ export const Providers = ({
 
   useUserLocation();
   useUserSettings(userSettings);
+  useConnectedAgents(connectedAgents);
 
   useEffect(() => {
     switchLanguage(locale);

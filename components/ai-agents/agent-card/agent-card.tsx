@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { SyntheticEvent, useState } from 'react';
 
+import { MarkdownText } from '@/components/common/markdown-text';
 import { TextBadge } from '@/components/common/text-badge';
 import { UserHoverCard } from '@/components/common/user-hover-card';
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { AGENT_ACTION } from '@/constants/ai/general';
 import { fetcher } from '@/lib/fetcher';
+import { isNumber } from '@/lib/guard';
 import { cn, getFallbackName } from '@/lib/utils';
 
 import { AgentFeatures } from './agent-features';
@@ -27,10 +29,13 @@ type AgentCardProps = Partial<
     | 'language'
     | 'name'
     | 'pictureUrl'
+    | 'systemInstruction'
+    | 'temperature'
   >
 > & {
   agentId?: string;
   aiModels?: AiModel[];
+  isConfigTab?: boolean;
   isConnected?: boolean;
   isEdit?: boolean;
   totalUses?: number;
@@ -41,6 +46,7 @@ export const AgentCard = ({
   agentId,
   aiModels = [],
   description,
+  isConfigTab,
   isConnected,
   isDefault,
   isDraft,
@@ -49,6 +55,8 @@ export const AgentCard = ({
   isSystem,
   name,
   pictureUrl,
+  systemInstruction,
+  temperature,
   totalUses,
   user,
 }: AgentCardProps) => {
@@ -87,7 +95,9 @@ export const AgentCard = ({
       className={cn(
         'group overflow-hidden rounded-lg h-full dark:bg-neutral-900 relative',
         !isEdit &&
+          !isConfigTab &&
           'border p-4 hover:shadow-sm transition duration-300 hover:bg-blue-500/10 dark:hover:bg-neutral-900/75',
+        isConfigTab && 'border p-4 ',
       )}
     >
       <div className="flex flex-col justify-between h-full">
@@ -116,12 +126,17 @@ export const AgentCard = ({
               </div>
             </div>
           </div>
-          <p className={cn('text-sm text-muted-foreground', !isEdit && 'line-clamp-2')}>
+          <p
+            className={cn(
+              'text-sm text-muted-foreground',
+              !isEdit && !isConfigTab && 'line-clamp-2',
+            )}
+          >
             {description}
           </p>
           {!isEdit && <AgentFeatures className="mt-4 mb-8" models={aiModels} />}
         </div>
-        {!isEdit && (
+        {!isEdit && !isConfigTab && (
           <div>
             <div className="flex justify-between items-center gap-x-4">
               <Button
@@ -144,11 +159,27 @@ export const AgentCard = ({
             </div>
           </div>
         )}
+        {isConfigTab && (
+          <div className="w-full flex flex-col text-sm">
+            {systemInstruction && (
+              <div>
+                <h4 className="mb-2 font-semibold">System instruction</h4>
+                <MarkdownText text={systemInstruction} />
+              </div>
+            )}
+            {isNumber(temperature) && (
+              <div>
+                <h4 className="mb-2 mt-4 font-semibold">Temperature</h4>
+                <TextBadge label={String(temperature)} variant="indigo" />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 
-  return isEdit ? (
+  return isEdit || isConfigTab ? (
     content
   ) : (
     <Link href={`/ai-agents/general/${agentId}`} title={name}>

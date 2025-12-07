@@ -4,7 +4,7 @@ import { Eraser, PanelRight, Share } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { memo, useState } from 'react';
 
-import { AgentConfiguration } from '@/components/ai-agents/agent-configuration';
+import { AgentConfiguration } from '@/components/ai-agents/agent-configuration/agent-configuration';
 import { ChatConversationModal } from '@/components/modals/chat-conversation-modal';
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button, Separator } from '@/components/ui';
@@ -36,7 +36,10 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
     isFetching: state.isFetching,
     setIsFetching: state.setIsFetching,
   }));
-  const { currentModel } = useAiAgentStore((state) => ({ currentModel: state.currentModel }));
+  const { currentAgent, currentModel } = useAiAgentStore((state) => ({
+    currentAgent: state.currentAgent,
+    currentModel: state.currentModel,
+  }));
 
   const [open, setOpen] = useState(false);
 
@@ -44,6 +47,8 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   const currentConversation = conversations.find(
     (conversation) => conversation.id === conversationId,
   );
+
+  const hasAgent = currentAgent?.name && currentModel?.name;
 
   const handleChatAction = async (action: 'clear' | 'share') => {
     setIsFetching(true);
@@ -82,11 +87,18 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
       )}
       <div className={cn('w-full h-[75px]', !messages.length && 'h-full')}>
         {!isEmbed && (
-          <div className="flex flex-1 text-base pt-4 px-4 items-center justify-between gap-x-4">
-            <div className="flex flex-col  justify-center">
-              <p className="line-clamp-1 font-semibold text-sm">Nova Copilot</p>
-              <p className="text-muted-foreground text-xs">{currentModel}</p>
-            </div>
+          <div
+            className={cn(
+              'flex flex-1 text-base pt-4 px-4 items-center gap-x-4',
+              hasAgent ? 'justify-between' : 'justify-end',
+            )}
+          >
+            {hasAgent && (
+              <div className="flex flex-col justify-center">
+                <p className="line-clamp-1 font-semibold text-sm">{currentAgent.name}</p>
+                <p className="text-muted-foreground text-xs">{currentModel.name}</p>
+              </div>
+            )}
             <div className="flex gap-x-2 items-center">
               <Button
                 disabled={isFetching}

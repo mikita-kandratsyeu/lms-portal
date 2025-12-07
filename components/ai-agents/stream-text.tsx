@@ -13,7 +13,7 @@ import { getValueFromMemoryCache, setValueToMemoryCache } from '@/lib/cache';
 import { fetcher } from '@/lib/fetcher';
 
 import { Button } from '../ui';
-import { AgentConfiguration } from './agent-configuration';
+import { AgentConfiguration } from './agent-configuration/agent-configuration';
 
 type StreamTextProps = {
   cacheKey?: string;
@@ -68,7 +68,7 @@ export const StreamText = ({
           input: messages,
           instructions: isTranslateButton ? SYSTEM_TRANSLATE_PROMPT : SYSTEM_COURSE_PROMPT,
           stream: true,
-          ...(showModelSelector && { model: currentModel }),
+          ...(showModelSelector && { model: currentModel?.value }),
         },
         cache: 'no-cache',
         headers: {
