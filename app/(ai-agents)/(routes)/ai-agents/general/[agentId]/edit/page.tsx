@@ -13,7 +13,11 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
   const user = await getCurrentUser();
 
   const { agentId } = await props.params;
-  const { agent, models } = await getAgentData({ agentId, userId: user?.userId });
+  const { agent, models } = await getAgentData({
+    agentId,
+    includeAllModels: true,
+    userId: user?.userId,
+  });
 
   if (!agent) {
     notFound();

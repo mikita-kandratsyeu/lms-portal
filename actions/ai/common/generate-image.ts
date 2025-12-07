@@ -4,7 +4,7 @@ import { ImageGenerateParams } from 'openai/resources/images.mjs';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 
-import { getTargetProvider } from './get-target-provider';
+import { getProviderByAgent } from './get-target-provider';
 
 type GenerateImage = Omit<ImageGenerateParams, 'model'> & {
   model?: string;
@@ -13,7 +13,7 @@ type GenerateImage = Omit<ImageGenerateParams, 'model'> & {
 export const generateImage = async ({ model, prompt }: GenerateImage) => {
   const user = await getCurrentUser();
 
-  const { provider, targetImageModel } = await getTargetProvider(model);
+  const { provider, targetImageModel } = await getProviderByAgent(model);
 
   if (!user?.hasSubscription && targetImageModel.isSubscription) {
     return {

@@ -9,7 +9,7 @@ type AgentIdPageProps = { params: Promise<{ agentId: string }> };
 
 const AgentIdPage = async (props: AgentIdPageProps) => {
   const { agentId } = await props.params;
-  const { agent } = await getAgentData({ agentId, isPreviewPage: true });
+  const { agent } = await getAgentData({ agentId });
 
   if (!agent) {
     notFound();

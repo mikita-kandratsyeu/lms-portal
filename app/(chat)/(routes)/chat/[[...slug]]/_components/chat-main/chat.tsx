@@ -1,6 +1,6 @@
 'use client';
 
-import { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Conversation } from '@/actions/chat/get-chat-conversations';
@@ -9,7 +9,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { ChatCompletionRole } from '@/constants/ai/general';
 import { CONVERSATION_ACTION } from '@/constants/chat';
 import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
-import { useAppConfigStore } from '@/hooks/store/use-app-config-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useLocaleStore } from '@/hooks/store/use-locale-store';
 import { useHydration } from '@/hooks/use-hydration';
@@ -35,13 +34,10 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
   const { chatMessages, conversationId, setChatMessages, setConversationId, setIsFetching } =
     useChatStore();
 
-  const { currentModel, setCurrentModel } = useAiAgentStore((state) => ({
+  const { currentAgent, currentModel, setCurrentModel } = useAiAgentStore((state) => ({
+    currentAgent: state.currentAgent,
     currentModel: state.currentModel,
     setCurrentModel: state.setCurrentModel,
-  }));
-
-  const { config: appConfig } = useAppConfigStore((state) => ({
-    config: state.config,
   }));
   const localeInfo = useLocaleStore((state) => state.localeInfo);
 
@@ -53,15 +49,6 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
   const [assistantImage, setAssistantImage] = useState('');
 
   const abortControllerRef = useRef<AbortController | null>(null);
-
-  const IMAGE_MODELS = useMemo(
-    () => appConfig?.ai.flatMap((ai) => ai['image-models']) ?? [],
-    [appConfig?.ai],
-  );
-  const TEXT_MODELS = useMemo(
-    () => appConfig?.ai.flatMap((ai) => ai['text-models']) ?? [],
-    [appConfig?.ai],
-  );
 
   useEffect(() => {
     if (conversations.length) {
@@ -76,15 +63,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       setChatMessages(chatMessages);
       // setHasSearch(hasSearch || TEXT_MODELS?.[0]?.hasSearch || false);
     }
-  }, [
-    TEXT_MODELS,
-    conversations,
-    isEmbed,
-    isShared,
-    setChatMessages,
-    setConversationId,
-    setCurrentModel,
-  ]);
+  }, [conversations, isEmbed, isShared, setChatMessages, setConversationId, setCurrentModel]);
 
   const saveLastMessages = useCallback(
     async (
@@ -98,7 +77,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
           image: false
             ? {
                 messageId: assistMessage.id,
-                model: IMAGE_MODELS[0].value,
+                model: currentModel?.value,
                 revisedPrompt: assistMessage.content,
                 url: assistMessage.url,
               }
@@ -120,18 +99,11 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
         setChatMessages(updatedChatMessages);
       }
     },
-    [
-      chatMessages,
-      currentModel,
-      IMAGE_MODELS,
-      setAssistantMessage,
-      setAssistantImage,
-      setChatMessages,
-    ],
+    [chatMessages, currentModel, setAssistantMessage, setAssistantImage, setChatMessages],
   );
 
   const handleSubmit = useCallback(
-    async (event: SyntheticEvent, options?: { userMessage?: string; regenerate?: boolean }) => {
+    async (event: SyntheticEvent, options?: { userMessage?: string }) => {
       event.preventDefault();
 
       setIsSubmitting(true);
@@ -176,14 +148,12 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
         return;
       }
 
-      if (!options?.regenerate) {
-        const updatedChatMessages = {
-          ...chatMessages,
-          [currentConversationId]: [...messages, ...messagesForApi],
-        };
+      const updatedChatMessages = {
+        ...chatMessages,
+        [currentConversationId]: [...messages, ...messagesForApi],
+      };
 
-        setChatMessages(updatedChatMessages);
-      }
+      setChatMessages(updatedChatMessages);
 
       setAssistantMessage('');
       setCurrentMessage('');
@@ -196,7 +166,8 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
           const imageGeneration = await fetcher.post('api/ai/image', {
             responseType: 'json',
             body: {
-              model: IMAGE_MODELS[0].value,
+              agentId: currentAgent?.id,
+              modelId: currentModel?.id,
               prompt: currentMessage,
             },
             cache: 'no-cache',
@@ -216,16 +187,17 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
 
           const completionStream = await fetcher.post('/api/ai/completions', {
             body: {
-              input: [...messages, ...(options?.regenerate ? [] : messagesForApi)].map(
-                ({ content, role }) => ({
-                  content,
-                  role,
-                }),
-              ),
+              input: [...messages, ...messagesForApi].map(({ content, role }) => ({
+                content,
+                role,
+              })),
+              agentId: currentAgent?.id,
+              instructions: currentAgent?.systemInstruction,
               isSearch: false,
               localeInfo,
-              model: currentModel?.value,
+              modelId: currentModel?.id,
               stream: true,
+              temperature: currentAgent?.temperature,
             },
             cache: 'no-cache',
             headers: {
@@ -290,12 +262,12 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       }
     },
     [
-      IMAGE_MODELS,
       assistantMessage,
       chatMessages,
       conversationId,
+      currentAgent?.id,
       currentMessage,
-      currentModel,
+      currentModel?.id,
       isEmbed,
       localeInfo,
       saveLastMessages,

@@ -14,7 +14,8 @@ export const POST = async (req: NextRequest) => {
   const t = await getTranslations('error');
 
   try {
-    const { input, instructions, isSearch, localeInfo, model, stream } = await req.json();
+    const { agentId, input, instructions, isSearch, localeInfo, modelId, stream, temperature } =
+      await req.json();
 
     if (!user) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
@@ -27,12 +28,14 @@ export const POST = async (req: NextRequest) => {
     }
 
     const response = await generateCompletion({
+      agentId,
       input,
       instructions,
       isSearch,
       localeInfo,
-      model,
+      modelId,
       stream,
+      temperature,
     });
 
     if (!response.completion) {

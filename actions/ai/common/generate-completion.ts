@@ -7,32 +7,36 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { AI_PROVIDER, ChatCompletionRole, DEFAULT_TEMPERATURE } from '@/constants/ai/general';
 import { LocaleInfo } from '@/hooks/store/use-locale-store';
 
-import { getTargetProvider } from './get-target-provider';
+import { getAgentData } from '../agent/get-agent-data';
+import { getProviderByAgent } from './get-target-provider';
 
 type GenerateCompletion = Omit<ResponseCreateParamsBase, 'model'> & {
+  agentId?: string;
   customTools?: unknown[];
   isSearch?: boolean;
   localeInfo?: LocaleInfo;
-  model?: string;
+  modelId?: string;
   temperature?: number;
 };
 
 export const generateCompletion = async ({
+  agentId,
   customTools = [],
   input,
   instructions,
   isSearch = false,
   localeInfo,
-  model,
+  modelId,
   stream = false,
   temperature = DEFAULT_TEMPERATURE,
 }: GenerateCompletion) => {
   const user = await getCurrentUser();
 
-  const { provider, providerName, targetTextModel } = await getTargetProvider(model);
+  const { agent } = await getAgentData({ agentId });
+  const { model, provider, providerName } = await getProviderByAgent(agent, modelId);
 
-  if (!user?.hasSubscription && targetTextModel.isSubscription) {
-    return { completion: null, model: targetTextModel.value };
+  if (!model || (!user?.hasSubscription && model?.isSubscription)) {
+    return { completion: null, model: model?.value };
   }
 
   const tools = [
@@ -54,27 +58,29 @@ export const generateCompletion = async ({
       : []),
   ];
 
+  const commonArgs = {
+    model: model.value,
+    stream,
+    temperature,
+  };
+
   const completion =
     providerName === AI_PROVIDER.openai
       ? await provider.responses.create({
+          ...commonArgs,
           input,
           instructions,
-          model: targetTextModel.value,
-          stream,
-          temperature,
-          tool_choice: 'auto',
           tools: tools as unknown as Tool[],
+          tool_choice: 'auto',
         })
       : await provider.chat.completions.create({
+          ...commonArgs,
           messages: [
             ...(instructions ? [{ role: ChatCompletionRole.SYSTEM, content: instructions }] : []),
             ...input,
           ] as ChatCompletionMessageParam[],
-          model: targetTextModel.value,
-          stream,
-          temperature,
-          tool_choice: 'auto',
           tools: tools as unknown as ChatCompletionTool[],
+          tool_choice: 'auto',
         });
 
   if (stream) {
@@ -98,7 +104,9 @@ export const generateCompletion = async ({
               ),
             );
           } else if (
-            [AI_PROVIDER.deepseek, AI_PROVIDER.ollama].includes(providerName as AI_PROVIDER) &&
+            [AI_PROVIDER.deepseek, AI_PROVIDER.ollama, AI_PROVIDER.lmsstudio].includes(
+              providerName as AI_PROVIDER,
+            ) &&
             event.choices[0].finish_reason !== 'stop'
           ) {
             await writer.write(encoder.encode(event.choices[0].delta.content ?? ''));
@@ -115,8 +123,8 @@ export const generateCompletion = async ({
       }
     })();
 
-    return { completion: stream_response.readable, model: targetTextModel.value };
+    return { completion: stream_response.readable, model: model.value };
   }
 
-  return { completion, model: targetTextModel.value };
+  return { completion, model: model.value };
 };

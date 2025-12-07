@@ -2,6 +2,7 @@
 
 import { XIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 
 import { Button } from '@/components/ui';
 import {
@@ -25,9 +26,26 @@ type AgentConfigurationProps = {
 export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
   const t = useTranslations('ai-agent.sheet');
 
-  const { currentAgent } = useAiAgentStore((state) => ({
-    currentAgent: state.currentAgent,
-  }));
+  const { connectedAgents, currentAgent, setCurrentAgent, setCurrentModel } = useAiAgentStore(
+    (state) => ({
+      connectedAgents: state.connectedAgents,
+      currentAgent: state.currentAgent,
+      setCurrentAgent: state.setCurrentAgent,
+      setCurrentModel: state.setCurrentModel,
+    }),
+  );
+
+  useEffect(() => {
+    if (!currentAgent) {
+      const defaultAgent = connectedAgents.find((agent) => agent.isDefault);
+
+      if (defaultAgent) {
+        setCurrentAgent(defaultAgent);
+        setCurrentModel(defaultAgent?.aiModels[0]);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Sheet>

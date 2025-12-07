@@ -2,65 +2,45 @@
 
 import OpenAI from 'openai';
 
-import { getAppConfig } from '@/actions/configs/get-app-config';
 import { AI_PROVIDER } from '@/constants/ai/general';
 
-const AIProvider = (provider: string) => {
-  let options = {};
+import { GetAgentDataResponse } from '../agent/get-agent-data';
 
-  switch (provider) {
-    case AI_PROVIDER.deepseek:
-      options = {
-        apiKey: process.env.DEEPSEEK_API_KEY,
-        baseURL: 'https://api.deepseek.com',
-      };
-      break;
-    case AI_PROVIDER.openai:
-      options = {
-        apiKey: process.env.OPENAI_API_KEY,
-      };
-      break;
-    default:
-      options = {
-        apiKey: 'ollama',
-        baseURL: process.env.OLLAMA_BASE_URL,
-      };
+const AIProvider = (providerName: string) => {
+  let options: { apiKey: string; baseURL?: string } = {
+    apiKey: '',
+    baseURL: '',
+  };
+
+  if (providerName === AI_PROVIDER.deepseek) {
+    options = {
+      apiKey: process.env.DEEPSEEK_API_KEY as string,
+      baseURL: 'https://api.deepseek.com',
+    };
+  }
+
+  if (providerName === AI_PROVIDER.openai) {
+    options = {
+      apiKey: process.env.OPENAI_API_KEY as string,
+    };
   }
 
   return new OpenAI(options);
 };
 
-export const getTargetProvider = async (model: string | undefined) => {
-  const config = await getAppConfig();
+export const getProviderByAgent = async (
+  agent: GetAgentDataResponse['agent'],
+  modelId?: string,
+) => {
+  const model = agent?.aiModels.find((model) => model.id === modelId);
 
-  const targetProvider = config.ai.find((ai) => {
-    const allModels = [...ai['image-models'], ...ai['text-models']].map((model) => model.value);
-
-    return allModels.includes(String(model));
-  });
-
-  if (!targetProvider) {
-    const { provider, 'text-models': textModels, 'image-models': imageModels } = config.ai[0];
-
+  if (model) {
     return {
-      provider: AIProvider(provider),
-      providerName: provider,
-      targetImageModel: imageModels[0],
-      targetTextModel: textModels[0],
+      model,
+      provider: AIProvider(model.provider),
+      providerName: model.provider,
     };
   }
 
-  const { provider, 'text-models': textModels, 'image-models': imageModels } = targetProvider;
-
-  const targetTextModel =
-    textModels.find((textModel) => textModel.value === model) ?? textModels[0];
-  const targetImageModel =
-    imageModels.find((imageModel) => imageModel.value === model) ?? imageModels[0];
-
-  return {
-    provider: AIProvider(provider),
-    providerName: provider,
-    targetImageModel,
-    targetTextModel,
-  };
+  return {};
 };
