@@ -27,11 +27,9 @@ const ChatInputComponent = ({
 }: ChatInputProps) => {
   const t = useTranslations('chat.input');
 
-  const { isImageGeneration } = useChatStore((state) => ({
-    isImageGeneration: state.isImageGeneration,
-  }));
-
   const [inputLength, setInputLength] = useState(0);
+
+  const isImageGeneration = false;
 
   return (
     <div className="w-full h-full relative flex items-end">

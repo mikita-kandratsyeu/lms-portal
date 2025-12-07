@@ -4,7 +4,6 @@ import { MoreHorizontalIcon, X } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
-import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useUserSettingsStore } from '@/hooks/store/use-user-settings.store';
 import { absoluteUrl, cn } from '@/lib/utils';
 
@@ -16,9 +15,6 @@ export const Chat = () => {
   const [open, setOpen] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
-  const { currentModelLabel } = useChatStore((state) => ({
-    currentModelLabel: state.currentModelLabel,
-  }));
   const { isCopilotInNewTab } = useUserSettingsStore((state) => ({
     isCopilotInNewTab: state.isCopilotInNewTab,
   }));
@@ -65,7 +61,7 @@ export const Chat = () => {
                 <p className={'font-semibold text-base text-neutral-700 dark:text-neutral-300'}>
                   Nova Copilot
                 </p>
-                <p className={'text-muted-foreground text-xs'}>{currentModelLabel}</p>
+                {/* <p className={'text-muted-foreground text-xs'}>{currentModelLabel}</p> */}
               </div>
               <div className="flex gap-x-2">
                 <ChatContextMenu isNewTab>

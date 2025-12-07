@@ -32,19 +32,8 @@ type ChatProps = {
 export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
   const { toast } = useToast();
 
-  const {
-    chatMessages,
-    conversationId,
-    currentModelLabel,
-    hasSearch,
-    isImageGeneration,
-    isSearchMode,
-    setChatMessages,
-    setConversationId,
-    setCurrentModelLabel,
-    setHasSearch,
-    setIsFetching,
-  } = useChatStore();
+  const { chatMessages, conversationId, setChatMessages, setConversationId, setIsFetching } =
+    useChatStore();
 
   const { currentModel, setCurrentModel } = useAiAgentStore((state) => ({
     currentModel: state.currentModel,
@@ -83,23 +72,18 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       }
 
       // setCurrentModel(currentModel || TEXT_MODELS?.[0]?.value || '');
-      setCurrentModelLabel(currentModelLabel || TEXT_MODELS?.[0]?.label || '');
+      // setCurrentModelLabel(currentModelLabel || TEXT_MODELS?.[0]?.label || '');
       setChatMessages(chatMessages);
-      setHasSearch(hasSearch || TEXT_MODELS?.[0]?.hasSearch || false);
+      // setHasSearch(hasSearch || TEXT_MODELS?.[0]?.hasSearch || false);
     }
   }, [
     TEXT_MODELS,
     conversations,
-    currentModel,
-    currentModelLabel,
-    hasSearch,
     isEmbed,
     isShared,
     setChatMessages,
     setConversationId,
     setCurrentModel,
-    setCurrentModelLabel,
-    setHasSearch,
   ]);
 
   const saveLastMessages = useCallback(
@@ -111,7 +95,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       const response = await fetcher.post('/api/chat', {
         body: {
           conversationId,
-          image: isImageGeneration
+          image: false
             ? {
                 messageId: assistMessage.id,
                 model: IMAGE_MODELS[0].value,
@@ -139,7 +123,6 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
     [
       chatMessages,
       currentModel,
-      isImageGeneration,
       IMAGE_MODELS,
       setAssistantMessage,
       setAssistantImage,
@@ -209,7 +192,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       let streamAssistImage = '';
 
       try {
-        if (isImageGeneration) {
+        if (false) {
           const imageGeneration = await fetcher.post('api/ai/image', {
             responseType: 'json',
             body: {
@@ -239,7 +222,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
                   role,
                 }),
               ),
-              isSearch: isSearchMode,
+              isSearch: false,
               localeInfo,
               model: currentModel?.value,
               stream: true,
@@ -314,8 +297,6 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       currentMessage,
       currentModel,
       isEmbed,
-      isImageGeneration,
-      isSearchMode,
       localeInfo,
       saveLastMessages,
       setChatMessages,

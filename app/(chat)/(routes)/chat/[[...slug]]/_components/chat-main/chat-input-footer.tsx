@@ -1,11 +1,10 @@
 'use client';
 
-import { Globe, Paperclip, SendHorizonal, StopCircle } from 'lucide-react';
+import { Paperclip, SendHorizonal, StopCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { FileUploadModal } from '@/components/modals/file-upload-modal';
 import { Badge, Button, Separator } from '@/components/ui';
-import { useChatStore } from '@/hooks/store/use-chat-store';
 import { cn } from '@/lib/utils';
 
 type ChatInputFooterProps = {
@@ -21,14 +20,8 @@ export const ChatInputFooter = ({
 }: ChatInputFooterProps) => {
   const t = useTranslations('chat.input');
 
-  const { hasSearch, isImageGeneration, isSearchMode, setIsImageGeneration, setIsSearchMode } =
-    useChatStore((state) => ({
-      hasSearch: state.hasSearch,
-      isImageGeneration: state.isImageGeneration,
-      isSearchMode: state.isSearchMode,
-      setIsImageGeneration: state.setIsImageGeneration,
-      setIsSearchMode: state.setIsSearchMode,
-    }));
+  const isImageGeneration = false;
+  const isWebSearchGeneration = false;
 
   return (
     <div className="flex justify-between px-2 py-2 items-center">
@@ -38,14 +31,14 @@ export const ChatInputFooter = ({
             {t('image-generation-mode')}
           </Badge>
         )}
-        {isSearchMode && (
+        {isWebSearchGeneration && (
           <Badge variant="secondary" className="rounded-sm px-1 font-normal line-clamp-2">
             {t('search')}
           </Badge>
         )}
       </div>
       <div className="flex items-center">
-        {hasSearch && (
+        {/* {hasSearch && (
           <button
             type="button"
             className="mr-3"
@@ -62,7 +55,7 @@ export const ChatInputFooter = ({
               )}
             />
           </button>
-        )}
+        )} */}
         {/* <button
           type="button"
           className="mr-3"
