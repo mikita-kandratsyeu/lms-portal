@@ -114,7 +114,7 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
                 </Button>
               </ConfirmModal>
               <Separator orientation="vertical" className="mx-2 h-8" />
-              <AgentConfiguration isChat>
+              <AgentConfiguration>
                 <Button variant="outline" title="Configuration" disabled={isFetching}>
                   <PanelRight className="h-4 w-4" />
                 </Button>

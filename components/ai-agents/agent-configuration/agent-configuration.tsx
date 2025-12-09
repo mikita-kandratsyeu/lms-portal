@@ -23,10 +23,9 @@ import { AiModelSwitcher } from './ai-model-switcher';
 
 type AgentConfigurationProps = {
   children: React.ReactNode;
-  isChat?: boolean;
 };
 
-export const AgentConfiguration = ({ children, isChat }: AgentConfigurationProps) => {
+export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
   const t = useTranslations('ai-agent.sheet');
 
   const { isFetching, setActiveFeature } = useChatStore((state) => ({
@@ -82,7 +81,7 @@ export const AgentConfiguration = ({ children, isChat }: AgentConfigurationProps
               <div className="flex items-center gap-x-2">
                 <h4 className="text-sm text-muted-foreground">AI Agent</h4>
               </div>
-              <AiAgentSwitcher className="flex items-center w-full gap-x-2" isChat={isChat} />
+              <AiAgentSwitcher className="flex items-center w-full gap-x-2" />
             </div>
             <AgentCard agentId={currentAgent?.id} isConfigTab {...currentAgent} />
           </div>

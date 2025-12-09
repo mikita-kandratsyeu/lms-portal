@@ -11,8 +11,9 @@ export const getConnectedAgents = async () => {
   const connectedAgents = await db.aiAgent.findMany({
     where: { connectedUsers: { some: { userId: user?.userId } } },
     include: {
-      chatConversationStarters: true,
       aiModels: { orderBy: [{ isDefault: 'desc' }, { providerName: 'asc' }, { name: 'asc' }] },
+      chatConversationStarters: true,
+      chatConversations: { select: { id: true } },
     },
     orderBy: [{ isDefault: 'desc' }, { isDraft: 'desc' }, { updatedAt: 'desc' }],
   });

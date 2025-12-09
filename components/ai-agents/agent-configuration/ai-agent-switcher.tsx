@@ -11,19 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui';
-import { useToast } from '@/components/ui/use-toast';
 import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';
-import { fetcher } from '@/lib/fetcher';
 
 type AiAgentSwitcherProps = {
   className?: string;
-  isChat?: boolean;
 };
 
-export const AiAgentSwitcher = ({ isChat, className }: AiAgentSwitcherProps) => {
-  const { toast } = useToast();
-
+export const AiAgentSwitcher = ({ className }: AiAgentSwitcherProps) => {
   const { connectedAgents, currentAgent, setCurrentAgent, setCurrentModel } = useAiAgentStore(
     (state) => ({
       connectedAgents: state.connectedAgents,
@@ -33,11 +28,9 @@ export const AiAgentSwitcher = ({ isChat, className }: AiAgentSwitcherProps) => 
     }),
   );
 
-  const { conversationId, isFetching, setIsFetching, setActiveFeature } = useChatStore((state) => ({
-    conversationId: state.conversationId,
+  const { isFetching, setActiveFeature } = useChatStore((state) => ({
     isFetching: state.isFetching,
     setActiveFeature: state.setActiveFeature,
-    setIsFetching: state.setIsFetching,
   }));
 
   const defaultAgent = useMemo(
@@ -45,27 +38,13 @@ export const AiAgentSwitcher = ({ isChat, className }: AiAgentSwitcherProps) => 
     [connectedAgents],
   );
 
-  const handleValueChange = async (agentId: string) => {
-    setIsFetching(true);
+  const handleValueChange = (agentId: string) => {
+    const agent = connectedAgents.find((agent) => agent.id === agentId);
 
-    try {
-      const agent = connectedAgents.find((agent) => agent.id === agentId);
-
-      if (agent) {
-        setActiveFeature(AiModelFeature.text);
-        setCurrentAgent(agent);
-        setCurrentModel(agent.aiModels[0]);
-
-        if (isChat) {
-          await fetcher.patch(`/api/ai/agents/${agentId}`, {
-            body: { chatConversationId: conversationId },
-          });
-        }
-      }
-    } catch (error) {
-      toast({ isError: true });
-    } finally {
-      setIsFetching(false);
+    if (agent) {
+      setActiveFeature(AiModelFeature.text);
+      setCurrentAgent(agent);
+      setCurrentModel(agent.aiModels[0]);
     }
   };
 
