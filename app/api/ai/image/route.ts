@@ -16,7 +16,7 @@ export const POST = async (req: NextRequest) => {
   const t = await getTranslations('error');
 
   try {
-    const { model, prompt } = await req.json();
+    const { agentId, modelId, prompt } = await req.json();
 
     if (!user) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
@@ -32,7 +32,8 @@ export const POST = async (req: NextRequest) => {
     }
 
     const response = await generateImage({
-      model,
+      agentId,
+      modelId,
       n: 1,
       prompt,
       quality: 'hd',
