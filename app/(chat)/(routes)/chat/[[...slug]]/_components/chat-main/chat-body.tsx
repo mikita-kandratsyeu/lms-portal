@@ -177,10 +177,11 @@ const ChatBodyComponent = ({
                 )}
                 {assistantMessage && (
                   <ChatBubble
-                    streamImage={assistantImage}
                     isSubmitting={isSubmitting}
                     message={{ role: ChatCompletionRole.ASSISTANT, content: '' }}
-                    name="Nova Copilot"
+                    name={currentAgent?.name ?? 'Copilot'}
+                    picture={currentAgent?.pictureUrl}
+                    streamImage={assistantImage}
                     streamMessage={assistantMessage}
                   />
                 )}
