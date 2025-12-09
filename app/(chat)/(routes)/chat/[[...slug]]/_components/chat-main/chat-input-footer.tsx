@@ -112,7 +112,7 @@ export const ChatInputFooter = ({
             'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:text-white font-medium z-10 px-2 text-sm',
             isSubmitting && 'w-12',
           )}
-          disabled={isDisabled || isSubmitting}
+          disabled={isDisabled && !isSubmitting}
           type={isSubmitting ? 'button' : 'submit'}
           variant="outline"
           onClick={onSendMessage}

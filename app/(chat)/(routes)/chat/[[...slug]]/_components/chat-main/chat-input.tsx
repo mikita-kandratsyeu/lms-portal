@@ -67,7 +67,7 @@ const ChatInputComponent = ({
               }}
             />
             <ChatInputFooter
-              isDisabled={!currenMessage && !isSubmitting}
+              isDisabled={!currenMessage}
               isSubmitting={isSubmitting}
               onSendMessage={isSubmitting ? onAbortGenerating : () => {}}
             />

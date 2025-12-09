@@ -1,5 +1,6 @@
 'use client';
 
+import { AiModelFeature } from '@prisma/client';
 import { useMemo } from 'react';
 
 import {
@@ -11,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui';
 import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
+import { useChatStore } from '@/hooks/store/use-chat-store';
 
 type AiAgentSwitcherProps = {
   className?: string;
@@ -26,6 +28,10 @@ export const AiAgentSwitcher = ({ className }: AiAgentSwitcherProps) => {
     }),
   );
 
+  const { setActiveFeature } = useChatStore((state) => ({
+    setActiveFeature: state.setActiveFeature,
+  }));
+
   const defaultAgent = useMemo(
     () => connectedAgents.find((agent) => agent.isDefault),
     [connectedAgents],
@@ -35,6 +41,7 @@ export const AiAgentSwitcher = ({ className }: AiAgentSwitcherProps) => {
     const agent = connectedAgents.find((agent) => agent.id === agentId);
 
     if (agent) {
+      setActiveFeature(AiModelFeature.text);
       setCurrentAgent(agent);
       setCurrentModel(agent.aiModels[0]);
     }

@@ -7,7 +7,7 @@ export const mapConversationStarters = (starters: ChatConversationStarters[] = [
     text: starter.text || '',
   })) || [];
 
-export const getConversationStartersByLanguage = <T extends { language?: string }>(
+export const getConversationStartersByLanguage = <T extends { language?: string | null }>(
   starters: T[] = [],
   language: string,
 ) =>

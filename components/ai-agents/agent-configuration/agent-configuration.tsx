@@ -1,5 +1,6 @@
 'use client';
 
+import { AiModelFeature } from '@prisma/client';
 import { XIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
@@ -14,6 +15,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
+import { useChatStore } from '@/hooks/store/use-chat-store';
 
 import { AgentCard } from '../agent-card/agent-card';
 import { AiAgentSwitcher } from './ai-agent-switcher';
@@ -25,6 +27,10 @@ type AgentConfigurationProps = {
 
 export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
   const t = useTranslations('ai-agent.sheet');
+
+  const { setActiveFeature } = useChatStore((state) => ({
+    setActiveFeature: state.setActiveFeature,
+  }));
 
   const { connectedAgents, currentAgent, setCurrentAgent, setCurrentModel } = useAiAgentStore(
     (state) => ({
@@ -40,6 +46,7 @@ export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
       const defaultAgent = connectedAgents.find((agent) => agent.isDefault);
 
       if (defaultAgent) {
+        setActiveFeature(AiModelFeature.text);
         setCurrentAgent(defaultAgent);
         setCurrentModel(defaultAgent?.aiModels[0]);
       }

@@ -2,7 +2,7 @@
 
 import { ChatConversationStarters } from '@prisma/client';
 import { motion } from 'framer-motion';
-import { useCallback } from 'react';
+import { SyntheticEvent, useCallback } from 'react';
 
 import { CopyClipboard } from '../common/copy-clipboard';
 
@@ -20,19 +20,22 @@ const bubbleVariants = {
 };
 
 type ChatStartersProps = {
-  callback?: (text: string) => void;
+  callback?: (event: SyntheticEvent, value: string) => void;
   isAnimated?: boolean;
   showCopyButton?: boolean;
-  starters: Pick<ChatConversationStarters, 'id' | 'language' | 'text'>[];
+  starters?: Pick<ChatConversationStarters, 'id' | 'language' | 'text'>[];
 };
 
 export const ChatStarters = ({
   callback,
   isAnimated,
   showCopyButton,
-  starters,
+  starters = [],
 }: ChatStartersProps) => {
-  const handleClick = useCallback((text: string) => (callback ? callback(text) : {}), [callback]);
+  const handleClick = useCallback(
+    (event: SyntheticEvent, value: string) => (callback ? callback(event, value) : {}),
+    [callback],
+  );
 
   const styles =
     'inline-flex max-w-full rounded-lg bg-muted px-5 py-3 text-left text-sm md:text-base text-muted-foreground line-clamp-2 border justify-between items-center gap-x-2';
@@ -49,7 +52,7 @@ export const ChatStarters = ({
               initial="hidden"
               key={starter.id}
               variants={bubbleVariants}
-              onClick={() => handleClick(starter.text)}
+              onClick={(event) => handleClick(event, starter.text)}
             >
               {starter.text}
             </motion.button>;
