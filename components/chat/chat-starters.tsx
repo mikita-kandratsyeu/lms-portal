@@ -45,17 +45,19 @@ export const ChatStarters = ({
       <div className="flex flex-col gap-3 w-full">
         {starters.map((starter, index) => {
           if (isAnimated) {
-            <motion.button
-              animate="visible"
-              className={styles}
-              custom={index}
-              initial="hidden"
-              key={starter.id}
-              variants={bubbleVariants}
-              onClick={(event) => handleClick(event, starter.text)}
-            >
-              {starter.text}
-            </motion.button>;
+            return (
+              <motion.button
+                animate="visible"
+                className={styles}
+                custom={index}
+                initial="hidden"
+                key={starter.id}
+                variants={bubbleVariants}
+                onClick={(event) => handleClick(event, starter.text)}
+              >
+                {starter.text}
+              </motion.button>
+            );
           }
 
           return (

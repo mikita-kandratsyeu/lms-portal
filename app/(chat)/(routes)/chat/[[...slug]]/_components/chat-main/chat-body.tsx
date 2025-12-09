@@ -118,7 +118,10 @@ const ChatBodyComponent = ({
       {!hasMessages && !isShared && (
         <div className="flex flex-col items-center justify-center gap-y-2 h-full w-full">
           <div className="h-full flex flex-col gap-y-2">
-            <ChatGreeting />
+            <ChatGreeting
+              assistantName={currentAgent?.name}
+              assistantPicture={currentAgent?.pictureUrl}
+            />
             <ChatStarters
               callback={(event, message) => onSubmit(event, { userMessage: message })}
               isAnimated
@@ -143,7 +146,7 @@ const ChatBodyComponent = ({
                   }
 
                   if (isAssistant) {
-                    return ['Nova Copilot', null];
+                    return [currentAgent?.name ?? 'Copilot', currentAgent?.pictureUrl];
                   }
 
                   return [user?.name || 'Current User', user?.image];
