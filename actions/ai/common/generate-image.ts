@@ -4,26 +4,26 @@ import { ImageGenerateParams } from 'openai/resources/images.mjs';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 
+import { getAgentData } from '../agent/get-agent-data';
 import { getProviderByAgent } from './get-target-provider';
 
 type GenerateImage = Omit<ImageGenerateParams, 'model'> & {
-  model?: string;
+  agentId?: string;
+  modelId?: string;
 };
 
-export const generateImage = async ({ model, prompt }: GenerateImage) => {
+export const generateImage = async ({ agentId, modelId, prompt }: GenerateImage) => {
   const user = await getCurrentUser();
 
-  const { provider, targetImageModel } = await getProviderByAgent(model);
+  const { agent } = await getAgentData({ agentId });
+  const { model, provider } = await getProviderByAgent(agent, modelId);
 
-  if (!user?.hasSubscription && targetImageModel.isSubscription) {
-    return {
-      image: null,
-      model: targetImageModel.value,
-    };
+  if (!model || (!user?.hasSubscription && model?.isSubscription)) {
+    return { image: null, model: model?.value };
   }
 
   const response = await provider.images.generate({
-    model: targetImageModel.value,
+    model: model.value,
     n: 1,
     prompt,
     quality: 'hd',
@@ -33,6 +33,6 @@ export const generateImage = async ({ model, prompt }: GenerateImage) => {
 
   return {
     image: response,
-    model: targetImageModel.value,
+    model: model.value,
   };
 };

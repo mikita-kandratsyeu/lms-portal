@@ -1,5 +1,6 @@
 'use client';
 
+import { AiModelFeature } from '@prisma/client';
 import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -31,8 +32,14 @@ type ChatProps = {
 export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
   const { toast } = useToast();
 
-  const { chatMessages, conversationId, setChatMessages, setConversationId, setIsFetching } =
-    useChatStore();
+  const {
+    activeFeature,
+    chatMessages,
+    conversationId,
+    setChatMessages,
+    setConversationId,
+    setIsFetching,
+  } = useChatStore();
 
   const { currentAgent, currentModel, setCurrentModel } = useAiAgentStore((state) => ({
     currentAgent: state.currentAgent,
@@ -50,6 +57,9 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  const isImageGenerationActive = activeFeature === AiModelFeature.image;
+  const isWebSearchActive = activeFeature === AiModelFeature.search;
+
   useEffect(() => {
     if (conversations.length) {
       const chatMessages = getChatMessages(conversations);
@@ -58,10 +68,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
         setConversationId(conversations[0].id);
       }
 
-      // setCurrentModel(currentModel || TEXT_MODELS?.[0]?.value || '');
-      // setCurrentModelLabel(currentModelLabel || TEXT_MODELS?.[0]?.label || '');
       setChatMessages(chatMessages);
-      // setHasSearch(hasSearch || TEXT_MODELS?.[0]?.hasSearch || false);
     }
   }, [conversations, isEmbed, isShared, setChatMessages, setConversationId, setCurrentModel]);
 
@@ -74,7 +81,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       const response = await fetcher.post('/api/chat', {
         body: {
           conversationId,
-          image: false
+          image: isImageGenerationActive
             ? {
                 messageId: assistMessage.id,
                 model: currentModel?.value,
@@ -99,7 +106,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
         setChatMessages(updatedChatMessages);
       }
     },
-    [chatMessages, currentModel, setAssistantMessage, setAssistantImage, setChatMessages],
+    [isImageGenerationActive, currentModel?.value, chatMessages, setChatMessages],
   );
 
   const handleSubmit = useCallback(
@@ -162,7 +169,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       let streamAssistImage = '';
 
       try {
-        if (false) {
+        if (isImageGenerationActive) {
           const imageGeneration = await fetcher.post('api/ai/image', {
             responseType: 'json',
             body: {
@@ -193,7 +200,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
               })),
               agentId: currentAgent?.id,
               instructions: currentAgent?.systemInstruction,
-              isSearch: false,
+              isSearch: isWebSearchActive,
               localeInfo,
               modelId: currentModel?.id,
               stream: true,
@@ -266,9 +273,13 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       chatMessages,
       conversationId,
       currentAgent?.id,
+      currentAgent?.systemInstruction,
+      currentAgent?.temperature,
       currentMessage,
       currentModel?.id,
       isEmbed,
+      isImageGenerationActive,
+      isWebSearchActive,
       localeInfo,
       saveLastMessages,
       setChatMessages,
