@@ -6,7 +6,6 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Markdown from 'react-markdown';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import * as z from 'zod';
 

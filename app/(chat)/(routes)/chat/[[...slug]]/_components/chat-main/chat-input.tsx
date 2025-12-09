@@ -1,5 +1,6 @@
 'use client';
 
+import { AiModelFeature } from '@prisma/client';
 import { useTranslations } from 'next-intl';
 import { memo, SyntheticEvent, useState } from 'react';
 
@@ -27,9 +28,13 @@ const ChatInputComponent = ({
 }: ChatInputProps) => {
   const t = useTranslations('chat.input');
 
+  const { activeFeature } = useChatStore((state) => ({
+    activeFeature: state.activeFeature,
+  }));
+
   const [inputLength, setInputLength] = useState(0);
 
-  const isImageGeneration = false;
+  const isImageGenerationActive = activeFeature === AiModelFeature.image;
 
   return (
     <div className="w-full h-full relative flex items-end">
@@ -39,7 +44,7 @@ const ChatInputComponent = ({
             className={cn(
               'bg-background mx-auto flex flex-col lg:max-w-2xl xl:max-w-4xl w-full h-full border rounded-sm z-10 focus-within:border-b-indigo-500 focus-within:border-b-2 transition-colors duration-200 ease-in-out',
               inputLength >= LIMIT_CHAT_INPUT && 'focus-within:border-b-red-600',
-              isImageGeneration &&
+              isImageGenerationActive &&
                 'border-b-purple-500 border-b-2 focus-within:border-b-purple-500 ',
             )}
             onSubmit={onSubmit}
@@ -48,7 +53,7 @@ const ChatInputComponent = ({
               className="resize-none overflow-auto z-10 border-none"
               disabled={isSubmitting}
               maxLength={LIMIT_CHAT_INPUT}
-              placeholder={t(isImageGeneration ? 'enterImageMessage' : 'enterMessage')}
+              placeholder={t(isImageGenerationActive ? 'enterImageMessage' : 'enterMessage')}
               value={currenMessage}
               onChange={(event) => {
                 setCurrentMessage(event.target.value);
