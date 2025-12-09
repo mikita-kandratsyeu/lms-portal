@@ -16,6 +16,7 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
     }
 
     const {
+      chatConversationId,
       chatConversationStarters,
       description,
       isSystem,
@@ -39,6 +40,12 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       },
     };
 
+    const chatConversationData = Boolean(chatConversationId) && {
+      chatConversations: {
+        connect: [{ id: chatConversationId }],
+      },
+    };
+
     const chatConversationStartersData = Boolean(chatConversationStarters?.length) && {
       chatConversationStarters: {
         deleteMany: {},
@@ -55,6 +62,7 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ agentId
       where: { id: agentId, userId: user.userId },
       data: {
         ...aiModelsData,
+        ...chatConversationData,
         ...chatConversationStartersData,
         description,
         isSystem,

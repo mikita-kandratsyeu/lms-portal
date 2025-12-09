@@ -38,7 +38,8 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
     }),
   );
 
-  const { setActiveFeature } = useChatStore((state) => ({
+  const { isFetching, setActiveFeature } = useChatStore((state) => ({
+    isFetching: state.isFetching,
     setActiveFeature: state.setActiveFeature,
   }));
 
@@ -82,7 +83,7 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
   return (
     <div className={className}>
       <Select onValueChange={handleValueChange} value={selectedModelId}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full" disabled={isFetching}>
           <SelectValue placeholder="Select a LLM model" />
         </SelectTrigger>
         <SelectContent>

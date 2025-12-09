@@ -23,12 +23,14 @@ import { AiModelSwitcher } from './ai-model-switcher';
 
 type AgentConfigurationProps = {
   children: React.ReactNode;
+  isChat?: boolean;
 };
 
-export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
+export const AgentConfiguration = ({ children, isChat }: AgentConfigurationProps) => {
   const t = useTranslations('ai-agent.sheet');
 
-  const { setActiveFeature } = useChatStore((state) => ({
+  const { isFetching, setActiveFeature } = useChatStore((state) => ({
+    isFetching: state.isFetching,
     setActiveFeature: state.setActiveFeature,
   }));
 
@@ -63,7 +65,7 @@ export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
             <div className="flex justify-between items-center">
               <h2>{t('general')}</h2>
               <SheetClose asChild>
-                <Button variant="outline">
+                <Button variant="outline" disabled={isFetching}>
                   <XIcon className="h-4 w-4" />
                 </Button>
               </SheetClose>
@@ -77,8 +79,10 @@ export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
               <AiModelSwitcher className="flex items-center w-full gap-x-2" />
             </div>
             <div className="flex flex-col gap-y-2">
-              <h4 className="text-sm text-muted-foreground">AI Agent</h4>
-              <AiAgentSwitcher className="flex items-center w-full gap-x-2" />
+              <div className="flex items-center gap-x-2">
+                <h4 className="text-sm text-muted-foreground">AI Agent</h4>
+              </div>
+              <AiAgentSwitcher className="flex items-center w-full gap-x-2" isChat={isChat} />
             </div>
             <AgentCard agentId={currentAgent?.id} isConfigTab {...currentAgent} />
           </div>

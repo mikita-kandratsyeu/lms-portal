@@ -26,8 +26,11 @@ export const POST = async (req: NextRequest) => {
     if (action === CONVERSATION_ACTION.NEW) {
       const { title } = await req.json();
 
+      const defaultAgent = await db.aiAgent.findFirst({ where: { isDefault: true } });
+
       const newChatConversation = await db.chatConversation.create({
         data: {
+          aiAgentId: defaultAgent?.id,
           title: title?.slice(0, LIMIT_CONVERSATION_TITLE) || generateConversationTitle(),
           userId: user?.userId,
         },
