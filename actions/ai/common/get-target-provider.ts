@@ -32,7 +32,7 @@ export const getProviderByAgent = async (
   agent: GetAgentDataResponse['agent'],
   modelId?: string,
 ) => {
-  const model = agent?.aiModels.find((model) => model.id === modelId);
+  const model = agent?.aiModels.find((model) => (modelId ? model.id === modelId : model.isDefault));
 
   if (model) {
     return {
