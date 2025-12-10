@@ -1,6 +1,6 @@
 'use client';
 
-import { Languages } from 'lucide-react';
+import { LanguagesIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -20,10 +20,18 @@ import {
   Skeleton,
 } from '../ui';
 type LanguageSwitcherProps = {
+  callback?: (lang: string) => void;
+  isDisabled?: boolean;
   isMenu?: boolean;
+  value?: string;
 };
 
-export const LanguageSwitcher = ({ isMenu = false }: LanguageSwitcherProps) => {
+export const LanguageSwitcher = ({
+  callback,
+  isDisabled = false,
+  isMenu = false,
+  value,
+}: LanguageSwitcherProps) => {
   const t = useTranslations('switcher');
 
   const locale = useLocale();
@@ -36,14 +44,20 @@ export const LanguageSwitcher = ({ isMenu = false }: LanguageSwitcherProps) => {
   }
 
   const handleLanguage = async (lang: string) => {
-    await changeLocale(lang);
-    switchLanguage(lang);
+    if (callback && value) {
+      callback(lang);
+    } else {
+      await changeLocale(lang);
+      switchLanguage(lang);
 
-    router.refresh();
+      router.refresh();
+    }
   };
 
+  const defaultValue = callback && value ? value : locale;
+
   const DropDown = () => (
-    <Select onValueChange={handleLanguage} defaultValue={locale}>
+    <Select onValueChange={handleLanguage} defaultValue={defaultValue} disabled={isDisabled}>
       <SelectTrigger className="w-[120px]">
         <SelectValue placeholder="Select a language" />
       </SelectTrigger>
@@ -63,7 +77,7 @@ export const LanguageSwitcher = ({ isMenu = false }: LanguageSwitcherProps) => {
     <DropdownMenuItem className="hover:cursor-pointer">
       <div className="flex justify-between items-center w-full">
         <div className="flex items-center">
-          <Languages className="mr-2 h-4 w-4" />
+          <LanguagesIcon className="mr-2 h-4 w-4" />
           <span>{t('language')}</span>
         </div>
         <DropDown />

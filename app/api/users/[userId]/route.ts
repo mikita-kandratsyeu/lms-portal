@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { createCsmIssue } from '@/actions/csm/create-csm-issue';
 import { deleteFiles } from '@/actions/uploadthing/delete-files';
-import { uploadFiles } from '@/actions/uploadthing/upload-files';
 import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
 import { stripe } from '@/server/stripe';
@@ -51,29 +50,16 @@ export const PATCH = async (req: NextRequest, props: RequestProps) => {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    const { notification, settings, base64, pictureUrl, ...values } = await req.json();
+    const { notification, settings, pictureUrl, ...values } = await req.json();
+    const fileName = pictureUrl === null ? user?.image?.split('/')?.pop() ?? '' : null;
 
-    let updatedPicture = pictureUrl;
-
-    if (base64) {
-      const files = await uploadFiles([
-        {
-          base64,
-          contentType: 'image/png',
-          name: `${userId}_profile-picture.png`,
-        },
-      ]);
-
-      updatedPicture = files[0].data?.ufsUrl ?? pictureUrl;
-    }
-
-    if (pictureUrl === null || base64) {
-      await deleteFiles([user?.image?.split('/')?.pop() ?? '']);
+    if (fileName) {
+      await deleteFiles([fileName]);
     }
 
     const updatedUser = await db.user.update({
       where: { id: userId },
-      data: { ...values, pictureUrl: updatedPicture },
+      data: { ...values, pictureUrl },
     });
 
     if (settings) {

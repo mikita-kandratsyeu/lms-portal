@@ -16,12 +16,7 @@ export const metadata: Metadata = {
   description: PLATFORM_DESCRIPTION,
 };
 
-type DashboardPageProps = {
-  searchParams: Promise<{ filter: string | null }>;
-};
-
-const DashboardPage = async (props: DashboardPageProps) => {
-  const searchParams = await props.searchParams;
+const DashboardPage = async () => {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -29,7 +24,6 @@ const DashboardPage = async (props: DashboardPageProps) => {
   }
 
   const { completedCourses, coursesInProgress, filterCourses } = await getDashboardCourses({
-    filter: searchParams?.filter,
     userId: user.userId,
   });
 

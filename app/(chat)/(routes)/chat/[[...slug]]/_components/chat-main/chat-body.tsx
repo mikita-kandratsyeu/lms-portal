@@ -1,7 +1,8 @@
 'use client';
 
-import { ArrowDown, Loader } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { ChatConversationStarters } from '@prisma/client';
+import { ArrowDown } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import React, {
   createContext,
   memo,
@@ -13,14 +14,18 @@ import React, {
 } from 'react';
 import ScrollToBottom, { useScrollToBottom, useSticky } from 'react-scroll-to-bottom';
 
+import { ChatStarters } from '@/components/chat/chat-starters';
 import { Button } from '@/components/ui';
+import { Spinner } from '@/components/ui/spinner';
 import { ChatCompletionRole } from '@/constants/ai/general';
+import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
+import { getConversationStartersByLanguage } from '@/lib/chat/conversation-starters';
 import { cn } from '@/lib/utils';
 
 import { ChatBubble } from './chat-bubble';
-import { ChatIntro } from './chat-intro';
+import { ChatGreeting } from './chat-greeting';
 
 const ChatScrollContext = createContext({
   sticky: false,
@@ -56,7 +61,6 @@ const Content = ({ children }: ContentProps) => {
 type ChatBodyProps = {
   assistantImage?: string;
   assistantMessage?: string;
-  introMessages: string[];
   isShared?: boolean;
   isSubmitting?: boolean;
   onSubmit: (
@@ -72,7 +76,6 @@ type ChatBodyProps = {
 const ChatBodyComponent = ({
   assistantImage,
   assistantMessage,
-  introMessages,
   isShared,
   isSubmitting,
   onSubmit,
@@ -80,8 +83,11 @@ const ChatBodyComponent = ({
   sharedPicture,
 }: ChatBodyProps) => {
   const t = useTranslations('chat.body');
+  const locale = useLocale();
 
   const { user } = useCurrentUser();
+
+  const { currentAgent } = useAiAgentStore((state) => ({ currentAgent: state.currentAgent }));
   const { chatMessages, conversationId } = useChatStore((state) => ({
     chatMessages: state.chatMessages,
     conversationId: state.conversationId,
@@ -93,6 +99,15 @@ const ChatBodyComponent = ({
   const messages = chatMessages[conversationId] ?? [];
   const hasMessages = Boolean(messages.length);
 
+  const conversationStarters = useMemo(
+    () =>
+      getConversationStartersByLanguage<ChatConversationStarters>(
+        currentAgent?.chatConversationStarters,
+        locale,
+      ),
+    [currentAgent?.chatConversationStarters, locale],
+  );
+
   const value = useMemo(
     () => ({ sticky, scrollToBottom, setSticky, setScrollToBottom }),
     [scrollToBottom, sticky],
@@ -101,8 +116,18 @@ const ChatBodyComponent = ({
   return (
     <ChatScrollContext.Provider value={value}>
       {!hasMessages && !isShared && (
-        <div className="flex flex-col items-center justify-start gap-y-2 h-full">
-          <ChatIntro introMessages={introMessages} onSubmit={onSubmit} />
+        <div className="flex flex-col items-center justify-center gap-y-2 h-full w-full">
+          <div className="h-full flex flex-col gap-y-2">
+            <ChatGreeting
+              assistantName={currentAgent?.name}
+              assistantPicture={currentAgent?.pictureUrl}
+            />
+            <ChatStarters
+              callback={(event, message) => onSubmit(event, { userMessage: message })}
+              isAnimated
+              starters={conversationStarters}
+            />
+          </div>
         </div>
       )}
       <div className={cn(isShared ? 'h-[calc(100%-4rem)]' : 'h-[calc(100%-17rem)]', 'relative')}>
@@ -121,7 +146,7 @@ const ChatBodyComponent = ({
                   }
 
                   if (isAssistant) {
-                    return ['Nova Copilot', null];
+                    return [currentAgent?.name ?? 'Copilot', currentAgent?.pictureUrl];
                   }
 
                   return [user?.name || 'Current User', user?.image];
@@ -141,11 +166,10 @@ const ChatBodyComponent = ({
                   </div>
                 );
               })}
-
               <div className="flex flex-1 text-base md:px-5 lg:px-1 xl:px-5 mx-auto gap-3 md:max-w-3xl lg:max-w-[40rem] xl:max-w-4xl px-4 first:mt-4 last:mb-6">
                 {!assistantMessage && isSubmitting && (
                   <div className="flex gap-x-2 items-center px-6 w-full mt-4">
-                    <Loader className="h-4 w-4 animate-spin text-muted-foreground" />
+                    <Spinner className="h-4 w-4 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground animate-pulse">
                       {t('image-loading')}
                     </p>
@@ -153,10 +177,11 @@ const ChatBodyComponent = ({
                 )}
                 {assistantMessage && (
                   <ChatBubble
-                    streamImage={assistantImage}
                     isSubmitting={isSubmitting}
                     message={{ role: ChatCompletionRole.ASSISTANT, content: '' }}
-                    name="Nova Copilot"
+                    name={currentAgent?.name ?? 'Copilot'}
+                    picture={currentAgent?.pictureUrl}
+                    streamImage={assistantImage}
                     streamMessage={assistantMessage}
                   />
                 )}

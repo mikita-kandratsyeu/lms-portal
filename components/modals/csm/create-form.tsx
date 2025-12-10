@@ -173,7 +173,7 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm mt-2 text-neutral-500 italic text-center">
+                    <p className="text-sm mt-2 text-muted-foreground italic text-center">
                       {t('notFound')}
                     </p>
                   )}

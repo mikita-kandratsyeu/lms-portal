@@ -39,8 +39,19 @@ export const NavBarRoutes = ({ globalProgress, userNotifications }: NavBarRoutes
   const isStudentPage = pathname?.includes('/chapter') && !pathname?.includes('/teacher');
   const isTeacherPage = pathname?.startsWith('/teacher');
   const isDocsPage = pathname?.startsWith('/docs');
+  const isAiAgentsPage = pathname?.startsWith('/ai-agents');
 
   const isLoading = status === AuthStatus.LOADING;
+
+  const showGoBackButton =
+    isCoursePage ||
+    isStudentPage ||
+    isTeacherPage ||
+    isChatPage ||
+    isSettingsPage ||
+    isDocsPage ||
+    isOwnerPage ||
+    isAiAgentsPage;
 
   return (
     <>
@@ -64,23 +75,19 @@ export const NavBarRoutes = ({ globalProgress, userNotifications }: NavBarRoutes
           )}
           {user?.userId && (
             <>
-              {(isCoursePage ||
-                isStudentPage ||
-                isTeacherPage ||
-                isChatPage ||
-                isSettingsPage ||
-                isDocsPage ||
-                isOwnerPage) && (
+              {showGoBackButton && (
                 <Link href="/">
                   <Button size="sm" variant="ghost">
                     <LogOut className="h-4 w-4 mr-2" />
                     {t(
-                      isTeacherPage || isOwnerPage || isChatPage || isDocsPage ? 'exit' : 'backTo',
+                      isTeacherPage || isOwnerPage || isChatPage || isDocsPage || isAiAgentsPage
+                        ? 'exit'
+                        : 'backTo',
                     )}
                   </Button>
                 </Link>
               )}
-              {!isChatPage && <Chat />}
+              {!isChatPage && !isAiAgentsPage && <Chat />}
               <Notifications userNotifications={userNotifications} />
             </>
           )}

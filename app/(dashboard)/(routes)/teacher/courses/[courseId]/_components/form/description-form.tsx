@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { StreamText } from '@/components/ai/stream-text';
+import { StreamText } from '@/components/ai-agents/stream-text';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -111,7 +111,10 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
       </div>
       {!isEditing && (
         <p
-          className={cn('text-sm mt-4', !initialData.description && 'text-neutral-500 italic mt-2')}
+          className={cn(
+            'text-sm mt-4',
+            !initialData.description && 'text-muted-foreground italic mt-2',
+          )}
         >
           {initialData.description || 'No description'}
         </p>

@@ -8,7 +8,7 @@ import { TEN_MINUTE_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
 import { extractValidJson } from '@/lib/utils';
 
-import { generateCompletion } from '../ai/generate-completion';
+import { generateCompletion } from '../ai/common/generate-completion';
 
 export const getLoginQuote = async () => {
   const locale = await getLocale();
@@ -19,7 +19,7 @@ export const getLoginQuote = async () => {
       async () => {
         const response = await generateCompletion({
           instructions:
-            'You are a machine that only returns JSON object format without unnecessary symbols.',
+            'You are a machine that returns ONLY with valid JSON format without unnecessary symbols.',
           input: [
             {
               content: `Generate a quote from a famous philosopher. Language code is ${locale}. Write it down in JSON format - {"quote": "Quote", "author": "Quote the author"}`,

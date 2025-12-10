@@ -4,7 +4,6 @@ import { format } from 'date-fns/format';
 import { FileText, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { BiLoaderAlt } from 'react-icons/bi';
 
 import {
   Button,
@@ -13,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui';
+import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/components/ui/use-toast';
 import { TIMESTAMP_EMAIL_TEMPLATE } from '@/constants/common';
 import { fetcher } from '@/lib/fetcher';
@@ -72,7 +72,7 @@ export const ColumnActions = ({ userId }: ColumnActionsProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="h-4 w-8 p-0" variant="ghost" disabled={isFetching}>
-          {isFetching && <BiLoaderAlt className="h-4 w-4 animate-spin" />}
+          {isFetching && <Spinner className="h-4 w-4" />}
           {!isFetching && (
             <>
               <span className="sr-only">Open menu</span>

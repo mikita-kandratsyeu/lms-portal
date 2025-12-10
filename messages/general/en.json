@@ -127,11 +127,16 @@
   },
   "profile-image-modal": {
     "accInfoUpdated": "Account information updated",
+    "agentBody": "Add a photo, it will make your AI agent more attractive and interesting.",
     "body": "Add a photo, it will make your profile more attractive and interesting.",
-    "delete": "Delete a profile picture",
+    "delete": "Delete picture",
     "footer": "You can upload an image in JPG, GIF or PNG format.",
-    "title": "Profile Picture",
+    "title": "Add a photo",
     "upload": "Upload picture"
+  },
+  "file-upload-modal": {
+    "footer": "You can upload an image or a PDF file.",
+    "title": "Upload File"
   },
   "footer": {
     "and": "and",
@@ -152,6 +157,7 @@
     }
   },
   "sidebar": {
+    "ai-agents": "AI agents",
     "analytics": "Analytics",
     "billingAndSubscription": "Billing & Subscription",
     "browse": "Browse",
@@ -320,6 +326,7 @@
       "title": "What can I assist you with today?"
     },
     "conversation": {
+      "ai-agents": "AI agents",
       "add": "New conversation",
       "clear": "Clear the conversation",
       "conversations": "Conversations",
@@ -329,7 +336,7 @@
       "removed-conversation": "The conversation \"{conversation}\" has been successfully deleted.",
       "share": "Share",
       "title": "New conversation",
-      "view": "View all conversations"
+      "view": "All conversations"
     },
     "input": {
       "ask": "Ask",
@@ -435,6 +442,7 @@
   },
   "settings": {
     "advancedOptions": "Advanced Options",
+    "mfaOptions": "Multi-Factor Authentication",
     "connectedAccounts": "Connected accounts",
     "deleteAcc": "Delete Account",
     "general": "General Settings",
@@ -457,19 +465,19 @@
       }
     },
     "publicProfileForm": {
-      "body": "Change the visibility of your profile",
+      "body": "Change the visibility of your profile.",
       "title": "Enable Public Profile",
       "visibilityUpdated": "Visibility updated"
     },
     "otpForm": {
       "addedAt": "Added at { date }",
-      "body": "Two-factor authentication adds an additional layer of security to your account",
+      "body": "Use an authenticator app to get multi-factor authentication codes when prompted.",
       "disable": "Disable",
       "disabled": "Disabled",
       "enable": "Enable",
       "enabled": "Enabled",
       "otpDisabled": "2FA authentication is disabled",
-      "title": "Enable 2FA"
+      "title": "Authenticator App"
     },
     "billing": {
       "activePlan": "Active Plan",
@@ -500,7 +508,7 @@
     },
     "new-tab-copilot": {
       "title": "Nova Copilot in a new tab",
-      "body": "Open the chat always in a new tab"
+      "body": "Open the chat always in a new tab."
     }
   },
   "file-upload": {
@@ -539,6 +547,12 @@
       "afternoon": "Good afternoon, { name } 👋",
       "evening": "Good evening, { name } 👋",
       "morning": "Good morning, { name } 👋"
+    }
+  },
+  "ai-agent": {
+    "sheet": {
+      "general": "Configuration",
+      "primaryLLM": "Primary LLM Model"
     }
   }
 }

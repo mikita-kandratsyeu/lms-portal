@@ -2,6 +2,7 @@ import { compareAsc } from 'date-fns/compareAsc';
 import { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
+import { getAgentsAmount } from '@/actions/ai/agent/get-agents-amount';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getChatConversations } from '@/actions/chat/get-chat-conversations';
 import { getGlobalProgress } from '@/actions/courses/get-global-progress';
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
   title: 'Nova Copilot',
   description: 'Nova Copilot',
   icons: {
-    icon: '/assets/copilot.ico',
+    icon: '/assets/copilot.svg',
   },
 };
 
@@ -43,6 +44,7 @@ const ChatLayout = async ({ children, params }: ChatLayoutProps) => {
     take: 5,
   });
   const conversations = isEmbed || isShared ? [] : await getChatConversations({});
+  const agentsAmount = isEmbed || isShared ? 0 : await getAgentsAmount();
 
   if (slug?.length && !(isEmbed || isShared)) {
     notFound();
@@ -78,7 +80,7 @@ const ChatLayout = async ({ children, params }: ChatLayoutProps) => {
             </div>
             {!isShared && (
               <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-48">
-                <ChatSideBar conversations={conversations} />
+                <ChatSideBar agentsAmount={agentsAmount} conversations={conversations} />
               </div>
             )}
           </>

@@ -43,14 +43,6 @@ export const ourFileRouter = {
   chapterVideo: f({ video: { maxFileSize: '2GB', maxFileCount: 1 } })
     .middleware(() => handleAuth())
     .onUploadComplete(() => {}),
-  profilePicture: f({
-    image: {
-      maxFileSize: '8MB',
-      maxFileCount: 1,
-    },
-  })
-    .middleware(() => handleAuth())
-    .onUploadComplete(() => {}),
   csmAttachments: f({
     pdf: {
       maxFileSize: '16MB',
@@ -61,6 +53,16 @@ export const ourFileRouter = {
       maxFileCount: 4,
     },
     video: { maxFileSize: '512MB', maxFileCount: 1 },
+  }).onUploadComplete(() => {}),
+  chatAttachments: f({
+    pdf: {
+      maxFileSize: '8MB',
+      maxFileCount: 1,
+    },
+    image: {
+      maxFileSize: '8MB',
+      maxFileCount: 1,
+    },
   }).onUploadComplete(() => {}),
 } satisfies FileRouter;
 

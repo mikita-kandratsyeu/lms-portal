@@ -4,12 +4,13 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
 }
 
 // User
 model User {
   id                  String                   @id @default(uuid())
+  aiAgents            AiAgent[]
+  connectedAiAgents   AiAgentConnection[]      @relation("ConnectedAiAgents")
   conversations       ChatConversation[]
   copilotRequestLimit CopilotRequestLimit?
   courses             Course[]
@@ -317,11 +318,6 @@ model CsmIssue {
 }
 
 // Copilot & Chat
-enum ChatFeedback {
-  positive
-  negative
-}
-
 model CopilotRequestLimit {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now())
@@ -340,24 +336,12 @@ model ChatMessage {
   conversation    ChatConversation?           @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId  String?
   createdAt       DateTime                    @default(now())
-  feedback        ChatMessageFeedback?
   imageGeneration ChatImageGenerationMessage?
   model           String
   role            String
   updatedAt       DateTime                    @updatedAt
 
   @@index([conversationId])
-}
-
-model ChatMessageFeedback {
-  id        String       @id @default(uuid())
-  createdAt DateTime     @default(now())
-  feedback  ChatFeedback
-  message   ChatMessage  @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  messageId String       @unique
-  updatedAt DateTime     @updatedAt
-
-  @@index([messageId])
 }
 
 model ChatImageGenerationMessage {
@@ -375,9 +359,10 @@ model ChatImageGenerationMessage {
 
 model ChatConversation {
   id        String                  @id @default(uuid())
+  aiAgent   AiAgent?                @relation(fields: [aiAgentId], references: [id], onDelete: Cascade)
+  aiAgentId String?
   createdAt DateTime                @default(now())
   messages  ChatMessage[]
-  position  Int
   shared    ChatSharedConversation?
   title     String
   updatedAt DateTime                @updatedAt
@@ -400,4 +385,77 @@ model ChatSharedConversation {
   userId         String?
 
   @@index([conversationId])
+}
+
+model ChatConversationStarters {
+  id        String   @id @default(uuid())
+  aiAgent   AiAgent? @relation(fields: [aiAgentId], references: [id], onDelete: Cascade)
+  aiAgentId String?
+  createdAt DateTime @default(now())
+  language  String?  @default("en")
+  text      String
+  updatedAt DateTime @updatedAt
+
+  @@index([aiAgentId])
+}
+
+// AI Agents
+enum AiModelFeature {
+  image
+  file
+  reasoning
+  text
+  search
+}
+
+model AiModel {
+  id             String           @id @default(uuid())
+  aiAgents       AiAgent[]
+  createdAt      DateTime         @default(now())
+  features       AiModelFeature[] @default([])
+  isDefault      Boolean?         @default(false)
+  isSubscription Boolean?         @default(false)
+  name           String
+  provider       String
+  providerName   String
+  updatedAt      DateTime         @updatedAt
+  value          String
+}
+
+model AiAgent {
+  id                       String                     @id @default(uuid())
+  aiModels                 AiModel[]
+  chatConversationStarters ChatConversationStarters[]
+  chatConversations        ChatConversation[]
+  connectedUsers           AiAgentConnection[]        @relation("ConnectedUsers")
+  createdAt                DateTime                   @default(now())
+  description              String?                    @db.Text
+  isDefault                Boolean?                   @default(false)
+  isDraft                  Boolean                    @default(true)
+  isPublic                 Boolean                    @default(false)
+  isSystem                 Boolean?                   @default(false)
+  language                 String?                    @default("en")
+  name                     String                     @db.Text
+  pictureUrl               String?
+  systemInstruction        String?                    @db.Text
+  systemTag                String?                    @db.Text
+  temperature              Float?
+  updatedAt                DateTime                   @updatedAt
+  user                     User?                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                   String?
+
+  @@index([userId])
+}
+
+model AiAgentConnection {
+  id        String   @id @default(uuid())
+  aiAgent   AiAgent  @relation("ConnectedUsers", fields: [aiAgentId], references: [id], onDelete: Cascade)
+  aiAgentId String
+  createdAt DateTime @default(now())
+  user      User     @relation("ConnectedAiAgents", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@unique([userId, aiAgentId])
+  @@index([aiAgentId])
+  @@index([userId])
 }

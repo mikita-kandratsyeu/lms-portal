@@ -90,7 +90,7 @@ export const AttachmentForm = ({ initialData, courseId }: AttachmentProps) => {
               ))}
             </div>
           ) : (
-            <p className="text-sm mt-2 text-neutral-500 italic">No attachments</p>
+            <p className="text-sm mt-2 text-muted-foreground italic">No attachments</p>
           )}
         </>
       )}

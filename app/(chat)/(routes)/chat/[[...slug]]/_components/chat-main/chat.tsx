@@ -1,19 +1,19 @@
 'use client';
 
-import { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AiModelFeature } from '@prisma/client';
+import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Conversation } from '@/actions/chat/get-chat-conversations';
-import { getChatInitial } from '@/actions/chat/get-chat-initial';
 import { ChatSkeleton } from '@/components/loaders/chat-skeleton';
 import { useToast } from '@/components/ui/use-toast';
 import { ChatCompletionRole } from '@/constants/ai/general';
 import { CONVERSATION_ACTION } from '@/constants/chat';
-import { useAppConfigStore } from '@/hooks/store/use-app-config-store';
+import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useLocaleStore } from '@/hooks/store/use-locale-store';
 import { useHydration } from '@/hooks/use-hydration';
-import { getChatMessages } from '@/lib/chat';
+import { getChatMessages } from '@/lib/chat/chat';
 import { fetcher } from '@/lib/fetcher';
 
 import { ChatBody } from './chat-body';
@@ -25,31 +25,26 @@ type Message = Conversation['messages'][0];
 
 type ChatProps = {
   conversations?: Conversation[];
-  initialData: Awaited<ReturnType<typeof getChatInitial>>;
   isEmbed?: boolean;
   isShared?: boolean;
 };
 
-export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: ChatProps) => {
+export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
   const { toast } = useToast();
 
   const {
+    activeFeature,
     chatMessages,
     conversationId,
-    currentModel,
-    currentModelLabel,
-    hasSearch,
-    isImageGeneration,
-    isSearchMode,
     setChatMessages,
     setConversationId,
-    setCurrentModel,
-    setCurrentModelLabel,
-    setHasSearch,
     setIsFetching,
   } = useChatStore();
-  const { config: appConfig } = useAppConfigStore((state) => ({
-    config: state.config,
+
+  const { currentAgent, currentModel, setCurrentModel } = useAiAgentStore((state) => ({
+    currentAgent: state.currentAgent,
+    currentModel: state.currentModel,
+    setCurrentModel: state.setCurrentModel,
   }));
   const localeInfo = useLocaleStore((state) => state.localeInfo);
 
@@ -62,14 +57,8 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const IMAGE_MODELS = useMemo(
-    () => appConfig?.ai.flatMap((ai) => ai['image-models']) ?? [],
-    [appConfig?.ai],
-  );
-  const TEXT_MODELS = useMemo(
-    () => appConfig?.ai.flatMap((ai) => ai['text-models']) ?? [],
-    [appConfig?.ai],
-  );
+  const isImageGenerationActive = activeFeature === AiModelFeature.image;
+  const isWebSearchActive = activeFeature === AiModelFeature.search;
 
   useEffect(() => {
     if (conversations.length) {
@@ -79,25 +68,9 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
         setConversationId(conversations[0].id);
       }
 
-      setCurrentModel(currentModel || TEXT_MODELS?.[0]?.value || '');
-      setCurrentModelLabel(currentModelLabel || TEXT_MODELS?.[0]?.label || '');
       setChatMessages(chatMessages);
-      setHasSearch(hasSearch || TEXT_MODELS?.[0]?.hasSearch || false);
     }
-  }, [
-    TEXT_MODELS,
-    conversations,
-    currentModel,
-    currentModelLabel,
-    hasSearch,
-    isEmbed,
-    isShared,
-    setChatMessages,
-    setConversationId,
-    setCurrentModel,
-    setCurrentModelLabel,
-    setHasSearch,
-  ]);
+  }, [conversations, isEmbed, isShared, setChatMessages, setConversationId, setCurrentModel]);
 
   const saveLastMessages = useCallback(
     async (
@@ -108,16 +81,16 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
       const response = await fetcher.post('/api/chat', {
         body: {
           conversationId,
-          image: isImageGeneration
+          image: isImageGenerationActive
             ? {
                 messageId: assistMessage.id,
-                model: IMAGE_MODELS[0].value,
+                model: currentModel?.value,
                 revisedPrompt: assistMessage.content,
                 url: assistMessage.url,
               }
             : null,
           messages: [userMessage, assistMessage],
-          model: currentModel,
+          model: currentModel?.value,
         },
         responseType: 'json',
       });
@@ -133,19 +106,11 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
         setChatMessages(updatedChatMessages);
       }
     },
-    [
-      chatMessages,
-      currentModel,
-      isImageGeneration,
-      IMAGE_MODELS,
-      setAssistantMessage,
-      setAssistantImage,
-      setChatMessages,
-    ],
+    [isImageGenerationActive, currentModel?.value, chatMessages, setChatMessages],
   );
 
   const handleSubmit = useCallback(
-    async (event: SyntheticEvent, options?: { userMessage?: string; regenerate?: boolean }) => {
+    async (event: SyntheticEvent, options?: { userMessage?: string }) => {
       event.preventDefault();
 
       setIsSubmitting(true);
@@ -190,14 +155,12 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
         return;
       }
 
-      if (!options?.regenerate) {
-        const updatedChatMessages = {
-          ...chatMessages,
-          [currentConversationId]: [...messages, ...messagesForApi],
-        };
+      const updatedChatMessages = {
+        ...chatMessages,
+        [currentConversationId]: [...messages, ...messagesForApi],
+      };
 
-        setChatMessages(updatedChatMessages);
-      }
+      setChatMessages(updatedChatMessages);
 
       setAssistantMessage('');
       setCurrentMessage('');
@@ -206,11 +169,12 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
       let streamAssistImage = '';
 
       try {
-        if (isImageGeneration) {
+        if (isImageGenerationActive) {
           const imageGeneration = await fetcher.post('api/ai/image', {
             responseType: 'json',
             body: {
-              model: IMAGE_MODELS[0].value,
+              agentId: currentAgent?.id,
+              modelId: currentModel?.id,
               prompt: currentMessage,
             },
             cache: 'no-cache',
@@ -230,16 +194,17 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
 
           const completionStream = await fetcher.post('/api/ai/completions', {
             body: {
-              input: [...messages, ...(options?.regenerate ? [] : messagesForApi)].map(
-                ({ content, role }) => ({
-                  content,
-                  role,
-                }),
-              ),
-              isSearch: isSearchMode,
+              input: [...messages, ...messagesForApi].map(({ content, role }) => ({
+                content,
+                role,
+              })),
+              agentId: currentAgent?.id,
+              instructions: currentAgent?.systemInstruction,
+              isSearch: isWebSearchActive,
               localeInfo,
-              model: currentModel,
+              modelId: currentModel?.id,
               stream: true,
+              temperature: currentAgent?.temperature,
             },
             cache: 'no-cache',
             headers: {
@@ -304,15 +269,17 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
       }
     },
     [
-      IMAGE_MODELS,
       assistantMessage,
       chatMessages,
       conversationId,
+      currentAgent?.id,
+      currentAgent?.systemInstruction,
+      currentAgent?.temperature,
       currentMessage,
-      currentModel,
+      currentModel?.id,
       isEmbed,
-      isImageGeneration,
-      isSearchMode,
+      isImageGenerationActive,
+      isWebSearchActive,
       localeInfo,
       saveLastMessages,
       setChatMessages,
@@ -346,7 +313,6 @@ export const Chat = ({ conversations = [], initialData, isEmbed, isShared }: Cha
           <ChatBody
             assistantImage={assistantImage}
             assistantMessage={assistantMessage}
-            introMessages={initialData.introMessages}
             isShared={isShared}
             isSubmitting={isSubmitting}
             onSubmit={handleSubmit}

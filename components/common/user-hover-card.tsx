@@ -17,15 +17,20 @@ import { TextBadge } from './text-badge';
 
 type UserHoverCardProps = {
   children: React.ReactNode;
+  isDisabledHover?: boolean;
   userId: string;
 };
 
-export const UserHoverCard = ({ children, userId }: UserHoverCardProps) => {
+export const UserHoverCard = ({ children, isDisabledHover, userId }: UserHoverCardProps) => {
   const t = useTranslations('profileButton');
 
   const { toast } = useToast();
 
   const [user, setUser] = useState<(User & { hasSubscription?: boolean }) | null>(null);
+
+  if (isDisabledHover) {
+    return children;
+  }
 
   const fetchUserData = async () => {
     try {
@@ -57,8 +62,8 @@ export const UserHoverCard = ({ children, userId }: UserHoverCardProps) => {
       </HoverCardTrigger>
       <HoverCardContent className="w-70">
         {user && (
-          <div className="flex justify-center space-x-4">
-            <Avatar className="border dark:border-muted-foreground w-12 h-12">
+          <div className="flex space-x-4 items-center mb-4">
+            <Avatar className="border dark:border-muted-foreground w-10 h-10">
               <AvatarImage src={user.pictureUrl ?? ''} />
               <AvatarFallback>{getFallbackName(user.name ?? '')}</AvatarFallback>
             </Avatar>
@@ -72,7 +77,7 @@ export const UserHoverCard = ({ children, userId }: UserHoverCardProps) => {
               <p className="text-xs leading-none text-muted-foreground">{t(user?.role)}</p>
               <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
               <div className="flex items-center pt-2">
-                <CalendarDays className="mr-1 h-4 w-4 text-neutral-500" />
+                <CalendarDays className="mr-1 h-4 w-4 text-muted-foreground" />
                 <span className="text-xs text-muted-foreground">
                   {t('joined', { date: format(user.createdAt, TIMESTAMP_PREVIEW_TEMPLATE) })}
                 </span>

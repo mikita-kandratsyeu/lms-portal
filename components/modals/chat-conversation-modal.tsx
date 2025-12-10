@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, RefreshCcw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/form';
 import { CONVERSATION_ACTION } from '@/constants/chat';
 import { useChatStore } from '@/hooks/store/use-chat-store';
-import { generateConversationTitle } from '@/lib/chat';
+import { generateConversationTitle } from '@/lib/chat/chat';
 import { fetcher } from '@/lib/fetcher';
 import { absoluteUrl, cn } from '@/lib/utils';
 
@@ -39,6 +39,7 @@ import { useToast } from '../ui/use-toast';
 type ChatConversationModalProps = {
   initialData?: Conversation;
   isEdit?: boolean;
+  isShare?: boolean;
   open?: boolean;
   setOpen?: (value: boolean) => void;
 };
@@ -52,6 +53,7 @@ const formSchema = z.object({
 export const ChatConversationModal = ({
   initialData,
   isEdit = false,
+  isShare = false,
   open = false,
   setOpen,
 }: ChatConversationModalProps) => {
@@ -75,6 +77,18 @@ export const ChatConversationModal = ({
   });
 
   const { isSubmitting, isValid } = form.formState;
+
+  const title = useMemo(() => {
+    if (isEdit) {
+      return t('titleEdit');
+    }
+
+    if (isShare) {
+      return t('sharedAccess');
+    }
+
+    return t('titleAdd');
+  }, [isEdit, isShare, t]);
 
   const [isUpdatingSharedLink, setIsUpdatingSharedLink] = useState(false);
   const [sharedLink, setSharedLink] = useState(
@@ -131,17 +145,23 @@ export const ChatConversationModal = ({
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = isEdit
-        ? await fetcher.patch(
-            `/api/chat/conversations/${initialData?.id}?action=${CONVERSATION_ACTION.EDIT}`,
-            { body: { ...values }, responseType: 'json' },
-          )
-        : await fetcher.post(`/api/chat/conversations?action=${CONVERSATION_ACTION.NEW}`, {
-            body: { ...values },
-            responseType: 'json',
-          });
+      const response =
+        isEdit || isShare
+          ? await fetcher.patch(
+              `/api/chat/conversations/${initialData?.id}?action=${CONVERSATION_ACTION.EDIT}`,
+              { body: { ...values }, responseType: 'json' },
+            )
+          : await fetcher.post(`/api/chat/conversations?action=${CONVERSATION_ACTION.NEW}`, {
+              body: { ...values },
+              responseType: 'json',
+            });
 
       setConversationId(response?.id ?? '');
+
+      if (!isEdit && !isShare) {
+        router.replace('/chat');
+      }
+
       router.refresh();
     } catch (error) {
       toast({ isError: true });
@@ -155,42 +175,43 @@ export const ChatConversationModal = ({
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{t(isEdit ? 'titleEdit' : 'titleAdd')}</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{t('description')}</DialogDescription>
           </DialogHeader>
           <Form {...form}>
             <form className="space-y-4 mt-4" onSubmit={form.handleSubmit(handleSubmit)}>
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>{t('title')}</FormLabel>
-                    <FormControl>
-                      <div className="flex gap-2">
-                        <Input
-                          {...field}
-                          aria-hidden="true"
-                          disabled={isSubmitting}
-                          placeholder="e.g. New conversation"
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => handleGenerateTitle(field.onChange)}
-                          disabled={isSubmitting || isUpdatingSharedLink}
-                        >
-                          <RefreshCcw className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {isEdit && (
+              {!isShare && (
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>{t('title')}</FormLabel>
+                      <FormControl>
+                        <div className="flex gap-2">
+                          <Input
+                            {...field}
+                            aria-hidden="true"
+                            disabled={isSubmitting}
+                            placeholder="e.g. New conversation"
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => handleGenerateTitle(field.onChange)}
+                            disabled={isSubmitting || isUpdatingSharedLink}
+                          >
+                            <RefreshCcw className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {isShare && (
                 <>
-                  <p className="text-sm font-medium pt-2">{t('sharedAccess')}</p>
                   <FormField
                     control={form.control}
                     name="isShared"
@@ -234,8 +255,8 @@ export const ChatConversationModal = ({
                 </>
               )}
               <DialogFooter className="pt-4">
-                <div className={cn('w-full flex', isEdit ? 'justify-between' : 'justify-end')}>
-                  {isEdit && (
+                <div className={cn('w-full flex', isShare ? 'justify-between' : 'justify-end')}>
+                  {isShare && (
                     <Button
                       disabled={
                         isSubmitting || !sharedLink || isUpdatingSharedLink || !watchIsShared
@@ -250,13 +271,15 @@ export const ChatConversationModal = ({
                       </div>
                     </Button>
                   )}
-                  <Button
-                    disabled={!isValid || isSubmitting || isUpdatingSharedLink}
-                    isLoading={isSubmitting}
-                    type="submit"
-                  >
-                    {t('submit')}
-                  </Button>
+                  {!isShare && (
+                    <Button
+                      disabled={!isValid || isSubmitting || isUpdatingSharedLink}
+                      isLoading={isSubmitting}
+                      type="submit"
+                    >
+                      {t('submit')}
+                    </Button>
+                  )}
                 </div>
               </DialogFooter>
             </form>

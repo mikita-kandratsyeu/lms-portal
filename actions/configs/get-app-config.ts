@@ -5,17 +5,6 @@ import { promises as fs } from 'fs';
 import { getGithubContents } from '../github/get-contents';
 
 export type GetAppConfig = {
-  ai: {
-    'image-models': { value: string; label: string; owner: string; isSubscription: boolean }[];
-    'text-models': {
-      hasSearch?: boolean;
-      isSubscription: boolean;
-      label: string;
-      owner: string;
-      value: string;
-    }[];
-    provider: string;
-  }[];
   auth: {
     allowNewUsers: boolean;
     allowNewUserSubscriptions: boolean;
@@ -36,13 +25,6 @@ export const getAppConfig = async (): Promise<GetAppConfig> => {
     console.error('[GET_APP_CONFIG_ACTION]', error);
 
     return {
-      ai: [
-        {
-          'image-models': [],
-          'text-models': [],
-          provider: 'ollama',
-        },
-      ],
       auth: {
         allowNewUsers: false,
         allowNewUserSubscriptions: false,

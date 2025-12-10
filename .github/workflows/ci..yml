@@ -10,6 +10,8 @@ jobs:
   build:
     name: CodeBuild
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
     steps:
       - uses: actions/checkout@v3
 

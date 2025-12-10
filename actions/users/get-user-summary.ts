@@ -7,7 +7,7 @@ import { ChatCompletionRole } from '@/constants/ai/general';
 import { USER_SUMMARY } from '@/constants/ai/prompts';
 import { extractValidJson } from '@/lib/utils';
 
-import { generateCompletion } from '../ai/generate-completion';
+import { generateCompletion } from '../ai/common/generate-completion';
 
 export const getUserSummary = async <T>(data: T) => {
   const locale = await getLocale();
@@ -15,7 +15,7 @@ export const getUserSummary = async <T>(data: T) => {
   try {
     const response: any = await generateCompletion({
       instructions:
-        'You are a machine that only returns JSON object format without unnecessary symbols.',
+        'You are a machine that returns ONLY with valid JSON format without unnecessary symbols.',
       input: [
         {
           content: USER_SUMMARY(data, locale),

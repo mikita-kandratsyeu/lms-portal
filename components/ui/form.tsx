@@ -106,6 +106,7 @@ const FormControl = React.forwardRef<
 
   return (
     <Slot
+      className="flex"
       ref={ref}
       id={formItemId}
       aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}

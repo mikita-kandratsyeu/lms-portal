@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { CONVERSATION_ACTION } from '@/constants/chat';
-import { generateConversationTitle } from '@/lib/chat';
+import { generateConversationTitle } from '@/lib/chat/chat';
 import db from '@/lib/db';
 
 export const PATCH = async (

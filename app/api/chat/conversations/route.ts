@@ -2,8 +2,9 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { CONVERSATION_ACTION, LIMIT_CONVERSATION_TITLE } from '@/constants/chat';
-import { generateConversationTitle } from '@/lib/chat';
+import { LIMIT_CONVERSATION_TITLE } from '@/constants/ai/general';
+import { CONVERSATION_ACTION } from '@/constants/chat';
+import { generateConversationTitle } from '@/lib/chat/chat';
 import db from '@/lib/db';
 
 export const POST = async (req: NextRequest) => {
@@ -25,18 +26,11 @@ export const POST = async (req: NextRequest) => {
     if (action === CONVERSATION_ACTION.NEW) {
       const { title } = await req.json();
 
-      await db.chatConversation.updateMany({
-        where: { userId: user?.userId },
-        data: {
-          position: {
-            increment: 1,
-          },
-        },
-      });
+      const defaultAgent = await db.aiAgent.findFirst({ where: { isDefault: true } });
 
       const newChatConversation = await db.chatConversation.create({
         data: {
-          position: 0,
+          aiAgentId: defaultAgent?.id,
           title: title?.slice(0, LIMIT_CONVERSATION_TITLE) || generateConversationTitle(),
           userId: user?.userId,
         },

@@ -32,7 +32,7 @@ const toast =
     type = 'info',
   }: Toast) => {
     if (isError) {
-      return soonerToast.error(t('error.title'), { description: t('error.body') });
+      return soonerToast.error(t('error.title'), { description: description || t('error.body') });
     }
 
     if (promiseData) {

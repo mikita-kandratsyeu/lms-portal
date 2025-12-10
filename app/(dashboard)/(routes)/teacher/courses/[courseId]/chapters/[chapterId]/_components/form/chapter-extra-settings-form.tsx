@@ -102,7 +102,9 @@ export const ChapterExtraSettingsForm = ({
         </Button>
       </div>
       {!isEditing && (
-        <div className={cn('text-sm mt-4', !initialData.isFree && 'text-neutral-500 italic mt-2')}>
+        <div
+          className={cn('text-sm mt-4', !initialData.isFree && 'text-muted-foreground italic mt-2')}
+        >
           {Number(initialData.durationSec) > 0 ? (
             <>
               <strong>{formatTimeInSeconds(Number(initialData.durationSec))}</strong> for this

@@ -1,6 +1,6 @@
 'use client';
 
-import { ImagePlus } from 'lucide-react';
+import { CloudUpload } from 'lucide-react';
 import { useState } from 'react';
 import Cropper, { Area } from 'react-easy-crop';
 
@@ -84,7 +84,7 @@ export const ImageCrop = ({ buttonLabel, callback, isFetching, uploadLabel }: Im
       ) : (
         <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer transition duration-200 border-blue-400 bg-blue-50 hover:border-blue-600 hover:bg-blue-100 dark:border-blue-600 dark:bg-gray-800 dark:hover:border-blue-400 dark:hover:bg-gray-700">
           <div className="flex flex-col items-center">
-            <ImagePlus className="w-6 h-6 text-blue-400 dark:text-blue-300 mb-2" />
+            <CloudUpload className="w-6 h-6 text-blue-400 dark:text-blue-300 mb-2" />
             <span className="text-blue-500 dark:text-blue-300 font-semibold">
               {uploadLabel ?? 'Upload'}
             </span>
