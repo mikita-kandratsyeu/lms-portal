@@ -2,7 +2,7 @@
 
 import { StripeSubscription, User, UserSettings } from '@prisma/client';
 import { Column, ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, BadgeCheckIcon } from 'lucide-react';
 
 import { TextBadge } from '@/components/common/text-badge';
 import { DateColumn } from '@/components/data-table/columns/date-column';
@@ -34,7 +34,7 @@ export const columns: ColumnDef<UserWithSubscription>[] = [
     id: 'user',
     header: () => <span>User</span>,
     cell: ({ row }) => {
-      const { email, name, pictureUrl } = row.original;
+      const { email, name, pictureUrl, isEmailConfirmed } = row.original;
 
       return (
         <div className="flex items-center gap-2">
@@ -43,7 +43,10 @@ export const columns: ColumnDef<UserWithSubscription>[] = [
             <AvatarFallback>{getFallbackName(name as string)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col text-sm">
-            <p className="font-medium">{name}</p>
+            <div className="flex items-center gap-x-1">
+              <p className="font-medium">{name}</p>
+              {isEmailConfirmed && <BadgeCheckIcon className="w-4 h-4 text-green-500" />}
+            </div>
             <p>{email}</p>
           </div>
         </div>

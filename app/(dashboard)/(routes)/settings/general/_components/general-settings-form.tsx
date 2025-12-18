@@ -2,7 +2,7 @@
 
 import { User } from '@prisma/client';
 import { format } from 'date-fns';
-import { BadgeDollarSign, IdCard, MapPin } from 'lucide-react';
+import { BadgeCheckIcon, BadgeDollarSign, IdCard, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
@@ -18,7 +18,7 @@ import { useLocaleStore } from '@/hooks/store/use-locale-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { useDebounce } from '@/hooks/use-debounce';
 import { fetcher } from '@/lib/fetcher';
-import { getFallbackName } from '@/lib/utils';
+import { cn, getFallbackName } from '@/lib/utils';
 
 type GeneralSettingsFormProps = {
   emailVerification: { label: string; variant: string };
@@ -149,16 +149,30 @@ export const GeneralSettingsForm = ({
             />
           </div>
           <div className="flex flex-col gap-y-2">
-            <div className="flex items-center gap-x-2">
+            <div
+              className={cn(
+                'flex items-center',
+                emailVerification.label === 'success' ? 'gap-x-1' : 'gap-x-2',
+              )}
+            >
               <div className="text-xs text-muted-foreground font-medium">{t('email')}</div>
               <button
                 onClick={handleVerifyEmail}
                 disabled={isFetching || emailVerification.label !== 'failed'}
               >
-                <TextBadge
-                  label={t(`emailVerifyStatus.${emailVerification.label}`)}
-                  variant={emailVerification.variant as TextVariantsProps['variant']}
-                />
+                {emailVerification.label === 'success' ? (
+                  <div
+                    className="hover:cursor-pointer"
+                    title={t(`emailVerifyStatus.${emailVerification.label}`)}
+                  >
+                    <BadgeCheckIcon className="w-4 h-4 text-green-500" />
+                  </div>
+                ) : (
+                  <TextBadge
+                    label={t(`emailVerifyStatus.${emailVerification.label}`)}
+                    variant={emailVerification.variant as TextVariantsProps['variant']}
+                  />
+                )}
               </button>
             </div>
             <Input disabled placeholder={t('enterEmail')} value={initialData.email} />
