@@ -5,6 +5,7 @@ export const ChatCompletionRole = {
 };
 
 export const enum AI_PROVIDER {
+  gemini = 'gemini',
   deepseek = 'deepseek',
   lmsstudio = 'lmsstudio',
   ollama = 'ollama',

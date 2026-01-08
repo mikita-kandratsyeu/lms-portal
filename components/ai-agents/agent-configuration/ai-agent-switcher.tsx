@@ -59,7 +59,7 @@ export const AiAgentSwitcher = ({ className }: AiAgentSwitcherProps) => {
             {connectedAgents.map((agent) => (
               <SelectItem
                 key={agent.id}
-                className="text-sm hover:bg-muted transition-colors duration-200 ease-in-out hover:cursor-pointer line-clamp-1"
+                className="text-sm hover:bg-muted transition-colors duration-200 ease-in-out hover:cursor-pointer line-clamp-2"
                 value={agent.id}
               >
                 <p>{agent.name}</p>

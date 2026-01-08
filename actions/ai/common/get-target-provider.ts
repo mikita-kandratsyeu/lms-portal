@@ -25,6 +25,13 @@ const AIProvider = (providerName: string) => {
     };
   }
 
+  if (providerName === AI_PROVIDER.gemini) {
+    options = {
+      apiKey: process.env.GEMINI_API_KEY as string,
+      baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+    };
+  }
+
   return new OpenAI(options);
 };
 

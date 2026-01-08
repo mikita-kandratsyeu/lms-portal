@@ -104,9 +104,12 @@ export const generateCompletion = async ({
               ),
             );
           } else if (
-            [AI_PROVIDER.deepseek, AI_PROVIDER.ollama, AI_PROVIDER.lmsstudio].includes(
-              providerName as AI_PROVIDER,
-            ) &&
+            [
+              AI_PROVIDER.deepseek,
+              AI_PROVIDER.gemini,
+              AI_PROVIDER.lmsstudio,
+              AI_PROVIDER.ollama,
+            ].includes(providerName as AI_PROVIDER) &&
             event.choices[0].finish_reason !== 'stop'
           ) {
             await writer.write(encoder.encode(event.choices[0].delta.content ?? ''));
