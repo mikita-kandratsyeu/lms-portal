@@ -1,52 +1,94 @@
 import { GlobeIcon, HousePlugIcon, LockKeyholeIcon } from 'lucide-react';
+import Link from 'next/link';
 
 import { getAgentsData } from '@/actions/ai/agent/get-agents-data';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { AgentCard } from '@/components/ai-agents/agent-card/agent-card';
+import { Button, ButtonGroup } from '@/components/ui';
 import { LIMIT_CONNECTED_AI_AGENTS } from '@/constants/ai/general';
 import { getTotalUses } from '@/lib/ai/analytics';
 
 import { Header } from './_components/header';
 
 type GeneralPageProps = {
-  searchParams: Promise<{ search: string }>;
+  searchParams: Promise<{ search?: string; scope?: string }>;
 };
 
 const GeneralPage = async (props: GeneralPageProps) => {
   const searchParams = await props.searchParams;
   const user = await getCurrentUser();
 
+  const search = searchParams.search ?? '';
+  const scope = searchParams.scope === 'mine' ? 'mine' : 'all';
+
   const { analytics, connectedAgents, defaultAgent, privateOrDraftAgents, publicAgents } =
-    await getAgentsData(searchParams.search);
+    await getAgentsData(search);
+
+  const isMine = (agent: (typeof publicAgents)[number]) =>
+    Boolean(user?.userId) && agent.user?.id === user?.userId;
+
+  const scopedConnectedAgents = scope === 'mine' ? connectedAgents.filter(isMine) : connectedAgents;
+  const scopedDefaultAgent = scope === 'mine' ? null : defaultAgent;
+  const scopedPrivateOrDraftAgents =
+    scope === 'mine' ? privateOrDraftAgents : privateOrDraftAgents;
+  const scopedPublicAgents = scope === 'mine' ? publicAgents.filter(isMine) : publicAgents;
+
+  const createScopeHref = (nextScope: 'all' | 'mine') => {
+    const params = new URLSearchParams();
+
+    if (search) {
+      params.set('search', search);
+    }
+
+    if (nextScope === 'mine') {
+      params.set('scope', nextScope);
+    }
+
+    const query = params.toString();
+    return query ? `/ai-agents/general?${query}` : '/ai-agents/general';
+  };
 
   const notFoundAgents =
-    !connectedAgents.length && !defaultAgent && !privateOrDraftAgents && !publicAgents;
+    !scopedConnectedAgents.length &&
+    !scopedDefaultAgent &&
+    !scopedPrivateOrDraftAgents.length &&
+    !scopedPublicAgents.length;
 
   return (
     <div className="w-full p-6">
-      <h1 className="text-2xl font-medium mb-12">AI agents</h1>
+      <div className="flex flex-col gap-4 mb-8">
+        <h1 className="text-2xl font-medium">AI agents</h1>
+        <ButtonGroup>
+          <Button asChild variant={scope === 'all' ? 'default' : 'outline'}>
+            <Link href={createScopeHref('all')}>All agents</Link>
+          </Button>
+          <Button asChild variant={scope === 'mine' ? 'default' : 'outline'}>
+            <Link href={createScopeHref('mine')}>My agents</Link>
+          </Button>
+        </ButtonGroup>
+      </div>
       <Header />
-      {(defaultAgent || connectedAgents.length > 0) && (
+      {(scopedDefaultAgent || scopedConnectedAgents.length > 0) && (
         <>
           <div className="flex gap-x-2 items-center my-6">
             <HousePlugIcon className="w-6 h-6" />
             <h2 className="text-xl font-semibold">
               Connected agents{' '}
               <span>
-                ({connectedAgents.length}/{LIMIT_CONNECTED_AI_AGENTS})
+                ({scopedConnectedAgents.length}/{LIMIT_CONNECTED_AI_AGENTS})
               </span>
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
-            {defaultAgent && (
+            {scopedDefaultAgent && (
               <AgentCard
-                agentId={defaultAgent.id}
-                key={defaultAgent.id}
-                totalUses={getTotalUses(analytics, defaultAgent.id)}
-                {...defaultAgent}
+                agentId={scopedDefaultAgent.id}
+                key={scopedDefaultAgent.id}
+                totalUses={getTotalUses(analytics, scopedDefaultAgent.id)}
+                {...scopedDefaultAgent}
               />
             )}
-            {connectedAgents.map((agent) => (
+            {scopedConnectedAgents.map((agent) => (
               <AgentCard
                 agentId={agent.id}
                 isConnected
@@ -58,7 +100,7 @@ const GeneralPage = async (props: GeneralPageProps) => {
           </div>
         </>
       )}
-      {privateOrDraftAgents.length > 0 && (
+      {scopedPrivateOrDraftAgents.length > 0 && (
         <>
           <div className="flex gap-x-2 items-center mt-8 mb-4">
             <LockKeyholeIcon className="w-6 h-6" />
@@ -66,13 +108,13 @@ const GeneralPage = async (props: GeneralPageProps) => {
               Private agents{' '}
               {!user?.hasSubscription && (
                 <span>
-                  ({privateOrDraftAgents.length}/{LIMIT_CONNECTED_AI_AGENTS})
+                  ({scopedPrivateOrDraftAgents.length}/{LIMIT_CONNECTED_AI_AGENTS})
                 </span>
               )}
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
-            {privateOrDraftAgents.map((agent) => (
+            {scopedPrivateOrDraftAgents.map((agent) => (
               <AgentCard
                 agentId={agent.id}
                 key={agent.id}
@@ -83,14 +125,14 @@ const GeneralPage = async (props: GeneralPageProps) => {
           </div>
         </>
       )}
-      {publicAgents.length > 0 && (
+      {scopedPublicAgents.length > 0 && (
         <>
           <div className="flex gap-x-2 items-center mt-8 mb-4">
             <GlobeIcon className="w-6 h-6" />
             <h2 className="text-xl font-semibold">Publicly available agents</h2>
           </div>
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
-            {publicAgents.map((agent) => (
+            {scopedPublicAgents.map((agent) => (
               <AgentCard
                 agentId={agent.id}
                 key={agent.id}
