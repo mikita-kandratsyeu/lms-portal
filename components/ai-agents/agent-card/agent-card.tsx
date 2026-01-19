@@ -126,14 +126,7 @@ export const AgentCard = ({
               </div>
             </div>
           </div>
-          <p
-            className={cn(
-              'text-sm text-muted-foreground',
-              !isEdit && !isConfigTab && 'line-clamp-2',
-            )}
-          >
-            {description}
-          </p>
+          <p className={cn('text-sm', !isEdit && !isConfigTab && 'line-clamp-2')}>{description}</p>
           {!isEdit && <AgentFeatures className="mt-4 mb-8" models={aiModels} />}
         </div>
         {!isEdit && !isConfigTab && (
