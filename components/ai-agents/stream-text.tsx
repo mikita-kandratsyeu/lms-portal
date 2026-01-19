@@ -34,6 +34,7 @@ export const StreamText = ({
   messages,
   showModelSelector,
 }: StreamTextProps) => {
+  const tAi = useTranslations('ai-agents.common');
   const t = useTranslations('ai-generate');
 
   const { toast } = useToast();
@@ -170,7 +171,7 @@ export const StreamText = ({
       </button>
       {showModelSelector && (
         <AgentConfiguration>
-          <Button variant="outline" title="Configuration" size="sm">
+          <Button variant="outline" title={tAi('configuration')} size="sm">
             <PanelRight className="h-4 w-4" />
           </Button>
         </AgentConfiguration>

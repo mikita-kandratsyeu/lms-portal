@@ -1,10 +1,11 @@
 import { GlobeIcon, HousePlugIcon, LockKeyholeIcon } from 'lucide-react';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 import { getAgentsData } from '@/actions/ai/agent/get-agents-data';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { AgentCard } from '@/components/ai-agents/agent-card/agent-card';
-import { Button, ButtonGroup } from '@/components/ui';
+import { ButtonGroup, buttonVariants } from '@/components/ui';
 import { LIMIT_CONNECTED_AI_AGENTS } from '@/constants/ai/general';
 import { getTotalUses } from '@/lib/ai/analytics';
 
@@ -15,6 +16,7 @@ type GeneralPageProps = {
 };
 
 const GeneralPage = async (props: GeneralPageProps) => {
+  const t = await getTranslations('ai-agents.general');
   const searchParams = await props.searchParams;
   const user = await getCurrentUser();
 
@@ -29,8 +31,7 @@ const GeneralPage = async (props: GeneralPageProps) => {
 
   const scopedConnectedAgents = scope === 'mine' ? connectedAgents.filter(isMine) : connectedAgents;
   const scopedDefaultAgent = scope === 'mine' ? null : defaultAgent;
-  const scopedPrivateOrDraftAgents =
-    scope === 'mine' ? privateOrDraftAgents : privateOrDraftAgents;
+  const scopedPrivateOrDraftAgents = scope === 'mine' ? privateOrDraftAgents : privateOrDraftAgents;
   const scopedPublicAgents = scope === 'mine' ? publicAgents.filter(isMine) : publicAgents;
 
   const createScopeHref = (nextScope: 'all' | 'mine') => {
@@ -57,14 +58,20 @@ const GeneralPage = async (props: GeneralPageProps) => {
   return (
     <div className="w-full p-6">
       <div className="flex flex-col gap-4 mb-8">
-        <h1 className="text-2xl font-medium">AI agents</h1>
+        <h1 className="text-2xl font-medium">{t('title')}</h1>
         <ButtonGroup>
-          <Button asChild variant={scope === 'all' ? 'default' : 'outline'}>
-            <Link href={createScopeHref('all')}>All agents</Link>
-          </Button>
-          <Button asChild variant={scope === 'mine' ? 'default' : 'outline'}>
-            <Link href={createScopeHref('mine')}>My agents</Link>
-          </Button>
+          <Link
+            className={buttonVariants({ variant: scope === 'all' ? 'default' : 'outline' })}
+            href={createScopeHref('all')}
+          >
+            {t('scopes.all')}
+          </Link>
+          <Link
+            className={buttonVariants({ variant: scope === 'mine' ? 'default' : 'outline' })}
+            href={createScopeHref('mine')}
+          >
+            {t('scopes.mine')}
+          </Link>
         </ButtonGroup>
       </div>
       <Header />
@@ -73,7 +80,7 @@ const GeneralPage = async (props: GeneralPageProps) => {
           <div className="flex gap-x-2 items-center my-6">
             <HousePlugIcon className="w-6 h-6" />
             <h2 className="text-xl font-semibold">
-              Connected agents{' '}
+              {t('sections.connected')}{' '}
               <span>
                 ({scopedConnectedAgents.length}/{LIMIT_CONNECTED_AI_AGENTS})
               </span>
@@ -105,7 +112,7 @@ const GeneralPage = async (props: GeneralPageProps) => {
           <div className="flex gap-x-2 items-center mt-8 mb-4">
             <LockKeyholeIcon className="w-6 h-6" />
             <h2 className="text-xl font-semibold">
-              Private agents{' '}
+              {t('sections.private')}{' '}
               {!user?.hasSubscription && (
                 <span>
                   ({scopedPrivateOrDraftAgents.length}/{LIMIT_CONNECTED_AI_AGENTS})
@@ -129,7 +136,7 @@ const GeneralPage = async (props: GeneralPageProps) => {
         <>
           <div className="flex gap-x-2 items-center mt-8 mb-4">
             <GlobeIcon className="w-6 h-6" />
-            <h2 className="text-xl font-semibold">Publicly available agents</h2>
+            <h2 className="text-xl font-semibold">{t('sections.public')}</h2>
           </div>
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
             {scopedPublicAgents.map((agent) => (
@@ -144,7 +151,7 @@ const GeneralPage = async (props: GeneralPageProps) => {
         </>
       )}
       {notFoundAgents && (
-        <div className="text-center text-sm text-muted-foreground mt-10">notFound</div>
+        <div className="text-center text-sm text-muted-foreground mt-10">{t('notFound')}</div>
       )}
     </div>
   );

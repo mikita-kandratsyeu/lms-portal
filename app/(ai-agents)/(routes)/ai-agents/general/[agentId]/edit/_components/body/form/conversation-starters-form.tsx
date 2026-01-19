@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CirclePlusIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
@@ -51,6 +52,7 @@ export const ConversationStartersForm = ({
   initialData,
   isPreviewPage,
 }: ConversationStartersFormProps) => {
+  const t = useTranslations('ai-agents.edit.conversationStarters');
   const { toast } = useToast();
 
   const router = useRouter();
@@ -92,7 +94,7 @@ export const ConversationStartersForm = ({
         body: values,
       });
 
-      toast({ title: 'Star conversations has been updated' });
+      toast({ title: t('toast.updated') });
       handleToggleEdit();
 
       router.refresh();
@@ -128,10 +130,13 @@ export const ConversationStartersForm = ({
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
       <div className="font-medium flex items-center justify-between gap-x-2">
         <div className="flex flex-col gap-x-2 justify-center">
-          <span>Conversation starters</span>
+          <span>{t('title')}</span>
           {isEditing && (
             <span className="text-sm text-muted-foreground">
-              {currentConversationStarters.length} of {LIMIT_CONVERSATION_STARTERS} (Max)
+              {t('limit', {
+                count: currentConversationStarters.length,
+                max: LIMIT_CONVERSATION_STARTERS,
+              })}
             </span>
           )}
         </div>
@@ -143,11 +148,11 @@ export const ConversationStartersForm = ({
           />
           {!isPreviewPage && (
             <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
-              {isEditing && <>Cancel</>}
+              {isEditing && <>{t('cancel')}</>}
               {!isEditing && (
                 <>
                   <PencilLineIcon className="h-4 w-4 mr-2" />
-                  Edit
+                  {t('edit')}
                 </>
               )}
             </Button>
@@ -160,7 +165,7 @@ export const ConversationStartersForm = ({
               size="sm"
               type="submit"
             >
-              Save
+              {t('save')}
             </Button>
           )}
         </div>
@@ -171,7 +176,7 @@ export const ConversationStartersForm = ({
             <ChatStarters starters={currentConversationStarters} showCopyButton />
           )}
           {!currentConversationStarters.length && (
-            <span className="text-muted-foreground italic">No conversation starters for chat.</span>
+            <span className="text-muted-foreground italic">{t('empty')}</span>
           )}
         </div>
       )}
@@ -212,7 +217,7 @@ export const ConversationStartersForm = ({
                       <div className="flex gap-x-2">
                         <Input
                           disabled={isSubmitting}
-                          placeholder="e.g. 'What is the weather today?'"
+                          placeholder={t('placeholder')}
                           value={currentInput}
                           onChange={(event) => setCurrentInput(event.target.value)}
                           onKeyDown={(event) => {

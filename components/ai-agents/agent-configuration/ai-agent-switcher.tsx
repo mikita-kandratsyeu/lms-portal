@@ -1,6 +1,7 @@
 'use client';
 
 import { AiModelFeature } from '@prisma/client';
+import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
 import {
@@ -19,6 +20,7 @@ type AiAgentSwitcherProps = {
 };
 
 export const AiAgentSwitcher = ({ className }: AiAgentSwitcherProps) => {
+  const t = useTranslations('ai-agents.switchers');
   const { connectedAgents, currentAgent, setCurrentAgent, setCurrentModel } = useAiAgentStore(
     (state) => ({
       connectedAgents: state.connectedAgents,
@@ -52,7 +54,7 @@ export const AiAgentSwitcher = ({ className }: AiAgentSwitcherProps) => {
     <div className={className}>
       <Select defaultValue={currentAgent?.id || defaultAgent?.id} onValueChange={handleValueChange}>
         <SelectTrigger className="w-full" disabled={isFetching}>
-          <SelectValue placeholder="Select an agent" />
+          <SelectValue placeholder={t('agentPlaceholder')} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

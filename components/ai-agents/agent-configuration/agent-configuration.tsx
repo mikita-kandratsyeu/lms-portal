@@ -79,7 +79,7 @@ export const AgentConfiguration = ({ children }: AgentConfigurationProps) => {
             </div>
             <div className="flex flex-col gap-y-2">
               <div className="flex items-center gap-x-2">
-                <h4 className="text-sm text-muted-foreground">AI Agent</h4>
+                <h4 className="text-sm text-muted-foreground">{t('agent')}</h4>
               </div>
               <AiAgentSwitcher className="flex items-center w-full gap-x-2" />
             </div>

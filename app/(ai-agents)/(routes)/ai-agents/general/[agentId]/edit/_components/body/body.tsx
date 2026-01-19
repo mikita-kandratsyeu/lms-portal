@@ -7,6 +7,7 @@ import {
   ServerIcon,
   SlidersHorizontalIcon,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
 import { IconBadge } from '@/components/common/icon-badge';
@@ -24,6 +25,7 @@ type BodyProps = {
 };
 
 export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyProps) => {
+  const t = useTranslations('ai-agents.edit.body');
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
       <div className="space-y-6">
@@ -31,7 +33,7 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
           {!isPreviewPage && (
             <div className="flex items-center gap-x-2">
               <IconBadge icon={LayoutDashboardIcon} />
-              <h2 className="text-xl">Customize your agent</h2>
+              <h2 className="text-xl">{t('customize')}</h2>
             </div>
           )}
           <DescriptionModelForm
@@ -44,7 +46,7 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
           {!isPreviewPage && (
             <div className="flex items-center gap-x-2">
               <IconBadge icon={MessageCircleMoreIcon} />
-              <h2 className="text-xl">Set conversation starters</h2>
+              <h2 className="text-xl">{t('starters')}</h2>
             </div>
           )}
           <ConversationStartersForm
@@ -57,7 +59,7 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
           {!isPreviewPage && (
             <div className="flex items-center gap-x-2">
               <IconBadge icon={SlidersHorizontalIcon} />
-              <h2 className="text-xl">Customize LLM engine</h2>
+              <h2 className="text-xl">{t('customizeLlm')}</h2>
             </div>
           )}
           <CustomizeModelForm
@@ -72,7 +74,7 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
           {!isPreviewPage && (
             <div className="flex items-center gap-x-2">
               <IconBadge icon={ServerIcon} />
-              <h2 className="text-xl">Select LLM engine</h2>
+              <h2 className="text-xl">{t('selectLlm')}</h2>
             </div>
           )}
           <ModelsForm
@@ -86,9 +88,9 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
           <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={FlaskConicalIcon} />
-              <h2 className="text-xl">Add experimental features</h2>
+              <h2 className="text-xl">{t('experimental.title')}</h2>
             </div>
-            <p>Own API server (Ollama)</p>
+            <p>{t('experimental.api')}</p>
           </div>
         )}
       </div>

@@ -26,6 +26,7 @@ type AiModelSwitcherProps = {
 export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
   const { user } = useCurrentUser();
 
+  const tAi = useTranslations('ai-agents.switchers');
   const t = useTranslations('chat.top-bar');
   const tProfile = useTranslations('profileButton');
 
@@ -84,7 +85,7 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
     <div className={className}>
       <Select onValueChange={handleValueChange} value={selectedModelId}>
         <SelectTrigger className="w-full" disabled={isFetching}>
-          <SelectValue placeholder="Select a LLM model" />
+          <SelectValue placeholder={tAi('modelPlaceholder')} />
         </SelectTrigger>
         <SelectContent>
           {Boolean(freeModels.length) && (
@@ -106,7 +107,7 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
             <SelectGroup>
               <SelectLabel className="text-xs text-muted-foreground">
                 <div className="flex gap-x-2 items-center">
-                  <p>Preview</p>
+                  <p>{tAi('preview')}</p>
                   <TextBadge label={tProfile('premium')} variant="lime" />
                 </div>
               </SelectLabel>

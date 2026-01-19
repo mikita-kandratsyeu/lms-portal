@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PencilLineIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -43,6 +44,7 @@ export const CustomizeModelForm = ({
   initialData,
   isPreviewPage,
 }: CustomizeModelFormProps) => {
+  const t = useTranslations('ai-agents.edit.customization');
   const { toast } = useToast();
   const router = useRouter();
 
@@ -76,7 +78,7 @@ export const CustomizeModelForm = ({
         body: values,
       });
 
-      toast({ title: 'LLM engine has been updated' });
+      toast({ title: t('toast.updated') });
       handleToggleEdit();
 
       router.refresh();
@@ -91,16 +93,16 @@ export const CustomizeModelForm = ({
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
       <div className="font-medium flex items-center justify-between gap-x-2">
         <div className="flex gap-x-2 items-center">
-          <span>LLM customization</span>
+          <span>{t('title')}</span>
         </div>
         <div className="flex gap-x-2 items-center">
           {!isPreviewPage && (
             <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
-              {isEditing && <>Cancel</>}
+              {isEditing && <>{t('cancel')}</>}
               {!isEditing && (
                 <>
                   <PencilLineIcon className="h-4 w-4 mr-2" />
-                  Edit
+                  {t('edit')}
                 </>
               )}
             </Button>
@@ -113,23 +115,23 @@ export const CustomizeModelForm = ({
               size="sm"
               type="submit"
             >
-              Save
+              {t('save')}
             </Button>
           )}
         </div>
       </div>
       {!isEditing && (
         <div className="text-sm mr-2 mt-4">
-          <h4 className="mb-2 font-semibold">System instruction</h4>
+          <h4 className="mb-2 font-semibold">{t('systemInstruction.title')}</h4>
           {isString(initialData?.systemInstruction) && (
             <MarkdownText text={initialData?.systemInstruction} />
           )}
           {!initialData?.systemInstruction && (
             <span className="text-muted-foreground italic">
-              No system instruction for LLM engine.
+              {t('systemInstruction.empty')}
             </span>
           )}
-          <h4 className="mb-2 mt-4 font-semibold">Temperature</h4>
+          <h4 className="mb-2 mt-4 font-semibold">{t('temperature.title')}</h4>
           {isNumber(initialData?.temperature) && (
             <TextBadge label={String(initialData.temperature)} variant="indigo" />
           )}
@@ -143,12 +145,12 @@ export const CustomizeModelForm = ({
               name="systemInstruction"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="mb-4">System instruction</FormLabel>
+                  <FormLabel className="mb-4">{t('systemInstruction.title')}</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
                       disabled={isSubmitting}
-                      placeholder="e.g. 'You are an AI agent who ...'"
+                      placeholder={t('systemInstruction.placeholder')}
                     />
                   </FormControl>
                   <FormMessage />
@@ -161,7 +163,7 @@ export const CustomizeModelForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex gap-x-2 items-center mb-4">
-                    <span>Temperature</span>
+                    <span>{t('temperature.title')}</span>
                     <TextBadge label={String(field.value)} variant="indigo" />
                   </FormLabel>
                   <FormControl>
@@ -176,9 +178,9 @@ export const CustomizeModelForm = ({
                     />
                   </FormControl>
                   <FormDescription className="flex justify-between">
-                    <span>Precise</span>
-                    <span>Neutral</span>
-                    <span>Creative</span>
+                    <span>{t('temperature.labels.precise')}</span>
+                    <span>{t('temperature.labels.neutral')}</span>
+                    <span>{t('temperature.labels.creative')}</span>
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

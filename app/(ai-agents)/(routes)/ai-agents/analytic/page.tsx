@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import {
   Bar,
@@ -16,15 +17,7 @@ import {
   YAxis,
 } from 'recharts';
 
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Separator,
-} from '@/components/ui';
+import { Button, ButtonGroup, Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import {
   ChartConfig,
   ChartContainer,
@@ -43,21 +36,13 @@ type WeeklyUsage = {
   personal: number;
 };
 
-const periodOptions = [
-  { id: '7d', label: '7 days' },
-  { id: '30d', label: '30 days' },
-  { id: '90d', label: '90 days' },
-] as const;
+const periodOptionIds = ['all', '7d', '30d', '90d'] as const;
 
-type PeriodId = (typeof periodOptions)[number]['id'];
+type PeriodId = (typeof periodOptionIds)[number];
 
-const scopeOptions = [
-  { id: 'all', label: 'All' },
-  { id: 'global', label: 'Global' },
-  { id: 'personal', label: 'Personal' },
-] as const;
+const scopeOptionIds = ['all', 'global', 'personal'] as const;
 
-type ScopeId = (typeof scopeOptions)[number]['id'];
+type ScopeId = (typeof scopeOptionIds)[number];
 
 const analyticsByPeriod: Record<
   PeriodId,
@@ -69,6 +54,32 @@ const analyticsByPeriod: Record<
     personalUsers: number;
   }
 > = {
+  all: {
+    globalModelUsage: [
+      { model: 'GPT-4o', uses: 118400 },
+      { model: 'Claude 3.5 Sonnet', uses: 96500 },
+      { model: 'Gemini 1.5 Pro', uses: 78400 },
+      { model: 'DeepSeek R1', uses: 60200 },
+      { model: 'Llama 3.1 70B', uses: 44800 },
+    ],
+    personalModelUsage: [
+      { model: 'GPT-4o', uses: 12400 },
+      { model: 'Claude 3.5 Sonnet', uses: 10350 },
+      { model: 'Gemini 1.5 Pro', uses: 7810 },
+      { model: 'Llama 3.1 70B', uses: 4620 },
+      { model: 'DeepSeek R1', uses: 3390 },
+    ],
+    weeklyUsage: [
+      { week: 'W1', global: 15200, personal: 1880 },
+      { week: 'W2', global: 16800, personal: 2060 },
+      { week: 'W3', global: 18200, personal: 2230 },
+      { week: 'W4', global: 19500, personal: 2400 },
+      { week: 'W5', global: 20900, personal: 2590 },
+      { week: 'W6', global: 22400, personal: 2760 },
+    ],
+    globalUsers: 16450,
+    personalUsers: 1210,
+  },
   '7d': {
     globalModelUsage: [
       { model: 'GPT-4o', uses: 2850 },
@@ -149,32 +160,42 @@ const analyticsByPeriod: Record<
   },
 };
 
-const personalAgents = [
-  { name: 'Personal Tutor', users: 64 },
-  { name: 'Code Reviewer', users: 41 },
-  { name: 'Marketing Copy', users: 27 },
-  { name: 'Private Coach', users: 18 },
-];
-
 const getTopModel = (models: ModelUsage[]) =>
   models.reduce((top, current) => (current.uses > top.uses ? current : top), models[0]);
 
 const sumUses = (models: ModelUsage[]) => models.reduce((total, model) => total + model.uses, 0);
 
-const usageTrendConfig = {
-  global: { label: 'Global', color: 'hsl(var(--primary))' },
-  personal: { label: 'Personal', color: 'hsl(var(--muted-foreground))' },
-} satisfies ChartConfig;
-
-const globalModelConfig = {
-  uses: { label: 'Uses', color: 'hsl(var(--primary))' },
-} satisfies ChartConfig;
-
 const personalPieColors = ['#2563eb', '#7c3aed', '#10b981', '#f59e0b', '#ef4444'];
 
 const AnalyticPage = () => {
+  const t = useTranslations('ai-agents.analytics');
   const [period, setPeriod] = useState<PeriodId>('30d');
   const [scope, setScope] = useState<ScopeId>('all');
+
+  const periodOptions = periodOptionIds.map((id) => ({
+    id,
+    label: t(`periods.${id}`),
+  }));
+  const scopeOptions = scopeOptionIds.map((id) => ({
+    id,
+    label: t(`scopes.${id}`),
+  }));
+
+  const usageTrendConfig = {
+    global: { label: t('labels.global'), color: 'hsl(var(--primary))' },
+    personal: { label: t('labels.personal'), color: 'hsl(var(--muted-foreground))' },
+  } satisfies ChartConfig;
+
+  const globalModelConfig = {
+    uses: { label: t('labels.uses'), color: 'hsl(var(--primary))' },
+  } satisfies ChartConfig;
+
+  const personalAgents = [
+    { name: t('personalAgents.tutor'), users: 64 },
+    { name: t('personalAgents.reviewer'), users: 41 },
+    { name: t('personalAgents.marketing'), users: 27 },
+    { name: t('personalAgents.coach'), users: 18 },
+  ];
 
   const { globalModelUsage, personalModelUsage, weeklyUsage, globalUsers, personalUsers } =
     analyticsByPeriod[period];
@@ -188,10 +209,8 @@ const AnalyticPage = () => {
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold">AI Agents Analytics</h1>
-            <p className="text-sm text-muted-foreground">
-              Mock analytics overview for global public agents and your private agents.
-            </p>
+            <h1 className="text-2xl font-semibold">{t('title')}</h1>
+            <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <ButtonGroup>
@@ -225,47 +244,51 @@ const AnalyticPage = () => {
         {showGlobal && (
           <Card className="shadow-none">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Global uses</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">{t('cards.globalUses')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-semibold">
                 {sumUses(globalModelUsage).toLocaleString()}
               </div>
-              <p className="text-xs text-muted-foreground">Public agents only</p>
+              <p className="text-xs text-muted-foreground">{t('cards.publicOnly')}</p>
             </CardContent>
           </Card>
         )}
         {showGlobal && (
           <Card className="shadow-none">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Active users</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">{t('cards.activeUsers')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-semibold">{globalUsers.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">Last 30 days</p>
+              <p className="text-xs text-muted-foreground">{t('cards.last30Days')}</p>
             </CardContent>
           </Card>
         )}
         {showPersonal && (
           <Card className="shadow-none">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Users using my agents</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">
+                {t('cards.myAgentsUsers')}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-semibold">{personalUsers.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">Including private agents</p>
+              <p className="text-xs text-muted-foreground">{t('cards.includingPrivate')}</p>
             </CardContent>
           </Card>
         )}
         {showGlobal && (
           <Card className="shadow-none">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Top model (global)</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">
+                {t('cards.topModelGlobal')}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-semibold">{globalTop.model}</div>
               <p className="text-xs text-muted-foreground">
-                {globalTop.uses.toLocaleString()} total uses
+                {t('cards.totalUses', { amount: globalTop.uses.toLocaleString() })}
               </p>
             </CardContent>
           </Card>
@@ -275,13 +298,13 @@ const AnalyticPage = () => {
         {(showGlobal || showPersonal) && (
           <Card className="shadow-none">
             <CardHeader>
-              <CardTitle>Usage trend</CardTitle>
+              <CardTitle>{t('usageTrend.title')}</CardTitle>
               <p className="text-xs text-muted-foreground">
                 {showGlobal && showPersonal
-                  ? 'Global vs your agents'
+                  ? t('usageTrend.globalVsPersonal')
                   : showGlobal
-                    ? 'Global public agents'
-                    : 'Your agents only'}
+                    ? t('usageTrend.globalOnly')
+                    : t('usageTrend.personalOnly')}
               </p>
             </CardHeader>
             <CardContent>
@@ -319,8 +342,8 @@ const AnalyticPage = () => {
         {showGlobal && (
           <Card className="shadow-none">
             <CardHeader>
-              <CardTitle>Most popular models (global)</CardTitle>
-              <p className="text-xs text-muted-foreground">Public agents only</p>
+              <CardTitle>{t('popularModels.title')}</CardTitle>
+              <p className="text-xs text-muted-foreground">{t('cards.publicOnly')}</p>
             </CardHeader>
             <CardContent>
               <ChartContainer config={globalModelConfig} className="h-[280px] w-full">
@@ -347,15 +370,17 @@ const AnalyticPage = () => {
         <div className="grid gap-6 lg:grid-cols-2">
           <Card className="shadow-none">
             <CardHeader>
-              <CardTitle>My agent users</CardTitle>
-              <p className="text-xs text-muted-foreground">Top agents by active users</p>
+              <CardTitle>{t('myAgentUsers.title')}</CardTitle>
+              <p className="text-xs text-muted-foreground">{t('myAgentUsers.subtitle')}</p>
             </CardHeader>
             <CardContent className="space-y-4">
               {personalAgents.map((agent) => (
                 <div key={agent.name} className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">{agent.name}</p>
-                    <p className="text-xs text-muted-foreground">{agent.users} active users</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t('myAgentUsers.activeUsers', { count: agent.users })}
+                    </p>
                   </div>
                   <div className="text-xs text-muted-foreground">
                     {Math.round((agent.users / personalUsers) * 100)}%
@@ -367,16 +392,18 @@ const AnalyticPage = () => {
 
           <Card className="shadow-none">
             <CardHeader>
-              <CardTitle>Most popular model (my agents)</CardTitle>
+              <CardTitle>{t('popularModelPersonal.title')}</CardTitle>
               <p className="text-xs text-muted-foreground">
-                {personalTop.uses.toLocaleString()} uses on your agents
+                {t('popularModelPersonal.uses', { amount: personalTop.uses.toLocaleString() })}
               </p>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-lg font-semibold">{personalTop.model}</p>
-                  <p className="text-xs text-muted-foreground">Most used across your agents</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t('popularModelPersonal.subtitle')}
+                  </p>
                 </div>
               </div>
               <ResponsiveContainer width="100%" height={240}>

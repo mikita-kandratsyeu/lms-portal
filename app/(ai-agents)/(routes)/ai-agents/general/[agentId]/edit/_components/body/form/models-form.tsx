@@ -2,6 +2,7 @@
 
 import { CirclePlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import * as z from 'zod';
 
@@ -26,6 +27,7 @@ const formSchema = z.object({
 });
 
 export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: ModelsProps) => {
+  const t = useTranslations('ai-agents.edit.models');
   const { toast } = useToast();
   const router = useRouter();
 
@@ -41,7 +43,7 @@ export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: Mode
     try {
       await fetcher.patch(`/api/ai/agents/${agentId}`, { body: values });
 
-      toast({ title: 'LLM engine has been updated' });
+      toast({ title: t('toast.updated') });
       handleToggleEdit();
 
       router.refresh();
@@ -58,17 +60,17 @@ export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: Mode
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
       <div className="font-medium flex items-center justify-between gap-x-2">
         <div className="flex gap-x-2 items-center">
-          <span>LLM engine</span>
+          <span>{t('title')}</span>
           {!isEditing && <AgentFeatures models={initialData?.aiModels ?? []} />}
         </div>
         <div className="flex gap-x-2 items-center">
           {!isPreviewPage && (
             <Button onClick={handleToggleEdit} variant="outline" size="sm" disabled={isFetching}>
-              {isEditing && <>Cancel</>}
+              {isEditing && <>{t('cancel')}</>}
               {!isEditing && (
                 <>
                   <CirclePlusIcon className="h-4 w-4 mr-2" />
-                  Select
+                  {t('select')}
                 </>
               )}
             </Button>
@@ -80,7 +82,7 @@ export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: Mode
               isLoading={isFetching}
               disabled={isFetching}
             >
-              Save
+              {t('save')}
             </Button>
           )}
         </div>
@@ -92,7 +94,7 @@ export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: Mode
             !initialData?.aiModels?.length && 'text-muted-foreground italic',
           )}
         >
-          {!initialData?.aiModels?.length && <span>No selected LLM engine.</span>}
+          {!initialData?.aiModels?.length && <span>{t('empty')}</span>}
           {Boolean(initialData?.aiModels?.length) && (
             <ModelsList selectedModels={initialData?.aiModels ?? []} />
           )}
@@ -107,7 +109,7 @@ export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: Mode
             selectedModels={initialData?.aiModels ?? []}
           />
           <div className="flex text-sm items-start justify-between">
-            <div className="text-muted-foreground mt-4">Select LLM engine for your agent</div>
+            <div className="text-muted-foreground mt-4">{t('helper')}</div>
           </div>
         </div>
       )}

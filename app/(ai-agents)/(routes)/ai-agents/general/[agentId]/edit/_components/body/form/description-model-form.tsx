@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PencilLineIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -56,6 +57,7 @@ export const DescriptionModelForm = ({
   initialData,
   isPreviewPage,
 }: DescriptionModelFormProps) => {
+  const t = useTranslations('ai-agents.edit.description');
   const { user } = useCurrentUser();
 
   const { toast } = useToast();
@@ -107,7 +109,7 @@ export const DescriptionModelForm = ({
         body: values,
       });
 
-      toast({ title: 'Agent description has been updated' });
+      toast({ title: t('toast.updated') });
       handleToggleEdit();
 
       router.refresh();
@@ -122,16 +124,16 @@ export const DescriptionModelForm = ({
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
       <div className="font-medium flex items-center justify-between gap-x-2">
         <div className="flex gap-x-2 items-center">
-          <span>Agent description</span>
+          <span>{t('title')}</span>
         </div>
         <div className="flex gap-x-2 items-center">
           {!isPreviewPage && (
             <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
-              {isEditing && <>Cancel</>}
+              {isEditing && <>{t('cancel')}</>}
               {!isEditing && (
                 <>
                   <PencilLineIcon className="h-4 w-4 mr-2" />
-                  Edit
+                  {t('edit')}
                 </>
               )}
             </Button>
@@ -144,7 +146,7 @@ export const DescriptionModelForm = ({
               size="sm"
               type="submit"
             >
-              Save
+              {t('save')}
             </Button>
           )}
         </div>
@@ -182,15 +184,15 @@ export const DescriptionModelForm = ({
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="mb-4">Name</FormLabel>
+                      <FormLabel className="mb-4">{t('fields.name.label')}</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
                           disabled={isSubmitting}
-                          placeholder="e.g. 'Nova Copilot'"
+                          placeholder={t('fields.name.placeholder')}
                         />
                       </FormControl>
-                      <FormDescription>Come up with a name for your agent</FormDescription>
+                      <FormDescription>{t('fields.name.helper')}</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -201,9 +203,13 @@ export const DescriptionModelForm = ({
                     name="systemTag"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="mb-4">System tag</FormLabel>
+                        <FormLabel className="mb-4">{t('fields.systemTag.label')}</FormLabel>
                         <FormControl>
-                          <Input {...field} disabled={isSubmitting} placeholder="e.g. 'copilot'" />
+                          <Input
+                            {...field}
+                            disabled={isSubmitting}
+                            placeholder={t('fields.systemTag.placeholder')}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -217,12 +223,12 @@ export const DescriptionModelForm = ({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="mb-4">Description</FormLabel>
+                  <FormLabel className="mb-4">{t('fields.description.label')}</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
                       disabled={isSubmitting}
-                      placeholder="e.g. 'AI agent who ...'"
+                      placeholder={t('fields.description.placeholder')}
                     />
                   </FormControl>
                   <FormMessage />
@@ -236,9 +242,9 @@ export const DescriptionModelForm = ({
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between space-x-3 space-y-0 rounded-md border p-4">
                     <div className="space-y-0.5">
-                      <FormLabel>System agent</FormLabel>
+                      <FormLabel>{t('fields.systemAgent.label')}</FormLabel>
                       <FormDescription className="text-xs">
-                        The agent will be displayed as a system agent.
+                        {t('fields.systemAgent.helper')}
                       </FormDescription>
                     </div>
                     <FormControl>
@@ -260,9 +266,9 @@ export const DescriptionModelForm = ({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between space-x-3 space-y-0 rounded-md border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel>Agent language</FormLabel>
+                    <FormLabel>{t('fields.language.label')}</FormLabel>
                     <FormDescription className="text-xs">
-                      Specify the default language.
+                      {t('fields.language.helper')}
                     </FormDescription>
                   </div>
                   <FormControl>

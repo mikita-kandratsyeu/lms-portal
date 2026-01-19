@@ -4,6 +4,7 @@ import { AiAgent, AiModel } from '@prisma/client';
 import { ChartColumnIcon, PlugIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { SyntheticEvent, useState } from 'react';
 
 import { MarkdownText } from '@/components/common/markdown-text';
@@ -60,6 +61,7 @@ export const AgentCard = ({
   totalUses,
   user,
 }: AgentCardProps) => {
+  const t = useTranslations('ai-agents.card');
   const { toast } = useToast();
   const router = useRouter();
 
@@ -76,7 +78,7 @@ export const AgentCard = ({
       });
 
       toast({
-        title: `${name} Agent has been ${isConnected ? 'disconnected' : 'connected'}.`,
+        title: isConnected ? t('toast.disconnected') : t('toast.connected'),
         type: isConnected ? 'warning' : 'success',
       });
 
@@ -111,15 +113,17 @@ export const AgentCard = ({
               <div className="flex flex-col space-y-1">
                 <div className="flex items-center gap-x-2">
                   <h4 className="font-semibold">{name}</h4>
-                  {isDraft && <TextBadge label={'Draft'} />}
-                  {isDefault && <TextBadge label={'Default'} />}
-                  {!isPublic && !isDraft && <TextBadge label={'Private'} variant="indigo" />}
-                  {isPublic && <TextBadge label={'Public'} variant="lime" />}
+                  {isDraft && <TextBadge label={t('badges.draft')} />}
+                  {isDefault && <TextBadge label={t('badges.default')} />}
+                  {!isPublic && !isDraft && <TextBadge label={t('badges.private')} variant="indigo" />}
+                  {isPublic && <TextBadge label={t('badges.public')} variant="lime" />}
                 </div>
                 {user?.id && user?.name && (
                   <UserHoverCard userId={user.id} isDisabledHover={Boolean(isSystem)}>
                     <button className="flex items-center justify-start gap-x-1 text-muted-foreground p-0 font-normal hover:underline">
-                      <span className="text-xs">{`by ${isSystem ? 'System' : user.name}`}</span>
+                      <span className="text-xs">
+                        {t('by', { name: isSystem ? t('system') : user.name })}
+                      </span>
                     </button>
                   </UserHoverCard>
                 )}
@@ -141,12 +145,12 @@ export const AgentCard = ({
                 variant="outline"
               >
                 {!isFetching && <PlugIcon className="w-4 h-4 mr-2" />}
-                <span>{isConnected || isDefault ? 'Disconnect' : 'Connect'}</span>
+                <span>{isConnected || isDefault ? t('disconnect') : t('connect')}</span>
               </Button>
               {!isDraft && Boolean(totalUses) && (
                 <div className="flex gap-x-1 items-center text-muted-foreground">
                   <ChartColumnIcon className="w-4 h-4" />
-                  <span className="text-xs">{totalUses} total uses</span>
+                  <span className="text-xs">{t('totalUses', { amount: totalUses })}</span>
                 </div>
               )}
             </div>
@@ -156,13 +160,13 @@ export const AgentCard = ({
           <div className="w-full flex flex-col text-sm">
             {systemInstruction && (
               <div>
-                <h4 className="mb-2 font-semibold">System instruction</h4>
+                <h4 className="mb-2 font-semibold">{t('systemInstruction')}</h4>
                 <MarkdownText text={systemInstruction} />
               </div>
             )}
             {isNumber(temperature) && (
               <div>
-                <h4 className="mb-2 mt-4 font-semibold">Temperature</h4>
+                <h4 className="mb-2 mt-4 font-semibold">{t('temperature')}</h4>
                 <TextBadge label={String(temperature)} variant="indigo" />
               </div>
             )}
