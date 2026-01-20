@@ -9,8 +9,8 @@ datasource db {
 // User
 model User {
   id                  String                   @id @default(uuid())
-  aiAgents            AiAgent[]
   aiAgentUsageSeen    AiAgentUsageSeen[]
+  aiAgents            AiAgent[]
   connectedAiAgents   AiAgentConnection[]      @relation("ConnectedAiAgents")
   conversations       ChatConversation[]
   copilotRequestLimit CopilotRequestLimit?
@@ -487,12 +487,12 @@ model AiAgentModelUsageBucket {
   id          String      @id @default(uuid())
   agent       AiAgent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
   agentId     String
-  model       String
-  periodType  UsagePeriod
-  periodStart DateTime
-  uses        Int         @default(0)
-  updatedAt   DateTime    @updatedAt
   createdAt   DateTime    @default(now())
+  model       String
+  periodStart DateTime
+  periodType  UsagePeriod
+  updatedAt   DateTime    @updatedAt
+  uses        Int         @default(0)
 
   @@unique([agentId, model, periodType, periodStart])
   @@index([agentId, periodType, periodStart])

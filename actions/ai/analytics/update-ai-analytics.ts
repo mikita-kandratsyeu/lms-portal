@@ -2,7 +2,9 @@
 
 import { startOfDay, startOfWeek } from 'date-fns';
 
+import { PeriodType } from '@/constants/ai/analytics';
 import db from '@/lib/db';
+import { isNumber } from '@/lib/guard';
 
 type UpdateAiAnalyticsArgs = {
   agentId: string;
@@ -15,7 +17,7 @@ type UpdateAiAnalyticsArgs = {
 const WEEK_STARTS_ON = 1;
 
 const normalizeUses = (uses?: number) => {
-  if (!uses || Number.isNaN(uses)) {
+  if (!uses || !isNumber(uses)) {
     return 1;
   }
 
@@ -52,7 +54,7 @@ export const updateAiAnalytics = async ({
       where: {
         agentId_periodType_periodStart: {
           agentId,
-          periodType: 'day',
+          periodType: PeriodType.DAY,
           periodStart: dayStart,
         },
       },
@@ -61,7 +63,7 @@ export const updateAiAnalytics = async ({
       },
       create: {
         agentId,
-        periodType: 'day',
+        periodType: PeriodType.DAY,
         periodStart: dayStart,
         totalUses: normalizedUses,
       },
@@ -70,7 +72,7 @@ export const updateAiAnalytics = async ({
       where: {
         agentId_periodType_periodStart: {
           agentId,
-          periodType: 'week',
+          periodType: PeriodType.WEEK,
           periodStart: weekStart,
         },
       },
@@ -79,7 +81,7 @@ export const updateAiAnalytics = async ({
       },
       create: {
         agentId,
-        periodType: 'week',
+        periodType: PeriodType.WEEK,
         periodStart: weekStart,
         totalUses: normalizedUses,
       },
@@ -89,7 +91,7 @@ export const updateAiAnalytics = async ({
         agentId_userId_periodType_periodStart: {
           agentId,
           userId,
-          periodType: 'day',
+          periodType: PeriodType.DAY,
           periodStart: dayStart,
         },
       },
@@ -97,7 +99,7 @@ export const updateAiAnalytics = async ({
       create: {
         agentId,
         userId,
-        periodType: 'day',
+        periodType: PeriodType.DAY,
         periodStart: dayStart,
       },
     }),
@@ -106,7 +108,7 @@ export const updateAiAnalytics = async ({
         agentId_userId_periodType_periodStart: {
           agentId,
           userId,
-          periodType: 'week',
+          periodType: PeriodType.WEEK,
           periodStart: weekStart,
         },
       },
@@ -114,7 +116,7 @@ export const updateAiAnalytics = async ({
       create: {
         agentId,
         userId,
-        periodType: 'week',
+        periodType: PeriodType.WEEK,
         periodStart: weekStart,
       },
     }),
@@ -130,7 +132,7 @@ export const updateAiAnalytics = async ({
         agentId_model_periodType_periodStart: {
           agentId,
           model,
-          periodType: 'day',
+          periodType: PeriodType.DAY,
           periodStart: dayStart,
         },
       },
@@ -140,7 +142,7 @@ export const updateAiAnalytics = async ({
       create: {
         agentId,
         model,
-        periodType: 'day',
+        periodType: PeriodType.DAY,
         periodStart: dayStart,
         uses: normalizedUses,
       },
@@ -150,7 +152,7 @@ export const updateAiAnalytics = async ({
         agentId_model_periodType_periodStart: {
           agentId,
           model,
-          periodType: 'week',
+          periodType: PeriodType.WEEK,
           periodStart: weekStart,
         },
       },
@@ -160,7 +162,7 @@ export const updateAiAnalytics = async ({
       create: {
         agentId,
         model,
-        periodType: 'week',
+        periodType: PeriodType.WEEK,
         periodStart: weekStart,
         uses: normalizedUses,
       },

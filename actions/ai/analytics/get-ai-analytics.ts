@@ -2,9 +2,8 @@
 
 import { startOfDay, startOfWeek, subDays } from 'date-fns';
 
+import { Period, PeriodType } from '@/constants/ai/analytics';
 import db from '@/lib/db';
-
-export type AnalyticsPeriodId = 'all' | '7d' | '30d' | '90d';
 
 export type ModelUsage = {
   model: string;
@@ -32,23 +31,23 @@ export type PeriodAnalytics = {
   personalAgents: PersonalAgentUsage[];
 };
 
-export type AiAnalyticsResponse = Record<AnalyticsPeriodId, PeriodAnalytics>;
+export type AiAnalyticsResponse = Record<Period, PeriodAnalytics>;
 
 type GetAiAnalyticsArgs = {
   userId: string;
 };
 
-const PERIOD_DAYS: Record<Exclude<AnalyticsPeriodId, 'all'>, number> = {
-  '7d': 7,
-  '30d': 30,
-  '90d': 90,
+const PERIOD_DAYS: Record<Exclude<Period, Period.ALL>, number> = {
+  [Period['7D']]: 7,
+  [Period['30D']]: 30,
+  [Period['90D']]: 90,
 };
 
 const WEEK_STARTS_ON = 1;
 const DEFAULT_WEEK_POINTS = 6;
 
-const getPeriodRange = (period: AnalyticsPeriodId, now: Date) => {
-  if (period === 'all') {
+const getPeriodRange = (period: Period, now: Date) => {
+  if (period === Period.ALL) {
     return { start: null, end: now };
   }
 
@@ -60,8 +59,8 @@ const getPeriodRange = (period: AnalyticsPeriodId, now: Date) => {
   };
 };
 
-const getWeekRange = (period: AnalyticsPeriodId, now: Date) => {
-  if (period === 'all') {
+const getWeekRange = (period: Period, now: Date) => {
+  if (period === Period.ALL) {
     const start = startOfWeek(subDays(now, DEFAULT_WEEK_POINTS * 7 - 1), {
       weekStartsOn: WEEK_STARTS_ON,
     });
@@ -89,7 +88,7 @@ const aggregateModelUsage = async (
   const usageRows = await db.aiAgentModelUsageBucket.findMany({
     where: {
       agentId: { in: agentIds },
-      periodType: 'day',
+      periodType: PeriodType.DAY,
       ...(start
         ? {
             periodStart: {
@@ -124,7 +123,7 @@ const aggregateUniqueUsers = async (agentIds: string[], start: Date | null, end:
   const usageSeen = await db.aiAgentUsageSeen.findMany({
     where: {
       agentId: { in: agentIds },
-      periodType: 'day',
+      periodType: PeriodType.DAY,
       ...(start
         ? {
             periodStart: {
@@ -165,7 +164,7 @@ const aggregateWeeklyUsage = async (
       ? db.aiAgentUsageBucket.findMany({
           where: {
             agentId: { in: globalAgentIds },
-            periodType: 'week',
+            periodType: PeriodType.WEEK,
             ...(start
               ? {
                   periodStart: {
@@ -185,7 +184,7 @@ const aggregateWeeklyUsage = async (
       ? db.aiAgentUsageBucket.findMany({
           where: {
             agentId: { in: personalAgentIds },
-            periodType: 'week',
+            periodType: PeriodType.WEEK,
             ...(start
               ? {
                   periodStart: {
@@ -247,7 +246,7 @@ export const getAiAnalytics = async ({
   const globalAgentIds = globalAgents.map((agent) => agent.id);
   const personalAgentIds = personalAgents.map((agent) => agent.id);
 
-  const buildPeriodAnalytics = async (period: AnalyticsPeriodId): Promise<PeriodAnalytics> => {
+  const buildPeriodAnalytics = async (period: Period): Promise<PeriodAnalytics> => {
     const { start, end } = getPeriodRange(period, now);
     const weekRange = getWeekRange(period, now);
 
@@ -283,16 +282,16 @@ export const getAiAnalytics = async ({
   };
 
   const [all, seven, thirty, ninety] = await Promise.all([
-    buildPeriodAnalytics('all'),
-    buildPeriodAnalytics('7d'),
-    buildPeriodAnalytics('30d'),
-    buildPeriodAnalytics('90d'),
+    buildPeriodAnalytics(Period.ALL),
+    buildPeriodAnalytics(Period['7D']),
+    buildPeriodAnalytics(Period['30D']),
+    buildPeriodAnalytics(Period['90D']),
   ]);
 
   return {
     all,
-    '7d': seven,
-    '30d': thirty,
-    '90d': ninety,
+    [Period['7D']]: seven,
+    [Period['30D']]: thirty,
+    [Period['90D']]: ninety,
   };
 };
