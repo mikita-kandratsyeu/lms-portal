@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  FlaskConicalIcon,
   LayoutDashboardIcon,
   MessageCircleMoreIcon,
   ServerIcon,
@@ -55,19 +54,6 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
             isPreviewPage={isPreviewPage}
           />
         </div>
-        <div>
-          {!isPreviewPage && (
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={SlidersHorizontalIcon} />
-              <h2 className="text-xl">{t('customizeLlm')}</h2>
-            </div>
-          )}
-          <CustomizeModelForm
-            agentId={agentId}
-            initialData={initialData}
-            isPreviewPage={isPreviewPage}
-          />
-        </div>
       </div>
       <div className="space-y-6">
         <div>
@@ -84,15 +70,19 @@ export const Body = ({ agentId, initialData, isPreviewPage, models = [] }: BodyP
             models={models}
           />
         </div>
-        {!isPreviewPage && (
-          <div>
+        <div>
+          {!isPreviewPage && (
             <div className="flex items-center gap-x-2">
-              <IconBadge icon={FlaskConicalIcon} />
-              <h2 className="text-xl">{t('experimental.title')}</h2>
+              <IconBadge icon={SlidersHorizontalIcon} />
+              <h2 className="text-xl">{t('customizeLlm')}</h2>
             </div>
-            <p>{t('experimental.api')}</p>
-          </div>
-        )}
+          )}
+          <CustomizeModelForm
+            agentId={agentId}
+            initialData={initialData}
+            isPreviewPage={isPreviewPage}
+          />
+        </div>
       </div>
     </div>
   );
