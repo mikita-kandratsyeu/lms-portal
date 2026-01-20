@@ -4,10 +4,9 @@ import { useTranslations } from 'next-intl';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
+import { PERSONAL_PIE_COLORS } from '@/constants/ai/analytics';
 
 import type { ModelUsage, PersonalAgent } from './types';
-
-const personalPieColors = ['#2563eb', '#7c3aed', '#10b981', '#f59e0b', '#ef4444'];
 
 type AnalyticsPersonalProps = {
   personalAgents: PersonalAgent[];
@@ -67,7 +66,7 @@ export const AnalyticsPersonal = ({
                 {personalModelUsage.map((entry, index) => (
                   <Cell
                     key={entry.model}
-                    fill={personalPieColors[index % personalPieColors.length]}
+                    fill={PERSONAL_PIE_COLORS[index % PERSONAL_PIE_COLORS.length]}
                   />
                 ))}
               </Pie>

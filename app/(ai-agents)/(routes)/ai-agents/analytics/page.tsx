@@ -3,18 +3,18 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
+import { Period, Scope } from '@/constants/ai/analytics';
+
 import { AnalyticsCharts } from './_components/analytics-charts';
 import { AnalyticsHeader } from './_components/analytics-header';
 import { AnalyticsPersonal } from './_components/analytics-personal';
 import { AnalyticsSummary } from './_components/analytics-summary';
 import type { ModelUsage, PersonalAgent, WeeklyUsage } from './_components/types';
 
-const periodOptionIds = ['all', '7d', '30d', '90d'] as const;
+const periodOptionIds = Object.values(Period);
+const scopeOptionIds = Object.values(Scope);
 
 type PeriodId = (typeof periodOptionIds)[number];
-
-const scopeOptionIds = ['all', 'global', 'personal'] as const;
-
 type ScopeId = (typeof scopeOptionIds)[number];
 
 const analyticsByPeriod: Record<
@@ -140,8 +140,9 @@ const sumUses = (models: ModelUsage[]) => models.reduce((total, model) => total 
 
 const AnalyticPage = () => {
   const t = useTranslations('ai-agents.analytics');
-  const [period, setPeriod] = useState<PeriodId>('30d');
-  const [scope, setScope] = useState<ScopeId>('all');
+
+  const [period, setPeriod] = useState<PeriodId>(Period['30D']);
+  const [scope, setScope] = useState<ScopeId>(Scope.ALL);
 
   const periodOptions = periodOptionIds.map((id) => ({
     id,
@@ -163,8 +164,8 @@ const AnalyticPage = () => {
     analyticsByPeriod[period];
   const globalTop = getTopModel(globalModelUsage);
   const personalTop = getTopModel(personalModelUsage);
-  const showGlobal = scope === 'all' || scope === 'global';
-  const showPersonal = scope === 'all' || scope === 'personal';
+  const showGlobal = scope === Scope.ALL || scope === Scope.GLOBAL;
+  const showPersonal = scope === Scope.ALL || scope === Scope.PERSONAL;
 
   return (
     <div className="w-full space-y-6 p-4 sm:space-y-8 sm:p-6">
