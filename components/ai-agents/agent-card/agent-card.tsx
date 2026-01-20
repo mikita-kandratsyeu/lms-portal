@@ -115,7 +115,9 @@ export const AgentCard = ({
                   <h4 className="font-semibold">{name}</h4>
                   {isDraft && <TextBadge label={t('badges.draft')} />}
                   {isDefault && <TextBadge label={t('badges.default')} />}
-                  {!isPublic && !isDraft && <TextBadge label={t('badges.private')} variant="indigo" />}
+                  {!isPublic && !isDraft && (
+                    <TextBadge label={t('badges.private')} variant="indigo" />
+                  )}
                   {isPublic && <TextBadge label={t('badges.public')} variant="lime" />}
                 </div>
                 {user?.id && user?.name && (
@@ -147,7 +149,7 @@ export const AgentCard = ({
                 {!isFetching && <PlugIcon className="w-4 h-4 mr-2" />}
                 <span>{isConnected || isDefault ? t('disconnect') : t('connect')}</span>
               </Button>
-              {!isDraft && Boolean(totalUses) && (
+              {!isDraft && isNumber(totalUses) && (
                 <div className="flex gap-x-1 items-center text-muted-foreground">
                   <ChartColumnIcon className="w-4 h-4" />
                   <span className="text-xs">{t('totalUses', { amount: totalUses })}</span>
