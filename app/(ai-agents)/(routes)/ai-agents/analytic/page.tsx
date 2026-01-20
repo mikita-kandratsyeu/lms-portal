@@ -2,40 +2,12 @@
 
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Line,
-  LineChart,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-type ModelUsage = {
-  model: string;
-  uses: number;
-};
-
-type WeeklyUsage = {
-  week: string;
-  global: number;
-  personal: number;
-};
+import { AnalyticsCharts } from './_components/analytics-charts';
+import { AnalyticsHeader } from './_components/analytics-header';
+import { AnalyticsPersonal } from './_components/analytics-personal';
+import { AnalyticsSummary } from './_components/analytics-summary';
+import type { ModelUsage, PersonalAgent, WeeklyUsage } from './_components/types';
 
 const periodOptionIds = ['all', '7d', '30d', '90d'] as const;
 
@@ -166,8 +138,6 @@ const getTopModel = (models: ModelUsage[]) =>
 
 const sumUses = (models: ModelUsage[]) => models.reduce((total, model) => total + model.uses, 0);
 
-const personalPieColors = ['#2563eb', '#7c3aed', '#10b981', '#f59e0b', '#ef4444'];
-
 const AnalyticPage = () => {
   const t = useTranslations('ai-agents.analytics');
   const [period, setPeriod] = useState<PeriodId>('30d');
@@ -182,22 +152,7 @@ const AnalyticPage = () => {
     label: t(`scopes.${id}`),
   }));
 
-  const usageTrendConfig = {
-    global: { label: t('labels.global'), color: 'hsl(var(--primary))' },
-    personal: { label: t('labels.personal'), color: 'hsl(var(--muted-foreground))' },
-  } satisfies ChartConfig;
-
-  const globalModelConfig = {
-    uses: {
-      label: t('labels.uses'),
-      theme: {
-        light: 'hsl(var(--muted-foreground))',
-        dark: 'hsl(var(--muted-foreground))',
-      },
-    },
-  } satisfies ChartConfig;
-
-  const personalAgents = [
+  const personalAgents: PersonalAgent[] = [
     { name: t('personalAgents.tutor'), users: 64 },
     { name: t('personalAgents.reviewer'), users: 41 },
     { name: t('personalAgents.marketing'), users: 27 },
@@ -213,216 +168,37 @@ const AnalyticPage = () => {
 
   return (
     <div className="w-full space-y-6 p-4 sm:space-y-8 sm:p-6">
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <h1 className="text-xl font-semibold sm:text-2xl">{t('title')}</h1>
-            <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
-          </div>
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <Tabs value={scope} onValueChange={(value) => setScope(value as ScopeId)}>
-              <TabsList className="grid h-auto w-full grid-cols-3 gap-1 sm:h-9 sm:inline-flex sm:w-auto sm:gap-0">
-                {scopeOptions.map((option) => (
-                  <TabsTrigger key={option.id} value={option.id} className="w-full">
-                    {option.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-            <Tabs value={period} onValueChange={(value) => setPeriod(value as PeriodId)}>
-              <TabsList className="grid h-auto w-full grid-cols-2 gap-1 sm:h-9 sm:inline-flex sm:w-auto sm:grid-cols-none sm:gap-0">
-                {periodOptions.map((option) => (
-                  <TabsTrigger key={option.id} value={option.id} className="w-full">
-                    {option.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-        </div>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {showGlobal && (
-          <Card className="shadow-none">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">{t('cards.globalUses')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold">
-                {sumUses(globalModelUsage).toLocaleString()}
-              </div>
-              <p className="text-xs text-muted-foreground">{t('cards.publicOnly')}</p>
-            </CardContent>
-          </Card>
-        )}
-        {showGlobal && (
-          <Card className="shadow-none">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">{t('cards.activeUsers')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold">{globalUsers.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">{t('cards.last30Days')}</p>
-            </CardContent>
-          </Card>
-        )}
-        {showPersonal && (
-          <Card className="shadow-none">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">
-                {t('cards.myAgentsUsers')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold">{personalUsers.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">{t('cards.includingPrivate')}</p>
-            </CardContent>
-          </Card>
-        )}
-        {showGlobal && (
-          <Card className="shadow-none">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">
-                {t('cards.topModelGlobal')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold">{globalTop.model}</div>
-              <p className="text-xs text-muted-foreground">
-                {t('cards.totalUses', { amount: globalTop.uses.toLocaleString() })}
-              </p>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-      <div className="grid gap-6 lg:grid-cols-2">
-        {(showGlobal || showPersonal) && (
-          <Card className="shadow-none">
-            <CardHeader>
-              <CardTitle>{t('usageTrend.title')}</CardTitle>
-              <p className="text-xs text-muted-foreground">
-                {showGlobal && showPersonal
-                  ? t('usageTrend.globalVsPersonal')
-                  : showGlobal
-                    ? t('usageTrend.globalOnly')
-                    : t('usageTrend.personalOnly')}
-              </p>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer config={usageTrendConfig} className="h-[280px] w-full">
-                <LineChart data={weeklyUsage} margin={{ left: 8, right: 8, top: 16 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="week" />
-                  <YAxis />
-                  {showGlobal && (
-                    <Line
-                      type="monotone"
-                      dataKey="global"
-                      stroke="var(--color-global)"
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  )}
-                  {showPersonal && (
-                    <Line
-                      type="monotone"
-                      dataKey="personal"
-                      stroke="var(--color-personal)"
-                      strokeWidth={2}
-                      strokeDasharray="6 4"
-                      dot={false}
-                    />
-                  )}
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </LineChart>
-              </ChartContainer>
-            </CardContent>
-          </Card>
-        )}
-
-        {showGlobal && (
-          <Card className="shadow-none">
-            <CardHeader>
-              <CardTitle>{t('popularModels.title')}</CardTitle>
-              <p className="text-xs text-muted-foreground">{t('cards.publicOnly')}</p>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer config={globalModelConfig} className="h-[280px] w-full">
-                <BarChart data={globalModelUsage} margin={{ left: 8, right: 8, top: 16 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="model"
-                    tick={{ fontSize: 11 }}
-                    interval={0}
-                    angle={-15}
-                    textAnchor="end"
-                    height={60}
-                  />
-                  <YAxis />
-                  <Bar dataKey="uses" fill="var(--color-uses)" radius={[6, 6, 0, 0]} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </BarChart>
-              </ChartContainer>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+      <AnalyticsHeader
+        title={t('title')}
+        subtitle={t('subtitle')}
+        scope={scope}
+        period={period}
+        scopeOptions={scopeOptions}
+        periodOptions={periodOptions}
+        onScopeChange={(value) => setScope(value as ScopeId)}
+        onPeriodChange={(value) => setPeriod(value as PeriodId)}
+      />
+      <AnalyticsSummary
+        showGlobal={showGlobal}
+        showPersonal={showPersonal}
+        globalUses={sumUses(globalModelUsage)}
+        globalUsers={globalUsers}
+        personalUsers={personalUsers}
+        globalTop={globalTop}
+      />
+      <AnalyticsCharts
+        showGlobal={showGlobal}
+        showPersonal={showPersonal}
+        weeklyUsage={weeklyUsage}
+        globalModelUsage={globalModelUsage}
+      />
       {showPersonal && (
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Card className="shadow-none">
-            <CardHeader>
-              <CardTitle>{t('myAgentUsers.title')}</CardTitle>
-              <p className="text-xs text-muted-foreground">{t('myAgentUsers.subtitle')}</p>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {personalAgents.map((agent) => (
-                <div key={agent.name} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">{agent.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {t('myAgentUsers.activeUsers', { count: agent.users })}
-                    </p>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {Math.round((agent.users / personalUsers) * 100)}%
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-none">
-            <CardHeader>
-              <CardTitle>{t('popularModelPersonal.title')}</CardTitle>
-              <p className="text-xs text-muted-foreground">
-                {t('popularModelPersonal.uses', { amount: personalTop.uses.toLocaleString() })}
-              </p>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-lg font-semibold">{personalTop.model}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {t('popularModelPersonal.subtitle')}
-                  </p>
-                </div>
-              </div>
-              <ResponsiveContainer width="100%" height={240}>
-                <PieChart>
-                  <Pie data={personalModelUsage} dataKey="uses" nameKey="model" innerRadius={50}>
-                    {personalModelUsage.map((entry, index) => (
-                      <Cell
-                        key={entry.model}
-                        fill={personalPieColors[index % personalPieColors.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </div>
+        <AnalyticsPersonal
+          personalAgents={personalAgents}
+          personalUsers={personalUsers}
+          personalTop={personalTop}
+          personalModelUsage={personalModelUsage}
+        />
       )}
     </div>
   );
