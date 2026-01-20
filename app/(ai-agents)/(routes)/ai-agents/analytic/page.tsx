@@ -17,13 +17,14 @@ import {
   YAxis,
 } from 'recharts';
 
-import { Button, ButtonGroup, Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type ModelUsage = {
   model: string;
@@ -187,7 +188,13 @@ const AnalyticPage = () => {
   } satisfies ChartConfig;
 
   const globalModelConfig = {
-    uses: { label: t('labels.uses'), color: 'hsl(var(--primary))' },
+    uses: {
+      label: t('labels.uses'),
+      theme: {
+        light: 'hsl(var(--muted-foreground))',
+        dark: 'hsl(var(--muted-foreground))',
+      },
+    },
   } satisfies ChartConfig;
 
   const personalAgents = [
@@ -205,38 +212,32 @@ const AnalyticPage = () => {
   const showPersonal = scope === 'all' || scope === 'personal';
 
   return (
-    <div className="w-full p-6 space-y-8">
+    <div className="w-full space-y-6 p-4 sm:space-y-8 sm:p-6">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold">{t('title')}</h1>
+            <h1 className="text-xl font-semibold sm:text-2xl">{t('title')}</h1>
             <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <ButtonGroup>
-              {scopeOptions.map((option) => (
-                <Button
-                  key={option.id}
-                  type="button"
-                  variant={scope === option.id ? 'default' : 'outline'}
-                  onClick={() => setScope(option.id)}
-                >
-                  {option.label}
-                </Button>
-              ))}
-            </ButtonGroup>
-            <ButtonGroup>
-              {periodOptions.map((option) => (
-                <Button
-                  key={option.id}
-                  type="button"
-                  variant={period === option.id ? 'default' : 'outline'}
-                  onClick={() => setPeriod(option.id)}
-                >
-                  {option.label}
-                </Button>
-              ))}
-            </ButtonGroup>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <Tabs value={scope} onValueChange={(value) => setScope(value as ScopeId)}>
+              <TabsList className="grid h-auto w-full grid-cols-3 gap-1 sm:h-9 sm:inline-flex sm:w-auto sm:gap-0">
+                {scopeOptions.map((option) => (
+                  <TabsTrigger key={option.id} value={option.id} className="w-full">
+                    {option.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+            <Tabs value={period} onValueChange={(value) => setPeriod(value as PeriodId)}>
+              <TabsList className="grid h-auto w-full grid-cols-2 gap-1 sm:h-9 sm:inline-flex sm:w-auto sm:grid-cols-none sm:gap-0">
+                {periodOptions.map((option) => (
+                  <TabsTrigger key={option.id} value={option.id} className="w-full">
+                    {option.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
           </div>
         </div>
       </div>

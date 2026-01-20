@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { getAgentsData } from '@/actions/ai/agent/get-agents-data';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { AgentCard } from '@/components/ai-agents/agent-card/agent-card';
-import { ButtonGroup, buttonVariants } from '@/components/ui';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LIMIT_CONNECTED_AI_AGENTS } from '@/constants/ai/general';
 import { getTotalUses } from '@/lib/ai/analytics';
 
@@ -56,37 +56,35 @@ const GeneralPage = async (props: GeneralPageProps) => {
     !scopedPublicAgents.length;
 
   return (
-    <div className="w-full p-6">
-      <div className="flex flex-col gap-4 mb-8">
-        <h1 className="text-2xl font-medium">{t('title')}</h1>
-        <ButtonGroup>
-          <Link
-            className={buttonVariants({ variant: scope === 'all' ? 'default' : 'outline' })}
-            href={createScopeHref('all')}
-          >
-            {t('scopes.all')}
-          </Link>
-          <Link
-            className={buttonVariants({ variant: scope === 'mine' ? 'default' : 'outline' })}
-            href={createScopeHref('mine')}
-          >
-            {t('scopes.mine')}
-          </Link>
-        </ButtonGroup>
+    <div className="w-full p-4 sm:p-6">
+      <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-xl font-medium sm:text-2xl">{t('title')}</h1>
+          <Tabs value={scope}>
+            <TabsList className="grid h-auto w-full grid-cols-2 gap-1 sm:h-9 sm:inline-flex sm:w-auto sm:grid-cols-none sm:gap-0">
+              <TabsTrigger value="all" className="w-full" asChild>
+                <Link href={createScopeHref('all')}>{t('scopes.all')}</Link>
+              </TabsTrigger>
+              <TabsTrigger value="mine" className="w-full" asChild>
+                <Link href={createScopeHref('mine')}>{t('scopes.mine')}</Link>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
       </div>
       <Header />
       {(scopedDefaultAgent || scopedConnectedAgents.length > 0) && (
         <>
-          <div className="flex gap-x-2 items-center my-6">
-            <HousePlugIcon className="w-6 h-6" />
-            <h2 className="text-xl font-semibold">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 my-5 sm:my-6">
+            <HousePlugIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+            <h2 className="text-lg font-semibold sm:text-xl">
               {t('sections.connected')}{' '}
               <span>
                 ({scopedConnectedAgents.length}/{LIMIT_CONNECTED_AI_AGENTS})
               </span>
             </h2>
           </div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3">
             {scopedDefaultAgent && (
               <AgentCard
                 agentId={scopedDefaultAgent.id}
@@ -109,9 +107,9 @@ const GeneralPage = async (props: GeneralPageProps) => {
       )}
       {scopedPrivateOrDraftAgents.length > 0 && (
         <>
-          <div className="flex gap-x-2 items-center mt-8 mb-4">
-            <LockKeyholeIcon className="w-6 h-6" />
-            <h2 className="text-xl font-semibold">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-7 mb-4 sm:mt-8">
+            <LockKeyholeIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+            <h2 className="text-lg font-semibold sm:text-xl">
               {t('sections.private')}{' '}
               {!user?.hasSubscription && (
                 <span>
@@ -120,7 +118,7 @@ const GeneralPage = async (props: GeneralPageProps) => {
               )}
             </h2>
           </div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3">
             {scopedPrivateOrDraftAgents.map((agent) => (
               <AgentCard
                 agentId={agent.id}
@@ -134,11 +132,11 @@ const GeneralPage = async (props: GeneralPageProps) => {
       )}
       {scopedPublicAgents.length > 0 && (
         <>
-          <div className="flex gap-x-2 items-center mt-8 mb-4">
-            <GlobeIcon className="w-6 h-6" />
-            <h2 className="text-xl font-semibold">{t('sections.public')}</h2>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-7 mb-4 sm:mt-8">
+            <GlobeIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+            <h2 className="text-lg font-semibold sm:text-xl">{t('sections.public')}</h2>
           </div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3">
             {scopedPublicAgents.map((agent) => (
               <AgentCard
                 agentId={agent.id}
@@ -151,7 +149,9 @@ const GeneralPage = async (props: GeneralPageProps) => {
         </>
       )}
       {notFoundAgents && (
-        <div className="text-center text-sm text-muted-foreground mt-10">{t('notFound')}</div>
+        <div className="text-center text-sm text-muted-foreground mt-8 sm:mt-10">
+          {t('notFound')}
+        </div>
       )}
     </div>
   );
