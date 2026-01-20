@@ -10,6 +10,7 @@ datasource db {
 model User {
   id                  String                   @id @default(uuid())
   aiAgents            AiAgent[]
+  aiAgentUsageSeen    AiAgentUsageSeen[]
   connectedAiAgents   AiAgentConnection[]      @relation("ConnectedAiAgents")
   conversations       ChatConversation[]
   copilotRequestLimit CopilotRequestLimit?
@@ -425,6 +426,9 @@ model AiModel {
 model AiAgent {
   id                       String                     @id @default(uuid())
   aiModels                 AiModel[]
+  analyticsModelUsage      AiAgentModelUsageBucket[]
+  analyticsUsageBuckets    AiAgentUsageBucket[]
+  analyticsUsageSeen       AiAgentUsageSeen[]
   chatConversationStarters ChatConversationStarters[]
   chatConversations        ChatConversation[]
   connectedUsers           AiAgentConnection[]        @relation("ConnectedUsers")
@@ -458,4 +462,54 @@ model AiAgentConnection {
   @@unique([userId, aiAgentId])
   @@index([aiAgentId])
   @@index([userId])
+}
+
+enum UsagePeriod {
+  day
+  week
+}
+
+model AiAgentUsageBucket {
+  id          String      @id @default(uuid())
+  agent       AiAgent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  agentId     String
+  periodType  UsagePeriod
+  periodStart DateTime
+  totalUses   Int         @default(0)
+  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime    @default(now())
+
+  @@unique([agentId, periodType, periodStart])
+  @@index([agentId, periodType, periodStart])
+}
+
+model AiAgentModelUsageBucket {
+  id          String      @id @default(uuid())
+  agent       AiAgent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  agentId     String
+  model       String
+  periodType  UsagePeriod
+  periodStart DateTime
+  uses        Int         @default(0)
+  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime    @default(now())
+
+  @@unique([agentId, model, periodType, periodStart])
+  @@index([agentId, periodType, periodStart])
+  @@index([model, periodType, periodStart])
+}
+
+model AiAgentUsageSeen {
+  id          String      @id @default(uuid())
+  agent       AiAgent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  agentId     String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  periodType  UsagePeriod
+  periodStart DateTime
+  createdAt   DateTime    @default(now())
+
+  @@unique([agentId, userId, periodType, periodStart])
+  @@index([agentId, periodType, periodStart])
+  @@index([userId, periodType, periodStart])
 }
