@@ -127,9 +127,7 @@ export const CustomizeModelForm = ({
             <MarkdownText text={initialData?.systemInstruction} />
           )}
           {!initialData?.systemInstruction && (
-            <span className="text-muted-foreground italic">
-              {t('systemInstruction.empty')}
-            </span>
+            <span className="text-muted-foreground italic">{t('systemInstruction.empty')}</span>
           )}
           <h4 className="mb-2 mt-4 font-semibold">{t('temperature.title')}</h4>
           {isNumber(initialData?.temperature) && (
