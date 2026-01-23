@@ -774,7 +774,7 @@
       "system": "Система",
       "connect": "Подключить",
       "disconnect": "Отключить",
-      "totalUses": "{amount} всего использований",
+      "totalUses": "{amount} всего подключений",
       "systemInstruction": "Системная инструкция",
       "temperature": "Температура",
       "toast": {

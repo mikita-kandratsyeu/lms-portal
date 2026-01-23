@@ -775,7 +775,7 @@
       "system": "System",
       "connect": "Connect",
       "disconnect": "Disconnect",
-      "totalUses": "{amount} total uses",
+      "totalUses": "{amount} total connections",
       "systemInstruction": "System instruction",
       "temperature": "Temperature",
       "toast": {
