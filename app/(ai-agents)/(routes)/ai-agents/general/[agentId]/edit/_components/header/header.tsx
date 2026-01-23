@@ -32,26 +32,26 @@ export const Header = ({ agentId, initialData, isPreviewPage }: HeaderProps) => 
   const completionText = t('completion', { completed: completedFields, total: totalFields });
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="w-full">
-        <Link
-          className="flex items-center text-sm hover:opacity-75 transition duration-300 mb-6"
-          href={'/ai-agents/general'}
-        >
-          <ArrowLeftIcon className="h-4 w-4 mr-2" />
-          {t('back')}
-        </Link>
-        <div className="flex items-center justify-between w-full">
-          <div className="flex flex-col gap-y-2">
-            <h1 className="text-2xl font-medium">
-              {isPreviewPage ? t('previewTitle') : t('setupTitle')}
-            </h1>
-            {!isPreviewPage && (
-              <span className="text-sm text-muted-foreground">
-                {t('completeFields', { completion: completionText })}
-              </span>
-            )}
-          </div>
+    <div className="flex w-full flex-col gap-4">
+      <Link
+        className="flex items-center text-sm hover:opacity-75 transition duration-300"
+        href={'/ai-agents/general'}
+      >
+        <ArrowLeftIcon className="h-4 w-4 mr-2" />
+        {t('back')}
+      </Link>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-y-2">
+          <h1 className="text-2xl font-medium">
+            {isPreviewPage ? t('previewTitle') : t('setupTitle')}
+          </h1>
+          {!isPreviewPage && (
+            <span className="text-sm text-muted-foreground">
+              {t('completeFields', { completion: completionText })}
+            </span>
+          )}
+        </div>
+        <div className="w-full max-w-full overflow-x-auto sm:w-auto sm:overflow-visible">
           <Actions
             agentId={agentId}
             isDefault={initialData?.isDefault}

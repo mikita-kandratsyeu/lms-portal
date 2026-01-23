@@ -91,11 +91,11 @@ export const CustomizeModelForm = ({
 
   return (
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between gap-x-2">
-        <div className="flex gap-x-2 items-center">
+      <div className="font-medium flex flex-wrap items-center justify-between gap-x-2 gap-y-2">
+        <div className="flex gap-x-2 items-center min-w-0">
           <span>{t('title')}</span>
         </div>
-        <div className="flex gap-x-2 items-center">
+        <div className="flex flex-wrap gap-x-2 gap-y-2 items-center justify-end">
           {!isPreviewPage && (
             <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
               {isEditing && <>{t('cancel')}</>}

@@ -7,6 +7,7 @@ import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { BsStars } from 'react-icons/bs';
 import { v4 as uuidv4 } from 'uuid';
 import * as z from 'zod';
 
@@ -16,7 +17,11 @@ import { LanguageSwitcher } from '@/components/common/language-switcher';
 import { Button, Input } from '@/components/ui';
 import { Form, FormField } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
-import { LIMIT_CONVERSATION_STARTERS } from '@/constants/ai/general';
+import { ChatCompletionRole, LIMIT_CONVERSATION_STARTERS } from '@/constants/ai/general';
+import {
+  SYSTEM_CONVERSATION_STARTERS_PROMPT,
+  USER_CONVERSATION_STARTERS_PROMPT,
+} from '@/constants/ai/prompts';
 import {
   getConversationStartersByLanguage,
   mapConversationStarters,
@@ -68,6 +73,7 @@ export const ConversationStartersForm = ({
   const [currentInput, setCurrentInput] = useState('');
   const [selectedLocale, setSelectedLocale] = useState(locale);
   const [isEditing, setIsEditing] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const { isSubmitting, isValid } = form.formState;
 
@@ -126,10 +132,121 @@ export const ConversationStartersForm = ({
     field.onChange(field.value.filter((value) => value.id !== id));
   };
 
+  const getCompletionText = (completion: any) => {
+    if (!completion) {
+      return '';
+    }
+
+    if (typeof completion === 'string') {
+      return completion;
+    }
+
+    if (typeof completion.output_text === 'string') {
+      return completion.output_text;
+    }
+
+    const content = completion.choices?.[0]?.message?.content ?? completion.choices?.[0]?.text;
+
+    if (Array.isArray(content)) {
+      return content.map((item) => item?.text ?? '').join('');
+    }
+
+    return typeof content === 'string' ? content : '';
+  };
+
+  const parseGeneratedStarters = (rawText: string) => {
+    const trimmedText = rawText.trim();
+    const fencedMatch = trimmedText.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+    const jsonCandidate = fencedMatch ? fencedMatch[1] : trimmedText;
+    const startIndex = jsonCandidate.indexOf('{');
+    const endIndex = jsonCandidate.lastIndexOf('}');
+    const normalized =
+      startIndex !== -1 && endIndex !== -1 ? jsonCandidate.slice(startIndex, endIndex + 1) : '';
+
+    if (!normalized) {
+      throw new Error(t('toast.generateError'));
+    }
+
+    return JSON.parse(normalized) as Record<string, string[]>;
+  };
+
+  const buildStarterEntries = (language: string, texts: unknown) => {
+    if (!Array.isArray(texts)) {
+      return [];
+    }
+
+    const uniqueTexts = Array.from(
+      new Set(
+        texts
+          .filter((text) => typeof text === 'string')
+          .map((text) => text.trim())
+          .filter(Boolean),
+      ),
+    ).slice(0, LIMIT_CONVERSATION_STARTERS);
+
+    return uniqueTexts.map((text) => ({
+      id: uuidv4(),
+      language,
+      text,
+    }));
+  };
+
+  const handleGenerateStarters = async () => {
+    try {
+      setIsGenerating(true);
+
+      const prompt = USER_CONVERSATION_STARTERS_PROMPT({
+        agentName: initialData?.name,
+        agentDescription: initialData?.description,
+        systemInstruction: initialData?.systemInstruction,
+        limit: LIMIT_CONVERSATION_STARTERS,
+      });
+
+      const response = await fetcher.post('/api/ai/completions', {
+        body: {
+          input: [{ role: ChatCompletionRole.USER, content: prompt }],
+          instructions: SYSTEM_CONVERSATION_STARTERS_PROMPT,
+        },
+        cache: 'no-cache',
+        responseType: 'json',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const completionText = getCompletionText(response?.completion);
+      const generated = parseGeneratedStarters(completionText);
+
+      const startersByLanguage = {
+        en: buildStarterEntries('en', generated.en),
+        ru: buildStarterEntries('ru', generated.ru),
+        be: buildStarterEntries('be', generated.be),
+      };
+
+      const starters = Object.values(startersByLanguage).flat();
+      const hasAllLanguages = Object.values(startersByLanguage).every((items) => items.length > 0);
+
+      if (!starters.length || !hasAllLanguages) {
+        throw new Error(t('toast.generateError'));
+      }
+
+      form.setValue('chatConversationStarters', starters, { shouldValidate: true });
+      setCurrentInput('');
+      toast({ title: t('toast.generated') });
+    } catch (error) {
+      toast({
+        isError: true,
+        description: (error as Error)?.message ?? t('toast.generateError'),
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between gap-x-2">
-        <div className="flex flex-col gap-x-2 justify-center">
+      <div className="font-medium flex items-start justify-between gap-x-2">
+        <div className="flex flex-col gap-1 min-w-0">
           <span>{t('title')}</span>
           {isEditing && (
             <span className="text-sm text-muted-foreground">
@@ -140,35 +257,54 @@ export const ConversationStartersForm = ({
             </span>
           )}
         </div>
-        <div className="flex gap-x-2 items-center">
-          <LanguageSwitcher
-            callback={setSelectedLocale}
-            isDisabled={isSubmitting}
-            value={selectedLocale}
-          />
-          {!isPreviewPage && (
+        <div className="flex items-center gap-x-2">
+          {!isPreviewPage && !isEditing && (
             <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
-              {isEditing && <>{t('cancel')}</>}
-              {!isEditing && (
-                <>
-                  <PencilLineIcon className="h-4 w-4 mr-2" />
-                  {t('edit')}
-                </>
-              )}
+              <PencilLineIcon className="h-4 w-4 mr-2" />
+              {t('edit')}
             </Button>
           )}
           {isEditing && (
-            <Button
-              disabled={!isValid || isSubmitting}
-              isLoading={isSubmitting}
-              onClick={form.handleSubmit(handleSubmit)}
-              size="sm"
-              type="submit"
-            >
-              {t('save')}
-            </Button>
+            <>
+              <Button
+                disabled={isSubmitting}
+                onClick={handleToggleEdit}
+                size="sm"
+                variant="outline"
+              >
+                {t('cancel')}
+              </Button>
+              <Button
+                disabled={!isValid || isSubmitting}
+                isLoading={isSubmitting}
+                onClick={form.handleSubmit(handleSubmit)}
+                size="sm"
+                type="submit"
+              >
+                {t('save')}
+              </Button>
+            </>
           )}
         </div>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <LanguageSwitcher
+          callback={setSelectedLocale}
+          isDisabled={isSubmitting || isGenerating}
+          value={selectedLocale}
+        />
+        {isEditing && (
+          <Button
+            disabled={isSubmitting || isGenerating}
+            isLoading={isGenerating}
+            onClick={handleGenerateStarters}
+            size="sm"
+            variant="outline"
+          >
+            <BsStars className="h-4 w-4 mr-2" />
+            {t(isGenerating ? 'generatingAi' : 'generateAi')}
+          </Button>
+        )}
       </div>
       {!isEditing && (
         <div className="text-sm mt-4">

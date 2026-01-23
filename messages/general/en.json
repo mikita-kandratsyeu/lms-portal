@@ -723,11 +723,15 @@
         "edit": "Edit",
         "cancel": "Cancel",
         "save": "Save",
+        "generateAi": "Generate with AI",
+        "generatingAi": "Generating...",
         "limit": "{count} of {max} (Max)",
         "empty": "No conversation starters for chat.",
         "placeholder": "e.g. 'What is the weather today?'",
         "toast": {
-          "updated": "Conversation starters have been updated"
+          "updated": "Conversation starters have been updated",
+          "generated": "AI-generated starters have been added",
+          "generateError": "Unable to generate starters. Please try again."
         }
       }
     },
