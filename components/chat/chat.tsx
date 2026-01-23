@@ -61,7 +61,6 @@ export const Chat = () => {
                 <p className={'font-semibold text-base text-neutral-700 dark:text-neutral-300'}>
                   Nova Copilot
                 </p>
-                {/* <p className={'text-muted-foreground text-xs'}>{currentModelLabel}</p> */}
               </div>
               <div className="flex gap-x-2">
                 <ChatContextMenu isNewTab>
