@@ -25,6 +25,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'media.licdn.com' },
       { protocol: 'https', hostname: 'sun23-2.userapi.com' },
       { protocol: 'https', hostname: 'utfs.io' },
+      { protocol: 'https', hostname: '*.ufs.sh' },
     ],
   },
   webpack: (config) => {
