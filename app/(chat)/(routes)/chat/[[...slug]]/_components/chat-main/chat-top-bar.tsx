@@ -58,25 +58,41 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   const hasAgent = currentAgent?.name && currentModel?.name;
 
   useEffect(() => {
-    if (connectedAgents.length) {
-      const requestedAgent = agentIdParam
-        ? connectedAgents.find((agent) => agent.id === agentIdParam)
-        : null;
-      const defaultAgent = connectedAgents.find((agent) => agent.isDefault) ?? connectedAgents[0];
-      const nextAgent = requestedAgent ?? defaultAgent;
+    if (!connectedAgents.length) {
+      return;
+    }
 
-      if (nextAgent && currentAgent?.id !== nextAgent.id) {
+    if (agentIdParam) {
+      const requestedAgent = connectedAgents.find((agent) => agent.id === agentIdParam);
+
+      if (requestedAgent && currentAgent?.id !== requestedAgent.id) {
         const nextModel =
-          nextAgent.aiModels.find(
+          requestedAgent.aiModels.find(
             (model) => model.isDefault || !model.features.includes('image'),
-          ) ?? nextAgent.aiModels[0];
+          ) ?? requestedAgent.aiModels[0];
 
         if (nextModel) {
           setCurrentModel(nextModel);
         }
 
         setActiveFeature(AiModelFeature.text);
-        setCurrentAgent(nextAgent);
+        setCurrentAgent(requestedAgent);
+      }
+    } else if (!currentAgent) {
+      const defaultAgent = connectedAgents.find((agent) => agent.isDefault) ?? connectedAgents[0];
+
+      if (defaultAgent) {
+        const nextModel =
+          defaultAgent.aiModels.find(
+            (model) => model.isDefault || !model.features.includes('image'),
+          ) ?? defaultAgent.aiModels[0];
+
+        if (nextModel) {
+          setCurrentModel(nextModel);
+        }
+
+        setActiveFeature(AiModelFeature.text);
+        setCurrentAgent(defaultAgent);
       }
     }
 
@@ -86,7 +102,6 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   }, [
     agentIdParam,
     connectedAgents,
-    currentAgent?.id,
     currentAgent,
     currentModel,
     setActiveFeature,

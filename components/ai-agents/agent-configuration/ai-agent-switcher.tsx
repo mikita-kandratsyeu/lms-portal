@@ -40,26 +40,34 @@ export const AiAgentSwitcher = ({ className }: AiAgentSwitcherProps) => {
     [connectedAgents],
   );
 
+  const selectedAgentId =
+    currentAgent?.id && connectedAgents.some((agent) => agent.id === currentAgent.id)
+      ? currentAgent.id
+      : defaultAgent?.id ?? connectedAgents[0]?.id;
+
   const handleValueChange = (agentId: string) => {
-    const agent = connectedAgents.find((agent) => agent.id === agentId);
+    const agent = connectedAgents.find((item) => item.id === agentId);
 
-    if (agent) {
-      const model = agent.aiModels.find(
-        (model) => model.isDefault || !model.features.includes('image'),
-      );
-
-      if (model) {
-        setCurrentModel(model);
-      }
-
-      setActiveFeature(AiModelFeature.text);
-      setCurrentAgent(agent);
+    if (!agent) {
+      return;
     }
+
+    const model =
+      agent.aiModels.find((item) => item.isDefault) ??
+      agent.aiModels.find((item) => !item.features.includes('image')) ??
+      agent.aiModels[0];
+
+    if (model) {
+      setCurrentModel(model);
+    }
+
+    setActiveFeature(AiModelFeature.text);
+    setCurrentAgent(agent);
   };
 
   return (
     <div className={className}>
-      <Select defaultValue={currentAgent?.id || defaultAgent?.id} onValueChange={handleValueChange}>
+      <Select defaultValue={selectedAgentId} onValueChange={handleValueChange}>
         <SelectTrigger className="w-full" disabled={isFetching}>
           <SelectValue placeholder={t('agentPlaceholder')} />
         </SelectTrigger>

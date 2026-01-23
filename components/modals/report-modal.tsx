@@ -2,13 +2,13 @@
 
 import { getCookie, setCookie } from 'cookies-next';
 import { format, fromUnixTime, sub } from 'date-fns';
-import { CalendarIcon, Clock } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { SyntheticEvent, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 
 import { getAnalytics } from '@/actions/analytics/get-analytics';
-import { Button, Calendar, Popover, PopoverContent, PopoverTrigger } from '@/components/ui';
+import { Button, Calendar } from '@/components/ui';
 import {
   Dialog,
   DialogContent,
@@ -23,7 +23,6 @@ import { DATE_RANGE_TEMPLATE, ONE_DAY_SEC, ONE_YEAR_SEC } from '@/constants/comm
 import { Report } from '@/constants/payments';
 import { roundDate } from '@/lib/date';
 import { fetcher } from '@/lib/fetcher';
-import { cn } from '@/lib/utils';
 
 type Analytics = Awaited<ReturnType<typeof getAnalytics>>;
 
@@ -103,47 +102,33 @@ export const ReportModal = ({ children, reportType, stripeConnect }: ReportModal
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-2 my-4">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  id="date"
-                  variant="outline"
-                  className={cn(
-                    'w-full justify-start text-left font-normal',
-                    !date && 'text-muted-foreground',
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date?.from ? (
-                    date.to ? (
-                      <>
-                        {format(date.from, DATE_RANGE_TEMPLATE)}&nbsp;-&nbsp;
-                        {format(date.to, DATE_RANGE_TEMPLATE)}
-                      </>
-                    ) : (
-                      format(date.from, DATE_RANGE_TEMPLATE)
-                    )
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="range"
-                  defaultMonth={date?.from}
-                  selected={date}
-                  onSelect={setDate}
-                  disabled={(date) =>
-                    date > new Date() ||
-                    date <
-                      (stripeConnect?.created
-                        ? fromUnixTime(stripeConnect.created)
-                        : sub(new Date(), { seconds: ONE_YEAR_SEC }))
-                  }
-                />
-              </PopoverContent>
-            </Popover>
+            <div className="text-sm text-muted-foreground">
+              {date?.from ? (
+                date.to ? (
+                  <>
+                    {format(date.from, DATE_RANGE_TEMPLATE)}&nbsp;-&nbsp;
+                    {format(date.to, DATE_RANGE_TEMPLATE)}
+                  </>
+                ) : (
+                  format(date.from, DATE_RANGE_TEMPLATE)
+                )
+              ) : (
+                <span>Pick a date</span>
+              )}
+            </div>
+            <Calendar
+              mode="range"
+              defaultMonth={date?.from}
+              selected={date}
+              onSelect={setDate}
+              disabled={(date) =>
+                date > new Date() ||
+                date <
+                  (stripeConnect?.created
+                    ? fromUnixTime(stripeConnect.created)
+                    : sub(new Date(), { seconds: ONE_YEAR_SEC }))
+              }
+            />
           </div>
           <DialogFooter>
             <Button disabled={isFetching} isLoading={isFetching} type="submit">

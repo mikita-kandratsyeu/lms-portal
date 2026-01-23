@@ -38,22 +38,25 @@ export const ChatStarters = ({
   );
 
   const styles =
-    'inline-flex max-w-full rounded-lg bg-muted px-5 py-3 text-left text-sm md:text-base text-muted-foreground line-clamp-2 border justify-between items-center gap-x-2';
+    'group w-full rounded-lg border bg-muted/40 px-4 py-3 text-left text-sm md:text-base text-foreground/80 shadow-sm transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring line-clamp-2';
 
   return (
-    <div className="flex items-center">
-      <div className="flex flex-col gap-3 w-full">
+    <div className="flex items-center w-full">
+      <div className="flex w-full max-w-2xl flex-col items-stretch gap-3 px-4 sm:grid sm:grid-cols-2 sm:px-0">
         {starters.map((starter, index) => {
+          const mobileHiddenClass = index > 1 ? 'hidden sm:block' : '';
+
           if (isAnimated) {
             return (
               <motion.button
                 animate="visible"
-                className={styles}
+                className={`${styles} ${mobileHiddenClass}`}
                 custom={index}
                 initial="hidden"
                 key={starter.id}
                 variants={bubbleVariants}
                 onClick={(event) => handleClick(event, starter.text)}
+                type="button"
               >
                 {starter.text}
               </motion.button>
@@ -61,9 +64,11 @@ export const ChatStarters = ({
           }
 
           return (
-            <div className={styles} key={starter.id}>
-              {starter.text}
-              {showCopyButton && <CopyClipboard textToCopy={starter.text} />}
+            <div className={`${styles} ${mobileHiddenClass}`} key={starter.id}>
+              <div className="flex w-full items-center justify-between gap-x-2">
+                <span className="line-clamp-2">{starter.text}</span>
+                {showCopyButton && <CopyClipboard textToCopy={starter.text} />}
+              </div>
             </div>
           );
         })}
