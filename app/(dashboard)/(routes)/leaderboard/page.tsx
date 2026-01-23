@@ -21,8 +21,8 @@ const LeaderBoard = async () => {
 
   return (
     <Suspense fallback={<LeaderBoardSkeleton />}>
-      <div className="p-4 sm:p-6">
-        <div className="mx-auto w-full max-w-5xl space-y-6">
+      <div className="px-4 py-4 sm:px-6 sm:py-6">
+        <div className="mx-auto w-full max-w-6xl space-y-6">
           <h1 className="text-2xl font-medium">{t('leaderboard')}</h1>
           <LeadersTable leaders={leaders} userId={user?.userId} />
         </div>
