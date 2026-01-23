@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
+import { getTranslations } from 'next-intl/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getLeaders } from '@/actions/courses/get-leaders';
@@ -14,13 +15,17 @@ export const metadata: Metadata = {
 };
 
 const LeaderBoard = async () => {
+  const t = await getTranslations('sidebar');
   const user = await getCurrentUser();
   const leaders = await getLeaders();
 
   return (
     <Suspense fallback={<LeaderBoardSkeleton />}>
-      <div className="p-6 space-y-4">
-        <LeadersTable leaders={leaders} userId={user?.userId} />
+      <div className="p-4 sm:p-6">
+        <div className="mx-auto w-full max-w-5xl space-y-6">
+          <h1 className="text-2xl font-medium">{t('leaderboard')}</h1>
+          <LeadersTable leaders={leaders} userId={user?.userId} />
+        </div>
       </div>
     </Suspense>
   );

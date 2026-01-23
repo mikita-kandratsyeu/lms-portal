@@ -39,41 +39,47 @@ export const LeadersTable = ({ leaders, userId }: LeadersTableProps) => {
   );
 
   return (
-    <Table className="w-full md:w-4/5 mx-auto">
-      {!leaders.length && <TableCaption>{t('notFound')}</TableCaption>}
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">{t('rank')}</TableHead>
-          <TableHead>{t('user')}</TableHead>
-          <TableHead className="text-right">{t('points')}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {currentLeader && (
+    <div className="w-full rounded-xl border bg-card shadow-sm overflow-hidden">
+      <Table className="w-full text-xs sm:text-sm">
+        {!leaders.length && <TableCaption className="text-center">{t('notFound')}</TableCaption>}
+        <TableHeader className="bg-muted/40">
           <TableRow>
-            <TableCell className="font-medium">
-              <Coffee className="w-4 h-4" />
-            </TableCell>
-            <TableCell>
-              <LeaderItem leader={currentLeader} userId={userId} />
-            </TableCell>
-            <TableCell className="text-right">
-              <TextBadge label={String(currentLeader.xp)} variant="yellow" />
-            </TableCell>
+            <TableHead className="w-[72px] sm:w-[100px] text-xs uppercase tracking-wide">
+              {t('rank')}
+            </TableHead>
+            <TableHead className="text-xs uppercase tracking-wide">{t('user')}</TableHead>
+            <TableHead className="text-right text-xs uppercase tracking-wide">
+              {t('points')}
+            </TableHead>
           </TableRow>
-        )}
-        {filteredLeaders.map((leader, index) => (
-          <TableRow key={leader.userId} className="space-y-6">
-            <TableCell className="font-medium">{index + 1}</TableCell>
-            <TableCell>
-              <LeaderItem leader={leader} />
-            </TableCell>
-            <TableCell className="text-right">
-              <TextBadge label={String(leader.xp)} variant="yellow" />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {currentLeader && (
+            <TableRow className="bg-muted/30">
+              <TableCell className="font-medium text-muted-foreground">
+                <Coffee className="h-4 w-4" />
+              </TableCell>
+              <TableCell>
+                <LeaderItem leader={currentLeader} userId={userId} />
+              </TableCell>
+              <TableCell className="text-right">
+                <TextBadge label={String(currentLeader.xp)} variant="yellow" />
+              </TableCell>
+            </TableRow>
+          )}
+          {filteredLeaders.map((leader, index) => (
+            <TableRow key={leader.userId}>
+              <TableCell className="font-medium text-muted-foreground">{index + 1}</TableCell>
+              <TableCell>
+                <LeaderItem leader={leader} />
+              </TableCell>
+              <TableCell className="text-right">
+                <TextBadge label={String(leader.xp)} variant="yellow" />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
