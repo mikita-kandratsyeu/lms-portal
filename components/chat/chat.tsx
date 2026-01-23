@@ -4,7 +4,6 @@ import { MoreHorizontalIcon, X } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
-import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
 import { useUserSettingsStore } from '@/hooks/store/use-user-settings.store';
 import { absoluteUrl, cn } from '@/lib/utils';
 
@@ -18,10 +17,6 @@ export const Chat = () => {
 
   const { isCopilotInNewTab } = useUserSettingsStore((state) => ({
     isCopilotInNewTab: state.isCopilotInNewTab,
-  }));
-  const { currentAgent, currentModel } = useAiAgentStore((state) => ({
-    currentAgent: state.currentAgent,
-    currentModel: state.currentModel,
   }));
 
   const handleOpenChange = isCopilotInNewTab
