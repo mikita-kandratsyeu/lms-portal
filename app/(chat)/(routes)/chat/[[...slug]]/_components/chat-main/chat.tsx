@@ -1,6 +1,7 @@
 'use client';
 
 import { AiModelFeature } from '@prisma/client';
+import { mode } from 'crypto-js';
 import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -78,35 +79,50 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       userMessage: Message,
       assistMessage: Message & { url: string },
     ) => {
-      const response = await fetcher.post('/api/chat', {
-        body: {
-          conversationId,
-          image: isImageGenerationActive
-            ? {
-                messageId: assistMessage.id,
-                model: currentModel?.value,
-                revisedPrompt: assistMessage.content,
-                url: assistMessage.url,
-              }
-            : null,
-          messages: [userMessage, assistMessage],
-          model: currentModel?.value,
-        },
-        responseType: 'json',
-      });
+      if (assistMessage?.content || (isImageGenerationActive && assistMessage?.url)) {
+        const model = isImageGenerationActive
+          ? currentAgent?.aiModels?.find(
+              (model) =>
+                model.features.length === 1 && model.features.includes(AiModelFeature.image),
+            )?.value
+          : currentModel?.value;
 
-      if (response?.messages) {
-        const updatedChatMessages = {
-          ...chatMessages,
-          [conversationId]: [...chatMessages[conversationId], ...response.messages],
-        };
+        const response = await fetcher.post('/api/chat', {
+          body: {
+            conversationId,
+            image: isImageGenerationActive
+              ? {
+                  messageId: assistMessage.id,
+                  model,
+                  revisedPrompt: assistMessage.content,
+                  url: assistMessage.url,
+                }
+              : null,
+            messages: [userMessage, assistMessage],
+            model,
+          },
+          responseType: 'json',
+        });
 
-        setAssistantMessage('');
-        setAssistantImage('');
-        setChatMessages(updatedChatMessages);
+        if (response?.messages) {
+          const updatedChatMessages = {
+            ...chatMessages,
+            [conversationId]: [...chatMessages[conversationId], ...response.messages],
+          };
+
+          setAssistantMessage('');
+          setAssistantImage('');
+          setChatMessages(updatedChatMessages);
+        }
       }
     },
-    [isImageGenerationActive, currentModel?.value, chatMessages, setChatMessages],
+    [
+      isImageGenerationActive,
+      currentAgent?.aiModels,
+      currentModel?.value,
+      chatMessages,
+      setChatMessages,
+    ],
   );
 
   const handleSubmit = useCallback(
@@ -170,11 +186,15 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
 
       try {
         if (isImageGenerationActive) {
+          const modelId = currentAgent?.aiModels?.find(
+            (model) => model.features.length === 1 && model.features.includes(AiModelFeature.image),
+          )?.id;
+
           const imageGeneration = await fetcher.post('api/ai/image', {
             responseType: 'json',
             body: {
               agentId: currentAgent?.id,
-              modelId: currentModel?.id,
+              modelId,
               prompt: currentMessage,
             },
             cache: 'no-cache',

@@ -56,10 +56,12 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
 
   const [previewModels, freeModels] = models.reduce<[AiModel[], AiModel[]]>(
     (acc, model) => {
-      if (model.isSubscription) {
-        acc[0].push(model);
-      } else {
-        acc[1].push(model);
+      if (model.features?.[0] !== AiModelFeature.image) {
+        if (model.isSubscription) {
+          acc[0].push(model);
+        } else {
+          acc[1].push(model);
+        }
       }
 
       return acc;
@@ -68,7 +70,9 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
   );
 
   const selectedModelId =
-    currentModel?.id && models.some((model) => model.id === currentModel.id)
+    currentModel?.id &&
+    currentModel?.features?.[0] !== AiModelFeature.image &&
+    models.some((model) => model.id === currentModel.id)
       ? currentModel.id
       : freeModels?.find((model) => model.isDefault)?.id ?? freeModels[0]?.id ?? models[0]?.id;
 
