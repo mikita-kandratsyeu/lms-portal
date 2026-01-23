@@ -19,9 +19,7 @@ export const LeaderItem = ({ leader, userId }: LeaderItemProps) => {
         <AvatarFallback>{getFallbackName(leader.name as string)}</AvatarFallback>
       </Avatar>
       <div className="flex flex-wrap items-center gap-2 min-w-0">
-        <p className="text-sm font-semibold truncate max-w-[160px] sm:max-w-none">
-          {leader.name}
-        </p>
+        <p className="text-sm font-semibold truncate max-w-[160px] sm:max-w-none">{leader.name}</p>
         {leader.userId === userId && <TextBadge label={t('you')} variant="indigo" />}
         {leader.hasSubscription && !leader.isOwner && (
           <TextBadge label="Nova&nbsp;Plus" variant="lime" />

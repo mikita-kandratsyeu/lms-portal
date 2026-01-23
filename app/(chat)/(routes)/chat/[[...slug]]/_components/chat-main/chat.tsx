@@ -104,13 +104,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
     }
 
     setCurrentAgent(requestedAgent);
-  }, [
-    agentIdParam,
-    connectedAgents,
-    currentAgent?.id,
-    setCurrentAgent,
-    setCurrentModel,
-  ]);
+  }, [agentIdParam, connectedAgents, currentAgent?.id, setCurrentAgent, setCurrentModel]);
 
   const saveLastMessages = useCallback(
     async (
