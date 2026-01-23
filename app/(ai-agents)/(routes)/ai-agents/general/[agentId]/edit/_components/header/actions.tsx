@@ -194,7 +194,12 @@ export const Actions = ({
                 <>
                   <DropdownMenuItem
                     className="hover:cursor-pointer"
-                    onClick={() => router.push(`/chat?agentId=${agentId}`)}
+                    disabled={!isConnected && !isDefault}
+                    onClick={() => {
+                      if (isConnected || isDefault) {
+                        router.push(`/chat?agentId=${agentId}`);
+                      }
+                    }}
                   >
                     <span>{t('chatNow')}</span>
                   </DropdownMenuItem>

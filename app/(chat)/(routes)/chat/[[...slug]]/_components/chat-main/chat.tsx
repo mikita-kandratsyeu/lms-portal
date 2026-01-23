@@ -2,6 +2,7 @@
 
 import { AiModelFeature } from '@prisma/client';
 import { mode } from 'crypto-js';
+import { useSearchParams } from 'next/navigation';
 import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -42,11 +43,16 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
     setIsFetching,
   } = useChatStore();
 
-  const { currentAgent, currentModel, setCurrentModel } = useAiAgentStore((state) => ({
-    currentAgent: state.currentAgent,
-    currentModel: state.currentModel,
-    setCurrentModel: state.setCurrentModel,
-  }));
+  const searchParams = useSearchParams();
+  const agentIdParam = searchParams.get('agentId');
+  const { connectedAgents, currentAgent, currentModel, setCurrentAgent, setCurrentModel } =
+    useAiAgentStore((state) => ({
+      connectedAgents: state.connectedAgents,
+      currentAgent: state.currentAgent,
+      currentModel: state.currentModel,
+      setCurrentAgent: state.setCurrentAgent,
+      setCurrentModel: state.setCurrentModel,
+    }));
   const localeInfo = useLocaleStore((state) => state.localeInfo);
 
   const { isMounted } = useHydration();
@@ -72,6 +78,39 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       setChatMessages(chatMessages);
     }
   }, [conversations, isEmbed, isShared, setChatMessages, setConversationId, setCurrentModel]);
+
+  useEffect(() => {
+    if (!agentIdParam || !connectedAgents.length) {
+      return;
+    }
+
+    if (currentAgent?.id === agentIdParam) {
+      return;
+    }
+
+    const requestedAgent = connectedAgents.find((agent) => agent.id === agentIdParam);
+
+    if (!requestedAgent) {
+      return;
+    }
+
+    const nextModel =
+      requestedAgent.aiModels.find(
+        (model) => model.isDefault || !model.features.includes(AiModelFeature.image),
+      ) ?? requestedAgent.aiModels[0];
+
+    if (nextModel) {
+      setCurrentModel(nextModel);
+    }
+
+    setCurrentAgent(requestedAgent);
+  }, [
+    agentIdParam,
+    connectedAgents,
+    currentAgent?.id,
+    setCurrentAgent,
+    setCurrentModel,
+  ]);
 
   const saveLastMessages = useCallback(
     async (

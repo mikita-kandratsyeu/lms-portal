@@ -2,12 +2,10 @@
 
 import { AiModelFeature } from '@prisma/client';
 import { Eraser, PanelRight, Share } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { memo, useEffect, useState } from 'react';
 
 import { AgentConfiguration } from '@/components/ai-agents/agent-configuration/agent-configuration';
-import { AiAgentSwitcher } from '@/components/ai-agents/agent-configuration/ai-agent-switcher';
-import { AiModelSwitcher } from '@/components/ai-agents/agent-configuration/ai-model-switcher';
 import { ChatConversationModal } from '@/components/modals/chat-conversation-modal';
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button, Separator } from '@/components/ui';
@@ -25,6 +23,8 @@ type ChatTopBarProps = {
 const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const agentIdParam = searchParams.get('agentId');
 
   const { chatMessages, conversationId, conversations, setChatMessages, setActiveFeature } =
     useChatStore((state) => ({
@@ -58,13 +58,25 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   const hasAgent = currentAgent?.name && currentModel?.name;
 
   useEffect(() => {
-    if (!currentAgent && connectedAgents.length) {
+    if (connectedAgents.length) {
+      const requestedAgent = agentIdParam
+        ? connectedAgents.find((agent) => agent.id === agentIdParam)
+        : null;
       const defaultAgent = connectedAgents.find((agent) => agent.isDefault) ?? connectedAgents[0];
+      const nextAgent = requestedAgent ?? defaultAgent;
 
-      if (defaultAgent) {
+      if (nextAgent && currentAgent?.id !== nextAgent.id) {
+        const nextModel =
+          nextAgent.aiModels.find(
+            (model) => model.isDefault || !model.features.includes('image'),
+          ) ?? nextAgent.aiModels[0];
+
+        if (nextModel) {
+          setCurrentModel(nextModel);
+        }
+
         setActiveFeature(AiModelFeature.text);
-        setCurrentAgent(defaultAgent);
-        setCurrentModel(defaultAgent.aiModels[0]);
+        setCurrentAgent(nextAgent);
       }
     }
 
@@ -72,7 +84,9 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
       setCurrentModel(currentAgent.aiModels[0]);
     }
   }, [
+    agentIdParam,
     connectedAgents,
+    currentAgent?.id,
     currentAgent,
     currentModel,
     setActiveFeature,
