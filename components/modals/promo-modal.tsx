@@ -44,6 +44,7 @@ import { PromoStatus } from '@/constants/payments';
 import { useLocaleStore } from '@/hooks/store/use-locale-store';
 import { fetcher } from '@/lib/fetcher';
 import { getScaledPrice } from '@/lib/format';
+import { isString } from '@/lib/guard';
 import { generatePromotionCode } from '@/lib/promo';
 import { cn } from '@/lib/utils';
 
@@ -110,7 +111,7 @@ export const PromoModal = ({ children, coupons, customers }: PromoModalProps) =>
           ...values,
           numberOfRedeemed: Number(values.numberOfRedeemed),
           minAmount: getScaledPrice(
-            typeof values.minAmount === 'string'
+            isString(values.minAmount)
               ? Number(values.minAmount.replace(/,/g, '.'))
               : values.minAmount,
           ),

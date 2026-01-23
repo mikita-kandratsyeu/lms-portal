@@ -5,6 +5,7 @@ import * as RechartsPrimitive from 'recharts';
 
 import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
+import { isString } from '@/lib/guard';
 import { cn } from '@/lib/utils';
 
 // Format: { THEME_NAME: CSS_SELECTOR }
@@ -139,7 +140,7 @@ const ChartTooltipContent = React.forwardRef<
       const key = `${labelKey || item?.dataKey || item?.name || 'value'}`;
       const itemConfig = getPayloadConfigFromPayload(config, item, key);
       const value =
-        !labelKey && typeof label === 'string'
+        !labelKey && isString(label)
           ? config[label as keyof typeof config]?.label || label
           : itemConfig?.label;
 
@@ -316,12 +317,12 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
 
   let configLabelKey: string = key;
 
-  if (key in payload && typeof payload[key as keyof typeof payload] === 'string') {
+  if (key in payload && isString(payload[key as keyof typeof payload])) {
     configLabelKey = payload[key as keyof typeof payload] as string;
   } else if (
     payloadPayload &&
     key in payloadPayload &&
-    typeof payloadPayload[key as keyof typeof payloadPayload] === 'string'
+    isString(payloadPayload[key as keyof typeof payloadPayload])
   ) {
     configLabelKey = payloadPayload[key as keyof typeof payloadPayload] as string;
   }

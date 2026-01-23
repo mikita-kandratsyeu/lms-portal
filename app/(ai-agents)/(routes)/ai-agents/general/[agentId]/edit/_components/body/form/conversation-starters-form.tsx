@@ -27,6 +27,7 @@ import {
   mapConversationStarters,
 } from '@/lib/chat/conversation-starters';
 import { fetcher } from '@/lib/fetcher';
+import { isString } from '@/lib/guard';
 
 type ConversationStartersFormProps = {
   agentId: string;
@@ -137,11 +138,11 @@ export const ConversationStartersForm = ({
       return '';
     }
 
-    if (typeof completion === 'string') {
+    if (isString(completion)) {
       return completion;
     }
 
-    if (typeof completion.output_text === 'string') {
+    if (isString(completion.output_text)) {
       return completion.output_text;
     }
 
@@ -151,7 +152,7 @@ export const ConversationStartersForm = ({
       return content.map((item) => item?.text ?? '').join('');
     }
 
-    return typeof content === 'string' ? content : '';
+    return isString(content) ? content : '';
   };
 
   const parseGeneratedStarters = (rawText: string) => {
@@ -178,7 +179,7 @@ export const ConversationStartersForm = ({
     const uniqueTexts = Array.from(
       new Set(
         texts
-          .filter((text) => typeof text === 'string')
+          .filter((text) => isString(text))
           .map((text) => text.trim())
           .filter(Boolean),
       ),
