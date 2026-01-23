@@ -44,9 +44,16 @@ export const AiAgentSwitcher = ({ className }: AiAgentSwitcherProps) => {
     const agent = connectedAgents.find((agent) => agent.id === agentId);
 
     if (agent) {
+      const model = agent.aiModels.find(
+        (model) => model.isDefault || !model.features.includes('image'),
+      );
+
+      if (model) {
+        setCurrentModel(model);
+      }
+
       setActiveFeature(AiModelFeature.text);
       setCurrentAgent(agent);
-      setCurrentModel(agent.aiModels[0]);
     }
   };
 

@@ -228,7 +228,6 @@ model StripeSubscriptionDescription {
   createdAt DateTime                 @default(now())
   name      String
   period    StripeSubscriptionPeriod
-  points    String[]
   price     Int?                     @default(0)
   updatedAt DateTime                 @updatedAt
 }

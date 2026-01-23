@@ -45,11 +45,11 @@ export const ChatSideBarTop = ({ agentsAmount }: ChatSideBarTopProps) => {
             className="w-full flex items-center mt-8 justify-between gap-x-2"
             href="/ai-agents/general"
             target="_blank"
-            title="Explore"
+            title={t('explore-ai-agents')}
           >
             <div className="w-full flex gap-x-2 items-center">
               <Blocks className="w-4 h-4" />
-              <span className="text-sm font-semibold line-clamp-1">Explore AI Agents</span>
+              <span className="text-sm font-semibold line-clamp-1">{t('explore-ai-agents')}</span>
             </div>
             <TextBadge label={String(agentsAmount)} />
           </Link>

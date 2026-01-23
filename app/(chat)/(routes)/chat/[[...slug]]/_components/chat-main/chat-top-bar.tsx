@@ -1,10 +1,13 @@
 'use client';
 
+import { AiModelFeature } from '@prisma/client';
 import { Eraser, PanelRight, Share } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import { AgentConfiguration } from '@/components/ai-agents/agent-configuration/agent-configuration';
+import { AiAgentSwitcher } from '@/components/ai-agents/agent-configuration/ai-agent-switcher';
+import { AiModelSwitcher } from '@/components/ai-agents/agent-configuration/ai-model-switcher';
 import { ChatConversationModal } from '@/components/modals/chat-conversation-modal';
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button, Separator } from '@/components/ui';
@@ -23,23 +26,27 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
-  const { chatMessages, conversationId, conversations, setChatMessages } = useChatStore(
-    (state) => ({
+  const { chatMessages, conversationId, conversations, setChatMessages, setActiveFeature } =
+    useChatStore((state) => ({
       chatMessages: state.chatMessages,
       conversationId: state.conversationId,
       conversations: state.conversations,
       setChatMessages: state.setChatMessages,
-    }),
-  );
+      setActiveFeature: state.setActiveFeature,
+    }));
 
   const { isFetching, setIsFetching } = useChatStore((state) => ({
     isFetching: state.isFetching,
     setIsFetching: state.setIsFetching,
   }));
-  const { currentAgent, currentModel } = useAiAgentStore((state) => ({
-    currentAgent: state.currentAgent,
-    currentModel: state.currentModel,
-  }));
+  const { connectedAgents, currentAgent, currentModel, setCurrentAgent, setCurrentModel } =
+    useAiAgentStore((state) => ({
+      connectedAgents: state.connectedAgents,
+      currentAgent: state.currentAgent,
+      currentModel: state.currentModel,
+      setCurrentAgent: state.setCurrentAgent,
+      setCurrentModel: state.setCurrentModel,
+    }));
 
   const [open, setOpen] = useState(false);
 
@@ -49,6 +56,29 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   );
 
   const hasAgent = currentAgent?.name && currentModel?.name;
+
+  useEffect(() => {
+    if (!currentAgent && connectedAgents.length) {
+      const defaultAgent = connectedAgents.find((agent) => agent.isDefault) ?? connectedAgents[0];
+
+      if (defaultAgent) {
+        setActiveFeature(AiModelFeature.text);
+        setCurrentAgent(defaultAgent);
+        setCurrentModel(defaultAgent.aiModels[0]);
+      }
+    }
+
+    if (currentAgent && !currentModel) {
+      setCurrentModel(currentAgent.aiModels[0]);
+    }
+  }, [
+    connectedAgents,
+    currentAgent,
+    currentModel,
+    setActiveFeature,
+    setCurrentAgent,
+    setCurrentModel,
+  ]);
 
   const handleChatAction = async (action: 'clear' | 'share') => {
     setIsFetching(true);
@@ -85,8 +115,8 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
           setOpen={setOpen}
         />
       )}
-      <div className={cn('w-full h-[75px]', !messages.length && 'h-full')}>
-        {!isEmbed && (
+      {!isEmbed && (
+        <div className={cn('w-full h-[75px]', !messages.length && 'h-full')}>
           <div
             className={cn(
               'flex flex-1 text-base pt-4 px-4 items-center gap-x-4',
@@ -121,8 +151,8 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
               </AgentConfiguration>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 };

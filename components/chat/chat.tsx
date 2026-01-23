@@ -4,6 +4,7 @@ import { MoreHorizontalIcon, X } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
+import { useAiAgentStore } from '@/hooks/store/use-ai-agent-store';
 import { useUserSettingsStore } from '@/hooks/store/use-user-settings.store';
 import { absoluteUrl, cn } from '@/lib/utils';
 
@@ -17,6 +18,10 @@ export const Chat = () => {
 
   const { isCopilotInNewTab } = useUserSettingsStore((state) => ({
     isCopilotInNewTab: state.isCopilotInNewTab,
+  }));
+  const { currentAgent, currentModel } = useAiAgentStore((state) => ({
+    currentAgent: state.currentAgent,
+    currentModel: state.currentModel,
   }));
 
   const handleOpenChange = isCopilotInNewTab
@@ -57,11 +62,7 @@ export const Chat = () => {
           {!isReady && <PrettyLoader isCopilot />}
           {isReady && (
             <div className="fixed py-2 px-4 flex gap-x-1 justify-between sm:max-w-md w-full items-center">
-              <div>
-                <p className={'font-semibold text-base text-neutral-700 dark:text-neutral-300'}>
-                  Nova Copilot
-                </p>
-              </div>
+              <div className="flex-1"></div>
               <div className="flex gap-x-2">
                 <ChatContextMenu isNewTab>
                   <Button className="w-full" variant="outline">

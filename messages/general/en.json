@@ -332,6 +332,7 @@
       "conversations": "Conversations",
       "delete-all": "Delete all conversations",
       "edit": "Edit",
+      "explore-ai-agents": "Explore AI Agents",
       "remove": "Remove",
       "removed-conversation": "The conversation \"{conversation}\" has been successfully deleted.",
       "share": "Share",

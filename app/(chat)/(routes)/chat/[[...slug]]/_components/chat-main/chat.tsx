@@ -342,6 +342,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
           {!isShared && (
             <ChatInput
               currenMessage={currentMessage}
+              isEmbed={isEmbed}
               isSubmitting={isSubmitting}
               onAbortGenerating={handleAbortGenerating}
               onSubmit={handleSubmit}
