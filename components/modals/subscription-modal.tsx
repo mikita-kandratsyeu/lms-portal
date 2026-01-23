@@ -88,22 +88,32 @@ export const SubscriptionModal = ({ description = [], open, setOpen }: Subscript
         window.location.assign(response.url);
       }
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }
   };
 
-  const renderBenefits = (benefits: string[] = []) => (
-    <ul className="pt-2 space-y-3 text-sm leading-6">
-      {benefits.map((benefit) => (
-        <li key={benefit} className="flex gap-x-3 text-sm items-center">
-          <CheckCircle className="h-4 w-4" />
-          {t(`benefits.${benefit}`)}
-        </li>
-      ))}
-    </ul>
-  );
+  const renderBenefits = () => {
+    const benefits = [
+      'unlock-premium-courses',
+      'get-access-nova-ai',
+      'advanced-ai-agents',
+      'teacher-functionality',
+      'cancel-anytime',
+    ];
+
+    return (
+      <ul className="pt-2 space-y-3 text-sm leading-6">
+        {benefits.map((benefit) => (
+          <li key={benefit} className="flex gap-x-3 text-sm items-center">
+            <CheckCircle className="h-4 w-4" />
+            {t(`benefits.${benefit}`)}
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -138,10 +148,10 @@ export const SubscriptionModal = ({ description = [], open, setOpen }: Subscript
               </div>
             )}
             <TabsContent value={StripeSubscriptionPeriod.yearly} className="pt-4">
-              {renderBenefits(yearly?.points)}
+              {renderBenefits()}
             </TabsContent>
             <TabsContent value={StripeSubscriptionPeriod.monthly} className="pt-4">
-              {renderBenefits(monthly?.points)}
+              {renderBenefits()}
             </TabsContent>
           </Tabs>
           <DialogFooter className="mt-6">

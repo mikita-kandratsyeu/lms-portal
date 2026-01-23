@@ -78,7 +78,7 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
     } catch (error) {
       console.error('[CSM_FORM_CREATE]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       form.reset({ categoryId: '', description: '', files: [] });
 

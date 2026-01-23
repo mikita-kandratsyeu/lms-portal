@@ -6,6 +6,9 @@ export const SYSTEM_COURSE_PROMPT =
 export const SYSTEM_TRANSLATE_PROMPT =
   'You are a professional translator with deep knowledge of languages and cultures.';
 
+export const SYSTEM_CONVERSATION_STARTERS_PROMPT =
+  'You are an expert UX writer for AI assistants. Generate short, friendly conversation starters.';
+
 export const USER_COURSE_SHORT_DESCRIPTION_PROMPT = (originalDescription: string) =>
   `Rewrite the following course description using different words: "${originalDescription}". Ensure the new description is concise and engaging. Limit the output to ${Math.round(TEXTAREA_MAX_LENGTH / 1.4)} characters.`;
 
@@ -14,6 +17,35 @@ export const USER_CHAPTER_DESCRIPTION_PROMPT = (originalDescription: string) =>
 
 export const USER_TRANSLATE_PROMPT = (originalText: string, targetLanguage: string) =>
   `Translate the following text into ${targetLanguage}: "${originalText}". Provide only the translated text, without quotation marks or additional comments.`;
+
+export const USER_CONVERSATION_STARTERS_PROMPT = ({
+  agentName,
+  agentDescription,
+  systemInstruction,
+  limit,
+}: {
+  agentName?: string | null;
+  agentDescription?: string | null;
+  systemInstruction?: string | null;
+  limit: number;
+}) => {
+  const context = [
+    agentName ? `Agent name: ${agentName}` : null,
+    agentDescription ? `Agent description: ${agentDescription}` : null,
+    systemInstruction ? `System instruction: ${systemInstruction}` : null,
+  ]
+    .filter(Boolean)
+    .join('\n');
+
+  return `Generate ${limit} short conversation starters for an AI assistant.
+${context ? `Context:\n${context}\n` : ''}Return JSON only, with this exact structure:
+{
+  "en": ["string", "..."],
+  "ru": ["string", "..."],
+  "be": ["string", "..."]
+}
+Each array must contain exactly ${limit} items. Use natural, user-friendly phrasing.`;
+};
 
 export const NOVA_PULSE_SUMMARY = <T>(data: T, locale: string) =>
   `Based on the provided data - ${JSON.stringify(data)}, analyze my academic performance and provide a detailed summary. Return the response in JSON format with the following structure:

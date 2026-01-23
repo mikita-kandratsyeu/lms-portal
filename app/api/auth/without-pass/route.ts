@@ -18,7 +18,7 @@ export const POST = async (req: NextRequest) => {
     const user = await db.user.findFirst({ where: { email: email?.toLowerCase() } });
 
     if (!user) {
-      return new NextResponse(JSON.stringify({ error: t('errors.invalidEmail') }), {
+      return new NextResponse(t('errors.invalidEmail'), {
         status: StatusCodes.NOT_FOUND,
       });
     }

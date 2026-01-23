@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 
 import { getAgentData } from '@/actions/ai/agent/get-agent-data';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
@@ -10,6 +11,7 @@ import { Header } from './_components/header/header';
 type AgentIdPageProps = { params: Promise<{ agentId: string }> };
 
 const AgentIdPage = async (props: AgentIdPageProps) => {
+  const t = await getTranslations('ai-agents.edit');
   const user = await getCurrentUser();
 
   const { agentId } = await props.params;
@@ -30,9 +32,7 @@ const AgentIdPage = async (props: AgentIdPageProps) => {
 
   return (
     <>
-      {agent.isDraft && (
-        <Banner label="This agent has not been published. It will not be available for you or other members." />
-      )}
+      {agent.isDraft && <Banner label={t('draftBanner')} />}
       <div className="p-6">
         <Header {...commonFormProps} />
         <Body {...commonFormProps} models={models} />

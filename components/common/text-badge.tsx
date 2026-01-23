@@ -46,8 +46,11 @@ interface IconBadgeProps extends BackgroundVariantsProps, TextVariantsProps {
 
 const TextBadge = ({ variant, label, className }: IconBadgeProps) => {
   return (
-    <Badge className={cn(backgroundVariants({ variant }), className)} variant="outline">
-      <span className={cn(textVariants({ variant }))}> {label}</span>
+    <Badge
+      className={cn(backgroundVariants({ variant }), 'whitespace-nowrap', className)}
+      variant="outline"
+    >
+      <span className={cn(textVariants({ variant }))}>{label}</span>
     </Badge>
   );
 };

@@ -3,7 +3,6 @@
 import { AiModelFeature } from '@prisma/client';
 import { GlobeIcon, ImageIcon, Paperclip, SendHorizonal, StopCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
 
 import { FileUploadModal } from '@/components/modals/file-upload-modal';
 import { Badge, Button, Separator } from '@/components/ui';
@@ -29,24 +28,22 @@ export const ChatInputFooter = ({
     setActiveFeature: state.setActiveFeature,
   }));
 
-  const { currentModel } = useAiAgentStore((state) => ({ currentModel: state.currentModel }));
+  const { currentAgent, currentModel } = useAiAgentStore((state) => ({
+    currentAgent: state.currentAgent,
+    currentModel: state.currentModel,
+  }));
 
-  const hasImageGeneration = currentModel?.features.includes(AiModelFeature.image);
+  const hasImageGeneration = currentAgent?.aiModels
+    .flatMap((model) => model.features)
+    ?.includes(AiModelFeature.image);
   const hasWebSearch = currentModel?.features.includes(AiModelFeature.search);
-  const hasFileUploading = currentModel?.features.includes(AiModelFeature.file);
+  // FIXME: Add File uploading with AI
+  const hasFileUploading = false && currentModel?.features.includes(AiModelFeature.file);
 
   const showSeparator = hasImageGeneration || hasWebSearch || hasFileUploading;
 
   const isImageGenerationActive = activeFeature === AiModelFeature.image;
   const isWebSearchActive = activeFeature === AiModelFeature.search;
-
-  const isBlockImageGenerationButton = hasImageGeneration && currentModel?.features.length === 1;
-
-  useEffect(() => {
-    if (isBlockImageGenerationButton) {
-      setActiveFeature(AiModelFeature.image);
-    }
-  }, [isBlockImageGenerationButton, setActiveFeature]);
 
   return (
     <div className="flex justify-between px-2 py-2 items-center">
@@ -83,7 +80,7 @@ export const ChatInputFooter = ({
         {hasImageGeneration && (
           <button
             className="mr-3"
-            disabled={isSubmitting || isBlockImageGenerationButton}
+            disabled={isSubmitting}
             type="button"
             onClick={() => {
               setActiveFeature(AiModelFeature.image);

@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -19,13 +20,14 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { fetcher } from '@/lib/fetcher';
 
-const formSchema = z.object({
-  name: z.string().min(1, { message: 'Agent name is required' }),
-});
-
 const CreatePage = () => {
+  const t = useTranslations('ai-agents.create');
   const { toast } = useToast();
   const router = useRouter();
+
+  const formSchema = z.object({
+    name: z.string().min(1, { message: t('form.errors.nameRequired') }),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,7 +44,7 @@ const CreatePage = () => {
         responseType: 'json',
       });
 
-      toast({ title: 'AI agent has been created' });
+      toast({ title: t('toast.created') });
 
       router.push(`/ai-agents/general/${data.id}/edit`);
     } catch (error) {
@@ -53,10 +55,8 @@ const CreatePage = () => {
   return (
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div>
-        <h1 className="text-2xl">Name Your AI Agent</h1>
-        <p className="text-sm text-muted-foreground">
-          What would you like to name your agent? Don’t worry, you can always change it later.
-        </p>
+        <h1 className="text-2xl">{t('title')}</h1>
+        <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 mt-8">
             <FormField
@@ -64,9 +64,13 @@ const CreatePage = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('form.name.label')}</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isSubmitting} placeholder="e.g 'Nova Copilot'" />
+                    <Input
+                      {...field}
+                      disabled={isSubmitting}
+                      placeholder={t('form.name.placeholder')}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -75,11 +79,11 @@ const CreatePage = () => {
             <div className="flex items-center gap-x-2">
               <Link href="/ai-agents/general">
                 <Button type="button" variant="ghost">
-                  Cancel
+                  {t('form.cancel')}
                 </Button>
               </Link>
               <Button type="submit" disabled={!isValid || isSubmitting} isLoading={isSubmitting}>
-                Continue
+                {t('form.continue')}
               </Button>
             </div>
           </form>

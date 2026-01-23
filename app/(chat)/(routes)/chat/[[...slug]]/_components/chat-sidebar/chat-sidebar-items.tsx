@@ -93,7 +93,7 @@ export const ChatSideBarItems = ({ conversations }: ChatSideBarItemsProps) => {
     } catch (error) {
       console.error('[CHAT-SIDEBAR-ITEMS]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

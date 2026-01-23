@@ -15,10 +15,6 @@ export const CaptchaInvisible = ({
   setVisible,
   visible,
 }: CaptchaInvisibleProps) => {
-  if (process.env.NODE_ENV === 'development') {
-    return null;
-  }
-
   return (
     <div className="absolute">
       <InvisibleSmartCaptcha

@@ -4,6 +4,8 @@ import { AiModelFeature } from '@prisma/client';
 import { useTranslations } from 'next-intl';
 import { memo, SyntheticEvent, useState } from 'react';
 
+import { AiAgentSwitcher } from '@/components/ai-agents/agent-configuration/ai-agent-switcher';
+import { AiModelSwitcher } from '@/components/ai-agents/agent-configuration/ai-model-switcher';
 import { Textarea } from '@/components/ui';
 import { LIMIT_CHAT_INPUT } from '@/constants/ai/general';
 import { useChatStore } from '@/hooks/store/use-chat-store';
@@ -13,6 +15,7 @@ import { ChatInputFooter } from './chat-input-footer';
 
 type ChatInputProps = {
   currenMessage: string;
+  isEmbed?: boolean;
   isSubmitting?: boolean;
   onAbortGenerating: () => void;
   onSubmit: (event: SyntheticEvent) => void;
@@ -21,6 +24,7 @@ type ChatInputProps = {
 
 const ChatInputComponent = ({
   currenMessage,
+  isEmbed = false,
   isSubmitting = false,
   onAbortGenerating,
   onSubmit,
@@ -39,7 +43,15 @@ const ChatInputComponent = ({
   return (
     <div className="w-full h-full relative flex items-end">
       <div className="flex flex-1 w-full flex-shrink-0">
-        <div className="flex w-full h-full flex-col pb-2 px-4">
+        <div className="flex w-full h-full flex-col pb-2 px-4 relative z-10">
+          {isEmbed && (
+            <div className="mb-3">
+              <div className="grid grid-cols-2 gap-2 rounded-xl border bg-background/80 p-2 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <AiModelSwitcher className="w-full" />
+                <AiAgentSwitcher className="w-full" />
+              </div>
+            </div>
+          )}
           <form
             className={cn(
               'bg-background mx-auto flex flex-col lg:max-w-2xl xl:max-w-4xl w-full h-full border rounded-sm z-10 focus-within:border-b-indigo-500 focus-within:border-b-2 transition-colors duration-200 ease-in-out',
@@ -77,7 +89,7 @@ const ChatInputComponent = ({
           </div>
         </div>
       </div>
-      <div className="h-[calc(100%+20px)] w-full bg-gradient-to-t from-neutral-50 dark:from-neutral-900 to-transparent absolute bottom-0 z-0"></div>
+      <div className="h-[calc(100%+20px)] w-full bg-gradient-to-t from-neutral-50 dark:from-neutral-900 to-transparent absolute bottom-0 z-0 pointer-events-none"></div>
     </div>
   );
 };

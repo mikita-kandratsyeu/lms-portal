@@ -2,6 +2,7 @@
 
 import { ChevronDownIcon, Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { ConfirmModal } from '@/components/modals/confirm-modal';
@@ -38,6 +39,7 @@ export const Actions = ({
   isPreviewPage = false,
   isPublished = false,
 }: ActionsProps) => {
+  const t = useTranslations('ai-agents.actions');
   const { toast } = useToast();
 
   const router = useRouter();
@@ -55,13 +57,13 @@ export const Actions = ({
       });
 
       if (isPublished) {
-        toast({ title: 'Agent unpublished' });
+        toast({ title: t('toast.unpublished') });
       } else {
         handleOpenConfetti();
 
         toast({
-          title: isPublished ? 'Agent unpublished' : 'Agent has been published',
-          type: isPublished ? 'warning' : 'success',
+          title: t('toast.published'),
+          type: 'success',
         });
       }
 
@@ -84,14 +86,14 @@ export const Actions = ({
     try {
       await fetcher.delete(`/api/ai/agents/${agentId}`);
 
-      toast({ title: 'Agent has been deleted', type: 'warning' });
+      toast({ title: t('toast.deleted'), type: 'warning' });
 
       router.push('/ai-agents/general');
       router.refresh();
     } catch (error) {
       console.error('[AGENT_DELETE]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }
@@ -106,7 +108,7 @@ export const Actions = ({
       });
 
       toast({
-        title: `${name} Agent has been ${isConnected ? 'disconnected' : 'connected'}.`,
+        title: isConnected ? t('toast.disconnected') : t('toast.connected'),
         type: isConnected ? 'warning' : 'success',
       });
 
@@ -161,9 +163,11 @@ export const Actions = ({
           disabled={isDisabledButton || (isPreviewPage && Boolean(isDefault))}
           onClick={() => (isPreviewPage ? handleConnection() : handleTogglePublication(true))}
         >
-          {isPreviewPage && <span>{isConnected || isDefault ? 'Disconnect' : 'Connect'}</span>}
-          {!isPreviewPage && isPublished && <span>Unpublish</span>}
-          {!isPreviewPage && !isPublished && <span>Publish</span>}
+          {isPreviewPage && (
+            <span>{isConnected || isDefault ? t('disconnect') : t('connect')}</span>
+          )}
+          {!isPreviewPage && isPublished && <span>{t('unpublish')}</span>}
+          {!isPreviewPage && !isPublished && <span>{t('publish')}</span>}
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -183,16 +187,21 @@ export const Actions = ({
                   className="hover:cursor-pointer"
                   onClick={() => handleTogglePublication(false)}
                 >
-                  <span>Publish as private</span>
+                  <span>{t('publishPrivate')}</span>
                 </DropdownMenuItem>
               )}
               {isPreviewPage && (
                 <>
                   <DropdownMenuItem
                     className="hover:cursor-pointer"
-                    onClick={() => router.push(`/chat?agentId=${agentId}`)}
+                    disabled={!isConnected && !isDefault}
+                    onClick={() => {
+                      if (isConnected || isDefault) {
+                        router.push(`/chat?agentId=${agentId}`);
+                      }
+                    }}
                   >
-                    <span>Chat now</span>
+                    <span>{t('chatNow')}</span>
                   </DropdownMenuItem>
                   {isOwner && (
                     <>
@@ -200,10 +209,10 @@ export const Actions = ({
                         className="hover:cursor-pointer"
                         onClick={() => router.push(`/ai-agents/general/${agentId}/edit`)}
                       >
-                        <span>Edit</span>
+                        <span>{t('edit')}</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem className="hover:cursor-pointer" onClick={handleClone}>
-                        <span>Clone</span>
+                        <span>{t('clone')}</span>
                       </DropdownMenuItem>
                     </>
                   )}

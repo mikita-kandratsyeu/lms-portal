@@ -140,7 +140,7 @@ export const getSideBarRoutes = async (referer: string): Promise<Record<string, 
       icon: 'cpu',
     },
     {
-      href: '/ai-agents/analytic',
+      href: '/ai-agents/analytics',
       isProtected: false,
       icon: 'bar-chart-4',
       label: 'analytics',

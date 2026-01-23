@@ -26,6 +26,7 @@ type AiModelSwitcherProps = {
 export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
   const { user } = useCurrentUser();
 
+  const tAi = useTranslations('ai-agents.switchers');
   const t = useTranslations('chat.top-bar');
   const tProfile = useTranslations('profileButton');
 
@@ -55,10 +56,12 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
 
   const [previewModels, freeModels] = models.reduce<[AiModel[], AiModel[]]>(
     (acc, model) => {
-      if (model.isSubscription) {
-        acc[0].push(model);
-      } else {
-        acc[1].push(model);
+      if (model.features?.[0] !== AiModelFeature.image) {
+        if (model.isSubscription) {
+          acc[0].push(model);
+        } else {
+          acc[1].push(model);
+        }
       }
 
       return acc;
@@ -67,7 +70,9 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
   );
 
   const selectedModelId =
-    currentModel?.id && models.some((model) => model.id === currentModel.id)
+    currentModel?.id &&
+    currentModel?.features?.[0] !== AiModelFeature.image &&
+    models.some((model) => model.id === currentModel.id)
       ? currentModel.id
       : freeModels?.find((model) => model.isDefault)?.id ?? freeModels[0]?.id ?? models[0]?.id;
 
@@ -84,7 +89,7 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
     <div className={className}>
       <Select onValueChange={handleValueChange} value={selectedModelId}>
         <SelectTrigger className="w-full" disabled={isFetching}>
-          <SelectValue placeholder="Select a LLM model" />
+          <SelectValue placeholder={tAi('modelPlaceholder')} />
         </SelectTrigger>
         <SelectContent>
           {Boolean(freeModels.length) && (
@@ -106,7 +111,7 @@ export const AiModelSwitcher = ({ className }: AiModelSwitcherProps) => {
             <SelectGroup>
               <SelectLabel className="text-xs text-muted-foreground">
                 <div className="flex gap-x-2 items-center">
-                  <p>Preview</p>
+                  <p>{tAi('preview')}</p>
                   <TextBadge label={tProfile('premium')} variant="lime" />
                 </div>
               </SelectLabel>

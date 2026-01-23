@@ -332,6 +332,7 @@
       "conversations": "Дыялогі",
       "delete-all": "Выдаліць усе дыялогі",
       "edit": "Рэдагаваць",
+      "explore-ai-agents": "Даследаваць ІІ агентаў",
       "remove": "Выдаліць",
       "removed-conversation": "Дыялог \"{ conversation }\" быў паспяхова выдалены.",
       "share": "Падзяліцца",
@@ -386,6 +387,7 @@
     "bannerBody": "Прэміум-курсы, неабмежаваны доступ да Nova Copilot і многае іншае.",
     "bannerTitle": "Абнавіць да Nova Plus",
     "benefits": {
+      "advanced-ai-agents": "Пашыраныя магчымасці AI агентаў",
       "cancel-anytime": "Без аплаты на працягу першых двух тыдняў",
       "get-access-nova-ai": "Неабмежаваны доступ да Nova Copilot",
       "unlock-premium-courses": "Прэміум курсы",
@@ -552,7 +554,248 @@
   "ai-agent": {
     "sheet": {
       "general": "Канфігурацыя",
+      "agent": "ИИ агент",
       "primaryLLM": "Асноўная LLM мадэль"
+    }
+  },
+  "ai-agents": {
+    "general": {
+      "title": "ИИ агенты",
+      "scopes": {
+        "all": "Усе агенты",
+        "mine": "Мае агенты"
+      },
+      "sections": {
+        "connected": "Падключаныя агенты",
+        "private": "Прыватныя агенты",
+        "public": "Публічна даступныя агенты"
+      },
+      "notFound": "Агенты не знойдзены.",
+      "header": {
+        "searchPlaceholder": "Пошук агента...",
+        "createAgent": "Стварыць агента"
+      }
+    },
+    "analytics": {
+      "title": "Аналітыка ІІ агентаў",
+      "subtitle": "Агляд аналітыкі для глабальных публічных агентаў і вашых прыватных агентаў.",
+      "emptyData": "Недастаткова дадзеных.",
+      "periods": {
+        "all": "За ўвесь час",
+        "7d": "7 дзён",
+        "30d": "30 дзён",
+        "90d": "90 дзён"
+      },
+      "scopes": {
+        "all": "Усе",
+        "global": "Глабальныя",
+        "personal": "Асабістыя"
+      },
+      "labels": {
+        "global": "Глабальныя",
+        "personal": "Асабістыя",
+        "uses": "Выкарыстанні"
+      },
+      "cards": {
+        "globalUses": "Глабальныя выкарыстанні",
+        "publicOnly": "Толькі публічныя агенты",
+        "activeUsers": "Актыўныя карыстальнікі",
+        "last30Days": "Апошнія 30 дзён",
+        "myAgentsUsers": "Карыстальнікі маіх агентаў",
+        "includingPrivate": "Уключаючы прыватных агентаў",
+        "topModelGlobal": "Топ мадэль (глабальна)",
+        "totalUses": "{amount} усяго выкарыстанняў"
+      },
+      "usageTrend": {
+        "title": "Дынаміка выкарыстання",
+        "globalVsPersonal": "Глабальныя супраць вашых агентаў",
+        "globalOnly": "Глабальныя публічныя агенты",
+        "personalOnly": "Толькі вашы агенты"
+      },
+      "popularModels": {
+        "title": "Самыя папулярныя мадэлі (глабальна)"
+      },
+      "myAgentUsers": {
+        "title": "Карыстальнікі маіх агентаў",
+        "subtitle": "Топ агентаў па актыўных карыстальніках",
+        "activeUsers": "{count} актыўных карыстальнікаў"
+      },
+      "popularModelPersonal": {
+        "title": "Самая папулярная мадэль (мае агенты)",
+        "uses": "{amount} выкарыстанняў на вашых агентах",
+        "subtitle": "Самая выкарыстоўваная сярод вашых агентаў"
+      },
+      "personalAgents": {
+        "tutor": "Персанальны т'ютар",
+        "reviewer": "Рэв'юер кода",
+        "marketing": "Маркетынгавы копірайтэр",
+        "coach": "Асабісты коуч"
+      }
+    },
+    "edit": {
+      "draftBanner": "Гэты агент яшчэ не апублікаваны. Ён будзе недаступны для вас і іншых удзельнікаў.",
+      "header": {
+        "back": "Назад да агентаў",
+        "previewTitle": "Прадпрагляд агента",
+        "setupTitle": "Налада агента",
+        "completion": "({completed}/{total})",
+        "completeFields": "Запоўніце ўсе палі {completion}"
+      },
+      "body": {
+        "customize": "Наладзьце агента",
+        "starters": "Задайце стартавыя фразы",
+        "customizeLlm": "Наладзьце LLM рухавік",
+        "selectLlm": "Выберыце LLM рухавік",
+        "experimental": {
+          "title": "Дадайце эксперыментальныя магчымасці",
+          "api": "Уласны API сервер (Ollama)"
+        }
+      },
+      "description": {
+        "title": "Апісанне агента",
+        "edit": "Рэдагаваць",
+        "cancel": "Адмена",
+        "save": "Захаваць",
+        "toast": {
+          "updated": "Апісанне агента абноўлена"
+        },
+        "fields": {
+          "name": {
+            "label": "Імя",
+            "placeholder": "напрыклад, 'Nova Copilot'",
+            "helper": "Прыдумайце імя для агента"
+          },
+          "systemTag": {
+            "label": "Сістэмны тэг",
+            "placeholder": "напрыклад, 'copilot'"
+          },
+          "description": {
+            "label": "Апісанне",
+            "placeholder": "напрыклад, 'AI агент, які ...'"
+          },
+          "systemAgent": {
+            "label": "Сістэмны агент",
+            "helper": "Агент будзе адлюстроўвацца як сістэмны."
+          },
+          "language": {
+            "label": "Мова агента",
+            "helper": "Пакажыце мову па змаўчанні."
+          }
+        }
+      },
+      "customization": {
+        "title": "Налада LLM",
+        "edit": "Рэдагаваць",
+        "cancel": "Адмена",
+        "save": "Захаваць",
+        "toast": {
+          "updated": "LLM рухавік абноўлены"
+        },
+        "systemInstruction": {
+          "title": "Сістэмная інструкцыя",
+          "placeholder": "напрыклад, 'Вы AI агент, які ...'",
+          "empty": "Няма сістэмнай інструкцыі для LLM рухавіка."
+        },
+        "temperature": {
+          "title": "Тэмпература",
+          "labels": {
+            "precise": "Дакладна",
+            "neutral": "Нейтральна",
+            "creative": "Крэатыўна"
+          }
+        }
+      },
+      "models": {
+        "title": "LLM рухавік",
+        "select": "Выбраць",
+        "cancel": "Адмена",
+        "save": "Захаваць",
+        "empty": "LLM рухавік не выбраны.",
+        "helper": "Выберыце LLM рухавік для агента",
+        "default": "Па змаўчанні",
+        "selectAria": "Выбраць LLM мадэль",
+        "toast": {
+          "updated": "LLM рухавік абноўлены"
+        }
+      },
+      "conversationStarters": {
+        "title": "Стартавыя фразы",
+        "edit": "Рэдагаваць",
+        "cancel": "Адмена",
+        "save": "Захаваць",
+        "generateAi": "Згенераваць з AI",
+        "generatingAi": "Генерацыя...",
+        "limit": "{count} з {max} (макс.)",
+        "empty": "Няма стартавых фраз для чата.",
+        "placeholder": "напрыклад, 'Якое сёння надвор'е?'",
+        "toast": {
+          "updated": "Стартавыя фразы абноўлены",
+          "generated": "AI запоўніў стартавыя фразы",
+          "generateError": "Не ўдалося згенераваць фразы. Паспрабуйце яшчэ раз."
+        }
+      }
+    },
+    "create": {
+      "title": "Назавіце вашага ІІ агента",
+      "subtitle": "Як бы вы назвалі свайго агента? Не хвалюйцеся, назву заўсёды можна змяніць.",
+      "toast": {
+        "created": "ІІ агент створаны"
+      },
+      "form": {
+        "name": {
+          "label": "Імя",
+          "placeholder": "напрыклад, 'Nova Copilot'"
+        },
+        "errors": {
+          "nameRequired": "Патрэбна імя агента"
+        },
+        "cancel": "Адмена",
+        "continue": "Працягнуць"
+      }
+    },
+    "actions": {
+      "connect": "Падключыць",
+      "disconnect": "Адключыць",
+      "publish": "Апублікаваць",
+      "unpublish": "Зняць з публікацыі",
+      "publishPrivate": "Апублікаваць як прыватны",
+      "chatNow": "Адкрыць чат",
+      "edit": "Рэдагаваць",
+      "clone": "Кланаваць",
+      "toast": {
+        "published": "Агент апублікаваны",
+        "unpublished": "Агент зняты з публікацыі",
+        "deleted": "Агент выдалены",
+        "connected": "Агент падключаны.",
+        "disconnected": "Агент адключаны."
+      }
+    },
+    "card": {
+      "badges": {
+        "draft": "Чарнавік",
+        "default": "Па змаўчанні",
+        "private": "Прыватны",
+        "public": "Публічны"
+      },
+      "by": "ад {name}",
+      "system": "Сістэма",
+      "connect": "Падключыць",
+      "disconnect": "Адключыць",
+      "totalUses": "{amount} усяго падключэнняў",
+      "systemInstruction": "Сістэмная інструкцыя",
+      "temperature": "Тэмпература",
+      "toast": {
+        "connected": "Агент падключаны.",
+        "disconnected": "Агент адключаны."
+      }
+    },
+    "switchers": {
+      "agentPlaceholder": "Выберыце агента",
+      "modelPlaceholder": "Выберыце LLM мадэль",
+      "preview": "Прадпрагляд"
+    },
+    "common": {
+      "configuration": "Наладкі"
     }
   }
 }

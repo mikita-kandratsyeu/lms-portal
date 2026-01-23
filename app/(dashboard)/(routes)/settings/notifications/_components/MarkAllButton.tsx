@@ -39,7 +39,7 @@ export const MarkAllButton = ({ action, amount, ids, reset }: MarkAllButtonProps
       router.refresh();
       reset?.();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

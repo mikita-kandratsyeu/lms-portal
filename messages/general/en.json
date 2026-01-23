@@ -332,6 +332,7 @@
       "conversations": "Conversations",
       "delete-all": "Delete all conversations",
       "edit": "Edit",
+      "explore-ai-agents": "Explore AI Agents",
       "remove": "Remove",
       "removed-conversation": "The conversation \"{conversation}\" has been successfully deleted.",
       "share": "Share",
@@ -386,6 +387,7 @@
     "bannerBody": "Premium courses, unlimited access to Nova Copilot, and more.",
     "bannerTitle": "Upgrade to Nova Plus",
     "benefits": {
+      "advanced-ai-agents": "Advanced AI agent capabilities",
       "cancel-anytime": "No payment for the first two weeks",
       "get-access-nova-ai": "Unlimited access to Nova Copilot",
       "unlock-premium-courses": "Premium courses",
@@ -552,7 +554,248 @@
   "ai-agent": {
     "sheet": {
       "general": "Configuration",
+      "agent": "AI Agent",
       "primaryLLM": "Primary LLM Model"
+    }
+  },
+  "ai-agents": {
+    "general": {
+      "title": "AI agents",
+      "scopes": {
+        "all": "All agents",
+        "mine": "My agents"
+      },
+      "sections": {
+        "connected": "Connected agents",
+        "private": "Private agents",
+        "public": "Publicly available agents"
+      },
+      "notFound": "No agents found.",
+      "header": {
+        "searchPlaceholder": "Search for an agent...",
+        "createAgent": "Create Agent"
+      }
+    },
+    "analytics": {
+      "title": "AI Agents Analytics",
+      "subtitle": "Mock analytics overview for global public agents and your private agents.",
+      "emptyData": "Not enough data.",
+      "periods": {
+        "all": "All time",
+        "7d": "7 days",
+        "30d": "30 days",
+        "90d": "90 days"
+      },
+      "scopes": {
+        "all": "All",
+        "global": "Global",
+        "personal": "Personal"
+      },
+      "labels": {
+        "global": "Global",
+        "personal": "Personal",
+        "uses": "Uses"
+      },
+      "cards": {
+        "globalUses": "Global uses",
+        "publicOnly": "Public agents only",
+        "activeUsers": "Active users",
+        "last30Days": "Last 30 days",
+        "myAgentsUsers": "Users using my agents",
+        "includingPrivate": "Including private agents",
+        "topModelGlobal": "Top model (global)",
+        "totalUses": "{amount} total uses"
+      },
+      "usageTrend": {
+        "title": "Usage trend",
+        "globalVsPersonal": "Global vs your agents",
+        "globalOnly": "Global public agents",
+        "personalOnly": "Your agents only"
+      },
+      "popularModels": {
+        "title": "Most popular models (global)"
+      },
+      "myAgentUsers": {
+        "title": "My agent users",
+        "subtitle": "Top agents by active users",
+        "activeUsers": "{count} active users"
+      },
+      "popularModelPersonal": {
+        "title": "Most popular model (my agents)",
+        "uses": "{amount} uses on your agents",
+        "subtitle": "Most used across your agents"
+      },
+      "personalAgents": {
+        "tutor": "Personal Tutor",
+        "reviewer": "Code Reviewer",
+        "marketing": "Marketing Copy",
+        "coach": "Private Coach"
+      }
+    },
+    "edit": {
+      "draftBanner": "This agent has not been published. It will not be available for you or other members.",
+      "header": {
+        "back": "Back to agents",
+        "previewTitle": "Agent preview",
+        "setupTitle": "Agent setup",
+        "completion": "({completed}/{total})",
+        "completeFields": "Complete all fields {completion}"
+      },
+      "body": {
+        "customize": "Customize your agent",
+        "starters": "Set conversation starters",
+        "customizeLlm": "Customize LLM engine",
+        "selectLlm": "Select LLM engine",
+        "experimental": {
+          "title": "Add experimental features",
+          "api": "Own API server (Ollama)"
+        }
+      },
+      "description": {
+        "title": "Agent description",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "save": "Save",
+        "toast": {
+          "updated": "Agent description has been updated"
+        },
+        "fields": {
+          "name": {
+            "label": "Name",
+            "placeholder": "e.g. 'Nova Copilot'",
+            "helper": "Come up with a name for your agent"
+          },
+          "systemTag": {
+            "label": "System tag",
+            "placeholder": "e.g. 'copilot'"
+          },
+          "description": {
+            "label": "Description",
+            "placeholder": "e.g. 'AI agent who ...'"
+          },
+          "systemAgent": {
+            "label": "System agent",
+            "helper": "The agent will be displayed as a system agent."
+          },
+          "language": {
+            "label": "Agent language",
+            "helper": "Specify the default language."
+          }
+        }
+      },
+      "customization": {
+        "title": "LLM customization",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "save": "Save",
+        "toast": {
+          "updated": "LLM engine has been updated"
+        },
+        "systemInstruction": {
+          "title": "System instruction",
+          "placeholder": "e.g. 'You are an AI agent who ...'",
+          "empty": "No system instruction for LLM engine."
+        },
+        "temperature": {
+          "title": "Temperature",
+          "labels": {
+            "precise": "Precise",
+            "neutral": "Neutral",
+            "creative": "Creative"
+          }
+        }
+      },
+      "models": {
+        "title": "LLM engine",
+        "select": "Select",
+        "cancel": "Cancel",
+        "save": "Save",
+        "empty": "No selected LLM engine.",
+        "helper": "Select LLM engine for your agent",
+        "default": "Default",
+        "selectAria": "Select LLM model",
+        "toast": {
+          "updated": "LLM engine has been updated"
+        }
+      },
+      "conversationStarters": {
+        "title": "Conversation starters",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "save": "Save",
+        "generateAi": "Generate with AI",
+        "generatingAi": "Generating...",
+        "limit": "{count} of {max} (Max)",
+        "empty": "No conversation starters for chat.",
+        "placeholder": "e.g. 'What is the weather today?'",
+        "toast": {
+          "updated": "Conversation starters have been updated",
+          "generated": "AI-generated starters have been added",
+          "generateError": "Unable to generate starters. Please try again."
+        }
+      }
+    },
+    "create": {
+      "title": "Name Your AI Agent",
+      "subtitle": "What would you like to name your agent? Don’t worry, you can always change it later.",
+      "toast": {
+        "created": "AI agent has been created"
+      },
+      "form": {
+        "name": {
+          "label": "Name",
+          "placeholder": "e.g. 'Nova Copilot'"
+        },
+        "errors": {
+          "nameRequired": "Agent name is required"
+        },
+        "cancel": "Cancel",
+        "continue": "Continue"
+      }
+    },
+    "actions": {
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "publishPrivate": "Publish as private",
+      "chatNow": "Chat now",
+      "edit": "Edit",
+      "clone": "Clone",
+      "toast": {
+        "published": "Agent has been published",
+        "unpublished": "Agent unpublished",
+        "deleted": "Agent has been deleted",
+        "connected": "Agent has been connected.",
+        "disconnected": "Agent has been disconnected."
+      }
+    },
+    "card": {
+      "badges": {
+        "draft": "Draft",
+        "default": "Default",
+        "private": "Private",
+        "public": "Public"
+      },
+      "by": "by {name}",
+      "system": "System",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "totalUses": "{amount} total connections",
+      "systemInstruction": "System instruction",
+      "temperature": "Temperature",
+      "toast": {
+        "connected": "Agent has been connected.",
+        "disconnected": "Agent has been disconnected."
+      }
+    },
+    "switchers": {
+      "agentPlaceholder": "Select an agent",
+      "modelPlaceholder": "Select a LLM model",
+      "preview": "Preview"
+    },
+    "common": {
+      "configuration": "Configuration"
     }
   }
 }

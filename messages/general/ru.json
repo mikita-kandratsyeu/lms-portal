@@ -331,6 +331,7 @@
       "conversations": "Диалоги",
       "delete-all": "Удалить все диалоги",
       "edit": "Редактировать",
+      "explore-ai-agents": "Исследовать ИИ агентов",
       "remove": "Удалить",
       "removed-conversation": "Диалог \"{ conversation }\" был успешно удален.",
       "share": "Поделиться",
@@ -385,6 +386,7 @@
     "bannerBody": "Премиум-курсы, неограниченный доступ к Nova Copilot и многое другое.",
     "bannerTitle": "Обновитесь до Nova Plus",
     "benefits": {
+      "advanced-ai-agents": "Расширенные возможности AI агентов",
       "cancel-anytime": "Без оплаты в течение первых двух недель",
       "get-access-nova-ai": "Неограниченный доступ к Nova Copilot",
       "unlock-premium-courses": "Премиум курсы",
@@ -551,7 +553,248 @@
   "ai-agent": {
     "sheet": {
       "general": "Конфигурация",
+      "agent": "ИИ агент",
       "primaryLLM": "Основная LLM модель"
+    }
+  },
+  "ai-agents": {
+    "general": {
+      "title": "ИИ агенты",
+      "scopes": {
+        "all": "Все агенты",
+        "mine": "Мои агенты"
+      },
+      "sections": {
+        "connected": "Подключенные агенты",
+        "private": "Приватные агенты",
+        "public": "Публично доступные агенты"
+      },
+      "notFound": "Агенты не найдены.",
+      "header": {
+        "searchPlaceholder": "Поиск агента...",
+        "createAgent": "Создать агента"
+      }
+    },
+    "analytics": {
+      "title": "Аналитика ИИ агентов",
+      "subtitle": "Обзор аналитики для глобальных публичных агентов и ваших приватных агентов.",
+      "emptyData": "Недостаточно данных.",
+      "periods": {
+        "all": "За все время",
+        "7d": "7 дней",
+        "30d": "30 дней",
+        "90d": "90 дней"
+      },
+      "scopes": {
+        "all": "Все",
+        "global": "Глобальные",
+        "personal": "Личные"
+      },
+      "labels": {
+        "global": "Глобальные",
+        "personal": "Личные",
+        "uses": "Использования"
+      },
+      "cards": {
+        "globalUses": "Глобальные использования",
+        "publicOnly": "Только публичные агенты",
+        "activeUsers": "Активные пользователи",
+        "last30Days": "Последние 30 дней",
+        "myAgentsUsers": "Пользователи моих агентов",
+        "includingPrivate": "Включая приватных агентов",
+        "topModelGlobal": "Топ модель (глобально)",
+        "totalUses": "{amount} всего использований"
+      },
+      "usageTrend": {
+        "title": "Динамика использования",
+        "globalVsPersonal": "Глобальные vs ваши агенты",
+        "globalOnly": "Глобальные публичные агенты",
+        "personalOnly": "Только ваши агенты"
+      },
+      "popularModels": {
+        "title": "Самые популярные модели (глобально)"
+      },
+      "myAgentUsers": {
+        "title": "Пользователи моих агентов",
+        "subtitle": "Топ агентов по активным пользователям",
+        "activeUsers": "{count} активных пользователей"
+      },
+      "popularModelPersonal": {
+        "title": "Самая популярная модель (мои агенты)",
+        "uses": "{amount} использований на ваших агентах",
+        "subtitle": "Самая используемая среди ваших агентов"
+      },
+      "personalAgents": {
+        "tutor": "Персональный тьютор",
+        "reviewer": "Код-ревьюер",
+        "marketing": "Маркетинговый копирайтер",
+        "coach": "Личный коуч"
+      }
+    },
+    "edit": {
+      "draftBanner": "Этот агент еще не опубликован. Он будет недоступен для вас и других участников.",
+      "header": {
+        "back": "Назад к агентам",
+        "previewTitle": "Предпросмотр агента",
+        "setupTitle": "Настройка агента",
+        "completion": "({completed}/{total})",
+        "completeFields": "Заполните все поля {completion}"
+      },
+      "body": {
+        "customize": "Настройте агента",
+        "starters": "Задайте стартовые фразы",
+        "customizeLlm": "Настройте LLM движок",
+        "selectLlm": "Выберите LLM движок",
+        "experimental": {
+          "title": "Добавьте экспериментальные функции",
+          "api": "Свой API сервер (Ollama)"
+        }
+      },
+      "description": {
+        "title": "Описание агента",
+        "edit": "Редактировать",
+        "cancel": "Отмена",
+        "save": "Сохранить",
+        "toast": {
+          "updated": "Описание агента обновлено"
+        },
+        "fields": {
+          "name": {
+            "label": "Имя",
+            "placeholder": "например, 'Nova Copilot'",
+            "helper": "Придумайте имя для агента"
+          },
+          "systemTag": {
+            "label": "Системный тег",
+            "placeholder": "например, 'copilot'"
+          },
+          "description": {
+            "label": "Описание",
+            "placeholder": "например, 'ИИ агент, который ...'"
+          },
+          "systemAgent": {
+            "label": "Системный агент",
+            "helper": "Агент будет отображаться как системный."
+          },
+          "language": {
+            "label": "Язык агента",
+            "helper": "Укажите язык по умолчанию."
+          }
+        }
+      },
+      "customization": {
+        "title": "Настройка LLM",
+        "edit": "Редактировать",
+        "cancel": "Отмена",
+        "save": "Сохранить",
+        "toast": {
+          "updated": "LLM движок обновлен"
+        },
+        "systemInstruction": {
+          "title": "Системная инструкция",
+          "placeholder": "например, 'Вы ИИ агент, который ...'",
+          "empty": "Нет системной инструкции для LLM движка."
+        },
+        "temperature": {
+          "title": "Температура",
+          "labels": {
+            "precise": "Точно",
+            "neutral": "Нейтрально",
+            "creative": "Креативно"
+          }
+        }
+      },
+      "models": {
+        "title": "LLM движок",
+        "select": "Выбрать",
+        "cancel": "Отмена",
+        "save": "Сохранить",
+        "empty": "LLM движок не выбран.",
+        "helper": "Выберите LLM движок для агента",
+        "default": "По умолчанию",
+        "selectAria": "Выбрать LLM модель",
+        "toast": {
+          "updated": "LLM движок обновлен"
+        }
+      },
+      "conversationStarters": {
+        "title": "Стартовые фразы",
+        "edit": "Редактировать",
+        "cancel": "Отмена",
+        "save": "Сохранить",
+        "generateAi": "Сгенерировать с AI",
+        "generatingAi": "Генерация...",
+        "limit": "{count} из {max} (макс.)",
+        "empty": "Нет стартовых фраз для чата.",
+        "placeholder": "например, 'Какая сегодня погода?'",
+        "toast": {
+          "updated": "Стартовые фразы обновлены",
+          "generated": "AI заполнил стартовые фразы",
+          "generateError": "Не удалось сгенерировать фразы. Попробуйте еще раз."
+        }
+      }
+    },
+    "create": {
+      "title": "Назовите вашего ИИ агента",
+      "subtitle": "Как бы вы назвали своего агента? Не переживайте, название можно изменить позже.",
+      "toast": {
+        "created": "ИИ агент создан"
+      },
+      "form": {
+        "name": {
+          "label": "Имя",
+          "placeholder": "например, 'Nova Copilot'"
+        },
+        "errors": {
+          "nameRequired": "Требуется имя агента"
+        },
+        "cancel": "Отмена",
+        "continue": "Продолжить"
+      }
+    },
+    "actions": {
+      "connect": "Подключить",
+      "disconnect": "Отключить",
+      "publish": "Опубликовать",
+      "unpublish": "Снять с публикации",
+      "publishPrivate": "Опубликовать как приватный",
+      "chatNow": "Открыть чат",
+      "edit": "Редактировать",
+      "clone": "Клонировать",
+      "toast": {
+        "published": "Агент опубликован",
+        "unpublished": "Агент снят с публикации",
+        "deleted": "Агент удален",
+        "connected": "Агент подключен.",
+        "disconnected": "Агент отключен."
+      }
+    },
+    "card": {
+      "badges": {
+        "draft": "Черновик",
+        "default": "По умолчанию",
+        "private": "Приватный",
+        "public": "Публичный"
+      },
+      "by": "от {name}",
+      "system": "Система",
+      "connect": "Подключить",
+      "disconnect": "Отключить",
+      "totalUses": "{amount} всего подключений",
+      "systemInstruction": "Системная инструкция",
+      "temperature": "Температура",
+      "toast": {
+        "connected": "Агент подключен.",
+        "disconnected": "Агент отключен."
+      }
+    },
+    "switchers": {
+      "agentPlaceholder": "Выберите агента",
+      "modelPlaceholder": "Выберите LLM модель",
+      "preview": "Предпросмотр"
+    },
+    "common": {
+      "configuration": "Настройка"
     }
   }
 }

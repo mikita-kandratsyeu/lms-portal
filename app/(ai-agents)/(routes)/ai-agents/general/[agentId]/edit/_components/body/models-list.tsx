@@ -22,6 +22,7 @@ export const ModelsList = ({
   onUpdate,
   models = [],
 }: ModelsListProps) => {
+  const t = useTranslations('ai-agents.edit.models');
   const tProfile = useTranslations('profileButton');
 
   const selectedModelIds = selectedModels.map((model) => model.id);
@@ -58,14 +59,14 @@ export const ModelsList = ({
                   value ? [...prev, model.id] : prev.filter((id) => id !== model.id),
                 )
               }
-              aria-label="Select LLM model"
+              aria-label={t('selectAria')}
             />
           </div>
         )}
         <div className="flex flex-col">
           <div className="flex gap-x-2 items-center">
             <strong>{model.name}</strong>
-            {model.isDefault && <TextBadge label="Default" />}
+            {model.isDefault && <TextBadge label={t('default')} />}
             {model.isSubscription && <TextBadge label={tProfile('premium')} variant="lime" />}
           </div>
           <p className="text-xs font-light">{model.value}</p>

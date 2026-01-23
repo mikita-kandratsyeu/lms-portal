@@ -25,6 +25,7 @@ import { MAX_PRICE_INT } from '@/constants/payments';
 import { useLocaleStore } from '@/hooks/store/use-locale-store';
 import { fetcher } from '@/lib/fetcher';
 import { formatPrice, getConvertedPrice, getScaledPrice } from '@/lib/format';
+import { isString } from '@/lib/guard';
 import { hasJsonStructure } from '@/lib/utils';
 
 type PriceFormProps = {
@@ -87,9 +88,7 @@ export const PriceForm = ({ courseId, fees, initialData }: PriceFormProps) => {
       await fetcher.patch(`/api/courses/${courseId}`, {
         body: {
           customRates,
-          price: getScaledPrice(
-            typeof price === 'string' ? Number(price.replace(/,/g, '.')) : price,
-          ),
+          price: getScaledPrice(isString(price) ? Number(price.replace(/,/g, '.')) : price),
         },
       });
 
@@ -98,7 +97,7 @@ export const PriceForm = ({ courseId, fees, initialData }: PriceFormProps) => {
 
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsSubmitting(false);
     }

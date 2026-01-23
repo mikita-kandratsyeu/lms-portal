@@ -57,7 +57,7 @@ export const NewTabCopilotForm = ({ initialData }: NewTabCopilotFormProps) => {
     } catch (error) {
       console.error('[NEW_TAB_COPILOT_FORM]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

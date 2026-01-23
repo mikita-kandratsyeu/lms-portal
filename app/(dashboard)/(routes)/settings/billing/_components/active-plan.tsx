@@ -43,7 +43,7 @@ export const ActivePlan = ({ userSubscription }: ActivePlanProps) => {
         window.location.assign(response.url);
       }
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

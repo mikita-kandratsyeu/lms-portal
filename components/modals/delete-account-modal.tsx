@@ -50,7 +50,7 @@ export const DeleteAccountModal = ({ email, open, setOpen, userId }: DeleteAccou
     } catch (error) {
       console.error('[DELETE-ACCOUNT-MODAL]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

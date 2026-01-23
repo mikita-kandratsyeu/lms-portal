@@ -1,7 +1,7 @@
 {
   "auth": {
     "allowNewUsers": true,
-    "allowNewUserSubscriptions": true,
+    "allowNewUserSubscriptions": false,
     "providers": {
       "github": true,
       "google": true,
@@ -13,7 +13,7 @@
     }
   },
   "features": {
-    "christmas": true,
+    "christmas": false,
     "testMode": true
   }
 }

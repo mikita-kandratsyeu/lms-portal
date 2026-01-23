@@ -18,6 +18,7 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
+      { protocol: 'https', hostname: '*.ufs.sh' },
       { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
       { protocol: 'https', hostname: 'avatars.yandex.net' },
       { protocol: 'https', hostname: 'filin.mail.ru' },

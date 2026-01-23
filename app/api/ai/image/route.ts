@@ -64,11 +64,8 @@ export const POST = async (req: NextRequest) => {
   } catch (error) {
     console.error('[OPEN_AI_IMAGE]', error);
 
-    return NextResponse.json(
-      { revisedPrompt: t('body') },
-      {
-        status: StatusCodes.INTERNAL_SERVER_ERROR,
-      },
-    );
+    return new NextResponse(t('body'), {
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
   }
 };

@@ -1,8 +1,9 @@
 'use client';
 
+import { AiModelFeature } from '@prisma/client';
 import { Eraser, PanelRight, Share } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { memo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { memo, useEffect, useState } from 'react';
 
 import { AgentConfiguration } from '@/components/ai-agents/agent-configuration/agent-configuration';
 import { ChatConversationModal } from '@/components/modals/chat-conversation-modal';
@@ -22,24 +23,30 @@ type ChatTopBarProps = {
 const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const agentIdParam = searchParams.get('agentId');
 
-  const { chatMessages, conversationId, conversations, setChatMessages } = useChatStore(
-    (state) => ({
+  const { chatMessages, conversationId, conversations, setChatMessages, setActiveFeature } =
+    useChatStore((state) => ({
       chatMessages: state.chatMessages,
       conversationId: state.conversationId,
       conversations: state.conversations,
       setChatMessages: state.setChatMessages,
-    }),
-  );
+      setActiveFeature: state.setActiveFeature,
+    }));
 
   const { isFetching, setIsFetching } = useChatStore((state) => ({
     isFetching: state.isFetching,
     setIsFetching: state.setIsFetching,
   }));
-  const { currentAgent, currentModel } = useAiAgentStore((state) => ({
-    currentAgent: state.currentAgent,
-    currentModel: state.currentModel,
-  }));
+  const { connectedAgents, currentAgent, currentModel, setCurrentAgent, setCurrentModel } =
+    useAiAgentStore((state) => ({
+      connectedAgents: state.connectedAgents,
+      currentAgent: state.currentAgent,
+      currentModel: state.currentModel,
+      setCurrentAgent: state.setCurrentAgent,
+      setCurrentModel: state.setCurrentModel,
+    }));
 
   const [open, setOpen] = useState(false);
 
@@ -49,6 +56,43 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
   );
 
   const hasAgent = currentAgent?.name && currentModel?.name;
+
+  useEffect(() => {
+    if (connectedAgents.length) {
+      const requestedAgent = agentIdParam
+        ? connectedAgents.find((agent) => agent.id === agentIdParam)
+        : null;
+      const defaultAgent = connectedAgents.find((agent) => agent.isDefault) ?? connectedAgents[0];
+      const nextAgent = requestedAgent ?? defaultAgent;
+
+      if (nextAgent && currentAgent?.id !== nextAgent.id) {
+        const nextModel =
+          nextAgent.aiModels.find(
+            (model) => model.isDefault || !model.features.includes('image'),
+          ) ?? nextAgent.aiModels[0];
+
+        if (nextModel) {
+          setCurrentModel(nextModel);
+        }
+
+        setActiveFeature(AiModelFeature.text);
+        setCurrentAgent(nextAgent);
+      }
+    }
+
+    if (currentAgent && !currentModel) {
+      setCurrentModel(currentAgent.aiModels[0]);
+    }
+  }, [
+    agentIdParam,
+    connectedAgents,
+    currentAgent?.id,
+    currentAgent,
+    currentModel,
+    setActiveFeature,
+    setCurrentAgent,
+    setCurrentModel,
+  ]);
 
   const handleChatAction = async (action: 'clear' | 'share') => {
     setIsFetching(true);
@@ -69,7 +113,7 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
       router.refresh();
     } catch (error) {
       console.error('[CHAT_TOP_BAR_ACTION]', error);
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }
@@ -85,8 +129,8 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
           setOpen={setOpen}
         />
       )}
-      <div className={cn('w-full h-[75px]', !messages.length && 'h-full')}>
-        {!isEmbed && (
+      {!isEmbed && (
+        <div className={cn('w-full h-[75px]', !messages.length && 'h-full')}>
           <div
             className={cn(
               'flex flex-1 text-base pt-4 px-4 items-center gap-x-4',
@@ -121,8 +165,8 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
               </AgentConfiguration>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 };
