@@ -47,7 +47,7 @@ export const FileUpload = ({ endpoint, onBegin, onChange }: FileUploadProps) => 
         onChange(res?.map(({ url, name }) => ({ url, name })));
       }}
       onUploadError={(error: Error) => {
-        toast({ title: String(error?.message) });
+        toast({ isError: true, description: String(error?.message) });
       }}
     />
   );

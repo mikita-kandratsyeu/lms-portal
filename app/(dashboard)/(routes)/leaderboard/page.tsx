@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
+import { Suspense } from 'react';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getLeaders } from '@/actions/courses/get-leaders';
