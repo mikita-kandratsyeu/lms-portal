@@ -69,7 +69,7 @@ const ChatTopBarComponent = ({ isEmbed = false }: ChatTopBarProps) => {
       router.refresh();
     } catch (error) {
       console.error('[CHAT_TOP_BAR_ACTION]', error);
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

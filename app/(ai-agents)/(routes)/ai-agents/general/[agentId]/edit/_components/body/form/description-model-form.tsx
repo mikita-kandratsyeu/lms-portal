@@ -116,7 +116,7 @@ export const DescriptionModelForm = ({
     } catch (error) {
       console.error('[DESCRIPTION_MODEL_FORM]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

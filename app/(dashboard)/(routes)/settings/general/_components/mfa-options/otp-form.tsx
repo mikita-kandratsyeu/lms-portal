@@ -44,7 +44,7 @@ export const OtpForm = ({ initialData }: OtpFormProps) => {
       setQrCode(otp.qr);
       setSecret(otp.secret);
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }
@@ -62,7 +62,7 @@ export const OtpForm = ({ initialData }: OtpFormProps) => {
       toast({ title: t('otpDisabled') });
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

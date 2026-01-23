@@ -39,7 +39,7 @@ export const AttachmentForm = ({ initialData, courseId }: AttachmentProps) => {
       toast({ title: 'Course updated' });
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 
@@ -52,7 +52,7 @@ export const AttachmentForm = ({ initialData, courseId }: AttachmentProps) => {
       toast({ title: 'Attachment deleted' });
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setDeletingId(null);
     }

@@ -85,7 +85,7 @@ export const CustomizeModelForm = ({
     } catch (error) {
       console.error('[CUSTOMIZE_MODEL_FORM]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

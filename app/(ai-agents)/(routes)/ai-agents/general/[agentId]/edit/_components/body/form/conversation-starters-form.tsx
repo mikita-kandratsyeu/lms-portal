@@ -101,7 +101,7 @@ export const ConversationStartersForm = ({
     } catch (error) {
       console.error('[CONVERSATION_STARTERS_FORM]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

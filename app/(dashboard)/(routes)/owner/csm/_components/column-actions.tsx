@@ -69,7 +69,7 @@ export const ColumnActions = ({ csmId, csmIssue }: ColumnActionsProps) => {
       }
     } catch (error) {
       console.log(error);
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

@@ -47,7 +47,7 @@ const CreatePage = () => {
 
       router.push(`/teacher/courses/${data.id}`);
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

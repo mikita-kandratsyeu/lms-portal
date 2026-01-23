@@ -57,7 +57,7 @@ export const ChristmasForm = ({ initialData }: ChristmasFormFormProps) => {
     } catch (error) {
       console.error('[CHRISTMAS_FORM]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

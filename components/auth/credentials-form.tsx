@@ -139,7 +139,7 @@ export const CredentialsFrom = ({
         }
       } catch (error) {
         console.error({ error });
-        toast({ isError: true });
+        toast({ isError: true, description: (error as Error)?.message ?? '' });
       } finally {
         setIsDisabledButtons?.(false);
       }

@@ -62,7 +62,7 @@ export const GeneralSettingsForm = ({
       toast({ title: t('accInfoUpdated') });
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }
@@ -77,7 +77,7 @@ export const GeneralSettingsForm = ({
       toast({ title: t('emailVerifyStatus.sentMessage') });
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }
@@ -97,7 +97,7 @@ export const GeneralSettingsForm = ({
       toast({ title: t('accInfoUpdated') });
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

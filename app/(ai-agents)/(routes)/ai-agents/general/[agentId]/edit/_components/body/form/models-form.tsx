@@ -50,7 +50,7 @@ export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: Mode
     } catch (error) {
       console.error('[MODELS_FORM]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

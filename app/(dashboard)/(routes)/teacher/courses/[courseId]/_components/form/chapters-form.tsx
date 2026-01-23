@@ -61,7 +61,7 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
 
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 
@@ -77,7 +77,7 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
 
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsUpdating(false);
     }

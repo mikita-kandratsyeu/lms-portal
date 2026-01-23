@@ -50,7 +50,7 @@ export const RoleActions = ({ userId, role }: RoleActionsProps) => {
       toast({ title: 'User updated' });
       startTransition(() => router.refresh());
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

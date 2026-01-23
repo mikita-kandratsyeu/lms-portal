@@ -57,7 +57,7 @@ export const PublicProfileForm = ({ initialData }: PublicProfileFormProps) => {
     } catch (error) {
       console.error('[PUBLIC_PROFILE_FORM]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

@@ -45,7 +45,7 @@ export const Actions = ({
 
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +62,7 @@ export const Actions = ({
       router.push(`/teacher/courses`);
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsLoading(false);
     }

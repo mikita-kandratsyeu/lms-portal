@@ -36,7 +36,7 @@ export const ChatSideBarBottom = ({ amountOfConversations }: ChatSideBarBottomPr
         responseType: 'json',
       });
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
       setConversationId('');

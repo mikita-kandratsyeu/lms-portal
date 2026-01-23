@@ -131,7 +131,7 @@ export const ChatConversationModal = ({
 
       setSharedLink(absoluteUrl(`/chat/shared/${response?.id}`));
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsUpdatingSharedLink(false);
     }
@@ -164,7 +164,7 @@ export const ChatConversationModal = ({
 
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setOpen?.(false);
     }

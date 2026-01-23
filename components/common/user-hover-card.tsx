@@ -51,7 +51,7 @@ export const UserHoverCard = ({ children, isDisabledHover, userId }: UserHoverCa
       console.error('[USER_HOVER_CARD]', error);
 
       setUser(null);
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

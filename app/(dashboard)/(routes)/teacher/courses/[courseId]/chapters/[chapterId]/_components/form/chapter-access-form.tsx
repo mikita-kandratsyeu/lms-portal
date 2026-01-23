@@ -51,7 +51,7 @@ export const ChapterAccessForm = ({ chapterId, courseId, initialData }: ChapterA
 
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     }
   };
 

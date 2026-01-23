@@ -122,7 +122,7 @@ export const PromoModal = ({ children, coupons, customers }: PromoModalProps) =>
 
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setOpen(false);
     }

@@ -39,7 +39,7 @@ export const Actions = ({ disableRequest = false, stripeConnect, totalProfit }: 
       toast({ title: 'You will be redirected to the Stripe Onboarding page.' });
       window.location.assign(response.url);
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }
@@ -56,7 +56,7 @@ export const Actions = ({ disableRequest = false, stripeConnect, totalProfit }: 
       toast({ title: 'You will be redirected to the Stripe Express page.' });
       window.location.assign(response.url);
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

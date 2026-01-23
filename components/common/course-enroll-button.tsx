@@ -61,7 +61,7 @@ export const CourseEnrollButton = ({
     } catch (error) {
       console.error('[COURSE_ENROLL_BUTTON]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

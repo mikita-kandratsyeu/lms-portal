@@ -93,7 +93,7 @@ export const Actions = ({
     } catch (error) {
       console.error('[AGENT_DELETE]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
     }

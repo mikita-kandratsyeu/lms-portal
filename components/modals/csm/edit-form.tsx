@@ -55,7 +55,7 @@ export const EditForm = ({ callback, editIssue }: EditFormProps) => {
     } catch (error) {
       console.error('[CSM_FORM_EDIT]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);
       callback?.();

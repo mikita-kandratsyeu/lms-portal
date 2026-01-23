@@ -49,7 +49,7 @@ export const CourseProgressButton = ({
       toast({ title: t('progress') });
       router.refresh();
     } catch (error) {
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsLoading(false);
     }

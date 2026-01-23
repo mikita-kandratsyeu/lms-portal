@@ -47,7 +47,7 @@ const NotificationCard = ({ isFetching = false, notification, userId }: Notifica
     } catch (error) {
       console.error('[NOTIFICATION-CARDS]', error);
 
-      toast({ isError: true });
+      toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsLoading(false);
     }
