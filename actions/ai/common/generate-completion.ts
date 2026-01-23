@@ -8,6 +8,7 @@ import { AI_PROVIDER, ChatCompletionRole, DEFAULT_TEMPERATURE } from '@/constant
 import { LocaleInfo } from '@/hooks/store/use-locale-store';
 
 import { getAgentData } from '../agent/get-agent-data';
+import { updateAiAnalytics } from '../analytics/update-ai-analytics';
 import { getProviderByAgent } from './get-target-provider';
 
 type GenerateCompletion = Omit<ResponseCreateParamsBase, 'model'> & {
@@ -83,6 +84,10 @@ export const generateCompletion = async ({
           tool_choice: 'auto',
         });
 
+  const usageAgentId = agent?.id;
+  const usageUserId = user?.userId;
+  const usageModel = model.value;
+
   if (stream) {
     const encoder = new TextEncoder();
     const stream_response = new TransformStream();
@@ -126,8 +131,24 @@ export const generateCompletion = async ({
       }
     })();
 
-    return { completion: stream_response.readable, model: model.value };
+    if (usageAgentId && usageUserId) {
+      await updateAiAnalytics({
+        agentId: usageAgentId,
+        userId: usageUserId,
+        model: usageModel,
+      });
+    }
+
+    return { completion: stream_response.readable, model: usageModel };
   }
 
-  return { completion, model: model.value };
+  if (usageAgentId && usageUserId) {
+    await updateAiAnalytics({
+      agentId: usageAgentId,
+      userId: usageUserId,
+      model: usageModel,
+    });
+  }
+
+  return { completion, model: usageModel };
 };

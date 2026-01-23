@@ -5,6 +5,7 @@ import { ImageGenerateParams } from 'openai/resources/images.mjs';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 
 import { getAgentData } from '../agent/get-agent-data';
+import { updateAiAnalytics } from '../analytics/update-ai-analytics';
 import { getProviderByAgent } from './get-target-provider';
 
 type GenerateImage = Omit<ImageGenerateParams, 'model'> & {
@@ -30,6 +31,14 @@ export const generateImage = async ({ agentId, modelId, prompt }: GenerateImage)
     response_format: 'b64_json',
     size: '1024x1024',
   });
+
+  if (agent?.id && user?.userId) {
+    await updateAiAnalytics({
+      agentId: agent.id,
+      userId: user.userId,
+      model: model.value,
+    });
+  }
 
   return {
     image: response,
