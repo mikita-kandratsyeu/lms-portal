@@ -38,7 +38,7 @@ export const ChatStarters = ({
   );
 
   const styles =
-    'group w-full rounded-lg border bg-muted/40 px-4 py-3 text-left text-sm md:text-base text-foreground/80 shadow-sm transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring line-clamp-2';
+    'group w-full rounded-lg border bg-muted/40 px-4 py-3 text-left text-sm text-foreground/80 shadow-sm transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring line-clamp-2';
 
   return (
     <div className="flex items-center w-full">
