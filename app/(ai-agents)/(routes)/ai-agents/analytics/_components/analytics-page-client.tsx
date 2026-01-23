@@ -3,14 +3,13 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-import { getAiAnalytics } from '@/actions/ai/analytics/get-ai-analytics';
 import { Period, Scope } from '@/constants/ai/analytics';
 
 import { AnalyticsCharts } from './analytics-charts';
 import { AnalyticsHeader } from './analytics-header';
 import { AnalyticsPersonal } from './analytics-personal';
 import { AnalyticsSummary } from './analytics-summary';
-import type { ModelUsage } from './types';
+import type { ModelUsage, PersonalAgent, WeeklyUsage } from './types';
 
 const periodOptionIds = Object.values(Period);
 const scopeOptionIds = Object.values(Scope);
@@ -18,13 +17,24 @@ const scopeOptionIds = Object.values(Scope);
 type PeriodId = (typeof periodOptionIds)[number];
 type ScopeId = (typeof scopeOptionIds)[number];
 
+type PeriodAnalytics = {
+  globalModelUsage: ModelUsage[];
+  personalModelUsage: ModelUsage[];
+  weeklyUsage: WeeklyUsage[];
+  globalUsers: number;
+  personalUsers: number;
+  personalAgents: PersonalAgent[];
+};
+
+type AnalyticsData = Record<PeriodId, PeriodAnalytics>;
+
 const getTopModel = (models: ModelUsage[]) =>
   models.reduce((top, current) => (current.uses > top.uses ? current : top), models[0]);
 
 const sumUses = (models: ModelUsage[]) => models.reduce((total, model) => total + model.uses, 0);
 
 type AnalyticsPageClientProps = {
-  analytics: Awaited<ReturnType<typeof getAiAnalytics>>;
+  analytics: AnalyticsData;
 };
 
 export const AnalyticsPageClient = ({ analytics }: AnalyticsPageClientProps) => {
@@ -42,6 +52,15 @@ export const AnalyticsPageClient = ({ analytics }: AnalyticsPageClientProps) => 
     label: t(`scopes.${id}`),
   }));
 
+  const emptyPeriod: PeriodAnalytics = {
+    globalModelUsage: [],
+    personalModelUsage: [],
+    weeklyUsage: [],
+    globalUsers: 0,
+    personalUsers: 0,
+    personalAgents: [],
+  };
+
   const {
     globalModelUsage,
     globalUsers,
@@ -49,10 +68,16 @@ export const AnalyticsPageClient = ({ analytics }: AnalyticsPageClientProps) => 
     personalModelUsage,
     personalUsers,
     weeklyUsage,
-  } = analytics[period];
+  } = analytics[period] ?? emptyPeriod;
 
-  const globalTop = getTopModel(globalModelUsage);
-  const personalTop = getTopModel(personalModelUsage);
+  const hasGlobalUsage = globalModelUsage.length > 0;
+  const hasPersonalUsage = personalModelUsage.length > 0;
+  const hasWeeklyUsage = weeklyUsage.length > 0;
+  const hasGlobalUsers = globalUsers > 0;
+  const hasPersonalUsers = personalUsers > 0;
+
+  const globalTop = hasGlobalUsage ? getTopModel(globalModelUsage) : null;
+  const personalTop = hasPersonalUsage ? getTopModel(personalModelUsage) : null;
   const showGlobal = scope === Scope.ALL || scope === Scope.GLOBAL;
   const showPersonal = scope === Scope.ALL || scope === Scope.PERSONAL;
 
@@ -75,12 +100,17 @@ export const AnalyticsPageClient = ({ analytics }: AnalyticsPageClientProps) => 
         globalUsers={globalUsers}
         personalUsers={personalUsers}
         globalTop={globalTop}
+        hasGlobalUsage={hasGlobalUsage}
+        hasGlobalUsers={hasGlobalUsers}
+        hasPersonalUsers={hasPersonalUsers}
       />
       <AnalyticsCharts
         showGlobal={showGlobal}
         showPersonal={showPersonal}
         weeklyUsage={weeklyUsage}
         globalModelUsage={globalModelUsage}
+        hasWeeklyUsage={hasWeeklyUsage}
+        hasGlobalUsage={hasGlobalUsage}
       />
       {showPersonal && (
         <AnalyticsPersonal
@@ -88,6 +118,7 @@ export const AnalyticsPageClient = ({ analytics }: AnalyticsPageClientProps) => 
           personalUsers={personalUsers}
           personalTop={personalTop}
           personalModelUsage={personalModelUsage}
+          hasPersonalUsage={hasPersonalUsage}
         />
       )}
     </div>

@@ -577,6 +577,7 @@
     "analytics": {
       "title": "AI Agents Analytics",
       "subtitle": "Mock analytics overview for global public agents and your private agents.",
+      "emptyData": "Not enough data.",
       "periods": {
         "all": "All time",
         "7d": "7 days",

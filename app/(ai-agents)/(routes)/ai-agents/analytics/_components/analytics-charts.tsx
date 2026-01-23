@@ -18,6 +18,8 @@ type AnalyticsChartsProps = {
   showPersonal: boolean;
   weeklyUsage: WeeklyUsage[];
   globalModelUsage: ModelUsage[];
+  hasWeeklyUsage: boolean;
+  hasGlobalUsage: boolean;
 };
 
 export const AnalyticsCharts = ({
@@ -25,8 +27,11 @@ export const AnalyticsCharts = ({
   showPersonal,
   weeklyUsage,
   globalModelUsage,
+  hasWeeklyUsage,
+  hasGlobalUsage,
 }: AnalyticsChartsProps) => {
   const t = useTranslations('ai-agents.analytics');
+  const emptyLabel = t('emptyData');
 
   const usageTrendConfig = {
     global: { label: t('labels.global'), color: 'hsl(var(--primary))' },
@@ -58,33 +63,37 @@ export const AnalyticsCharts = ({
             </p>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={usageTrendConfig} className="h-[280px] w-full">
-              <LineChart data={weeklyUsage} margin={{ left: 8, right: 8, top: 16 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="week" />
-                <YAxis />
-                {showGlobal && (
-                  <Line
-                    type="monotone"
-                    dataKey="global"
-                    stroke="var(--color-global)"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                )}
-                {showPersonal && (
-                  <Line
-                    type="monotone"
-                    dataKey="personal"
-                    stroke="var(--color-personal)"
-                    strokeWidth={2}
-                    strokeDasharray="6 4"
-                    dot={false}
-                  />
-                )}
-                <ChartTooltip content={<ChartTooltipContent />} />
-              </LineChart>
-            </ChartContainer>
+            {hasWeeklyUsage ? (
+              <ChartContainer config={usageTrendConfig} className="h-[280px] w-full">
+                <LineChart data={weeklyUsage} margin={{ left: 8, right: 8, top: 16 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="week" />
+                  <YAxis />
+                  {showGlobal && (
+                    <Line
+                      type="monotone"
+                      dataKey="global"
+                      stroke="var(--color-global)"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  )}
+                  {showPersonal && (
+                    <Line
+                      type="monotone"
+                      dataKey="personal"
+                      stroke="var(--color-personal)"
+                      strokeWidth={2}
+                      strokeDasharray="6 4"
+                      dot={false}
+                    />
+                  )}
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </LineChart>
+              </ChartContainer>
+            ) : (
+              <p className="text-sm text-muted-foreground">{emptyLabel}</p>
+            )}
           </CardContent>
         </Card>
       )}
@@ -95,22 +104,26 @@ export const AnalyticsCharts = ({
             <p className="text-xs text-muted-foreground">{t('cards.publicOnly')}</p>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={globalModelConfig} className="h-[280px] w-full">
-              <BarChart data={globalModelUsage} margin={{ left: 8, right: 8, top: 16 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="model"
-                  tick={{ fontSize: 11 }}
-                  interval={0}
-                  angle={-15}
-                  textAnchor="end"
-                  height={60}
-                />
-                <YAxis />
-                <Bar dataKey="uses" fill="var(--color-uses)" radius={[6, 6, 0, 0]} />
-                <ChartTooltip content={<ChartTooltipContent />} />
-              </BarChart>
-            </ChartContainer>
+            {hasGlobalUsage ? (
+              <ChartContainer config={globalModelConfig} className="h-[280px] w-full">
+                <BarChart data={globalModelUsage} margin={{ left: 8, right: 8, top: 16 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="model"
+                    tick={{ fontSize: 11 }}
+                    interval={0}
+                    angle={-15}
+                    textAnchor="end"
+                    height={60}
+                  />
+                  <YAxis />
+                  <Bar dataKey="uses" fill="var(--color-uses)" radius={[6, 6, 0, 0]} />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </BarChart>
+              </ChartContainer>
+            ) : (
+              <p className="text-sm text-muted-foreground">{emptyLabel}</p>
+            )}
           </CardContent>
         </Card>
       )}
