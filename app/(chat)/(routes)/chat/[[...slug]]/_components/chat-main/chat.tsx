@@ -1,7 +1,6 @@
 'use client';
 
 import { AiModelFeature } from '@prisma/client';
-import { mode } from 'crypto-js';
 import { useSearchParams } from 'next/navigation';
 import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
