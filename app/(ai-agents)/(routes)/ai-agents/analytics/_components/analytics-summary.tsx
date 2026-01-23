@@ -12,7 +12,7 @@ type AnalyticsSummaryProps = {
   globalUses: number;
   globalUsers: number;
   personalUsers: number;
-  globalTop: ModelUsage;
+  globalTop?: ModelUsage;
 };
 
 export const AnalyticsSummary = ({
@@ -64,7 +64,7 @@ export const AnalyticsSummary = ({
           </CardContent>
         </Card>
       )}
-      {showGlobal && (
+      {showGlobal && globalTop && (
         <Card className="shadow-none">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">

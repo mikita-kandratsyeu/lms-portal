@@ -34,7 +34,7 @@ export type PeriodAnalytics = {
 export type AiAnalyticsResponse = Record<Period, PeriodAnalytics>;
 
 type GetAiAnalyticsArgs = {
-  userId: string;
+  userId?: string;
 };
 
 const PERIOD_DAYS: Record<Exclude<Period, Period.ALL>, number> = {

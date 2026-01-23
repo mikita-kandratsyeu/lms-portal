@@ -11,7 +11,7 @@ import type { ModelUsage, PersonalAgent } from './types';
 type AnalyticsPersonalProps = {
   personalAgents: PersonalAgent[];
   personalUsers: number;
-  personalTop: ModelUsage;
+  personalTop?: ModelUsage;
   personalModelUsage: ModelUsage[];
 };
 
@@ -49,17 +49,23 @@ export const AnalyticsPersonal = ({
       <Card className="shadow-none">
         <CardHeader>
           <CardTitle>{t('popularModelPersonal.title')}</CardTitle>
-          <p className="text-xs text-muted-foreground">
-            {t('popularModelPersonal.uses', { amount: personalTop.uses.toLocaleString() })}
-          </p>
+          {personalTop && (
+            <p className="text-xs text-muted-foreground">
+              {t('popularModelPersonal.uses', { amount: personalTop.uses.toLocaleString() })}
+            </p>
+          )}
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <p className="text-lg font-semibold">{personalTop.model}</p>
-              <p className="text-xs text-muted-foreground">{t('popularModelPersonal.subtitle')}</p>
+          {personalTop && (
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-lg font-semibold">{personalTop.model}</p>
+                <p className="text-xs text-muted-foreground">
+                  {t('popularModelPersonal.subtitle')}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie data={personalModelUsage} dataKey="uses" nameKey="model" innerRadius={50}>
