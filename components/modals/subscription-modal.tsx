@@ -96,11 +96,11 @@ export const SubscriptionModal = ({ description = [], open, setOpen }: Subscript
 
   const renderBenefits = () => {
     const benefits = [
-      'Premium courses',
-      'Unlimited access to Nova Copilot',
-      'Advanced AI agent capabilities',
-      'Advanced functionality for Teacher mode',
-      'No payment for the first two weeks',
+      'unlock-premium-courses',
+      'get-access-nova-ai',
+      'advanced-ai-agents',
+      'teacher-functionality',
+      'cancel-anytime',
     ];
 
     return (
