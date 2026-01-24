@@ -6,7 +6,7 @@
       "github": true,
       "google": true,
       "linkedin": false,
-      "mailru": false,
+      "mailru": true,
       "slack": true,
       "vk": false,
       "yandex": true
