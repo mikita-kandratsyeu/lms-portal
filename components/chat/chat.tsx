@@ -59,7 +59,7 @@ export const Chat = () => {
             <div className="fixed py-2 px-4 flex gap-x-1 justify-between sm:max-w-md w-full items-center">
               <div className="flex-1"></div>
               <div className="flex gap-x-2">
-                <ChatContextMenu isNewTab>
+                <ChatContextMenu>
                   <Button className="w-full" variant="outline">
                     <MoreHorizontalIcon className="h-4 w-4" />
                   </Button>
