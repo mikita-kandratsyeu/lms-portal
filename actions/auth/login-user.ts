@@ -1,14 +1,12 @@
 'use server';
 
 import { differenceInMilliseconds } from 'date-fns/differenceInMilliseconds';
-import { getTranslations } from 'next-intl/server';
 import { v4 as uuidv4 } from 'uuid';
 
 import { OAUTH } from '@/constants/auth';
 import { ONE_HOUR_SEC, ONE_MIN_MS } from '@/constants/common';
 import { setValueToMemoryCache } from '@/lib/cache';
 import db from '@/lib/db';
-import { createWebSocketNotification } from '@/lib/notifications';
 import { absoluteUrl, encrypt } from '@/lib/utils';
 import { stripe } from '@/server/stripe';
 
@@ -66,8 +64,6 @@ export const loginUser = async (
     return null;
   }
 
-  const t = await getTranslations('auth');
-
   const user = await db.user.upsert({
     where: {
       email,
@@ -98,16 +94,6 @@ export const loginUser = async (
   }
 
   await createUserOauth(user.id, oauth);
-
-  await createWebSocketNotification({
-    channel: `notification_channel_${user.id}`,
-    data: {
-      body: t('welcomeBonus.body'),
-      title: t('welcomeBonus.title'),
-      userId: user.id,
-    },
-    event: `private_event_${user.id}`,
-  });
 
   if (
     !user.isEmailConfirmed &&

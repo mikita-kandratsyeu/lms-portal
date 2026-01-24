@@ -6,12 +6,6 @@
     "name": "Nova Academy",
     "poweredBy": "Powered by"
   },
-  "auth": {
-    "welcomeBonus": {
-      "body": "Thank you for signing up! A nice bonus is already waiting for you — a 5% promo code will automatically apply to your first purchase.",
-      "title": "Welcome bonus"
-    }
-  },
   "error-modal": {
     "body": "Something went wrong. Please restart the page.",
     "reload": "Reload",

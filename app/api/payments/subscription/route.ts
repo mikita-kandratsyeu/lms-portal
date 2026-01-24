@@ -7,7 +7,6 @@ import Stripe from 'stripe';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getIsEmailConfirmed } from '@/actions/auth/get-is-email-confirmed';
 import { getAppConfig } from '@/actions/configs/get-app-config';
-import { getWelcomeDiscounts } from '@/actions/stripe/get-welcome-discounts';
 import { TEN_MINUTE_SEC } from '@/constants/common';
 import { fetchCachedData } from '@/lib/cache';
 import db from '@/lib/db';
@@ -93,8 +92,6 @@ export const POST = async (req: NextRequest) => {
       });
     }
 
-    const discounts = await getWelcomeDiscounts(user.userId);
-
     const existingSubscriptions = await stripe.subscriptions.list({
       customer: stripeCustomer.stripeCustomerId,
       status: 'all',
@@ -102,7 +99,7 @@ export const POST = async (req: NextRequest) => {
     const trialPeriodDays = existingSubscriptions.data.length === 0 ? 14 : null;
 
     const session = await stripe.checkout.sessions.create({
-      ...(discounts.length ? { discounts } : { allow_promotion_codes: true }),
+      allow_promotion_codes: true,
       customer: stripeCustomer.stripeCustomerId,
       expires_at: getUnixTime(addSeconds(Date.now(), 3600)),
       mode: 'subscription',

@@ -7,7 +7,6 @@ import Stripe from 'stripe';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getIsEmailConfirmed } from '@/actions/auth/get-is-email-confirmed';
 import { sentEmailByTemplate } from '@/actions/mailer/sent-email-by-template';
-import { getWelcomeDiscounts } from '@/actions/stripe/get-welcome-discounts';
 import db from '@/lib/db';
 import { getConvertedPrice, getScaledPrice } from '@/lib/format';
 import { getLocale } from '@/lib/locale';
@@ -137,10 +136,8 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ courseId
       });
     }
 
-    const discounts = await getWelcomeDiscounts(user.userId);
-
     const session = await stripe.checkout.sessions.create({
-      ...(discounts.length ? { discounts } : { allow_promotion_codes: true }),
+      allow_promotion_codes: true,
       cancel_url: absoluteUrl(`/preview-course/${course.id}?canceled=true`),
       customer: stripeCustomer.stripeCustomerId,
       expires_at: getUnixTime(addSeconds(Date.now(), 3600)),
