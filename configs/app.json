@@ -8,7 +8,7 @@
       "linkedin": false,
       "mailru": false,
       "slack": true,
-      "vk": true,
+      "vk": false,
       "yandex": true
     }
   },
