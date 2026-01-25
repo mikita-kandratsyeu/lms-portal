@@ -78,12 +78,14 @@ export const NavBarRoutes = ({ globalProgress, userNotifications }: NavBarRoutes
               {showGoBackButton && (
                 <Link href="/">
                   <Button size="sm" variant="ghost">
-                    <LogOut className="h-4 w-4 mr-2" />
-                    {t(
-                      isTeacherPage || isOwnerPage || isChatPage || isDocsPage || isAiAgentsPage
-                        ? 'exit'
-                        : 'backTo',
-                    )}
+                    <LogOut className="h-4 w-4 sm:mr-2" />
+                    <span className="hidden sm:inline">
+                      {t(
+                        isTeacherPage || isOwnerPage || isChatPage || isDocsPage || isAiAgentsPage
+                          ? 'exit'
+                          : 'backTo',
+                      )}
+                    </span>
                   </Button>
                 </Link>
               )}

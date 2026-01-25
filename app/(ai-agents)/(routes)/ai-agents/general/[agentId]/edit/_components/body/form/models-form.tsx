@@ -3,7 +3,7 @@
 import { CirclePlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import * as z from 'zod';
 
 import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
@@ -56,12 +56,20 @@ export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: Mode
     }
   };
 
+  const selectedModels = useMemo(() => {
+    if (isEditing) {
+      return models.filter((model) => selectedModelIds.includes(model.id));
+    }
+
+    return initialData?.aiModels ?? [];
+  }, [initialData?.aiModels, isEditing, models, selectedModelIds]);
+
   return (
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
       <div className="font-medium flex flex-wrap items-center justify-between gap-x-2 gap-y-2">
-        <div className="flex gap-x-2 items-center min-w-0">
+        <div className="flex flex-col gap-2 min-w-0">
           <span>{t('title')}</span>
-          {!isEditing && <AgentFeatures models={initialData?.aiModels ?? []} />}
+          <AgentFeatures models={selectedModels} />
         </div>
         <div className="flex flex-wrap gap-x-2 gap-y-2 items-center justify-end">
           {!isPreviewPage && (
@@ -69,8 +77,8 @@ export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: Mode
               {isEditing && <>{t('cancel')}</>}
               {!isEditing && (
                 <>
-                  <CirclePlusIcon className="h-4 w-4 mr-2" />
-                  {t('select')}
+                  <CirclePlusIcon className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">{t('select')}</span>
                 </>
               )}
             </Button>

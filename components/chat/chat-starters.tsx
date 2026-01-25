@@ -4,6 +4,8 @@ import { ChatConversationStarters } from '@prisma/client';
 import { motion } from 'framer-motion';
 import { SyntheticEvent, useCallback } from 'react';
 
+import { cn } from '@/lib/utils';
+
 import { CopyClipboard } from '../common/copy-clipboard';
 
 const bubbleVariants = {
@@ -42,7 +44,12 @@ export const ChatStarters = ({
 
   return (
     <div className="flex items-center w-full">
-      <div className="flex w-full max-w-2xl flex-col items-stretch gap-3 px-4 sm:grid sm:grid-cols-2 sm:px-0">
+      <div
+        className={cn(
+          'flex w-full max-w-2xl flex-col items-stretch gap-3 sm:grid sm:grid-cols-2 sm:px-0',
+          isAnimated && 'px-4',
+        )}
+      >
         {starters.map((starter, index) => {
           const mobileHiddenClass = index > 1 ? 'hidden sm:block' : '';
 

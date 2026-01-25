@@ -4,7 +4,6 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { GetAgentDataResponse } from '@/actions/ai/agent/get-agent-data';
-import { AgentFeatures } from '@/components/ai-agents/agent-card/agent-features';
 import { TextBadge } from '@/components/common/text-badge';
 import { Checkbox } from '@/components/ui';
 import { cn } from '@/lib/utils';
@@ -70,9 +69,6 @@ export const ModelsList = ({
             {model.isSubscription && <TextBadge label={tProfile('premium')} variant="lime" />}
           </div>
           <p className="text-xs font-light">{model.value}</p>
-        </div>
-        <div className="ml-auto flex items-center gap-x-2">
-          {isEdit && <AgentFeatures models={[model]} />}
         </div>
       </div>
     );

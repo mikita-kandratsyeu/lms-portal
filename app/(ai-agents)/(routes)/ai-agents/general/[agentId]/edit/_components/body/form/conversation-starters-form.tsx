@@ -261,8 +261,8 @@ export const ConversationStartersForm = ({
         <div className="flex items-center gap-x-2">
           {!isPreviewPage && !isEditing && (
             <Button disabled={isSubmitting} onClick={handleToggleEdit} size="sm" variant="outline">
-              <PencilLineIcon className="h-4 w-4 mr-2" />
-              {t('edit')}
+              <PencilLineIcon className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">{t('edit')}</span>
             </Button>
           )}
           {isEditing && (
