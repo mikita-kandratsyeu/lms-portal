@@ -37,7 +37,7 @@ export const USER_CONVERSATION_STARTERS_PROMPT = ({
     .filter(Boolean)
     .join('\n');
 
-  return `Generate ${limit} short conversation starters for an AI assistant.
+  return `Generate ${limit} short conversation starters for an AI assistant on behalf of the user.
 ${context ? `Context:\n${context}\n` : ''}Return JSON only, with this exact structure:
 {
   "en": ["string", "..."],
