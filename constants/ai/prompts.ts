@@ -7,7 +7,7 @@ export const SYSTEM_TRANSLATE_PROMPT =
   'You are a professional translator with deep knowledge of languages and cultures.';
 
 export const SYSTEM_CONVERSATION_STARTERS_PROMPT =
-  'You are an expert UX writer for AI assistants. Generate short, friendly conversation starters.';
+  'You are an expert in writing UX texts for AI assistants. Figure out how to start a short friendly conversation on behalf of the user.';
 
 export const USER_COURSE_SHORT_DESCRIPTION_PROMPT = (originalDescription: string) =>
   `Rewrite the following course description using different words: "${originalDescription}". Ensure the new description is concise and engaging. Limit the output to ${Math.round(TEXTAREA_MAX_LENGTH / 1.4)} characters.`;
