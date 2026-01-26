@@ -70,13 +70,13 @@ const PreviewCourseIdPage = async (props: PreviewCourseIdPageProps) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="space-y-6 lg:col-span-2">
           {course.chapters?.[0]?.imageUrl && (
-            <div className="relative aspect-video border rounded-lg overflow-hidden shadow-md">
+            <div className="relative aspect-w-16 aspect-h-9 border rounded-lg overflow-hidden shadow-none">
               <Image
-                alt="Image"
+                alt="Course preview"
                 blurDataURL={chapterImagePlaceholder}
+                className="object-cover"
                 fill
                 src={course.chapters[0].imageUrl}
-                className="object-cover"
               />
             </div>
           )}
@@ -91,7 +91,6 @@ const PreviewCourseIdPage = async (props: PreviewCourseIdPageProps) => {
               durationInSec={durationInSec}
               language={course.language}
               chaptersLength={course._count.chapters}
-              hasAiTranslation={Boolean(user?.userId)}
             />
           </div>
           <PreviewDescription
