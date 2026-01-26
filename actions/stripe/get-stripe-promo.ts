@@ -108,7 +108,6 @@ export const getStripePromo = async ({
     });
 
     const customers = await db.stripeCustomer.findMany();
-
     const coupons = await stripe.coupons.list({ limit: 10 });
 
     const batchedStripePromos = getBatchedItems(promos);
