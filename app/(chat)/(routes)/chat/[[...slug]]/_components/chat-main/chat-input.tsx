@@ -39,6 +39,7 @@ const ChatInputComponent = ({
   const [inputLength, setInputLength] = useState(0);
 
   const isImageGenerationActive = activeFeature === AiModelFeature.image;
+  const isWebSearchActive = activeFeature === AiModelFeature.search;
 
   return (
     <div className="w-full h-full relative flex items-end">
@@ -58,6 +59,8 @@ const ChatInputComponent = ({
               inputLength >= LIMIT_CHAT_INPUT && 'focus-within:border-b-red-600',
               isImageGenerationActive &&
                 'border-b-purple-500 border-b-2 focus-within:border-b-purple-500 ',
+              isWebSearchActive &&
+                'border-b-indigo-500 border-b-2 focus-within:border-b-indigo-500 ',
             )}
             onSubmit={onSubmit}
           >

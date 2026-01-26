@@ -40,20 +40,18 @@ export const ChatSideBarTop = ({ agentsAmount }: ChatSideBarTopProps) => {
           <Plus className="w-4 h-4 mr-2" />
           {t('add')}
         </Button>
-        {Boolean(agentsAmount) && (
-          <Link
-            className="w-full flex items-center mt-8 justify-between gap-x-2"
-            href="/ai-agents/general"
-            target="_blank"
-            title={t('explore-ai-agents')}
-          >
-            <div className="w-full flex gap-x-2 items-center">
-              <Blocks className="w-4 h-4" />
-              <span className="text-sm font-semibold line-clamp-1">{t('explore-ai-agents')}</span>
-            </div>
-            <TextBadge label={String(agentsAmount)} />
-          </Link>
-        )}
+        <Link
+          className="w-full flex items-center mt-8 justify-between gap-x-2"
+          href="/ai-agents/general"
+          target="_blank"
+          title={t('explore-ai-agents')}
+        >
+          <div className="w-full flex gap-x-2 items-center">
+            <Blocks className="w-4 h-4" />
+            <span className="text-sm font-semibold line-clamp-1">{t('explore-ai-agents')}</span>
+          </div>
+          {Boolean(agentsAmount) && <TextBadge label={String(agentsAmount)} />}
+        </Link>
         <div className="flex justify-between items-center mt-4 text-xs text-muted-foreground">
           <div className="flex gap-x-1 items-center">
             <span>{t('conversations')}</span>
