@@ -9,12 +9,14 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getPreviewCourse } from '@/actions/courses/get-preview-course';
 import { AuthRedirect } from '@/components/auth/auth-redirect';
 import { CourseEnrollButton } from '@/components/common/course-enroll-button';
+import { Price } from '@/components/common/price';
 import { Button } from '@/components/ui/button';
 import { PLATFORM_DESCRIPTION } from '@/constants/common';
 import db from '@/lib/db';
 import { cn } from '@/lib/utils';
 
 import { ContinueButton } from './_components/continue-button';
+import { CourseHighlights } from './_components/course-highlights';
 import { PreviewDescription } from './_components/preview-description';
 import { PreviewVideoPlayer } from './_components/preview-video-player';
 
@@ -65,15 +67,16 @@ const PreviewCourseIdPage = async (props: PreviewCourseIdPageProps) => {
           </Link>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-        <div className="space-y-6 md:col-span-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="space-y-6 lg:col-span-2">
           {course.chapters?.[0]?.imageUrl && (
-            <div className="relative aspect-w-16 aspect-h-9 border">
+            <div className="relative aspect-video border rounded-lg overflow-hidden shadow-md">
               <Image
                 alt="Image"
                 blurDataURL={chapterImagePlaceholder}
                 fill
                 src={course.chapters[0].imageUrl}
+                className="object-cover"
               />
             </div>
           )}
@@ -83,25 +86,38 @@ const PreviewCourseIdPage = async (props: PreviewCourseIdPageProps) => {
               isLocked={!course.chapters?.[0]?.isFree}
             />
           )}
+          <div className="space-y-4">
+            <CourseHighlights
+              durationInSec={durationInSec}
+              language={course.language}
+              chaptersLength={course._count.chapters}
+              hasAiTranslation={Boolean(user?.userId)}
+            />
+          </div>
           <PreviewDescription
             author={course?.user?.name}
             authorUserId={course?.userId}
             categories={[course.category!.name]}
-            chaptersLength={course._count.chapters}
-            customRates={course.customRates}
             customTags={course.customTags}
             description={course.description!}
-            durationInSec={durationInSec}
-            fees={fees}
-            hasPurchase={hasPurchase}
             id={course.id}
             language={course.language}
             lastUpdate={course.updatedAt}
-            price={course.price}
             title={course.title}
           />
         </div>
-        <div className="space-y-6 md:col-span-2">
+        <div className="space-y-6 lg:col-span-1">
+          {!hasPurchase && (
+            <div className="border rounded-lg p-6 bg-card">
+              <h4 className="font-semibold text-lg mb-4">{t('preview.pricing')}</h4>
+              <Price
+                customRates={course.customRates}
+                price={course.price}
+                fees={fees}
+                showFeesAccordion
+              />
+            </div>
+          )}
           <div
             className={cn(
               'w-full border rounded-lg p-6',

@@ -272,13 +272,25 @@
       "keepProgress": "Отслеживайте свой прогресс, учите новое и многое другое.",
       "loginToContinue": "Войдите, чтобы продолжить",
       "readyToLearn": "Готовы начать обучение?",
+      "highlights": {
+        "duration": "Длительность",
+        "durationDesc": "Общая продолжительность курса",
+        "language": "Язык",
+        "originalLang": "Оригинальный язык",
+        "aiTranslation": "Доступен ИИ перевод",
+        "chapters": "Главы",
+        "chaptersDesc": "Уроков в курсе",
+        "ai": "ИИ"
+      },
       "preview": {
         "author": "Автор курса { author }",
         "chapter": "{ amount, plural, one {# часть} few {# части} many {# частей} other {# частей}}",
         "lang": "{ language } + ИИ Перевод",
         "lastUpdated": "Последнее обновление от",
         "loading": "Загрузка видео...",
-        "lock": "Этот превью заблокирован"
+        "lock": "Этот превью заблокирован",
+        "additionalInfo": "Дополнительная информация",
+        "pricing": "Стоимость курса"
       }
     },
     "progress": {

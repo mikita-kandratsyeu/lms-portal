@@ -1,39 +1,28 @@
 'use client';
 
-import { Fee } from '@prisma/client';
 import { format } from 'date-fns';
-import { BookA, BookOpen, CalendarDays, Clock9, Languages } from 'lucide-react';
+import { BookA, CalendarDays } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { StreamText } from '@/components/ai-agents/stream-text';
-import { IconBadge } from '@/components/common/icon-badge';
-import { Price } from '@/components/common/price';
 import { TextBadge } from '@/components/common/text-badge';
 import { UserHoverCard } from '@/components/common/user-hover-card';
 import { Button } from '@/components/ui';
 import { ChatCompletionRole } from '@/constants/ai/general';
 import { USER_TRANSLATE_PROMPT } from '@/constants/ai/prompts';
 import { TIMESTAMP_PREVIEW_TEMPLATE } from '@/constants/common';
-import { SUPPORTED_LOCALES } from '@/constants/locale';
 import { useCurrentUser } from '@/hooks/use-current-user';
-import { formatTimeInSeconds } from '@/lib/date';
 
 type PreviewDescriptionProps = {
   author?: string | null;
   authorUserId?: string | null;
   categories: string[];
-  chaptersLength: number;
-  customRates: string | null;
   customTags?: string[];
   description: string;
-  durationInSec: number;
-  fees?: Fee[];
-  hasPurchase?: boolean;
   id: string;
   language: string | null;
   lastUpdate: Date;
-  price: number | null;
   title: string;
 };
 
@@ -41,17 +30,11 @@ export const PreviewDescription = ({
   author,
   authorUserId,
   categories,
-  chaptersLength,
-  customRates,
   customTags,
   description,
-  durationInSec,
-  fees,
-  hasPurchase,
   id,
   language,
   lastUpdate,
-  price,
   title,
 }: PreviewDescriptionProps) => {
   const t = useTranslations('courses.preview.preview');
@@ -60,17 +43,12 @@ export const PreviewDescription = ({
 
   const [translatedDescription, setTranslatedDescription] = useState('');
 
-  const languageTitle = SUPPORTED_LOCALES.find(({ key }) => key === language)?.title;
-
   return (
-    <div className="border rounded-lg p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-x-1 text-muted-foreground mb-1">
-          <IconBadge size="sm" icon={BookOpen} />
-          <span className="text-xs">{t('chapter', { amount: chaptersLength })}</span>
-        </div>
-        {Boolean(user?.userId) && language !== currentLocale && (
-          <div className="my-2">
+    <div className="border rounded-lg p-6 space-y-6">
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-2xl capitalize">{title}</h3>
+          {Boolean(user?.userId) && language !== currentLocale && (
             <StreamText
               cacheKey={`preview-course-description-[${id}]::user-[${user?.userId}]-[${currentLocale}]`}
               isTranslateButton
@@ -82,63 +60,46 @@ export const PreviewDescription = ({
                 },
               ]}
             />
+          )}
+        </div>
+        <div className="space-y-4">
+          {Boolean(customTags?.length || categories.length) && (
+            <div className="flex gap-2 items-center flex-wrap">
+              {categories.map((category) => (
+                <TextBadge key={category} label={category} variant="indigo" />
+              ))}
+              {customTags?.map((tag) => <TextBadge key={tag} label={tag} variant="yellow" />)}
+            </div>
+          )}
+          <div className="prose prose-sm dark:prose-invert max-w-none">
+            <p className="text-muted-foreground leading-relaxed">
+              {translatedDescription || description}
+            </p>
           </div>
-        )}
+        </div>
       </div>
-      <h3 className="font-semibold text-lg md:text-2xl mb-2 capitalize">{title}</h3>
-      <p className="text-sm text-muted-foreground mb-4">{translatedDescription || description}</p>
-      {Boolean(customTags?.length) && (
-        <div className="flex gap-2 items-center mb-2 flex-wrap">
-          {customTags?.map((tag) => <TextBadge key={tag} label={tag} variant="yellow" />)}
-        </div>
-      )}
-      {Boolean(categories.length) && (
-        <div className="flex gap-x-2 items-center">
-          {categories.map((category) => (
-            <TextBadge key={category} label={category} variant="indigo" />
-          ))}
-        </div>
-      )}
-      <div className="mt-4 gap-y-1">
+      <div className="pt-4 space-y-1">
+        <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+          {t('additionalInfo')}
+        </h4>
         {author && authorUserId && (
           <UserHoverCard userId={authorUserId}>
             <Button
-              className="flex items-center gap-x-1 text-muted-foreground p-0 font-normal"
+              className="flex items-center gap-x-2 text-muted-foreground p-0 font-normal hover:text-foreground"
               variant="link"
             >
               <BookA className="h-4 w-4" />
-              <span className="text-xs">{t('author', { author })}</span>
+              <span className="text-sm">{t('author', { author })}</span>
             </Button>
           </UserHoverCard>
         )}
-        {durationInSec > 0 && (
-          <div className="flex items-center gap-x-1 text-muted-foreground my-1">
-            <Clock9 className="h-4 w-4" />
-            <span className="text-xs">{formatTimeInSeconds(durationInSec)}</span>
-          </div>
-        )}
-        {languageTitle && (
-          <div className="flex items-center gap-x-1 text-muted-foreground mb-4">
-            <Languages className="h-4 w-4" />
-            <span className="text-xs">
-              {t('lang', {
-                language: languageTitle,
-              })}
-            </span>
-          </div>
-        )}
-        <div className="flex items-center gap-x-1 text-muted-foreground mb-1">
+        <div className="flex items-center gap-x-2 text-muted-foreground">
           <CalendarDays className="h-4 w-4" />
-          <span className="text-xs">
+          <span className="text-sm">
             {t('lastUpdated')}&nbsp;{format(lastUpdate, TIMESTAMP_PREVIEW_TEMPLATE)}
           </span>
         </div>
       </div>
-      {!hasPurchase && (
-        <div className="mt-4">
-          <Price customRates={customRates} price={price} fees={fees} showFeesAccordion />
-        </div>
-      )}
     </div>
   );
 };

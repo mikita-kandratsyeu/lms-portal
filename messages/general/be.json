@@ -273,13 +273,25 @@
       "keepProgress": "Адсочвайце свой прагрэс, вучыцесь новым рэчам і шмат іншага.",
       "loginToContinue": "Увайдзеце, каб працягнуць",
       "readyToLearn": "Гатовыя пачаць вучыцца?",
+      "highlights": {
+        "duration": "Працягласць",
+        "durationDesc": "Агульная працягласць курса",
+        "language": "Мова",
+        "originalLang": "Арыгінальная мова",
+        "aiTranslation": "Даступны AI пераклад",
+        "chapters": "Часткі",
+        "chaptersDesc": "Урокаў у курсе",
+        "ai": "ИИ"
+      },
       "preview": {
         "author": "Аўтар курсу { author }",
         "chapter": "{ amount, plural, one {# частка} few {# часткі} many {# частак} other {# частак}}",
         "lang": "{ language } + AI Пераклад",
         "lastUpdated": "Апошняе абнаўленне ад",
         "loading": "Загрузка відэа...",
-        "lock": "Гэтае папяреджанне заблакавана"
+        "lock": "Гэтае папяреджанне заблакавана",
+        "additionalInfo": "Дадатковая інфармацыя",
+        "pricing": "Кошт курса"
       }
     },
     "progress": {

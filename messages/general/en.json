@@ -273,13 +273,25 @@
       "keepProgress": "Keep track of your progress, learn new things and much more.",
       "loginToContinue": "Login to continue",
       "readyToLearn": "Ready to start learning?",
+      "highlights": {
+        "duration": "Duration",
+        "durationDesc": "Total course length",
+        "language": "Language",
+        "originalLang": "Original language",
+        "aiTranslation": "AI translation available",
+        "chapters": "Chapters",
+        "chaptersDesc": "Lessons in this course",
+        "ai": "AI"
+      },
       "preview": {
         "author": "Course author { author }",
         "chapter": "{ amount, plural, =1 {# chapter} other {# chapters}}",
         "lang": "{ language } + AI Translation",
         "lastUpdated": "Last Updated",
         "loading": "Loading a video...",
-        "lock": "This preview is locked"
+        "lock": "This preview is locked",
+        "additionalInfo": "Additional Information",
+        "pricing": "Course Pricing"
       }
     },
     "progress": {
