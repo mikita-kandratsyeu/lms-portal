@@ -28,7 +28,7 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ courseId
     const { success, message } = await getIsEmailConfirmed(user.userId);
 
     if (!success) {
-      return NextResponse.json({ message }, { status: StatusCodes.FORBIDDEN });
+      return new NextResponse(message, { status: StatusCodes.FORBIDDEN });
     }
 
     const course = await db.course.findUnique({

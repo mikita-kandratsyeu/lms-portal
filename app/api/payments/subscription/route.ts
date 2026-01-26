@@ -48,7 +48,7 @@ export const POST = async (req: NextRequest) => {
     const { success, message } = await getIsEmailConfirmed(user.userId);
 
     if (!success) {
-      return NextResponse.json({ message }, { status: StatusCodes.FORBIDDEN });
+      return new NextResponse(message, { status: StatusCodes.FORBIDDEN });
     }
 
     const { details, locale, price, rate, recurringInterval, returnUrl, subscriptionName } =
@@ -73,7 +73,7 @@ export const POST = async (req: NextRequest) => {
     const t = await getTranslations('subscription');
 
     if (!config?.auth?.allowNewUserSubscriptions) {
-      return NextResponse.json({ message: t('block') }, { status: StatusCodes.FORBIDDEN });
+      return new NextResponse(t('block'), { status: StatusCodes.FORBIDDEN });
     }
 
     let stripeCustomer = await db.stripeCustomer.findUnique({
