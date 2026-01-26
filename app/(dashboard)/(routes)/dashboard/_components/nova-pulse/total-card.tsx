@@ -23,7 +23,7 @@ export const TotalCard = ({ info, type }: TotalCardProps) => {
     return null;
   }
   return (
-    <Card className="shadow-none h-full p-6 flex-1">
+    <Card className="shadow-none h-full p-4 sm:p-6 flex-1">
       <CardTitle className="mb-2">{t(`${type}.title`)}</CardTitle>
       <CardDescription className="text-xs mb-4">{t(`${type}.body`)}</CardDescription>
       <CardContent className="m-0 p-0">

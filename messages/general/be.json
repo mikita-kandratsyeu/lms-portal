@@ -525,7 +525,7 @@
       "body": "Усяго патрачана часу"
     },
     "heatmap": {
-      "title": "Heat Map",
+      "title": "ИИ Heat Map",
       "generated": "Створана з дапамогай Nova Copilot",
       "tooltip": {
         "xp": "Gained { xp } XP",
@@ -533,7 +533,10 @@
       },
       "recommendations": "Рэкамендацыі",
       "weaknesses": "Слабыя бакі",
-      "strengths": "Моцныя бакі"
+      "strengths": "Моцныя бакі",
+      "lessActive": "Менш актыўны",
+      "mostActive": "Найбольш актыўны",
+      "monthsTracked": "адсочваных месяцаў"
     },
     "about": {
       "title": "Nova Pulse",

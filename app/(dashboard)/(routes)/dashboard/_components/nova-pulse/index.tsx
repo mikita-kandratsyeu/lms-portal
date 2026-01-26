@@ -26,13 +26,13 @@ export const NovaPulse = ({ info }: NovaPulseProps) => {
   return (
     <div className="flex flex-col gap-y-2">
       <div className="mb-4 px-2">
-        <div className="flex justify-between items-center">
-          <h2 className="font-medium mb-2">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="font-medium mb-2 text-xl">
             {t(`greeting.${greeting}`, { name: user?.name ?? '' })}
           </h2>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger className="invisible sm:visible">
+              <TooltipTrigger className="hidden sm:block">
                 <p className="flex gap-x-2 text-muted-foreground items-center text-xs">
                   {t('about.title')}
                   <Info className="h-4 w-4" />
@@ -42,7 +42,7 @@ export const NovaPulse = ({ info }: NovaPulseProps) => {
             </Tooltip>
           </TooltipProvider>
         </div>
-        <div className="flex gap-x-2">
+        <div className="gap-x-2 hidden sm:flex">
           <TextBadge
             label={info.summary.title}
             variant={

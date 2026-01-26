@@ -525,7 +525,7 @@
       "body": "Total time spent"
     },
     "heatmap": {
-      "title": "Heat Map",
+      "title": "AI Heat Map",
       "generated": "Generated using Nova Copilot",
       "tooltip": {
         "xp": "Gained { xp } XP",
@@ -533,7 +533,10 @@
       },
       "recommendations": "Recommendations",
       "weaknesses": "Weaknesses",
-      "strengths": "Strengths"
+      "strengths": "Strengths",
+      "lessActive": "Less Active",
+      "mostActive": "Most Active",
+      "monthsTracked": "months tracked"
     },
     "about": {
       "title": "Nova Pulse",
