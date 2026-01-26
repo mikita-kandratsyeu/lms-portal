@@ -11,18 +11,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+import { Promotion } from './types';
+
 type PromotionCardProps = {
-  promo: {
-    id: string;
-    code: string;
-    description: string;
-    restrictions: string;
-    active: boolean;
-    isPersonal: boolean;
-    maxRedemptions: number;
-    timesRedeemed: number;
-    applied: boolean;
-  };
+  promo: Promotion;
   onApply: (id: string) => void;
   isExpired?: boolean;
 };

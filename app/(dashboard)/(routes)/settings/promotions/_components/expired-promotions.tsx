@@ -1,18 +1,7 @@
 import { TagIcon } from 'lucide-react';
 
 import { PromotionCard } from './promotion-card';
-
-type Promotion = {
-  id: string;
-  code: string;
-  description: string;
-  restrictions: string;
-  active: boolean;
-  isPersonal: boolean;
-  maxRedemptions: number;
-  timesRedeemed: number;
-  applied: boolean;
-};
+import { Promotion } from './types';
 
 type ExpiredPromotionsProps = {
   promotions: Promotion[];

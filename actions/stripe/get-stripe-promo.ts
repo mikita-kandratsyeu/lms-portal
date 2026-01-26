@@ -21,50 +21,55 @@ type GetStripePromo = {
   search?: string;
 };
 
+const formatCouponDescription = (cp: Stripe.Coupon) => {
+  if (cp.percent_off) {
+    return `${cp.percent_off}% off ${cp.duration_in_months ? `for ${cp.duration_in_months} months` : 'forever'}`;
+  }
+
+  if (cp.amount_off && cp.currency) {
+    return formatPrice(getConvertedPrice(cp.amount_off), {
+      locale: DEFAULT_LOCALE,
+      currency: cp.currency,
+    });
+  }
+
+  return '';
+};
+
 const getCoupons = (coupons: StripeCoupons) => {
-  return coupons.map((cp) => {
-    const description = (() => {
-      if (cp.percent_off) {
-        return `${cp.percent_off}% off ${cp.duration_in_months ? `for ${cp.duration_in_months} months` : 'forever'}`;
-      }
+  return coupons.map((cp) => ({
+    description: formatCouponDescription(cp),
+    id: cp.id,
+    name: cp.name,
+  }));
+};
 
-      return cp.amount_off && cp.currency
-        ? formatPrice(getConvertedPrice(cp.amount_off), {
-            locale: DEFAULT_LOCALE,
-            currency: cp.currency,
-          })
-        : '';
-    })();
+const formatRestrictions = (restrictions: Stripe.PromotionCode.Restrictions) => {
+  let result = '';
 
-    return {
-      description,
-      id: cp.id,
-      name: cp.name,
-    };
-  });
+  if (restrictions.first_time_transaction) {
+    result += 'Only for first purchase. ';
+  }
+
+  if (restrictions.minimum_amount && restrictions.minimum_amount_currency) {
+    result += `Min amount is ${formatPrice(getConvertedPrice(restrictions.minimum_amount), { locale: DEFAULT_LOCALE, currency: restrictions.minimum_amount_currency })}.`;
+  }
+
+  return result;
 };
 
 const getPromos = (promos: StripePromotionCodes, customers: StripeCustomers) => {
   return promos.map((pc) => {
     const customer = customers.find((cs) => cs?.id === pc.customer);
-    const restrictions = (() => {
-      let result = '';
-
-      if (pc.restrictions.first_time_transaction) {
-        result += 'Only for first purchase. ';
-      }
-
-      if (pc.restrictions.minimum_amount && pc.restrictions.minimum_amount_currency) {
-        result += `Min amount is ${formatPrice(getConvertedPrice(pc.restrictions.minimum_amount), { locale: DEFAULT_LOCALE, currency: pc.restrictions.minimum_amount_currency })}.`;
-      }
-
-      return result;
-    })();
 
     return {
       active: pc.active,
       code: pc.code,
-      coupon: getCoupons([pc.coupon])[0],
+      coupon: {
+        description: formatCouponDescription(pc.coupon as Stripe.Coupon),
+        id: pc.coupon.id,
+        name: pc.coupon.name,
+      },
       customer: customer
         ? {
             email: customer.email,
@@ -75,7 +80,7 @@ const getPromos = (promos: StripePromotionCodes, customers: StripeCustomers) => 
       id: pc.id,
       maxRedemptions: pc.max_redemptions ?? 0,
       timesRedeemed: pc.times_redeemed,
-      restrictions,
+      restrictions: formatRestrictions(pc.restrictions),
     };
   });
 };
@@ -114,22 +119,18 @@ export const getStripePromo = async ({
     const batchedStripeCustomers = getBatchedItems(customers);
 
     const stripePromos = await batchedStripePromos.reduce(
-      async (previousStripePromosPromise: Promise<any[]>, batch: any[], batchIndex: number) => {
-        const previousStripePromos = await previousStripePromosPromise;
+      async (previousPromise: Promise<Stripe.PromotionCode[]>, batch, batchIndex) => {
+        const previous = await previousPromise;
 
         if (batchIndex > 0) {
           await sleep(DELAY_MS);
         }
 
-        const currentBatchStripePromos = await Promise.all(
+        const currentBatch = await Promise.all(
           batch.map(async (code) => {
             const data = await fetchCachedData(
-              `${code.id}_${code.stripePromoId}`,
-              async () => {
-                const res = await stripe.promotionCodes.retrieve(code.stripePromoId);
-
-                return res;
-              },
+              `promo_${code.id}_${code.stripePromoId}`,
+              async () => stripe.promotionCodes.retrieve(code.stripePromoId),
               ONE_MINUTE_SEC,
             );
 
@@ -137,38 +138,34 @@ export const getStripePromo = async ({
           }),
         );
 
-        return previousStripePromos.concat(currentBatchStripePromos);
+        return previous.concat(currentBatch);
       },
-      Promise.resolve([] as any[]),
+      Promise.resolve([]),
     );
 
     const stripeCustomers = await batchedStripeCustomers.reduce(
-      async (previousStripeCustomersPromise: Promise<any[]>, batch: any[], batchIndex: number) => {
-        const previousStripeCustomers = await previousStripeCustomersPromise;
+      async (previousPromise: Promise<Stripe.Customer[]>, batch, batchIndex) => {
+        const previous = await previousPromise;
 
         if (batchIndex > 0) {
           await sleep(DELAY_MS);
         }
 
-        const currentBatchStripeCustomers = await Promise.all(
+        const currentBatch = await Promise.all(
           batch.map(async (cs) => {
             const data = await fetchCachedData(
-              `stripe-customers_${cs.stripeCustomerId}`,
-              async () => {
-                const res = await stripe.customers.retrieve(cs.stripeCustomerId);
-
-                return res;
-              },
+              `customer_${cs.stripeCustomerId}`,
+              async () => stripe.customers.retrieve(cs.stripeCustomerId),
               ONE_MINUTE_SEC,
             );
 
-            return data;
+            return data as Stripe.Customer;
           }),
         );
 
-        return previousStripeCustomers.concat(currentBatchStripeCustomers);
+        return previous.concat(currentBatch);
       },
-      Promise.resolve([] as any[]),
+      Promise.resolve([]),
     );
 
     return {
