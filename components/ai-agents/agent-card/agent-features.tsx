@@ -16,7 +16,7 @@ export const AgentFeatures = ({ className, models }: AgentFeaturesProps) => {
   const uniqFeatures = [...new Set(features)];
 
   return (
-    <div className={cn('ml-auto flex items-center gap-x-2', className)}>
+    <div className={cn('flex items-center gap-x-2', className)}>
       {uniqFeatures.map((feature) => {
         const { label, variant } = getModelFeaturesStyle(feature);
 
