@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RefreshCcw } from 'lucide-react';
+import { Check, ChevronsUpDown, RefreshCcw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { getStripePromo } from '@/actions/stripe/get-stripe-promo';
+import { CurrencyInput } from '@/components/common/currency-input';
 import {
   Button,
   Checkbox,
@@ -20,6 +21,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import {
   Dialog,
   DialogContent,
@@ -38,6 +47,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/components/ui/use-toast';
 import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { PromoStatus } from '@/constants/payments';
@@ -47,8 +57,6 @@ import { getScaledPrice } from '@/lib/format';
 import { isString } from '@/lib/guard';
 import { generatePromotionCode } from '@/lib/promo';
 import { cn } from '@/lib/utils';
-
-import { CurrencyInput } from '../common/currency-input';
 
 type StripePromo = Awaited<ReturnType<typeof getStripePromo>>;
 type Coupon = StripePromo['coupons'][number];
@@ -99,6 +107,8 @@ export const PromoModal = ({ children, coupons, customers }: PromoModalProps) =>
   const { isSubmitting, isValid } = form.formState;
 
   const [open, setOpen] = useState(false);
+  const [customerComboboxOpen, setCustomerComboboxOpen] = useState(false);
+  const [customerSearchQuery, setCustomerSearchQuery] = useState('');
 
   const watchLimitToSpecificCustomer = form.watch('limitToSpecificCustomer');
   const watchLimitNumberOfRedeemed = form.watch('limitNumberOfRedeemed');
@@ -234,28 +244,89 @@ export const PromoModal = ({ children, coupons, customers }: PromoModalProps) =>
               <FormField
                 control={form.control}
                 name="customerId"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className={cn('text-start', field.value ? 'py-7' : '')}>
-                          <SelectValue placeholder={t('selectCustomer')} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {customers.map((cs) => (
-                          <SelectItem key={cs.id} value={cs.id}>
-                            <div className="flex flex-col">
-                              <span className="font-medium">{cs.name}</span>
-                              <span className="text-muted-foreground">{cs.email}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  const selectedCustomer = customers.find((cs) => cs.id === field.value);
+                  const filteredCustomers = customers.filter((cs) => {
+                    const searchLower = customerSearchQuery.toLowerCase();
+                    return (
+                      cs.name?.toLowerCase().includes(searchLower) ||
+                      cs.email?.toLowerCase().includes(searchLower)
+                    );
+                  });
+
+                  return (
+                    <FormItem className="w-full">
+                      <Popover open={customerComboboxOpen} onOpenChange={setCustomerComboboxOpen}>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                'w-full justify-between text-start font-normal',
+                                !field.value && 'text-muted-foreground',
+                                field.value && 'h-auto py-3',
+                              )}
+                            >
+                              {selectedCustomer ? (
+                                <div className="flex flex-col">
+                                  <span className="font-medium">
+                                    {selectedCustomer.name ?? 'N/A'}
+                                  </span>
+                                  <span className="text-muted-foreground text-sm">
+                                    {selectedCustomer.email ?? 'N/A'}
+                                  </span>
+                                </div>
+                              ) : (
+                                t('selectCustomer')
+                              )}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0" align="start">
+                          <Command>
+                            <CommandInput
+                              placeholder={t('searchCustomer')}
+                              value={customerSearchQuery}
+                              onValueChange={setCustomerSearchQuery}
+                            />
+                            <CommandList>
+                              <CommandEmpty>{t('noCustomerFound')}</CommandEmpty>
+                              <CommandGroup>
+                                {filteredCustomers.map((cs) => (
+                                  <CommandItem
+                                    key={cs.id}
+                                    value={cs.id}
+                                    onSelect={() => {
+                                      field.onChange(cs.id);
+                                      setCustomerComboboxOpen(false);
+                                      setCustomerSearchQuery('');
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        cs.id === field.value ? 'opacity-100' : 'opacity-0',
+                                      )}
+                                    />
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">{cs.name ?? 'N/A'}</span>
+                                      <span className="text-muted-foreground text-sm">
+                                        {cs.email ?? 'N/A'}
+                                      </span>
+                                    </div>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
             )}
             <FormField
