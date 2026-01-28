@@ -80,7 +80,10 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
       {isEditing && (
         <div className="mt-4">
           <FileUpload
-            endpoint="courseImage"
+            accept="image/*"
+            folder="course-images"
+            maxFiles={1}
+            maxFileSize={8}
             onChange={(files) => {
               if (files?.length) {
                 handleSubmit({ imageUrl: files[0]?.url });

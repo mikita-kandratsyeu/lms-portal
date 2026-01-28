@@ -571,8 +571,17 @@
     }
   },
   "file-upload": {
+    "anyFileType": "Any file type",
     "dragAndDrop": "Choose files or drag and drop",
+    "dropFiles": "Drop files here",
+    "fileTooLarge": "File is too large",
+    "invalidFileType": "Invalid file type",
+    "remove": "Remove",
+    "selectedFiles": "Selected files",
+    "tooManyFiles": "Too many files selected",
     "upload": "Upload",
+    "uploadError": "Upload failed",
+    "uploadSuccess": "Files uploaded successfully",
     "uploading": "Uploading..."
   },
   "docs": {

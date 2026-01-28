@@ -571,8 +571,17 @@
     }
   },
   "file-upload": {
+    "anyFileType": "Любы тып файла",
     "dragAndDrop": "Выберыце файлы або перацягніце іх",
+    "dropFiles": "Адпусціце файлы тут",
+    "fileTooLarge": "Файл занадта вялікі",
+    "invalidFileType": "Няправільны тып файла",
+    "remove": "Выдаліць",
+    "selectedFiles": "Выбраныя файлы",
+    "tooManyFiles": "Выбрана занадта шмат файлаў",
     "upload": "Загрузіць",
+    "uploadError": "Памылка загрузкі",
+    "uploadSuccess": "Файлы паспяхова загружаны",
     "uploading": "Загрузка..."
   },
   "docs": {

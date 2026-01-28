@@ -1,9 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { withUt } = require('uploadthing/tw');
-
 import type { Config } from 'tailwindcss';
 
-const config = withUt({
+const config = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -107,6 +104,6 @@ const config = withUt({
     require('@tailwindcss/typography'),
     require('tailwindcss-animate'),
   ],
-} satisfies Config);
+} satisfies Config;
 
 export default config;

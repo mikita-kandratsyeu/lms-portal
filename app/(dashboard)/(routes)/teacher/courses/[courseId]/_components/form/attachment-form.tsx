@@ -97,7 +97,10 @@ export const AttachmentForm = ({ initialData, courseId }: AttachmentProps) => {
       {isEditing && (
         <div className="mt-4">
           <FileUpload
-            endpoint="courseAttachments"
+            accept="application/pdf,image/*,text/*,application/zip"
+            folder="course-attachments"
+            maxFiles={4}
+            maxFileSize={128}
             onChange={(files) => {
               if (files?.length) {
                 handleSubmit({ files });

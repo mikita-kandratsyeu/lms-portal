@@ -4,7 +4,6 @@ import { Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 
-import { ourFileRouter } from '@/app/api/uploadthing/core';
 import {
   Dialog,
   DialogContent,
@@ -12,19 +11,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { S3FolderType } from '@/server/s3';
 
 import { FileUpload } from '../common/file-upload';
 
 type FileUploadModalProps = {
+  accept?: string;
   children: React.ReactNode;
-  endpoint: keyof typeof ourFileRouter;
+  folder?: S3FolderType;
+  maxFiles?: number;
+  maxFileSize?: number;
   onBegin?: () => void;
-  onChange: (files: { url: string; name: string }[]) => void;
+  onChange: (files: { url: string; name: string; key: string }[]) => void;
 };
 
 export const FileUploadModal = ({
+  accept,
   children,
-  endpoint,
+  folder = 'common',
+  maxFiles,
+  maxFileSize,
   onBegin,
   onChange,
 }: FileUploadModalProps) => {
@@ -41,7 +47,10 @@ export const FileUploadModal = ({
         </DialogHeader>
         <div className="w-full flex flex-col gap-y-2 my-4">
           <FileUpload
-            endpoint={endpoint}
+            accept={accept}
+            folder={folder}
+            maxFiles={maxFiles}
+            maxFileSize={maxFileSize}
             onChange={(args) => {
               onChange(args);
               setOpen(false);
