@@ -834,5 +834,69 @@
     "common": {
       "configuration": "Наладкі"
     }
+  },
+  "owner": {
+    "page": {
+      "title": "Панэль бізнесу",
+      "description": "Поўны агляд фінансавых паказчыкаў вашай платформы",
+      "sections": {
+        "overview": {
+          "title": "Агляд",
+          "description": "Ключавыя метрыкі і фінансавыя паказчыкі вашай платформы"
+        },
+        "revenue": {
+          "title": "Разбіўка даходаў",
+          "description": "Дэталёвы аналіз вашых крыніц даходу"
+        },
+        "stripe": {
+          "title": "Акаўнт Stripe",
+          "description": "Падключаны платны правайдар для бяспечных транзакцый"
+        }
+      }
+    },
+    "analytics": {
+      "availableBalance": "Даступны баланс",
+      "pendingBalance": "Чаканы баланс",
+      "totalCustomers": "Усяго кліентаў",
+      "totalInstructors": "Усяго выкладчыкаў",
+      "subscriptionRevenue": "Даход ад падпісак",
+      "courseSales": "Продажы курсаў",
+      "descriptions": {
+        "readyForPayout": "Гатова да вываду",
+        "processing": "Апрацоўка",
+        "activeUsers": "Актыўных карыстальнікаў",
+        "connectedViaStripe": "Падключана праз Stripe",
+        "active": "актыўных",
+        "purchases": "пакупак"
+      }
+    },
+    "revenue": {
+      "subscriptionRevenue": "Даход ад падпісак",
+      "courseSales": "Продажы курсаў",
+      "totalPlatformRevenue": "Агульны даход платформы",
+      "totalPaidOut": "Усяго выплачана",
+      "active": "актыўных",
+      "total": "усяго",
+      "ofTotalRevenue": "ад агульнага даходу",
+      "purchases": "пакупак"
+    },
+    "stripe": {
+      "secureProcessing": "Усе фінансавыя транзакцыі бяспечна апрацоўваюцца праз",
+      "downloadReport": "Спампаваць справаздачу"
+    },
+    "aiInsights": {
+      "button": "ІІ аналітыка",
+      "title": "Бізнес-аналітыка з ІІ",
+      "description": "Комплексны аналіз вашых бізнес-паказчыкаў з дапамогай штучнага інтэлекту",
+      "loading": "Аналізую вашы бізнес-даныя і генеруючы аналітыку...",
+      "generatePrompt": "Націсніце кнопку ніжэй, каб згенераваць аналітыку",
+      "generateButton": "Згенераваць аналітыку",
+      "regenerate": "Перагенераваць",
+      "close": "Закрыць",
+      "errors": {
+        "unableToGenerate": "Не ўдалося згенераваць аналітыку. Паспрабуйце пазней.",
+        "errorOccurred": "Адбылася памылка пры генерацыі аналітыкі."
+      }
+    }
   }
 }

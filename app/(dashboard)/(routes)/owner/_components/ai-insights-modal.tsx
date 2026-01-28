@@ -1,6 +1,7 @@
 'use client';
 
 import { Loader2, Sparkles } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -16,6 +17,7 @@ import {
 import { fetcher } from '@/lib/fetcher';
 
 export const AiInsightsModal = () => {
+  const t = useTranslations('owner.aiInsights');
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [insights, setInsights] = useState<string>('');
@@ -33,11 +35,11 @@ export const AiInsightsModal = () => {
       if (result.success) {
         setInsights(result.insights);
       } else {
-        setInsights('Unable to generate insights. Please try again later.');
+        setInsights(t('errors.unableToGenerate'));
       }
     } catch (error) {
       console.error('Error generating insights:', error);
-      setInsights('An error occurred while generating insights.');
+      setInsights(t('errors.errorOccurred'));
     } finally {
       setLoading(false);
     }
@@ -55,27 +57,23 @@ export const AiInsightsModal = () => {
       <DialogTrigger asChild>
         <Button variant="default" className="gap-2">
           <Sparkles className="h-4 w-4" />
-          AI Analytics Insights
+          {t('button')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            AI-Powered Business Insights
+            {t('title')}
           </DialogTitle>
-          <DialogDescription>
-            Comprehensive analysis of your business metrics powered by artificial intelligence
-          </DialogDescription>
+          <DialogDescription>{t('description')}</DialogDescription>
         </DialogHeader>
 
         <div className="mt-4">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12 gap-4">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="text-sm text-muted-foreground">
-                Analyzing your business data and generating insights...
-              </p>
+              <p className="text-sm text-muted-foreground">{t('loading')}</p>
             </div>
           ) : insights ? (
             <div className="prose prose-sm max-w-none dark:prose-invert">
@@ -83,12 +81,10 @@ export const AiInsightsModal = () => {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-12 gap-4">
-              <p className="text-sm text-muted-foreground">
-                Click the button below to generate insights
-              </p>
+              <p className="text-sm text-muted-foreground">{t('generatePrompt')}</p>
               <Button onClick={handleGenerateInsights} variant="outline">
                 <Sparkles className="h-4 w-4 mr-2" />
-                Generate Insights
+                {t('generateButton')}
               </Button>
             </div>
           )}
@@ -97,10 +93,10 @@ export const AiInsightsModal = () => {
         {!loading && insights && (
           <div className="flex justify-end gap-2 mt-4 pt-4 border-t">
             <Button onClick={handleGenerateInsights} variant="outline" size="sm">
-              Regenerate
+              {t('regenerate')}
             </Button>
             <Button onClick={() => setOpen(false)} variant="default" size="sm">
-              Close
+              {t('close')}
             </Button>
           </div>
         )}

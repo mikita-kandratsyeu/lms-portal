@@ -1,6 +1,7 @@
 'use client';
 
 import { CreditCard, ShoppingBag } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { Card, CardContent } from '@/components/ui';
@@ -14,6 +15,7 @@ type RevenueBreakdownProps = {
 };
 
 export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
+  const t = useTranslations('owner');
   const defaultLocale = { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY };
   const totalRevenue = analytics.revenue.total;
 
@@ -25,9 +27,9 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
   return (
     <div className="flex flex-col gap-4 mb-8">
       <div className="flex flex-col gap-1">
-        <p className="font-medium text-xl">Revenue Breakdown</p>
+        <p className="font-medium text-xl">{t('page.sections.revenue.title')}</p>
         <span className="text-xs text-muted-foreground">
-          Detailed analysis of your income sources
+          {t('page.sections.revenue.description')}
         </span>
       </div>
       <Card className="shadow-none">
@@ -39,7 +41,7 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="font-medium">Subscription Revenue</h4>
+                  <h4 className="font-medium">{t('revenue.subscriptionRevenue')}</h4>
                   <span className="text-sm font-semibold">
                     {formatPrice(
                       getConvertedPrice(analytics.revenue.subscriptions.amount),
@@ -49,11 +51,13 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <span>
-                    {analytics.revenue.subscriptions.active} active •{' '}
-                    {analytics.revenue.subscriptions.count} total
+                    {analytics.revenue.subscriptions.active} {t('revenue.active')} •{' '}
+                    {analytics.revenue.subscriptions.count} {t('revenue.total')}
                   </span>
                   {subscriptionPercentage > 0 && (
-                    <span>• {subscriptionPercentage.toFixed(1)}% of total revenue</span>
+                    <span>
+                      • {subscriptionPercentage.toFixed(1)}% {t('revenue.ofTotalRevenue')}
+                    </span>
                   )}
                 </div>
                 {analytics.revenue.subscriptions.plans.length > 0 && (
@@ -64,7 +68,7 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                           {plan.name} ({plan.period})
                         </span>
                         <span className="font-medium">
-                          {plan.activeCount} active •{' '}
+                          {plan.activeCount} {t('revenue.active')} •{' '}
                           {formatPrice(getConvertedPrice(plan.revenue), defaultLocale)}
                         </span>
                       </div>
@@ -80,14 +84,14 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="font-medium">Course Sales</h4>
+                  <h4 className="font-medium">{t('revenue.courseSales')}</h4>
                   <span className="text-sm font-semibold">
                     {formatPrice(getConvertedPrice(analytics.revenue.sales.amount), defaultLocale)}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {analytics.revenue.sales.count} purchases • {salesPercentage.toFixed(1)}% of total
-                  revenue
+                  {analytics.revenue.sales.count} {t('revenue.purchases')} •{' '}
+                  {salesPercentage.toFixed(1)}% {t('revenue.ofTotalRevenue')}
                 </p>
               </div>
             </div>
@@ -96,13 +100,13 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
           <div className="pt-4 border-t">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total Platform Revenue</p>
+                <p className="text-sm text-muted-foreground">{t('revenue.totalPlatformRevenue')}</p>
                 <p className="text-2xl font-bold mt-1">
                   {formatPrice(getConvertedPrice(totalRevenue), defaultLocale)}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-muted-foreground">Total Paid Out</p>
+                <p className="text-sm text-muted-foreground">{t('revenue.totalPaidOut')}</p>
                 <p className="text-2xl font-bold mt-1 text-green-600">
                   {formatPrice(getConvertedPrice(analytics.payouts.total), defaultLocale)}
                 </p>

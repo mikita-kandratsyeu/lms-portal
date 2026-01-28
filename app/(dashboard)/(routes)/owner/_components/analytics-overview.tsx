@@ -8,6 +8,7 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
@@ -21,49 +22,50 @@ type AnalyticsOverviewProps = {
 };
 
 export const AnalyticsOverview = ({ analytics }: AnalyticsOverviewProps) => {
+  const t = useTranslations('owner.analytics');
   const defaultLocale = { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY };
 
   const metrics = [
     {
-      title: 'Available Balance',
+      title: t('availableBalance'),
       value: formatPrice(getConvertedPrice(analytics.balances.available), defaultLocale),
       icon: DollarSign,
-      description: 'Ready for payout',
+      description: t('descriptions.readyForPayout'),
       color: 'text-green-600',
     },
     {
-      title: 'Pending Balance',
+      title: t('pendingBalance'),
       value: formatPrice(getConvertedPrice(analytics.balances.pending), defaultLocale),
       icon: TrendingUp,
-      description: 'Processing',
+      description: t('descriptions.processing'),
       color: 'text-yellow-600',
     },
     {
-      title: 'Total Customers',
+      title: t('totalCustomers'),
       value: analytics.customers.total.toLocaleString(),
       icon: Users,
-      description: 'Active users',
+      description: t('descriptions.activeUsers'),
       color: 'text-blue-600',
     },
     {
-      title: 'Total Instructors',
+      title: t('totalInstructors'),
       value: analytics.instructors.total.toLocaleString(),
       icon: GraduationCap,
-      description: 'Connected via Stripe',
+      description: t('descriptions.connectedViaStripe'),
       color: 'text-purple-600',
     },
     {
-      title: 'Subscription Revenue',
+      title: t('subscriptionRevenue'),
       value: formatPrice(getConvertedPrice(analytics.revenue.subscriptions.amount), defaultLocale),
       icon: CreditCard,
-      description: `${analytics.revenue.subscriptions.active} active`,
+      description: `${analytics.revenue.subscriptions.active} ${t('descriptions.active')}`,
       color: 'text-indigo-600',
     },
     {
-      title: 'Course Sales',
+      title: t('courseSales'),
       value: formatPrice(getConvertedPrice(analytics.revenue.sales.amount), defaultLocale),
       icon: ShoppingCart,
-      description: `${analytics.revenue.sales.count} purchases`,
+      description: `${analytics.revenue.sales.count} ${t('descriptions.purchases')}`,
       color: 'text-pink-600',
     },
   ];

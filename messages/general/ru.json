@@ -833,5 +833,69 @@
     "common": {
       "configuration": "Настройка"
     }
+  },
+  "owner": {
+    "page": {
+      "title": "Панель бизнеса",
+      "description": "Полный обзор финансовых показателей вашей платформы",
+      "sections": {
+        "overview": {
+          "title": "Обзор",
+          "description": "Ключевые метрики и финансовые показатели вашей платформы"
+        },
+        "revenue": {
+          "title": "Разбивка доходов",
+          "description": "Детальный анализ ваших источников дохода"
+        },
+        "stripe": {
+          "title": "Аккаунт Stripe",
+          "description": "Подключенный платежный провайдер для безопасных транзакций"
+        }
+      }
+    },
+    "analytics": {
+      "availableBalance": "Доступный баланс",
+      "pendingBalance": "Ожидающий баланс",
+      "totalCustomers": "Всего клиентов",
+      "totalInstructors": "Всего преподавателей",
+      "subscriptionRevenue": "Доход от подписок",
+      "courseSales": "Продажи курсов",
+      "descriptions": {
+        "readyForPayout": "Готово к выводу",
+        "processing": "Обработка",
+        "activeUsers": "Активных пользователей",
+        "connectedViaStripe": "Подключено через Stripe",
+        "active": "активных",
+        "purchases": "покупок"
+      }
+    },
+    "revenue": {
+      "subscriptionRevenue": "Доход от подписок",
+      "courseSales": "Продажи курсов",
+      "totalPlatformRevenue": "Общий доход платформы",
+      "totalPaidOut": "Всего выплачено",
+      "active": "активных",
+      "total": "всего",
+      "ofTotalRevenue": "от общего дохода",
+      "purchases": "покупок"
+    },
+    "stripe": {
+      "secureProcessing": "Все финансовые транзакции безопасно обрабатываются через",
+      "downloadReport": "Скачать отчет"
+    },
+    "aiInsights": {
+      "button": "ИИ аналитика",
+      "title": "Бизнес-аналитика с ИИ",
+      "description": "Комплексный анализ ваших бизнес-показателей с помощью искусственного интеллекта",
+      "loading": "Анализирую ваши бизнес-данные и генерирую инсайты...",
+      "generatePrompt": "Нажмите кнопку ниже, чтобы сгенерировать аналитику",
+      "generateButton": "Сгенерировать аналитику",
+      "regenerate": "Перегенерировать",
+      "close": "Закрыть",
+      "errors": {
+        "unableToGenerate": "Не удалось сгенерировать аналитику. Попробуйте позже.",
+        "errorOccurred": "Произошла ошибка при генерации аналитики."
+      }
+    }
   }
 }

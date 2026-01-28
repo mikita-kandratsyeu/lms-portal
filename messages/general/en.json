@@ -834,5 +834,69 @@
     "common": {
       "configuration": "Configuration"
     }
+  },
+  "owner": {
+    "page": {
+      "title": "Business Dashboard",
+      "description": "Comprehensive overview of your platform's financial metrics",
+      "sections": {
+        "overview": {
+          "title": "Overview",
+          "description": "Key metrics and financial indicators for your platform"
+        },
+        "revenue": {
+          "title": "Revenue Breakdown",
+          "description": "Detailed analysis of your income sources"
+        },
+        "stripe": {
+          "title": "Stripe Account",
+          "description": "Connected payment service provider for secure transactions"
+        }
+      }
+    },
+    "analytics": {
+      "availableBalance": "Available Balance",
+      "pendingBalance": "Pending Balance",
+      "totalCustomers": "Total Customers",
+      "totalInstructors": "Total Instructors",
+      "subscriptionRevenue": "Subscription Revenue",
+      "courseSales": "Course Sales",
+      "descriptions": {
+        "readyForPayout": "Ready for payout",
+        "processing": "Processing",
+        "activeUsers": "Active users",
+        "connectedViaStripe": "Connected via Stripe",
+        "active": "active",
+        "purchases": "purchases"
+      }
+    },
+    "revenue": {
+      "subscriptionRevenue": "Subscription Revenue",
+      "courseSales": "Course Sales",
+      "totalPlatformRevenue": "Total Platform Revenue",
+      "totalPaidOut": "Total Paid Out",
+      "active": "active",
+      "total": "total",
+      "ofTotalRevenue": "of total revenue",
+      "purchases": "purchases"
+    },
+    "stripe": {
+      "secureProcessing": "All financial transactions are securely processed through",
+      "downloadReport": "Download Report"
+    },
+    "aiInsights": {
+      "button": "AI Analytics Insights",
+      "title": "AI-Powered Business Insights",
+      "description": "Comprehensive analysis of your business metrics powered by artificial intelligence",
+      "loading": "Analyzing your business data and generating insights...",
+      "generatePrompt": "Click the button below to generate insights",
+      "generateButton": "Generate Insights",
+      "regenerate": "Regenerate",
+      "close": "Close",
+      "errors": {
+        "unableToGenerate": "Unable to generate insights. Please try again later.",
+        "errorOccurred": "An error occurred while generating insights."
+      }
+    }
   }
 }

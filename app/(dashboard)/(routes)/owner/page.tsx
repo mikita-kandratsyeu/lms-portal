@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server';
+
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { getStripeDetails } from '@/actions/stripe/get-stripe-details';
 
@@ -13,6 +15,7 @@ type OwnerPageProps = {
 
 const OwnerPage = async (props: OwnerPageProps) => {
   const searchParams = await props.searchParams;
+  const t = await getTranslations('owner.page');
 
   const { pageCount, payoutRequests, owner } = await getStripeDetails(searchParams);
   const analytics = await getStripeAnalytics();
@@ -21,20 +24,16 @@ const OwnerPage = async (props: OwnerPageProps) => {
     <div className="p-6">
       <div className="flex items-center justify-between mb-8">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-medium">
-            {owner?.dashboard?.display_name ?? 'Business Dashboard'}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Comprehensive overview of your platform's financial metrics
-          </p>
+          <h1 className="text-2xl font-medium">{owner?.dashboard?.display_name ?? t('title')}</h1>
+          <p className="text-sm text-muted-foreground">{t('description')}</p>
         </div>
         <AiInsightsModal />
       </div>
       <div className="flex flex-col gap-4 mb-8">
         <div className="flex flex-col gap-1">
-          <p className="font-medium text-xl">Overview</p>
+          <p className="font-medium text-xl">{t('sections.overview.title')}</p>
           <span className="text-xs text-muted-foreground">
-            Key metrics and financial indicators for your platform
+            {t('sections.overview.description')}
           </span>
         </div>
         <AnalyticsOverview analytics={analytics} />
