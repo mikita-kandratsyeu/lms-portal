@@ -91,6 +91,18 @@
     "submit": "Submit",
     "success": "The report has been created.",
     "title": "Bug Report",
+    "form": {
+      "reporter": "Reporter",
+      "releaseInfo": "Release Information",
+      "status": "Status",
+      "description": "Description",
+      "attachmentsCount": "Attachments ({count})",
+      "resolutionComment": "Resolution Comment",
+      "resolutionPlaceholder": "Describe how the issue was resolved...",
+      "emailNotification": "Send resolution confirmation to the reporter by email",
+      "emailAddress": "Email Address",
+      "issueCategory": "Issue Category"
+    },
     "categories": {
       "auth": "Authorization",
       "data": "Data / Content issue",

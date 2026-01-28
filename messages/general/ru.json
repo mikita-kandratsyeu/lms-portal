@@ -91,6 +91,18 @@
     "submit": "Отправить",
     "success": "Отчет создан.",
     "title": "Отчет об ошибке",
+    "form": {
+      "reporter": "Автор обращения",
+      "releaseInfo": "Информация о версии",
+      "status": "Статус",
+      "description": "Описание",
+      "attachmentsCount": "Вложения ({count})",
+      "resolutionComment": "Комментарий о решении",
+      "resolutionPlaceholder": "Опишите, как была решена проблема...",
+      "emailNotification": "Отправить подтверждение решения автору обращения по email",
+      "emailAddress": "Email адрес",
+      "issueCategory": "Категория обращения"
+    },
     "categories": {
       "auth": "Авторизация",
       "data": "Проблема с данными / контентом",

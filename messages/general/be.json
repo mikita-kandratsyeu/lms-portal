@@ -91,6 +91,18 @@
     "submit": "Адправіць",
     "success": "Справаздача створаная.",
     "title": "Справаздача аб памылцы",
+    "form": {
+      "reporter": "Аўтар звароту",
+      "releaseInfo": "Інфармацыя аб версіі",
+      "status": "Статус",
+      "description": "Апісанне",
+      "attachmentsCount": "Укладанні ({count})",
+      "resolutionComment": "Каментар аб рашэнні",
+      "resolutionPlaceholder": "Апішыце, як была вырашана праблема...",
+      "emailNotification": "Адправіць пацверджанне рашэння аўтару звароту па email",
+      "emailAddress": "Email адрас",
+      "issueCategory": "Катэгорыя звароту"
+    },
     "categories": {
       "auth": "Аўтарызацыя",
       "data": "Праблема з дадзенымі/кантэнтам",
