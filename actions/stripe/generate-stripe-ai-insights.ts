@@ -1,27 +1,39 @@
 'use server';
 
+import { getLocale, getTranslations } from 'next-intl/server';
 import { ChatCompletionUserMessageParam } from 'openai/resources/index.mjs';
 
 import { generateCompletion } from '@/actions/ai/common/generate-completion';
 import { ChatCompletionRole } from '@/constants/ai/general';
-import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
+import { TEN_MINUTE_SEC } from '@/constants/common';
+import { DEFAULT_CURRENCY, DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@/constants/locale';
+import { fetchCachedData } from '@/lib/cache';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 
 import { getStripeAnalytics } from './get-stripe-analytics';
 
 export const generateStripeAiInsights = async () => {
+  const locale = await getLocale();
+  const t = await getTranslations('error');
+
+  const languageName = SUPPORTED_LOCALES.find(({ key }) => key === locale)?.title || 'English';
+  const cacheKey = `stripe_ai_insights_${locale}`;
+
   try {
-    const analytics = await getStripeAnalytics();
-    const defaultLocale = { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY };
+    const result = await fetchCachedData(
+      cacheKey,
+      async () => {
+        const analytics = await getStripeAnalytics();
+        const defaultLocale = { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY };
 
-    const subscriptionPlansBreakdown = analytics.revenue.subscriptions.plans
-      .map(
-        (plan) =>
-          `  • ${plan.name} (${plan.period}): ${plan.activeCount} active subscriptions, ${formatPrice(getConvertedPrice(plan.revenue), defaultLocale)} revenue`,
-      )
-      .join('\n');
+        const subscriptionPlansBreakdown = analytics.revenue.subscriptions.plans
+          .map(
+            (plan) =>
+              `  • ${plan.name} (${plan.period}): ${plan.activeCount} active subscriptions, ${formatPrice(getConvertedPrice(plan.revenue), defaultLocale)} revenue`,
+          )
+          .join('\n');
 
-    const prompt = `Analyze the following business metrics from our LMS platform and provide actionable insights:
+        const prompt = `Analyze the following business metrics from our LMS platform and provide actionable insights:
 
 **Financial Balances:**
 - Available Balance: ${formatPrice(getConvertedPrice(analytics.balances.available), defaultLocale)}
@@ -49,41 +61,42 @@ Please provide:
 4. Actionable recommendations for growth
 5. Financial health indicators
 
-Keep the analysis concise and focused on actionable insights.`;
+IMPORTANT: Respond in ${languageName} language. Keep the analysis concise and focused on actionable insights.`;
 
-    const result = await generateCompletion({
-      input: [
-        {
-          role: ChatCompletionRole.USER as unknown as ChatCompletionUserMessageParam['role'],
-          content: prompt,
-        },
-      ],
-      instructions:
-        'You are a business analytics expert specializing in LMS platforms and SaaS financial metrics. Provide clear, actionable insights based on the data provided.',
-    });
+        const aiResult = await generateCompletion({
+          input: [
+            {
+              role: ChatCompletionRole.USER as unknown as ChatCompletionUserMessageParam['role'],
+              content: prompt,
+            },
+          ],
+          instructions: `You are a business analytics expert specializing in LMS platforms and SaaS financial metrics. Provide clear, actionable insights based on the data provided. IMPORTANT: You MUST respond in ${languageName} language. All analysis, recommendations, and insights must be written in ${languageName}.`,
+        });
 
-    if (!result.completion) {
-      return {
-        success: false,
-        insights: 'Unable to generate insights at this time. Please try again later.',
-      };
-    }
+        if (!aiResult.completion) {
+          throw new Error('No completion received from AI');
+        }
 
-    const insightsText =
-      (result.completion as any).output_text ??
-      (result.completion as any).choices?.[0]?.message?.content ??
-      '';
+        const insightsText =
+          (aiResult.completion as any).output_text ??
+          (aiResult.completion as any).choices?.[0]?.message?.content ??
+          '';
 
-    return {
-      success: true,
-      insights: insightsText,
-    };
+        return {
+          success: true,
+          insights: insightsText,
+        };
+      },
+      TEN_MINUTE_SEC,
+    );
+
+    return result;
   } catch (error) {
     console.error('[GENERATE_STRIPE_AI_INSIGHTS_ACTION]', error);
 
     return {
       success: false,
-      insights: 'Error generating insights. Please try again.',
+      insights: t('body'),
     };
   }
 };

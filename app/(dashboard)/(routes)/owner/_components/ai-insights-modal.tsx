@@ -4,7 +4,6 @@ import { Loader2, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import { generateStripeAiInsights } from '@/actions/stripe/generate-stripe-ai-insights';
 import {
   Button,
   Dialog,
@@ -14,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui';
+import { fetcher } from '@/lib/fetcher';
 
 export const AiInsightsModal = () => {
   const [open, setOpen] = useState(false);
@@ -25,7 +25,10 @@ export const AiInsightsModal = () => {
     setInsights('');
 
     try {
-      const result = await generateStripeAiInsights();
+      const result = await fetcher.post('/api/payments/ai-insights', {
+        responseType: 'json',
+        cache: 'no-cache',
+      });
 
       if (result.success) {
         setInsights(result.insights);
