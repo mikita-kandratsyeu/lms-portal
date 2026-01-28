@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CsmCategory } from '@prisma/client';
-import { Paperclip } from 'lucide-react';
+import { FileText, Mail, Paperclip, Tag } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -90,12 +90,16 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
 
   return (
     <Form {...form}>
-      <form className="space-y-4 mt-4" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem className="w-full">
+              <label className="text-sm font-medium flex items-center gap-2 mb-2">
+                <Mail className="h-4 w-4" />
+                {t('form.emailAddress')}
+              </label>
               <Input
                 {...field}
                 {...(user?.email && { value: user.email })}
@@ -110,6 +114,10 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
           name="categoryId"
           render={({ field }) => (
             <FormItem className="w-full">
+              <label className="text-sm font-medium flex items-center gap-2 mb-2">
+                <Tag className="h-4 w-4" />
+                {t('form.issueCategory')}
+              </label>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="text-start">
@@ -133,7 +141,11 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+            <FormItem className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                {t('form.description')}
+              </label>
               <FormControl>
                 <Editor {...field} />
               </FormControl>
@@ -144,12 +156,19 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
           control={form.control}
           name="files"
           render={() => (
-            <>
-              <div className="font-medium flex items-center justify-between">
-                {t('attachments')}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <Paperclip className="h-4 w-4" />
+                  {t('attachments')}
+                  {files.length > 0 && (
+                    <span className="text-xs text-muted-foreground">({files.length})</span>
+                  )}
+                </label>
                 <Button onClick={handleToggleEdit} variant="outline" size="sm" type="button">
-                  {isEditing && <>{t('cancel')}</>}
-                  {!isEditing && (
+                  {isEditing ? (
+                    t('cancel')
+                  ) : (
                     <>
                       <Paperclip className="h-4 w-4 mr-2" />
                       {t('attach')}
@@ -160,7 +179,7 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
               {!isEditing && (
                 <>
                   {files.length > 0 ? (
-                    <div className="space-y-2 mt-4">
+                    <div className="space-y-2">
                       {files.map((file) => (
                         <FileDownload
                           key={file.id}
@@ -173,7 +192,7 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm mt-2 text-muted-foreground italic text-center">
+                    <p className="text-sm text-muted-foreground italic text-center py-3 border border-dashed rounded-md">
                       {t('notFound')}
                     </p>
                   )}
@@ -192,10 +211,10 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
                   }}
                 />
               )}
-            </>
+            </div>
           )}
         />
-        <DialogFooter>
+        <DialogFooter className="mt-6">
           <Button
             disabled={!isValid || isSubmitting || isUploading}
             isLoading={isSubmitting}

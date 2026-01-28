@@ -91,6 +91,18 @@
     "submit": "Отправить",
     "success": "Отчет создан.",
     "title": "Отчет об ошибке",
+    "form": {
+      "reporter": "Автор обращения",
+      "releaseInfo": "Информация о версии",
+      "status": "Статус",
+      "description": "Описание",
+      "attachmentsCount": "Вложения ({count})",
+      "resolutionComment": "Комментарий о решении",
+      "resolutionPlaceholder": "Опишите, как была решена проблема...",
+      "emailNotification": "Отправить подтверждение решения автору обращения по email",
+      "emailAddress": "Email адрес",
+      "issueCategory": "Категория обращения"
+    },
     "categories": {
       "auth": "Авторизация",
       "data": "Проблема с данными / контентом",
@@ -832,6 +844,152 @@
     },
     "common": {
       "configuration": "Настройка"
+    }
+  },
+  "owner": {
+    "page": {
+      "title": "Панель бизнеса",
+      "description": "Полный обзор финансовых показателей вашей платформы",
+      "sections": {
+        "overview": {
+          "title": "Обзор",
+          "description": "Ключевые метрики и финансовые показатели вашей платформы"
+        },
+        "revenue": {
+          "title": "Разбивка доходов",
+          "description": "Детальный анализ ваших источников дохода"
+        },
+        "stripe": {
+          "title": "Аккаунт Stripe",
+          "description": "Подключенный платежный провайдер для безопасных транзакций"
+        }
+      }
+    },
+    "analytics": {
+      "availableBalance": "Доступный баланс",
+      "pendingBalance": "Ожидающий баланс",
+      "totalCustomers": "Всего клиентов",
+      "totalInstructors": "Всего преподавателей",
+      "subscriptionRevenue": "Доход от подписок",
+      "courseSales": "Продажи курсов",
+      "descriptions": {
+        "readyForPayout": "Готово к выводу",
+        "processing": "Обработка",
+        "activeUsers": "Активных пользователей",
+        "connectedViaStripe": "Подключено через Stripe",
+        "active": "активных",
+        "purchases": "покупок"
+      }
+    },
+    "revenue": {
+      "subscriptionRevenue": "Доход от подписок",
+      "courseSales": "Продажи курсов",
+      "totalPlatformRevenue": "Общий доход платформы",
+      "totalPaidOut": "Всего выплачено",
+      "active": "активных",
+      "total": "всего",
+      "ofTotalRevenue": "от общего дохода",
+      "purchases": "покупок"
+    },
+    "stripe": {
+      "secureProcessing": "Все финансовые транзакции безопасно обрабатываются через",
+      "downloadReport": "Скачать отчет"
+    },
+    "aiInsights": {
+      "button": "ИИ аналитика",
+      "title": "Бизнес-аналитика с ИИ",
+      "description": "Комплексный анализ ваших бизнес-показателей с помощью искусственного интеллекта",
+      "loading": "Анализирую ваши бизнес-данные и генерирую инсайты...",
+      "generatePrompt": "Нажмите кнопку ниже, чтобы сгенерировать аналитику",
+      "generateButton": "Сгенерировать аналитику",
+      "regenerate": "Перегенерировать",
+      "close": "Закрыть",
+      "errors": {
+        "unableToGenerate": "Не удалось сгенерировать аналитику. Попробуйте позже.",
+        "errorOccurred": "Произошла ошибка при генерации аналитики."
+      }
+    },
+    "users": {
+      "page": {
+        "title": "Управление пользователями",
+        "description": "Полный обзор и управление всеми пользователями платформы"
+      },
+      "sections": {
+        "overview": {
+          "title": "Статистика пользователей",
+          "description": "Ключевые метрики и инсайты о вашей пользовательской базе"
+        },
+        "list": {
+          "title": "Все пользователи",
+          "description": "Полный список зарегистрированных пользователей с подробной информацией"
+        }
+      },
+      "metrics": {
+        "totalUsers": "Всего пользователей",
+        "verifiedUsers": "Верифицированные",
+        "premiumUsers": "Premium пользователи",
+        "publicProfiles": "Публичные профили",
+        "usersWithCourses": "Пользователи с курсами",
+        "newThisMonth": "Новые за месяц",
+        "descriptions": {
+          "registered": "Всего зарегистрировано",
+          "verified": "подтверждена почта",
+          "premium": "премиум пользователей",
+          "visibleProfiles": "Видимые профили",
+          "enrolled": "Записаны на курсы",
+          "joinedRecently": "Присоединились в этом месяце",
+          "noSubscriptions": "Нет активных подписок"
+        }
+      },
+      "table": {
+        "columns": {
+          "user": "Пользователь",
+          "type": "Тип",
+          "activity": "Активность",
+          "profileStatus": "Статус профиля",
+          "dateOfCreation": "Дата создания",
+          "lastUpdate": "Последнее обновление",
+          "changeRole": "Изменить роль"
+        },
+        "premium": "Premium",
+        "free": "Бесплатный",
+        "public": "Публичный",
+        "private": "Приватный",
+        "noUsers": "Пользователи не найдены"
+      }
+    },
+    "csm": {
+      "page": {
+        "title": "Управление клиентским сервисом",
+        "description": "Управление и отслеживание обращений в поддержку и отчетов об ошибках"
+      },
+      "sections": {
+        "overview": {
+          "title": "Статистика обращений",
+          "description": "Обзор всех обращений в поддержку и их текущий статус"
+        }
+      },
+      "metrics": {
+        "totalIssues": "Всего обращений",
+        "newIssues": "Новые обращения",
+        "inProgress": "В работе",
+        "resolved": "Решено",
+        "thisMonth": "За этот месяц",
+        "topCategories": "Популярные категории",
+        "descriptions": {
+          "allTime": "Всего обращений",
+          "awaitingReview": "Ожидают рассмотрения",
+          "beingProcessed": "В процессе обработки",
+          "completed": "завершено",
+          "recentActivity": "Создано в этом месяце",
+          "noCategories": "Категорий пока нет"
+        }
+      },
+      "list": {
+        "title": "Все обращения",
+        "description": "Полный список обращений в службу поддержки и отчетов об ошибках",
+        "noIssues": "Обращения не найдены"
+      }
     }
   }
 }

@@ -16,7 +16,8 @@ type CsmListProps = {
 };
 
 export const CsmList = ({ pageCount, issues }: CsmListProps) => {
-  const t = useTranslations('csm-modal');
+  const tModal = useTranslations('csm-modal');
+  const t = useTranslations('owner.csm');
 
   const searchParams = useSearchParams();
 
@@ -30,24 +31,23 @@ export const CsmList = ({ pageCount, issues }: CsmListProps) => {
       setCsmIssue(issues.find((issue) => issue.id === issueId) ?? null);
       setOpenModal(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams, issues]);
 
-  const columns = getColumns(t);
+  const columns = getColumns(tModal);
 
   return (
     <>
       {openModal && <CsmModal open={openModal} setOpen={setOpenModal} editIssue={csmIssue} />}
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <p className="font-medium text-xl">Issues</p>
-          <span className="text-xs text-muted-foreground">List of all CSM issues</span>
+          <p className="font-medium text-lg sm:text-xl">{t('list.title')}</p>
+          <span className="text-xs text-muted-foreground">{t('list.description')}</span>
         </div>
         <DataTable
           columns={columns}
           data={issues}
           isCsmPage
-          noLabel="No issues"
+          noLabel={t('list.noIssues')}
           pageCount={pageCount}
         />
       </div>

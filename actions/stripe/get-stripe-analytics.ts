@@ -1,0 +1,160 @@
+'use server';
+
+import db from '@/lib/db';
+import { stripe } from '@/server/stripe';
+
+export const getStripeAnalytics = async () => {
+  try {
+    const stripeBalance = await stripe.balance.retrieve();
+
+    const totalCustomers = await db.stripeCustomer.count();
+    const totalInstructors = await db.stripeConnectAccount.count();
+
+    const subscriptions = await db.stripeSubscription.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+    const subscriptionDescriptions = await db.stripeSubscriptionDescription.findMany();
+
+    const subscriptionPlans = subscriptions.reduce(
+      (acc, sub) => {
+        const planName = sub.name;
+        const description = subscriptionDescriptions.find((desc) => desc.name === planName);
+        const price = description?.price || 0;
+
+        if (!acc[planName]) {
+          acc[planName] = {
+            name: planName,
+            count: 0,
+            activeCount: 0,
+            revenue: 0,
+            period: description?.period || 'monthly',
+          };
+        }
+
+        acc[planName].count += 1;
+        if (!sub.cancelAt) {
+          acc[planName].activeCount += 1;
+          acc[planName].revenue += price;
+        }
+
+        return acc;
+      },
+      {} as Record<
+        string,
+        { name: string; count: number; activeCount: number; revenue: number; period: string }
+      >,
+    );
+
+    const subscriptionRevenueAmount = Object.values(subscriptionPlans).reduce(
+      (total, plan) => total + plan.revenue,
+      0,
+    );
+
+    const purchases = await db.purchase.findMany({
+      include: {
+        details: true,
+        course: {
+          select: {
+            title: true,
+            price: true,
+          },
+        },
+      },
+    });
+
+    const salesRevenue = purchases.reduce((total, purchase) => {
+      return total + (purchase.details?.price || purchase.course?.price || 0);
+    }, 0);
+
+    const recentPayoutRequests = await db.payoutRequest.findMany({
+      take: 5,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        connectAccount: {
+          include: {
+            payoutRequests: true,
+          },
+        },
+      },
+    });
+
+    const totalPayoutAmount = await db.payoutRequest.aggregate({
+      _sum: {
+        amount: true,
+      },
+      where: {
+        status: 'paid',
+      },
+    });
+
+    return {
+      balances: {
+        available: stripeBalance?.available?.reduce((acc, current) => acc + current.amount, 0) ?? 0,
+        pending: stripeBalance?.pending?.reduce((acc, current) => acc + current.amount, 0) ?? 0,
+      },
+      customers: {
+        total: totalCustomers,
+      },
+      instructors: {
+        total: totalInstructors,
+      },
+      revenue: {
+        subscriptions: {
+          count: subscriptions.length,
+          active: subscriptions.filter((s) => !s.cancelAt).length,
+          amount: subscriptionRevenueAmount,
+          plans: Object.values(subscriptionPlans).sort((a, b) => b.activeCount - a.activeCount),
+        },
+        sales: {
+          amount: salesRevenue,
+          count: purchases.length,
+        },
+        total: salesRevenue + subscriptionRevenueAmount,
+      },
+      payouts: {
+        total: totalPayoutAmount._sum.amount || 0,
+        recent: recentPayoutRequests.length,
+      },
+    };
+  } catch (error) {
+    console.error('[GET_STRIPE_ANALYTICS_ACTION]', error);
+
+    return {
+      balances: {
+        available: 0,
+        pending: 0,
+      },
+      customers: {
+        total: 0,
+      },
+      instructors: {
+        total: 0,
+      },
+      revenue: {
+        subscriptions: {
+          count: 0,
+          active: 0,
+          amount: 0,
+          plans: [],
+        },
+        sales: {
+          amount: 0,
+          count: 0,
+        },
+        total: 0,
+      },
+      payouts: {
+        total: 0,
+        recent: 0,
+      },
+    };
+  }
+};

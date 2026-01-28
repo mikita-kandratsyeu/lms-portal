@@ -26,21 +26,32 @@ export const getCsmIssue = async ({
   const size = Number(pageSize);
 
   try {
-    const issues = await db.csmIssue.findMany({
-      where: { name: { contains: search, mode: 'insensitive' } },
-      include: {
-        category: true,
-        attachments: true,
-        user: true,
-      },
-      orderBy: { createdAt: 'desc' },
-      skip: index * size,
-      take: size,
-    });
+    const whereClause = search
+      ? {
+          OR: [
+            { name: { contains: search, mode: 'insensitive' as const } },
+            { description: { contains: search, mode: 'insensitive' as const } },
+            { email: { contains: search, mode: 'insensitive' as const } },
+          ],
+        }
+      : {};
 
-    const count = await db.user.count({
-      where: { name: { contains: search, mode: 'insensitive' } },
-    });
+    const [issues, count] = await Promise.all([
+      db.csmIssue.findMany({
+        where: whereClause,
+        include: {
+          category: true,
+          attachments: true,
+          user: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: index * size,
+        take: size,
+      }),
+      db.csmIssue.count({
+        where: whereClause,
+      }),
+    ]);
 
     return { pageCount: Math.ceil(count / size), issues };
   } catch (error) {

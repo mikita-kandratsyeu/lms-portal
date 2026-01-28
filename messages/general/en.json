@@ -91,6 +91,18 @@
     "submit": "Submit",
     "success": "The report has been created.",
     "title": "Bug Report",
+    "form": {
+      "reporter": "Reporter",
+      "releaseInfo": "Release Information",
+      "status": "Status",
+      "description": "Description",
+      "attachmentsCount": "Attachments ({count})",
+      "resolutionComment": "Resolution Comment",
+      "resolutionPlaceholder": "Describe how the issue was resolved...",
+      "emailNotification": "Send resolution confirmation to the reporter by email",
+      "emailAddress": "Email Address",
+      "issueCategory": "Issue Category"
+    },
     "categories": {
       "auth": "Authorization",
       "data": "Data / Content issue",
@@ -833,6 +845,152 @@
     },
     "common": {
       "configuration": "Configuration"
+    }
+  },
+  "owner": {
+    "page": {
+      "title": "Business Dashboard",
+      "description": "Comprehensive overview of your platform's financial metrics",
+      "sections": {
+        "overview": {
+          "title": "Overview",
+          "description": "Key metrics and financial indicators for your platform"
+        },
+        "revenue": {
+          "title": "Revenue Breakdown",
+          "description": "Detailed analysis of your income sources"
+        },
+        "stripe": {
+          "title": "Stripe Account",
+          "description": "Connected payment service provider for secure transactions"
+        }
+      }
+    },
+    "analytics": {
+      "availableBalance": "Available Balance",
+      "pendingBalance": "Pending Balance",
+      "totalCustomers": "Total Customers",
+      "totalInstructors": "Total Instructors",
+      "subscriptionRevenue": "Subscription Revenue",
+      "courseSales": "Course Sales",
+      "descriptions": {
+        "readyForPayout": "Ready for payout",
+        "processing": "Processing",
+        "activeUsers": "Active users",
+        "connectedViaStripe": "Connected via Stripe",
+        "active": "active",
+        "purchases": "purchases"
+      }
+    },
+    "revenue": {
+      "subscriptionRevenue": "Subscription Revenue",
+      "courseSales": "Course Sales",
+      "totalPlatformRevenue": "Total Platform Revenue",
+      "totalPaidOut": "Total Paid Out",
+      "active": "active",
+      "total": "total",
+      "ofTotalRevenue": "of total revenue",
+      "purchases": "purchases"
+    },
+    "stripe": {
+      "secureProcessing": "All financial transactions are securely processed through",
+      "downloadReport": "Download Report"
+    },
+    "aiInsights": {
+      "button": "AI Analytics Insights",
+      "title": "AI-Powered Business Insights",
+      "description": "Comprehensive analysis of your business metrics powered by artificial intelligence",
+      "loading": "Analyzing your business data and generating insights...",
+      "generatePrompt": "Click the button below to generate insights",
+      "generateButton": "Generate Insights",
+      "regenerate": "Regenerate",
+      "close": "Close",
+      "errors": {
+        "unableToGenerate": "Unable to generate insights. Please try again later.",
+        "errorOccurred": "An error occurred while generating insights."
+      }
+    },
+    "users": {
+      "page": {
+        "title": "Users Management",
+        "description": "Comprehensive overview and management of all platform users"
+      },
+      "sections": {
+        "overview": {
+          "title": "User Statistics",
+          "description": "Key metrics and insights about your user base"
+        },
+        "list": {
+          "title": "All Users",
+          "description": "Complete list of registered users with detailed information"
+        }
+      },
+      "metrics": {
+        "totalUsers": "Total Users",
+        "verifiedUsers": "Verified Users",
+        "premiumUsers": "Premium Users",
+        "publicProfiles": "Public Profiles",
+        "usersWithCourses": "Users with Courses",
+        "newThisMonth": "New This Month",
+        "descriptions": {
+          "registered": "Total registered users",
+          "verified": "verified email",
+          "premium": "premium users",
+          "visibleProfiles": "Visible profiles",
+          "enrolled": "Enrolled in courses",
+          "joinedRecently": "Joined this month",
+          "noSubscriptions": "No active subscriptions"
+        }
+      },
+      "table": {
+        "columns": {
+          "user": "User",
+          "type": "Type",
+          "activity": "Activity",
+          "profileStatus": "Profile Status",
+          "dateOfCreation": "Date of Creation",
+          "lastUpdate": "Last Update",
+          "changeRole": "Change Role"
+        },
+        "premium": "Premium",
+        "free": "Free",
+        "public": "Public",
+        "private": "Private",
+        "noUsers": "No users found"
+      }
+    },
+    "csm": {
+      "page": {
+        "title": "Client Service Management",
+        "description": "Manage and track customer support issues and bug reports"
+      },
+      "sections": {
+        "overview": {
+          "title": "Issue Statistics",
+          "description": "Overview of all support issues and their current status"
+        }
+      },
+      "metrics": {
+        "totalIssues": "Total Issues",
+        "newIssues": "New Issues",
+        "inProgress": "In Progress",
+        "resolved": "Resolved",
+        "thisMonth": "This Month",
+        "topCategories": "Top Categories",
+        "descriptions": {
+          "allTime": "All time issues",
+          "awaitingReview": "Awaiting review",
+          "beingProcessed": "Currently being processed",
+          "completed": "completed",
+          "recentActivity": "Created this month",
+          "noCategories": "No categories yet"
+        }
+      },
+      "list": {
+        "title": "All Issues",
+        "description": "Complete list of customer service issues and bug reports",
+        "noIssues": "No issues found"
+      }
     }
   }
 }

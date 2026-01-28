@@ -91,6 +91,18 @@
     "submit": "Адправіць",
     "success": "Справаздача створаная.",
     "title": "Справаздача аб памылцы",
+    "form": {
+      "reporter": "Аўтар звароту",
+      "releaseInfo": "Інфармацыя аб версіі",
+      "status": "Статус",
+      "description": "Апісанне",
+      "attachmentsCount": "Укладанні ({count})",
+      "resolutionComment": "Каментар аб рашэнні",
+      "resolutionPlaceholder": "Апішыце, як была вырашана праблема...",
+      "emailNotification": "Адправіць пацверджанне рашэння аўтару звароту па email",
+      "emailAddress": "Email адрас",
+      "issueCategory": "Катэгорыя звароту"
+    },
     "categories": {
       "auth": "Аўтарызацыя",
       "data": "Праблема з дадзенымі/кантэнтам",
@@ -833,6 +845,152 @@
     },
     "common": {
       "configuration": "Наладкі"
+    }
+  },
+  "owner": {
+    "page": {
+      "title": "Панэль бізнесу",
+      "description": "Поўны агляд фінансавых паказчыкаў вашай платформы",
+      "sections": {
+        "overview": {
+          "title": "Агляд",
+          "description": "Ключавыя метрыкі і фінансавыя паказчыкі вашай платформы"
+        },
+        "revenue": {
+          "title": "Разбіўка даходаў",
+          "description": "Дэталёвы аналіз вашых крыніц даходу"
+        },
+        "stripe": {
+          "title": "Акаўнт Stripe",
+          "description": "Падключаны платны правайдар для бяспечных транзакцый"
+        }
+      }
+    },
+    "analytics": {
+      "availableBalance": "Даступны баланс",
+      "pendingBalance": "Чаканы баланс",
+      "totalCustomers": "Усяго кліентаў",
+      "totalInstructors": "Усяго выкладчыкаў",
+      "subscriptionRevenue": "Даход ад падпісак",
+      "courseSales": "Продажы курсаў",
+      "descriptions": {
+        "readyForPayout": "Гатова да вываду",
+        "processing": "Апрацоўка",
+        "activeUsers": "Актыўных карыстальнікаў",
+        "connectedViaStripe": "Падключана праз Stripe",
+        "active": "актыўных",
+        "purchases": "пакупак"
+      }
+    },
+    "revenue": {
+      "subscriptionRevenue": "Даход ад падпісак",
+      "courseSales": "Продажы курсаў",
+      "totalPlatformRevenue": "Агульны даход платформы",
+      "totalPaidOut": "Усяго выплачана",
+      "active": "актыўных",
+      "total": "усяго",
+      "ofTotalRevenue": "ад агульнага даходу",
+      "purchases": "пакупак"
+    },
+    "stripe": {
+      "secureProcessing": "Усе фінансавыя транзакцыі бяспечна апрацоўваюцца праз",
+      "downloadReport": "Спампаваць справаздачу"
+    },
+    "aiInsights": {
+      "button": "ІІ аналітыка",
+      "title": "Бізнес-аналітыка з ІІ",
+      "description": "Комплексны аналіз вашых бізнес-паказчыкаў з дапамогай штучнага інтэлекту",
+      "loading": "Аналізую вашы бізнес-даныя і генеруючы аналітыку...",
+      "generatePrompt": "Націсніце кнопку ніжэй, каб згенераваць аналітыку",
+      "generateButton": "Згенераваць аналітыку",
+      "regenerate": "Перагенераваць",
+      "close": "Закрыць",
+      "errors": {
+        "unableToGenerate": "Не ўдалося згенераваць аналітыку. Паспрабуйце пазней.",
+        "errorOccurred": "Адбылася памылка пры генерацыі аналітыкі."
+      }
+    },
+    "users": {
+      "page": {
+        "title": "Кіраванне карыстальнікамі",
+        "description": "Поўны агляд і кіраванне ўсімі карыстальнікамі платформы"
+      },
+      "sections": {
+        "overview": {
+          "title": "Статыстыка карыстальнікаў",
+          "description": "Ключавыя метрыкі і аналітыка аб вашай карыстальніцкай базе"
+        },
+        "list": {
+          "title": "Усе карыстальнікі",
+          "description": "Поўны спіс зарэгістраваных карыстальнікаў з падрабязнай інфармацыяй"
+        }
+      },
+      "metrics": {
+        "totalUsers": "Усяго карыстальнікаў",
+        "verifiedUsers": "Верыфікаваныя",
+        "premiumUsers": "Premium карыстальнікі",
+        "publicProfiles": "Публічныя профілі",
+        "usersWithCourses": "Карыстальнікі з курсамі",
+        "newThisMonth": "Новыя за месяц",
+        "descriptions": {
+          "registered": "Усяго зарэгістравана",
+          "verified": "пацверджана пошта",
+          "premium": "прэміум карыстальнікаў",
+          "visibleProfiles": "Бачныя профілі",
+          "enrolled": "Запісаны на курсы",
+          "joinedRecently": "Далучыліся ў гэтым месяцы",
+          "noSubscriptions": "Няма актыўных падпісак"
+        }
+      },
+      "table": {
+        "columns": {
+          "user": "Карыстальнік",
+          "type": "Тып",
+          "activity": "Актыўнасць",
+          "profileStatus": "Статус профілю",
+          "dateOfCreation": "Дата стварэння",
+          "lastUpdate": "Апошняе абнаўленне",
+          "changeRole": "Змяніць ролю"
+        },
+        "premium": "Premium",
+        "free": "Бясплатны",
+        "public": "Публічны",
+        "private": "Прыватны",
+        "noUsers": "Карыстальнікі не знойдзены"
+      }
+    },
+    "csm": {
+      "page": {
+        "title": "Кіраванне кліенцкім сэрвісам",
+        "description": "Кіраванне і адсочванне звяротаў у падтрымку і справаздач аб памылках"
+      },
+      "sections": {
+        "overview": {
+          "title": "Статыстыка звяротаў",
+          "description": "Агляд усіх звяротаў у падтрымку і іх бягучы статус"
+        }
+      },
+      "metrics": {
+        "totalIssues": "Усяго звяротаў",
+        "newIssues": "Новыя звароты",
+        "inProgress": "У працы",
+        "resolved": "Вырашана",
+        "thisMonth": "За гэты месяц",
+        "topCategories": "Папулярныя катэгорыі",
+        "descriptions": {
+          "allTime": "Усяго звяротаў",
+          "awaitingReview": "Чакаюць разгляду",
+          "beingProcessed": "У працэсе апрацоўкі",
+          "completed": "завершана",
+          "recentActivity": "Створана ў гэтым месяцы",
+          "noCategories": "Катэгорый пакуль няма"
+        }
+      },
+      "list": {
+        "title": "Усе звароты",
+        "description": "Поўны спіс звяротаў у службу падтрымкі і справаздач аб памылках",
+        "noIssues": "Звароты не знойдзены"
+      }
     }
   }
 }
