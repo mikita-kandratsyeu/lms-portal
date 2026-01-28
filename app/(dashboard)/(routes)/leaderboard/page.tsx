@@ -19,7 +19,7 @@ const LeaderBoard = async () => {
   const user = await getCurrentUser();
 
   if (!user) {
-    return redirect('/');
+    redirect('/');
   }
 
   const tSidebar = await getTranslations('sidebar');
