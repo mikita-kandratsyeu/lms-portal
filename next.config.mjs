@@ -28,6 +28,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'media.licdn.com' },
       { protocol: 'https', hostname: 'storage.yandexcloud.net' },
       { protocol: 'https', hostname: 'sun23-2.userapi.com' },
+      { protocol: 'https', hostname: 'utfs.io' },
     ],
   },
   webpack: (config) => {

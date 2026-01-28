@@ -2377,14 +2377,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/adapter-neon@npm:^6.16.3":
-  version: 6.16.3
-  resolution: "@prisma/adapter-neon@npm:6.16.3"
+"@prisma/adapter-neon@npm:^7.3.0":
+  version: 7.3.0
+  resolution: "@prisma/adapter-neon@npm:7.3.0"
   dependencies:
     "@neondatabase/serverless": "npm:>0.6.0 <2"
-    "@prisma/driver-adapter-utils": "npm:6.16.3"
+    "@prisma/driver-adapter-utils": "npm:7.3.0"
     postgres-array: "npm:3.0.4"
-  checksum: 10c0/f0fbb58bf8a442a9547ec2c1d200b9a09a495eaf9b95dbc14f6fbfe0a9ca9c597bb07e3ae5d4a8594950184543aa626d48a5da8cc0f506c9944075a08dae70fa
+  checksum: 10c0/39daf43b9f23a89b85937dd06044caac56ca6377b8b10e0c187513785c3fa9a1dbed35165db1c79e73d3cb664944194c2916017bbb45afe460e655d07c70c06b
   languageName: node
   linkType: hard
 
@@ -2421,13 +2421,6 @@ __metadata:
     effect: "npm:3.18.4"
     empathic: "npm:2.0.0"
   checksum: 10c0/ac0e53d4293a640b94d8294e67dd7172fbc506d0ec1df89d45ab86dc4a4a4dcdede4cb1d831ff2dd9ea35eb4a6b93f0a98f7e757d735a96f15a5f095d6108210
-  languageName: node
-  linkType: hard
-
-"@prisma/debug@npm:6.16.3":
-  version: 6.16.3
-  resolution: "@prisma/debug@npm:6.16.3"
-  checksum: 10c0/25ffcb0a019e768e91bb993e3ea00f2b042e38627e880cdc584d02b2364b55aa62c980df85fc49f8227a8a62192d37539aea0cb1137c60526aa20f278cc1071a
   languageName: node
   linkType: hard
 
@@ -2470,12 +2463,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/driver-adapter-utils@npm:6.16.3":
-  version: 6.16.3
-  resolution: "@prisma/driver-adapter-utils@npm:6.16.3"
+"@prisma/driver-adapter-utils@npm:7.3.0":
+  version: 7.3.0
+  resolution: "@prisma/driver-adapter-utils@npm:7.3.0"
   dependencies:
-    "@prisma/debug": "npm:6.16.3"
-  checksum: 10c0/ee1a714157c128c295b1e0d857c292612864b1db92deea922698739c90ecf78fa44e9f14d78d603f30bbe45a62ddc41b31e948538f082aaf566398ed7db1ba36
+    "@prisma/debug": "npm:7.3.0"
+  checksum: 10c0/c85367790863a6c964f372c46bbb1ce730218f38955a723e36387025d527da1a72ecec22cb274e43de53707696b3c9004eb9707c85d17b1b0635ebc1c7f136e3
   languageName: node
   linkType: hard
 
@@ -7393,9 +7386,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001578, caniuse-lite@npm:^1.0.30001579, caniuse-lite@npm:^1.0.30001580":
-  version: 1.0.30001587
-  resolution: "caniuse-lite@npm:1.0.30001587"
-  checksum: 10c0/c7a34cb758a24fa1d948e164de3c5873e7e607b46db0e530ba160a281cb619c9d6a1b85bb334894bc8e629a59db99f3de4521593b08142d317a529e80a856385
+  version: 1.0.30001766
+  resolution: "caniuse-lite@npm:1.0.30001766"
+  checksum: 10c0/cecc8f9a3758c486fc68434a3cca5f4ca7077db5ac9cdb1689786abf63c4aa9891bf70f2df2c3e549d5e284e8da36a218d0e131ebb26dd59280bc99db49640f6
   languageName: node
   linkType: hard
 
@@ -11183,7 +11176,7 @@ __metadata:
     "@hookform/resolvers": "npm:^3.3.4"
     "@neondatabase/serverless": "npm:^1.0.2"
     "@plaiceholder/next": "npm:^3.0.0"
-    "@prisma/adapter-neon": "npm:^6.16.3"
+    "@prisma/adapter-neon": "npm:^7.3.0"
     "@prisma/client": "npm:^7.3.0"
     "@radix-ui/react-accordion": "npm:^1.1.2"
     "@radix-ui/react-alert-dialog": "npm:^1.0.5"
