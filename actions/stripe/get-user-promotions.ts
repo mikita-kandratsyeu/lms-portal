@@ -44,10 +44,12 @@ const formatRestrictions = (restrictions: Stripe.PromotionCode.Restrictions) => 
 };
 
 const formatPromotionCode = (pc: StripePromotionCode, isPersonal: boolean) => {
+  const coupon = pc.coupon as Stripe.Coupon;
   return {
     id: pc.id,
     code: pc.code,
-    description: formatCouponDescription(pc.coupon as Stripe.Coupon),
+    name: coupon.name || null,
+    description: formatCouponDescription(coupon),
     restrictions: formatRestrictions(pc.restrictions),
     active: pc.active,
     isPersonal,
@@ -63,12 +65,10 @@ export const getUserPromotions = async () => {
       return { promotions: [] };
     }
 
-    // Получаем Stripe Customer ID пользователя
     const stripeCustomer = await db.stripeCustomer.findUnique({
       where: { userId: user.userId },
     });
 
-    // Получаем все промокоды из БД
     const dbPromos = await db.stripePromo.findMany({
       where: { isActive: true },
       orderBy: { createdAt: 'desc' },
@@ -78,7 +78,6 @@ export const getUserPromotions = async () => {
       return { promotions: [] };
     }
 
-    // Батчинг запросов к Stripe
     const batchedPromos = getBatchedItems(dbPromos);
 
     const stripePromos = await batchedPromos.reduce(
@@ -97,7 +96,7 @@ export const getUserPromotions = async () => {
                 const res = await stripe.promotionCodes.retrieve(promo.stripePromoId);
                 return res;
               },
-              ONE_MINUTE_SEC * 5, // 5 минут кеша
+              ONE_MINUTE_SEC * 5,
             );
 
             return data;
@@ -109,21 +108,16 @@ export const getUserPromotions = async () => {
       Promise.resolve([]),
     );
 
-    // Фильтруем промокоды: только те, что доступны пользователю
     const availablePromos = stripePromos.filter((pc) => {
-      // Промокод должен быть активным
-      if (!pc.active) return true; // Показываем неактивные как expired
+      if (!pc.active) return true;
 
-      // Если промокод общий (без привязки к customer) - доступен всем
       if (!pc.customer) return true;
 
-      // Если промокод именной - проверяем, что он для этого пользователя
       if (stripeCustomer && pc.customer === stripeCustomer.stripeCustomerId) return true;
 
       return false;
     });
 
-    // Форматируем данные
     const promotions = availablePromos.map((pc) => {
       const isPersonal = !!pc.customer;
       return formatPromotionCode(pc, isPersonal);

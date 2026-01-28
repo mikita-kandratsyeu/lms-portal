@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-
 import { CheckIcon, CopyIcon, PercentIcon, UserIcon, UsersIcon } from 'lucide-react';
+import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -36,7 +35,9 @@ export const PromotionCard = ({ promo, isExpired = false }: PromotionCardProps) 
   };
 
   return (
-    <Card className={`flex flex-col transition-all hover:shadow-lg ${isExpired ? 'opacity-60' : ''}`}>
+    <Card
+      className={`flex flex-col transition-all hover:shadow-lg ${isExpired ? 'opacity-60' : ''}`}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2 mb-2">
           <Badge
@@ -57,6 +58,7 @@ export const PromotionCard = ({ promo, isExpired = false }: PromotionCardProps) 
           </Badge>
           {isExpired && <Badge variant="destructive">Expired</Badge>}
         </div>
+        {promo.name && <h3 className="text-lg font-semibold mb-2">{promo.name}</h3>}
         <CardTitle className="text-xl font-bold tracking-wider font-mono flex items-center gap-2">
           <PercentIcon
             className={`h-5 w-5 ${isExpired ? 'text-muted-foreground' : 'text-primary'}`}
