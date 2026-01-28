@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, ChevronsUpDown, RefreshCcw } from 'lucide-react';
+import { Check, RefreshCcw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -22,14 +22,6 @@ import {
   SelectValue,
 } from '@/components/ui';
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -47,7 +39,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/components/ui/use-toast';
 import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { PromoStatus } from '@/constants/payments';
@@ -107,7 +98,6 @@ export const PromoModal = ({ children, coupons, customers }: PromoModalProps) =>
   const { isSubmitting, isValid } = form.formState;
 
   const [open, setOpen] = useState(false);
-  const [customerComboboxOpen, setCustomerComboboxOpen] = useState(false);
   const [customerSearchQuery, setCustomerSearchQuery] = useState('');
 
   const watchLimitToSpecificCustomer = form.watch('limitToSpecificCustomer');
@@ -245,7 +235,6 @@ export const PromoModal = ({ children, coupons, customers }: PromoModalProps) =>
                 control={form.control}
                 name="customerId"
                 render={({ field }) => {
-                  const selectedCustomer = customers.find((cs) => cs.id === field.value);
                   const filteredCustomers = customers.filter((cs) => {
                     const searchLower = customerSearchQuery.toLowerCase();
                     return (
@@ -254,75 +243,55 @@ export const PromoModal = ({ children, coupons, customers }: PromoModalProps) =>
                     );
                   });
 
+                  const handleSelectCustomer = (customerId: string) => {
+                    field.onChange(customerId);
+                  };
+
                   return (
                     <FormItem className="w-full">
-                      <Popover open={customerComboboxOpen} onOpenChange={setCustomerComboboxOpen}>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className={cn(
-                                'w-full justify-between text-start font-normal',
-                                !field.value && 'text-muted-foreground',
-                                field.value && 'h-auto py-3',
-                              )}
-                            >
-                              {selectedCustomer ? (
-                                <div className="flex flex-col">
-                                  <span className="font-medium">
-                                    {selectedCustomer.name ?? 'N/A'}
-                                  </span>
-                                  <span className="text-muted-foreground text-sm">
-                                    {selectedCustomer.email ?? 'N/A'}
-                                  </span>
-                                </div>
-                              ) : (
-                                t('selectCustomer')
-                              )}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0" align="start">
-                          <Command>
-                            <CommandInput
-                              placeholder={t('searchCustomer')}
-                              value={customerSearchQuery}
-                              onValueChange={setCustomerSearchQuery}
-                            />
-                            <CommandList>
-                              <CommandEmpty>{t('noCustomerFound')}</CommandEmpty>
-                              <CommandGroup>
-                                {filteredCustomers.map((cs) => (
-                                  <CommandItem
-                                    key={cs.id}
-                                    value={cs.id}
-                                    onSelect={() => {
-                                      field.onChange(cs.id);
-                                      setCustomerComboboxOpen(false);
-                                      setCustomerSearchQuery('');
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        'mr-2 h-4 w-4',
-                                        cs.id === field.value ? 'opacity-100' : 'opacity-0',
-                                      )}
-                                    />
-                                    <div className="flex flex-col">
-                                      <span className="font-medium">{cs.name ?? 'N/A'}</span>
-                                      <span className="text-muted-foreground text-sm">
-                                        {cs.email ?? 'N/A'}
-                                      </span>
-                                    </div>
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                      <div className="space-y-2">
+                        <Input
+                          placeholder={t('searchCustomer')}
+                          value={customerSearchQuery}
+                          onChange={(e) => setCustomerSearchQuery(e.target.value)}
+                          className="w-full"
+                        />
+                        <div className="border rounded-md max-h-[200px] overflow-y-auto">
+                          {filteredCustomers.length === 0 ? (
+                            <div className="p-4 text-center text-sm text-muted-foreground">
+                              {t('noCustomerFound')}
+                            </div>
+                          ) : (
+                            filteredCustomers.map((cs) => {
+                              const isSelected = field.value === cs.id;
+                              return (
+                                <button
+                                  key={cs.id}
+                                  type="button"
+                                  onClick={() => handleSelectCustomer(cs.id)}
+                                  className={cn(
+                                    'w-full flex items-center gap-2 p-3 text-left hover:bg-accent transition-colors',
+                                    isSelected && 'bg-accent',
+                                  )}
+                                >
+                                  <Check
+                                    className={cn(
+                                      'h-4 w-4 shrink-0',
+                                      isSelected ? 'opacity-100' : 'opacity-0',
+                                    )}
+                                  />
+                                  <div className="flex flex-col flex-1 min-w-0">
+                                    <span className="font-medium text-sm">{cs.name ?? 'N/A'}</span>
+                                    <span className="text-muted-foreground text-xs truncate">
+                                      {cs.email ?? 'N/A'}
+                                    </span>
+                                  </div>
+                                </button>
+                              );
+                            })
+                          )}
+                        </div>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   );

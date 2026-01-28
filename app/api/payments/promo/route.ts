@@ -67,16 +67,22 @@ export const POST = async (req: NextRequest) => {
           where: { stripeCustomerId: other.customerId },
         });
 
-        if (stripeCustomer) {
-          await createWebSocketNotification({
-            channel: `notification_channel_${stripeCustomer.userId}`,
-            data: {
-              body: t('new.body', { code: promotionCode.code }),
-              title: t('new.title'),
-              userId: stripeCustomer.userId,
-            },
-            event: `private_event_${stripeCustomer.userId}`,
+        if (stripeCustomer?.userId) {
+          const userExists = await db.user.findUnique({
+            where: { id: stripeCustomer.userId },
           });
+
+          if (userExists) {
+            await createWebSocketNotification({
+              channel: `notification_channel_${stripeCustomer.userId}`,
+              data: {
+                body: t('new.body', { code: promotionCode.code }),
+                title: t('new.title'),
+                userId: stripeCustomer.userId,
+              },
+              event: `private_event_${stripeCustomer.userId}`,
+            });
+          }
         }
       }
 
