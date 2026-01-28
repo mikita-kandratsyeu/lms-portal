@@ -18,7 +18,9 @@ const LeaderBoard = async () => {
   const tSidebar = await getTranslations('sidebar');
   const tLeaderboard = await getTranslations('leaderboard');
   const user = await getCurrentUser();
-  const { leaders, totalUsersCount } = await getLeaders();
+  const { leaders, currentUserLeader, currentUserRank, totalUsersCount } = await getLeaders(
+    user?.userId,
+  );
 
   return (
     <Suspense fallback={<LeaderBoardSkeleton />}>
@@ -27,7 +29,13 @@ const LeaderBoard = async () => {
           <h1 className="text-2xl font-medium">{tSidebar('leaderboard')}</h1>
           <p className="text-muted-foreground mt-2">{tLeaderboard('description')}</p>
         </div>
-        <LeadersTable leaders={leaders} userId={user?.userId} totalUsersCount={totalUsersCount} />
+        <LeadersTable
+          leaders={leaders}
+          userId={user?.userId}
+          currentUserLeader={currentUserLeader ?? null}
+          currentUserRank={currentUserRank}
+          totalUsersCount={totalUsersCount}
+        />
       </div>
     </Suspense>
   );

@@ -19,7 +19,7 @@ export type Leader = {
   xp: number;
 };
 
-export const getLeaders = async () => {
+export const getLeaders = async (currentUserId?: string) => {
   const totalUsersCount = await db.user.count();
 
   const userProgress = await db.userProgress.findMany();
@@ -39,14 +39,19 @@ export const getLeaders = async () => {
     .filter(({ course }) => course.isPublished)
     .map(({ id }) => id);
 
-  const users = (
-    await db.user.findMany({
-      where: { id: { in: userIds } },
-      include: { settings: true },
-    })
-  ).filter((user) => user?.settings?.isPublicProfile);
+  const allUsersWithProgress = await db.user.findMany({
+    where: { id: { in: userIds } },
+    include: { settings: true },
+  });
 
-  const batchedUsers = getBatchedItems(users);
+  const publicUsers = allUsersWithProgress.filter((user) => user?.settings?.isPublicProfile);
+  const usersToProcess = currentUserId
+    ? allUsersWithProgress.filter(
+        (user) => user?.settings?.isPublicProfile || user.id === currentUserId,
+      )
+    : publicUsers;
+
+  const batchedUsers = getBatchedItems(usersToProcess);
 
   const userSubscriptions = await batchedUsers.reduce(
     async (previousUserSubscriptionsPromise: Promise<any[]>, batch: any[], batchIndex: number) => {
@@ -74,9 +79,9 @@ export const getLeaders = async () => {
     Promise.resolve([] as any[]),
   );
 
-  const leaders = Object.entries(groupedByUser)
+  const allLeaders = Object.entries(groupedByUser)
     .reduce<Leader[]>((acc, [userId, items]) => {
-      const userInfo = users.find((user) => user.id === userId);
+      const userInfo = usersToProcess.find((user) => user.id === userId);
 
       if (userInfo) {
         const xp =
@@ -101,8 +106,23 @@ export const getLeaders = async () => {
     }, [])
     .sort((a, b) => b.xp - a.xp);
 
+  const publicLeaders = allLeaders.filter((leader) => {
+    const userInfo = publicUsers.find((u) => u.id === leader.userId);
+    return userInfo !== undefined;
+  });
+
+  const currentUserLeader = currentUserId
+    ? allLeaders.find((leader) => leader.userId === currentUserId)
+    : null;
+
+  const currentUserRank = currentUserLeader
+    ? allLeaders.findIndex((leader) => leader.userId === currentUserId) + 1
+    : null;
+
   return {
-    leaders,
+    leaders: publicLeaders,
+    currentUserLeader,
+    currentUserRank,
     totalUsersCount,
   };
 };
