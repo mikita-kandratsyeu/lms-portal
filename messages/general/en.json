@@ -449,6 +449,7 @@
     },
     "restrictions": "Restrictions:",
     "redeemed": "Redeemed:",
+    "expiresAt": "Expires at:",
     "buttons": {
       "notAvailable": "Not Available",
       "copyCode": "Copy Code",
@@ -457,9 +458,19 @@
     "tabs": {
       "all": "All",
       "general": "General",
-      "personal": "Personal"
+      "personal": "Personal",
+      "empty": "No promotions in this category"
     },
-    "expiredSection": "Expired or Unavailable"
+    "expiredSection": "Expired or Unavailable",
+    "format": {
+      "percentOff": "{percent}% off {duration}",
+      "forMonths": "for {months} months",
+      "forever": "forever"
+    },
+    "restrictionTexts": {
+      "firstPurchase": "Only for first purchase.",
+      "minAmount": "Min amount is {amount}."
+    }
   },
   "notifications": {
     "all": "All",

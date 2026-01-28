@@ -449,6 +449,7 @@
     },
     "restrictions": "Абмежаванні:",
     "redeemed": "Выкарыстана:",
+    "expiresAt": "Сканчаецца:",
     "buttons": {
       "notAvailable": "Недаступна",
       "copyCode": "Капіраваць код",
@@ -457,9 +458,19 @@
     "tabs": {
       "all": "Усе",
       "general": "Агульныя",
-      "personal": "Персанальныя"
+      "personal": "Персанальныя",
+      "empty": "Няма промакодаў у гэтай катэгорыі"
     },
-    "expiredSection": "Скончаныя або недаступныя"
+    "expiredSection": "Скончаныя або недаступныя",
+    "format": {
+      "percentOff": "{percent}% зніжка {duration}",
+      "forMonths": "на {months} месяцаў",
+      "forever": "назаўжды"
+    },
+    "restrictionTexts": {
+      "firstPurchase": "Толькі для першай пакупкі.",
+      "minAmount": "Мінімальная сума {amount}."
+    }
   },
   "notifications": {
     "all": "Усе",

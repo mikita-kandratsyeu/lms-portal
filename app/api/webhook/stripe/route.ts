@@ -39,6 +39,48 @@ export const POST = async (req: NextRequest) => {
   const locale = session?.metadata?.locale ?? DEFAULT_LANGUAGE;
 
   if (event.type === 'checkout.session.completed') {
+    if (session.total_details?.amount_discount) {
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+        expand: ['data.discounts'],
+      });
+
+      for (const item of lineItems.data) {
+        if (item.discounts && item.discounts.length > 0) {
+          for (const discount of item.discounts) {
+            if (discount.discount && isObject(discount.discount)) {
+              const promotionCodeId = discount.discount.promotion_code;
+
+              if (isString(promotionCodeId)) {
+                const promoCode = await stripe.promotionCodes.retrieve(promotionCodeId);
+
+                const existingPromo = await db.stripePromo.findUnique({
+                  where: { stripePromoId: promoCode.id },
+                });
+
+                if (existingPromo) {
+                  const shouldDeactivate =
+                    promoCode.max_redemptions &&
+                    promoCode.times_redeemed >= promoCode.max_redemptions;
+
+                  await db.stripePromo.update({
+                    where: { stripePromoId: promoCode.id },
+                    data: {
+                      timesRedeemed: promoCode.times_redeemed,
+                      isActive: shouldDeactivate ? false : promoCode.active,
+                    },
+                  });
+
+                  await removeValueFromMemoryCache(
+                    `user-promo-redeemed_${existingPromo.id}_${promoCode.id}`,
+                  );
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     if (!userId || (!isSubscription && !courseId)) {
       return new NextResponse('Webhook Error: Missing metadata', {
         status: StatusCodes.BAD_REQUEST,
@@ -169,6 +211,36 @@ export const POST = async (req: NextRequest) => {
     });
 
     return new NextResponse(JSON.stringify(response));
+  }
+
+  if (event.type === 'promotion_code.updated') {
+    const promotionCode = event.data.object as Stripe.PromotionCode;
+
+    const existingPromo = await db.stripePromo.findUnique({
+      where: { stripePromoId: promotionCode.id },
+    });
+
+    if (existingPromo) {
+      const shouldDeactivate =
+        promotionCode.max_redemptions &&
+        promotionCode.times_redeemed >= promotionCode.max_redemptions;
+
+      const response = await db.stripePromo.update({
+        where: { stripePromoId: promotionCode.id },
+        data: {
+          timesRedeemed: promotionCode.times_redeemed,
+          isActive: shouldDeactivate ? false : promotionCode.active,
+        },
+      });
+
+      await removeValueFromMemoryCache(
+        `user-promo-redeemed_${existingPromo.id}_${promotionCode.id}`,
+      );
+
+      return new NextResponse(JSON.stringify(response));
+    }
+
+    return new NextResponse(null);
   }
 
   return new NextResponse(`Webhook Error: Unhandled event type ${event.type}`);

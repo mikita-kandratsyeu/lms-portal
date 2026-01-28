@@ -79,7 +79,19 @@ export const PromotionCard = ({ promo, isExpired = false }: PromotionCardProps) 
             <p className="text-xs text-muted-foreground">{promo.restrictions}</p>
           </div>
         )}
-        <div className="mt-3 pt-3 border-t">
+        {promo.expiresAt && (
+          <div className="space-y-1 mt-3">
+            <p className="text-xs font-medium text-muted-foreground">{t('expiresAt')}</p>
+            <p className="text-xs text-muted-foreground">
+              {new Date(promo.expiresAt).toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </p>
+          </div>
+        )}
+        <div className="mt-3 pt-3">
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>{t('redeemed')}</span>
             <span className="font-medium">

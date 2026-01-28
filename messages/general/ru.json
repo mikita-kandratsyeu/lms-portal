@@ -448,6 +448,7 @@
     },
     "restrictions": "Ограничения:",
     "redeemed": "Использовано:",
+    "expiresAt": "Истекает:",
     "buttons": {
       "notAvailable": "Недоступно",
       "copyCode": "Копировать код",
@@ -456,9 +457,19 @@
     "tabs": {
       "all": "Все",
       "general": "Общие",
-      "personal": "Персональные"
+      "personal": "Персональные",
+      "empty": "Нет промокодов в этой категории"
     },
-    "expiredSection": "Истёкшие или недоступные"
+    "expiredSection": "Истёкшие или недоступные",
+    "format": {
+      "percentOff": "{percent}% скидка {duration}",
+      "forMonths": "на {months} месяцев",
+      "forever": "навсегда"
+    },
+    "restrictionTexts": {
+      "firstPurchase": "Только для первой покупки.",
+      "minAmount": "Минимальная сумма {amount}."
+    }
   },
   "notifications": {
     "all": "Все",

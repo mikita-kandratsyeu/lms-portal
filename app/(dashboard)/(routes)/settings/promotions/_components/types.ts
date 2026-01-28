@@ -8,4 +8,5 @@ export type Promotion = {
   isPersonal: boolean;
   maxRedemptions: number;
   timesRedeemed: number;
+  expiresAt: Date | null;
 };

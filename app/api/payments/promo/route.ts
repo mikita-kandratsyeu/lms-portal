@@ -54,11 +54,27 @@ export const POST = async (req: NextRequest) => {
 
       const stripePromotion = await stripe.promotionCodes.create(payload);
 
+      const coupon = stripePromotion.coupon as Stripe.Coupon;
+
       const promotionCode = await db.stripePromo.create({
         data: {
           code: other.code,
           stripeCouponId: other.couponId,
           stripePromoId: stripePromotion.id,
+          couponName: coupon.name || null,
+          percentOff: coupon.percent_off || null,
+          amountOff: coupon.amount_off || null,
+          currency: coupon.currency || null,
+          durationInMonths: coupon.duration_in_months || null,
+          firstTimeTransaction: stripePromotion.restrictions.first_time_transaction || false,
+          minimumAmount: stripePromotion.restrictions.minimum_amount || null,
+          minimumAmountCurrency: stripePromotion.restrictions.minimum_amount_currency || null,
+          stripeCustomerId: stripePromotion.customer ? (stripePromotion.customer as string) : null,
+          maxRedemptions: stripePromotion.max_redemptions || null,
+          timesRedeemed: stripePromotion.times_redeemed || 0,
+          expiresAt: stripePromotion.expires_at
+            ? new Date(stripePromotion.expires_at * 1000)
+            : null,
         },
       });
 

@@ -197,13 +197,25 @@ model StripeConnectAccount {
 }
 
 model StripePromo {
-  id             String   @id @default(uuid())
-  code           String
-  createdAt      DateTime @default(now())
-  isActive       Boolean  @default(true)
-  stripeCouponId String
-  stripePromoId  String   @unique
-  updatedAt      DateTime @updatedAt
+  id                    String    @id @default(uuid())
+  code                  String
+  createdAt             DateTime  @default(now())
+  isActive              Boolean   @default(true)
+  stripeCouponId        String
+  stripePromoId         String    @unique
+  updatedAt             DateTime  @updatedAt
+  couponName            String?
+  percentOff            Float?
+  amountOff             Int?
+  currency              String?
+  durationInMonths      Int?
+  firstTimeTransaction  Boolean   @default(false)
+  minimumAmount         Int?
+  minimumAmountCurrency String?
+  stripeCustomerId      String?
+  maxRedemptions        Int?
+  timesRedeemed         Int       @default(0)
+  expiresAt             DateTime?
 }
 
 model StripeSubscription {
