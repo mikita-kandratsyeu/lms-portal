@@ -897,6 +897,55 @@
         "unableToGenerate": "Unable to generate insights. Please try again later.",
         "errorOccurred": "An error occurred while generating insights."
       }
+    },
+    "users": {
+      "page": {
+        "title": "Users Management",
+        "description": "Comprehensive overview and management of all platform users"
+      },
+      "sections": {
+        "overview": {
+          "title": "User Statistics",
+          "description": "Key metrics and insights about your user base"
+        },
+        "list": {
+          "title": "All Users",
+          "description": "Complete list of registered users with detailed information"
+        }
+      },
+      "metrics": {
+        "totalUsers": "Total Users",
+        "verifiedUsers": "Verified Users",
+        "premiumUsers": "Premium Users",
+        "publicProfiles": "Public Profiles",
+        "usersWithCourses": "Users with Courses",
+        "newThisMonth": "New This Month",
+        "descriptions": {
+          "registered": "Total registered users",
+          "verified": "verified email",
+          "premium": "premium users",
+          "visibleProfiles": "Visible profiles",
+          "enrolled": "Enrolled in courses",
+          "joinedRecently": "Joined this month",
+          "noSubscriptions": "No active subscriptions"
+        }
+      },
+      "table": {
+        "columns": {
+          "user": "User",
+          "type": "Type",
+          "activity": "Activity",
+          "profileStatus": "Profile Status",
+          "dateOfCreation": "Date of Creation",
+          "lastUpdate": "Last Update",
+          "changeRole": "Change Role"
+        },
+        "premium": "Premium",
+        "free": "Free",
+        "public": "Public",
+        "private": "Private",
+        "noUsers": "No users found"
+      }
     }
   }
 }
