@@ -946,6 +946,39 @@
         "private": "Private",
         "noUsers": "No users found"
       }
+    },
+    "csm": {
+      "page": {
+        "title": "Client Service Management",
+        "description": "Manage and track customer support issues and bug reports"
+      },
+      "sections": {
+        "overview": {
+          "title": "Issue Statistics",
+          "description": "Overview of all support issues and their current status"
+        }
+      },
+      "metrics": {
+        "totalIssues": "Total Issues",
+        "newIssues": "New Issues",
+        "inProgress": "In Progress",
+        "resolved": "Resolved",
+        "thisMonth": "This Month",
+        "topCategories": "Top Categories",
+        "descriptions": {
+          "allTime": "All time issues",
+          "awaitingReview": "Awaiting review",
+          "beingProcessed": "Currently being processed",
+          "completed": "completed",
+          "recentActivity": "Created this month",
+          "noCategories": "No categories yet"
+        }
+      },
+      "list": {
+        "title": "All Issues",
+        "description": "Complete list of customer service issues and bug reports",
+        "noIssues": "No issues found"
+      }
     }
   }
 }

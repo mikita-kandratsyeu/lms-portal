@@ -12,6 +12,7 @@ type UsersPageProps = {
 
 const UsersPage = async (props: UsersPageProps) => {
   const searchParams = await props.searchParams;
+
   const { pageCount, users } = await getUsers(searchParams);
   const stats = await getUsersStats();
   const t = await getTranslations('owner.users');
