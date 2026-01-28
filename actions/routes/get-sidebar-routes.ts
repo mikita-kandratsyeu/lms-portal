@@ -78,6 +78,12 @@ export const getSideBarRoutes = async (referer: string): Promise<Record<string, 
       isProtected: true,
       label: 'notifications',
     },
+    {
+      href: '/settings/promotions',
+      icon: 'ticket-percent',
+      isProtected: true,
+      label: 'promotions',
+    },
   ] as RouteItem[];
 
   const businessOwnerRoutes = [
