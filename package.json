@@ -16,7 +16,12 @@
     "postinstall": "prisma generate",
     "prepare": "husky || true",
     "type:check": "tsc",
-    "knip": "knip"
+    "knip": "knip",
+    "migrate:files": "tsx prisma/migrate-files-to-s3.ts",
+    "migrate:files:dry-run": "tsx prisma/migrate-files-to-s3-dry-run.ts",
+    "migrate:files:check": "tsx prisma/check-s3-config.ts",
+    "db:backup": "bash scripts/backup/backup.sh",
+    "db:restore": "bash scripts/backup/restore.sh"
   },
   "lint-staged": {
     "*.{ts,js}": [
