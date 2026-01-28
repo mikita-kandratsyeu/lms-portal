@@ -19,8 +19,6 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**.storage.yandexcloud.net' },
-      { protocol: 'https', hostname: '**.ufs.sh' },
-      { protocol: 'https', hostname: '**.utfs.io' },
       { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
       { protocol: 'https', hostname: 'avatars.yandex.net' },
       { protocol: 'https', hostname: 'filin.mail.ru' },
@@ -28,7 +26,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'media.licdn.com' },
       { protocol: 'https', hostname: 'storage.yandexcloud.net' },
       { protocol: 'https', hostname: 'sun23-2.userapi.com' },
-      { protocol: 'https', hostname: 'utfs.io' },
     ],
   },
   webpack: (config) => {
