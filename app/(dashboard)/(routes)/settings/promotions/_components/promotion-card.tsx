@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-
 import { CheckIcon, CopyIcon, PercentIcon, UserIcon, UsersIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 import { Promotion } from './types';
 
@@ -38,9 +38,7 @@ export const PromotionCard = ({ promo, isExpired = false }: PromotionCardProps) 
   };
 
   return (
-    <Card
-      className={`flex flex-col transition-all hover:shadow-lg ${isExpired ? 'opacity-60' : ''}`}
-    >
+    <Card className={cn('flex flex-col shadow-none', isExpired ? 'opacity-60' : '')}>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2 mb-2">
           <Badge

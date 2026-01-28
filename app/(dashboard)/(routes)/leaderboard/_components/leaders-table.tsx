@@ -20,7 +20,6 @@ type LeadersTableProps = {
   leaders: Leader[];
   userId?: string;
   currentUserLeader: Leader | null;
-  currentUserRank: number | null;
   totalUsersCount: number;
 };
 
@@ -30,7 +29,6 @@ export const LeadersTable = ({
   leaders,
   userId,
   currentUserLeader,
-  currentUserRank,
   totalUsersCount,
 }: LeadersTableProps) => {
   const t = useTranslations('leaderboard');
