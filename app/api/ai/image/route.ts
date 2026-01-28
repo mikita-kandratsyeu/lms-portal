@@ -25,10 +25,7 @@ export const POST = async (req: NextRequest) => {
     const requestsLimit = await getRequestsLimit(user);
 
     if (requestsLimit.status === REQUEST_STATUS.FORBIDDEN) {
-      return NextResponse.json(
-        { revisedPrompt: requestsLimit.message },
-        { status: StatusCodes.FORBIDDEN },
-      );
+      return new NextResponse(requestsLimit.message, { status: StatusCodes.FORBIDDEN });
     }
 
     const response = await generateImage({
