@@ -18,14 +18,15 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
+      { protocol: 'https', hostname: '**.storage.yandexcloud.net' },
       { protocol: 'https', hostname: '**.ufs.sh' },
-      { protocol: 'https', hostname: 'utfs.io' },
       { protocol: 'https', hostname: '**.utfs.io' },
       { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
       { protocol: 'https', hostname: 'avatars.yandex.net' },
       { protocol: 'https', hostname: 'filin.mail.ru' },
       { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
       { protocol: 'https', hostname: 'media.licdn.com' },
+      { protocol: 'https', hostname: 'storage.yandexcloud.net' },
       { protocol: 'https', hostname: 'sun23-2.userapi.com' },
     ],
   },
@@ -42,7 +43,10 @@ const nextConfig = {
     };
   },
   rewrites: async () => {
-    return [{ source: '/ai-agents', destination: '/ai-agents/general' }];
+    return [
+      { source: '/ai-agents', destination: '/ai-agents/general' },
+      { source: '/settings', destination: '/settings/general' },
+    ];
   },
 };
 
