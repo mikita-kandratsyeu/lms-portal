@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Suspense } from 'react';
 
@@ -15,9 +16,15 @@ export const metadata: Metadata = {
 };
 
 const LeaderBoard = async () => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return redirect('/');
+  }
+
   const tSidebar = await getTranslations('sidebar');
   const tLeaderboard = await getTranslations('leaderboard');
-  const user = await getCurrentUser();
+
   const { leaders, currentUserLeader, currentUserRank, totalUsersCount } = await getLeaders(
     user?.userId,
   );

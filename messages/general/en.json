@@ -424,6 +424,29 @@
     "user": "User",
     "you": "You"
   },
+  "promotions": {
+    "title": "Promotions",
+    "description": "View and copy available promotion codes",
+    "notFound": "No promotions available",
+    "badges": {
+      "personal": "Personal",
+      "general": "General",
+      "expired": "Expired"
+    },
+    "restrictions": "Restrictions:",
+    "redeemed": "Redeemed:",
+    "buttons": {
+      "notAvailable": "Not Available",
+      "copyCode": "Copy Code",
+      "copied": "Copied!"
+    },
+    "tabs": {
+      "all": "All",
+      "general": "General",
+      "personal": "Personal"
+    },
+    "expiredSection": "Expired or Unavailable"
+  },
   "notifications": {
     "all": "All",
     "markAsRead": "Mark as read",

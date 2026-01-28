@@ -423,6 +423,29 @@
     "user": "Пользователь",
     "you": "Вы"
   },
+  "promotions": {
+    "title": "Промокоды",
+    "description": "Просматривайте и копируйте доступные промокоды",
+    "notFound": "Нет доступных промокодов",
+    "badges": {
+      "personal": "Персональный",
+      "general": "Общий",
+      "expired": "Истёк"
+    },
+    "restrictions": "Ограничения:",
+    "redeemed": "Использовано:",
+    "buttons": {
+      "notAvailable": "Недоступно",
+      "copyCode": "Копировать код",
+      "copied": "Скопировано!"
+    },
+    "tabs": {
+      "all": "Все",
+      "general": "Общие",
+      "personal": "Персональные"
+    },
+    "expiredSection": "Истёкшие или недоступные"
+  },
   "notifications": {
     "all": "Все",
     "markAsRead": "Отметить как прочитанное",

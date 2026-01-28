@@ -1,7 +1,9 @@
 'use client';
 
-import { CheckIcon, CopyIcon, PercentIcon, UserIcon, UsersIcon } from 'lucide-react';
 import { useState } from 'react';
+
+import { CheckIcon, CopyIcon, PercentIcon, UserIcon, UsersIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -22,6 +24,7 @@ type PromotionCardProps = {
 };
 
 export const PromotionCard = ({ promo, isExpired = false }: PromotionCardProps) => {
+  const t = useTranslations('promotions');
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -47,16 +50,16 @@ export const PromotionCard = ({ promo, isExpired = false }: PromotionCardProps) 
             {promo.isPersonal ? (
               <>
                 <UserIcon className="h-3 w-3" />
-                Personal
+                {t('badges.personal')}
               </>
             ) : (
               <>
                 <UsersIcon className="h-3 w-3" />
-                General
+                {t('badges.general')}
               </>
             )}
           </Badge>
-          {isExpired && <Badge variant="destructive">Expired</Badge>}
+          {isExpired && <Badge variant="destructive">{t('badges.expired')}</Badge>}
         </div>
         {promo.name && <h3 className="text-lg font-semibold mb-2">{promo.name}</h3>}
         <CardTitle className="text-xl font-bold tracking-wider font-mono flex items-center gap-2">
@@ -74,13 +77,13 @@ export const PromotionCard = ({ promo, isExpired = false }: PromotionCardProps) 
       <CardContent className="flex-grow pb-3">
         {promo.restrictions && (
           <div className="space-y-1">
-            <p className="text-xs font-medium text-muted-foreground">Restrictions:</p>
+            <p className="text-xs font-medium text-muted-foreground">{t('restrictions')}</p>
             <p className="text-xs text-muted-foreground">{promo.restrictions}</p>
           </div>
         )}
         <div className="mt-3 pt-3 border-t">
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>Redeemed:</span>
+            <span>{t('redeemed')}</span>
             <span className="font-medium">
               {promo.timesRedeemed} / {promo.maxRedemptions}
             </span>
@@ -98,19 +101,19 @@ export const PromotionCard = ({ promo, isExpired = false }: PromotionCardProps) 
       <CardFooter>
         {isExpired ? (
           <Button className="w-full" variant="outline" disabled>
-            Not Available
+            {t('buttons.notAvailable')}
           </Button>
         ) : (
           <Button className="w-full" onClick={handleCopy} disabled={copied}>
             {copied ? (
               <>
                 <CheckIcon className="h-4 w-4 mr-2" />
-                Copied!
+                {t('buttons.copied')}
               </>
             ) : (
               <>
                 <CopyIcon className="h-4 w-4 mr-2" />
-                Copy Code
+                {t('buttons.copyCode')}
               </>
             )}
           </Button>

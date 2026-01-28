@@ -424,6 +424,29 @@
     "user": "Карыстальнік",
     "you": "Вы"
   },
+  "promotions": {
+    "title": "Прамакоды",
+    "description": "Праглядайце і капіруйце даступныя прамакоды",
+    "notFound": "Няма даступных прамакодаў",
+    "badges": {
+      "personal": "Персанальны",
+      "general": "Агульны",
+      "expired": "Скончыўся"
+    },
+    "restrictions": "Абмежаванні:",
+    "redeemed": "Выкарыстана:",
+    "buttons": {
+      "notAvailable": "Недаступна",
+      "copyCode": "Капіраваць код",
+      "copied": "Скапіравана!"
+    },
+    "tabs": {
+      "all": "Усе",
+      "general": "Агульныя",
+      "personal": "Персанальныя"
+    },
+    "expiredSection": "Скончаныя або недаступныя"
+  },
   "notifications": {
     "all": "Усе",
     "markAsRead": "Азначыць як прачытанае",
