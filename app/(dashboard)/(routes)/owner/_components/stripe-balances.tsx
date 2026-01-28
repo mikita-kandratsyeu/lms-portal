@@ -2,23 +2,15 @@
 
 import { Download, Wallet } from 'lucide-react';
 
-import { getStripeDetails } from '@/actions/stripe/get-stripe-details';
 import { ReportModal } from '@/components/modals/report-modal';
 import { Button, Card, CardContent } from '@/components/ui';
 import { Report } from '@/constants/payments';
 
-type StripeDetails = Awaited<ReturnType<typeof getStripeDetails>>;
-
-type StripeBalancesProps = {
-  balances: StripeDetails['balances'];
-  owner: StripeDetails['owner'];
-};
-
-export const StripeBalances = ({ owner }: StripeBalancesProps) => {
+export const StripeBalances = () => {
   return (
     <div className="flex flex-col gap-4 mb-8">
       <div className="flex flex-col gap-1">
-        <p className="font-medium text-xl">{owner?.dashboard?.display_name ?? 'Stripe Account'}</p>
+        <p className="font-medium text-xl">Stripe Account</p>
         <span className="text-xs text-muted-foreground">
           Connected payment service provider for secure transactions
         </span>

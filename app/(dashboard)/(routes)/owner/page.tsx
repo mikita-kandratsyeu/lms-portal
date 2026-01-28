@@ -13,13 +13,21 @@ type OwnerPageProps = {
 
 const OwnerPage = async (props: OwnerPageProps) => {
   const searchParams = await props.searchParams;
-  const { balances, pageCount, payoutRequests, owner } = await getStripeDetails(searchParams);
+
+  const { pageCount, payoutRequests, owner } = await getStripeDetails(searchParams);
   const analytics = await getStripeAnalytics();
 
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-12">
-        <h1 className="text-2xl font-medium">Business Dashboard</h1>
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-medium">
+            {owner?.dashboard?.display_name ?? 'Business Dashboard'}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Comprehensive overview of your platform's financial metrics
+          </p>
+        </div>
         <AiInsightsModal />
       </div>
       <div className="flex flex-col gap-4 mb-8">
@@ -32,7 +40,7 @@ const OwnerPage = async (props: OwnerPageProps) => {
         <AnalyticsOverview analytics={analytics} />
       </div>
       <RevenueBreakdown analytics={analytics} />
-      <StripeBalances balances={balances} owner={owner} />
+      <StripeBalances />
       <PayoutRequests pageCount={pageCount} payoutRequests={payoutRequests} />
     </div>
   );
