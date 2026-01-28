@@ -138,7 +138,10 @@ export const ChapterVideoForm = ({ initialData, chapterId, courseId }: ChapterVi
           <div className="relative">
             {isImage && (
               <FileUpload
-                endpoint="courseImage"
+                accept="image/*"
+                folder="course-images"
+                maxFiles={1}
+                maxFileSize={8}
                 onChange={(files) => {
                   if (files?.length) {
                     handleSubmit({ imageUrl: files[0]?.url });
@@ -148,7 +151,10 @@ export const ChapterVideoForm = ({ initialData, chapterId, courseId }: ChapterVi
             )}
             {!isImage && (
               <FileUpload
-                endpoint="chapterVideo"
+                accept="video/*"
+                folder="course-videos"
+                maxFiles={1}
+                maxFileSize={2048}
                 onBegin={() => setIsUploading(true)}
                 onChange={(files) => {
                   if (files?.length) {

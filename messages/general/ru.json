@@ -570,8 +570,17 @@
     }
   },
   "file-upload": {
+    "anyFileType": "Любой тип файла",
     "dragAndDrop": "Выберите файлы или перетащите их",
+    "dropFiles": "Отпустите файлы здесь",
+    "fileTooLarge": "Файл слишком большой",
+    "invalidFileType": "Неверный тип файла",
+    "remove": "Удалить",
+    "selectedFiles": "Выбранные файлы",
+    "tooManyFiles": "Выбрано слишком много файлов",
     "upload": "Загрузить",
+    "uploadError": "Ошибка загрузки",
+    "uploadSuccess": "Файлы успешно загружены",
     "uploading": "Загрузка..."
   },
   "docs": {

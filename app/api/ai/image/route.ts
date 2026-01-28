@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { generateImage } from '@/actions/ai/common/generate-image';
 import { getRequestsLimit } from '@/actions/ai/common/get-requests-imit';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { uploadFiles } from '@/actions/uploadthing/upload-files';
+import { uploadFiles } from '@/actions/s3/upload-files';
 import { REQUEST_STATUS } from '@/constants/ai/general';
 
 export const maxDuration = 60;
@@ -54,12 +54,13 @@ export const POST = async (req: NextRequest) => {
         name: `${uuidv4()}.png`,
         base64: response.image.data[0].b64_json ?? '',
         contentType: 'image/png',
+        folder: 'common',
       },
     ]);
 
     return NextResponse.json({
       revisedPrompt: response.image.data[0].revised_prompt,
-      url: files[0].data?.ufsUrl,
+      url: files[0].data?.url,
     });
   } catch (error) {
     console.error('[OPEN_AI_IMAGE]', error);

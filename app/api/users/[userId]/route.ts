@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { createCsmIssue } from '@/actions/csm/create-csm-issue';
-import { deleteFiles } from '@/actions/uploadthing/delete-files';
+import { deleteFiles } from '@/actions/s3/delete-files';
 import db from '@/lib/db';
 import { createWebSocketNotification } from '@/lib/notifications';
 import { stripe } from '@/server/stripe';
@@ -51,10 +51,10 @@ export const PATCH = async (req: NextRequest, props: RequestProps) => {
     }
 
     const { notification, settings, pictureUrl, ...values } = await req.json();
-    const fileName = pictureUrl === null ? user?.image?.split('/')?.pop() ?? '' : null;
+    const oldImageUrl = pictureUrl === null && user?.image ? user.image : null;
 
-    if (fileName) {
-      await deleteFiles([fileName]);
+    if (oldImageUrl) {
+      await deleteFiles([oldImageUrl]);
     }
 
     const updatedUser = await db.user.update({

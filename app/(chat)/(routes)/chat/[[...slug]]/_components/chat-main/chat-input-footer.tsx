@@ -95,7 +95,14 @@ export const ChatInputFooter = ({
           </button>
         )}
         {hasFileUploading && (
-          <FileUploadModal endpoint="chatAttachments" onChange={() => {}} onBegin={() => {}}>
+          <FileUploadModal
+            accept="application/pdf,image/*"
+            folder="chat-files"
+            maxFiles={1}
+            maxFileSize={8}
+            onChange={() => {}}
+            onBegin={() => {}}
+          >
             <button type="button" className="mr-3" disabled={isSubmitting}>
               <Paperclip
                 className={'w-4 h-4 text-muted-foreground transition-colors duration-300'}

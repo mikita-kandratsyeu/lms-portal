@@ -14,8 +14,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useCurrentUser } from '@/hooks/use-current-user';
-import { fetcher } from '@/lib/fetcher';
-import { blobUrlToBase64 } from '@/lib/utils';
 
 import { ImageCrop } from '../image/image-crop';
 import { Button } from '../ui';
@@ -46,18 +44,30 @@ export const UpdatePhotoModal = ({ callback, children, type }: UpdatePhotoModalP
     try {
       let pictureUrl = null;
 
+      const folder = type === 'profile' ? 'profile-images' : 'ai-agent-images';
+
       if (blob) {
-        const base64 = await blobUrlToBase64(blob);
-        const response = await fetcher.post('/api/uploadthing/upload', {
-          body: {
-            base64,
-            contentType: 'image/png',
-            name: `${user?.userId}_${Date.now()}_${type === 'profile' ? 'profile-picture' : 'ai-agent-picture'}.png`,
-          },
-          responseType: 'json',
+        const response = await fetch(blob);
+        const blobData = await response.blob();
+
+        const formData = new FormData();
+        const fileName = `${user?.userId}_${Date.now()}_${folder}.png`;
+
+        formData.append('file', blobData, fileName);
+        formData.append('name', fileName);
+        formData.append('folder', folder);
+
+        const uploadResponse = await fetch('/api/s3/upload', {
+          method: 'POST',
+          body: formData,
         });
 
-        pictureUrl = response?.pictureUrl;
+        if (!uploadResponse.ok) {
+          throw new Error('Upload failed');
+        }
+
+        const data = await uploadResponse.json();
+        pictureUrl = data?.pictureUrl;
       }
 
       callback?.(pictureUrl);

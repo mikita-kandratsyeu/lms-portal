@@ -200,7 +200,10 @@ export const CreateForm = ({ categories, callback }: CreateFormProps) => {
               )}
               {isEditing && (
                 <FileUpload
-                  endpoint="csmAttachments"
+                  accept="application/pdf,image/*,video/*"
+                  folder="csm-files"
+                  maxFiles={4}
+                  maxFileSize={512}
                   onBegin={() => setIsUploading(true)}
                   onChange={(files) => {
                     if (files?.length) {

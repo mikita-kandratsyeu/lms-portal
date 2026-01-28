@@ -1,5 +1,5 @@
 type Options = {
-  body?: Record<string, unknown>;
+  body?: Record<string, unknown> | FormData;
   cache?: RequestCache;
   headers?: HeadersInit;
   responseType?: 'json' | 'stream' | 'text' | 'arrayBuffer';
@@ -56,9 +56,12 @@ class Fetcher {
   };
 
   post: FetchMethod = async (url, options) => {
+    const body = options?.body;
+    const isFormData = body instanceof FormData;
+
     const res = await fetch(url, {
       method: 'POST',
-      body: options?.body ? JSON.stringify(options.body) : undefined,
+      body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
       cache: options?.cache ?? 'force-cache',
       headers: options?.headers,
       signal: options?.signal,
@@ -68,9 +71,12 @@ class Fetcher {
   };
 
   put: FetchMethod = async (url, options) => {
+    const body = options?.body;
+    const isFormData = body instanceof FormData;
+
     const res = await fetch(url, {
       method: 'PUT',
-      body: options?.body ? JSON.stringify(options.body) : undefined,
+      body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
       headers: options?.headers,
       signal: options?.signal,
     });
@@ -79,9 +85,12 @@ class Fetcher {
   };
 
   patch: FetchMethod = async (url, options) => {
+    const body = options?.body;
+    const isFormData = body instanceof FormData;
+
     const res = await fetch(url, {
       method: 'PATCH',
-      body: options?.body ? JSON.stringify(options.body) : undefined,
+      body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
       headers: options?.headers,
       signal: options?.signal,
     });

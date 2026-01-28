@@ -103,8 +103,11 @@ export const getUserPromotions = async () => {
       return { promotions: [] };
     }
 
+    const now = new Date();
     const availablePromos = dbPromos.filter((promo) => {
-      if (!promo.isActive) return true;
+      if (!promo.isActive) return false;
+
+      if (promo.expiresAt && promo.expiresAt < now) return false;
 
       if (!promo.stripeCustomerId) return true;
 
