@@ -7,14 +7,13 @@ import { Promotion } from './types';
 
 type PromotionsTabsProps = {
   promotions: Promotion[];
-  onApply: (id: string) => void;
 };
 
-export const PromotionsTabs = ({ promotions, onApply }: PromotionsTabsProps) => {
+export const PromotionsTabs = ({ promotions }: PromotionsTabsProps) => {
   const renderPromotionCards = (promos: Promotion[]) => (
     <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {promos.map((promo) => (
-        <PromotionCard key={promo.id} promo={promo} onApply={onApply} />
+        <PromotionCard key={promo.id} promo={promo} />
       ))}
     </div>
   );

@@ -5,10 +5,9 @@ import { Promotion } from './types';
 
 type ExpiredPromotionsProps = {
   promotions: Promotion[];
-  onApply: (id: string) => void;
 };
 
-export const ExpiredPromotions = ({ promotions, onApply }: ExpiredPromotionsProps) => {
+export const ExpiredPromotions = ({ promotions }: ExpiredPromotionsProps) => {
   if (promotions.length === 0) return null;
 
   return (
@@ -19,7 +18,7 @@ export const ExpiredPromotions = ({ promotions, onApply }: ExpiredPromotionsProp
       </h2>
       <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {promotions.map((promo) => (
-          <PromotionCard key={promo.id} promo={promo} onApply={onApply} isExpired />
+          <PromotionCard key={promo.id} promo={promo} isExpired />
         ))}
       </div>
     </div>

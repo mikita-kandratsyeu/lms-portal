@@ -53,7 +53,6 @@ const formatPromotionCode = (pc: StripePromotionCode, isPersonal: boolean) => {
     isPersonal,
     maxRedemptions: pc.max_redemptions ?? 0,
     timesRedeemed: pc.times_redeemed,
-    applied: false,
   };
 };
 

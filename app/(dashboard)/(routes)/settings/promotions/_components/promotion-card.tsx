@@ -1,4 +1,8 @@
-import { CheckIcon, PercentIcon, UserIcon, UsersIcon } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+
+import { CheckIcon, CopyIcon, PercentIcon, UserIcon, UsersIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,21 +19,24 @@ import { Promotion } from './types';
 
 type PromotionCardProps = {
   promo: Promotion;
-  onApply: (id: string) => void;
   isExpired?: boolean;
 };
 
-export const PromotionCard = ({ promo, onApply, isExpired = false }: PromotionCardProps) => {
+export const PromotionCard = ({ promo, isExpired = false }: PromotionCardProps) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(promo.code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
+
   return (
-    <Card
-      className={`flex flex-col transition-all hover:shadow-lg ${
-        isExpired
-          ? 'opacity-60'
-          : promo.applied
-            ? 'border-green-500 bg-green-50/50 dark:bg-green-950/20'
-            : ''
-      }`}
-    >
+    <Card className={`flex flex-col transition-all hover:shadow-lg ${isExpired ? 'opacity-60' : ''}`}>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2 mb-2">
           <Badge
@@ -48,19 +55,7 @@ export const PromotionCard = ({ promo, onApply, isExpired = false }: PromotionCa
               </>
             )}
           </Badge>
-          {isExpired ? (
-            <Badge variant="destructive">Expired</Badge>
-          ) : (
-            promo.applied && (
-              <Badge
-                variant="outline"
-                className="bg-green-100 text-green-800 border-green-300 dark:bg-green-900 dark:text-green-100"
-              >
-                <CheckIcon className="h-3 w-3 mr-1" />
-                Applied
-              </Badge>
-            )
-          )}
+          {isExpired && <Badge variant="destructive">Expired</Badge>}
         </div>
         <CardTitle className="text-xl font-bold tracking-wider font-mono flex items-center gap-2">
           <PercentIcon
@@ -104,19 +99,17 @@ export const PromotionCard = ({ promo, onApply, isExpired = false }: PromotionCa
             Not Available
           </Button>
         ) : (
-          <Button
-            className="w-full"
-            variant={promo.applied ? 'outline' : 'default'}
-            disabled={promo.applied}
-            onClick={() => onApply(promo.id)}
-          >
-            {promo.applied ? (
+          <Button className="w-full" onClick={handleCopy} disabled={copied}>
+            {copied ? (
               <>
                 <CheckIcon className="h-4 w-4 mr-2" />
-                Applied
+                Copied!
               </>
             ) : (
-              'Apply Promotion'
+              <>
+                <CopyIcon className="h-4 w-4 mr-2" />
+                Copy Code
+              </>
             )}
           </Button>
         )}
