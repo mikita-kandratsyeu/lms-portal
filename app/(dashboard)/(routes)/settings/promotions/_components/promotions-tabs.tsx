@@ -28,13 +28,9 @@ export const PromotionsTabs = ({ promotions }: PromotionsTabsProps) => {
       </h2>
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="mb-6">
-          <TabsTrigger value="all">All ({promotions.length})</TabsTrigger>
-          <TabsTrigger value="general">
-            General ({promotions.filter((p) => !p.isPersonal).length})
-          </TabsTrigger>
-          <TabsTrigger value="personal">
-            Personal ({promotions.filter((p) => p.isPersonal).length})
-          </TabsTrigger>
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="personal">Personal</TabsTrigger>
         </TabsList>
         <TabsContent value="all">{renderPromotionCards(promotions)}</TabsContent>
         <TabsContent value="general">
