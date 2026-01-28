@@ -416,9 +416,11 @@
     }
   },
   "leaderboard": {
+    "description": "View top performers on the platform based on completed chapters",
     "notFound": "There are no leaders here yet.",
     "points": "Points",
     "rank": "Rank",
+    "showingCount": "Showing {displayed} of {total} users",
     "user": "User",
     "you": "You"
   },

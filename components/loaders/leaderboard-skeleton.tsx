@@ -3,46 +3,38 @@
 import { Skeleton } from '../ui/skeleton';
 
 export const LeaderBoardSkeleton = () => (
-  <div className="md:w-4/5 w-full px-6 pt-10 pb-6 flex flex-col mx-auto gap-y-4">
-    <Skeleton className="h-[40px] mb-4" />
-    <div className="flex justify-between">
-      <div className="flex space-x-6 w-full items-center justify-between">
-        <div className="flex gap-4">
-          <Skeleton className="h-[55px] w-[60px] md:mr-6" />
-          <Skeleton className="h-[55px] w-[55px] rounded-full" />
-          <div className="flex flex-col justify-center gap-2">
-            <Skeleton className="h-[15px] w-[150px]" />
-            <Skeleton className="h-[15px] w-[50px]" />
-          </div>
-        </div>
-        <Skeleton className="h-[20px] w-[40px] hidden md:block" />
-      </div>
+  <div className="p-6 flex flex-col mb-6">
+    <div className="mb-8">
+      <Skeleton className="h-8 w-[200px] mb-2" />
+      <Skeleton className="h-4 w-full max-w-[400px]" />
     </div>
-    <div className="flex justify-between">
-      <div className="flex space-x-6 w-full items-center justify-between">
-        <div className="flex gap-4">
-          <Skeleton className="h-[55px] w-[60px] md:mr-6" />
-          <Skeleton className="h-[55px] w-[55px] rounded-full" />
-          <div className="flex flex-col justify-center gap-2">
-            <Skeleton className="h-[15px] w-[150px]" />
-            <Skeleton className="h-[15px] w-[50px]" />
-          </div>
+
+    <div className="w-full rounded-xl border bg-card shadow-sm overflow-hidden">
+      <div className="bg-muted/40 p-4 border-b">
+        <div className="flex justify-between">
+          <Skeleton className="h-4 w-[60px]" />
+          <Skeleton className="h-4 w-[80px]" />
+          <Skeleton className="h-4 w-[60px]" />
         </div>
-        <Skeleton className="h-[20px] w-[40px] hidden md:block" />
       </div>
+
+      {[...Array(5)].map((_, index) => (
+        <div key={index} className="flex items-center justify-between p-4 border-b last:border-b-0">
+          <div className="flex items-center gap-3 flex-1">
+            <Skeleton className="h-5 w-[40px]" />
+            <Skeleton className="h-8 w-8 sm:h-9 sm:w-9 rounded-full" />
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-4 w-[120px] sm:w-[180px]" />
+              <Skeleton className="h-3 w-[60px]" />
+            </div>
+          </div>
+          <Skeleton className="h-6 w-[50px]" />
+        </div>
+      ))}
     </div>
-    <div className="flex justify-between">
-      <div className="flex space-x-6 w-full items-center justify-between">
-        <div className="flex gap-4">
-          <Skeleton className="h-[55px] w-[60px] md:mr-6" />
-          <Skeleton className="h-[55px] w-[55px] rounded-full" />
-          <div className="flex flex-col justify-center gap-2">
-            <Skeleton className="h-[15px] w-[150px]" />
-            <Skeleton className="h-[15px] w-[50px]" />
-          </div>
-        </div>
-        <Skeleton className="h-[20px] w-[40px] hidden md:block" />
-      </div>
+
+    <div className="mt-4 text-center">
+      <Skeleton className="h-4 w-[150px] mx-auto" />
     </div>
   </div>
 );

@@ -15,17 +15,19 @@ export const metadata: Metadata = {
 };
 
 const LeaderBoard = async () => {
-  const t = await getTranslations('sidebar');
+  const tSidebar = await getTranslations('sidebar');
+  const tLeaderboard = await getTranslations('leaderboard');
   const user = await getCurrentUser();
-  const leaders = await getLeaders();
+  const { leaders, totalUsersCount } = await getLeaders();
 
   return (
     <Suspense fallback={<LeaderBoardSkeleton />}>
-      <div className="px-4 py-4 sm:px-6 sm:py-6">
-        <div className="mx-auto w-full max-w-6xl space-y-6">
-          <h1 className="text-2xl font-medium">{t('leaderboard')}</h1>
-          <LeadersTable leaders={leaders} userId={user?.userId} />
+      <div className="p-6 flex flex-col mb-6">
+        <div className="mb-8">
+          <h1 className="text-2xl font-medium">{tSidebar('leaderboard')}</h1>
+          <p className="text-muted-foreground mt-2">{tLeaderboard('description')}</p>
         </div>
+        <LeadersTable leaders={leaders} userId={user?.userId} totalUsersCount={totalUsersCount} />
       </div>
     </Suspense>
   );

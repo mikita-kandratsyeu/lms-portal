@@ -20,6 +20,8 @@ export type Leader = {
 };
 
 export const getLeaders = async () => {
+  const totalUsersCount = await db.user.count();
+
   const userProgress = await db.userProgress.findMany();
   const publishedChapters = await db.chapter.findMany({
     where: { isPublished: true },
@@ -72,7 +74,7 @@ export const getLeaders = async () => {
     Promise.resolve([] as any[]),
   );
 
-  return Object.entries(groupedByUser)
+  const leaders = Object.entries(groupedByUser)
     .reduce<Leader[]>((acc, [userId, items]) => {
       const userInfo = users.find((user) => user.id === userId);
 
@@ -98,4 +100,9 @@ export const getLeaders = async () => {
       return acc;
     }, [])
     .sort((a, b) => b.xp - a.xp);
+
+  return {
+    leaders,
+    totalUsersCount,
+  };
 };
