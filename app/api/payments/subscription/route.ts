@@ -99,7 +99,7 @@ export const POST = async (req: NextRequest) => {
     const trialPeriodDays = existingSubscriptions.data.length === 0 ? 14 : null;
 
     const session = await stripe.checkout.sessions.create({
-      allow_promotion_codes: true,
+      allow_promotion_codes: false,
       customer: stripeCustomer.stripeCustomerId,
       expires_at: getUnixTime(addSeconds(Date.now(), 3600)),
       mode: 'subscription',
