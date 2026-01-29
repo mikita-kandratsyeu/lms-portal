@@ -34,7 +34,7 @@ export const LeadersTable = ({
   const t = useTranslations('leaderboard');
 
   const displayedLeaders = leaders.slice(0, MAX_DISPLAYED_USERS);
-  const displayedCount = currentUserLeader ? displayedLeaders.length + 1 : displayedLeaders.length;
+  const displayedCount = displayedLeaders.length;
 
   return (
     <div className="space-y-4">
