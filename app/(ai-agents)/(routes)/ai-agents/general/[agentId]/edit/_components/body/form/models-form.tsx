@@ -22,7 +22,7 @@ type ModelsProps = {
   models: GetAgentDataResponse['models'];
 };
 
-const formSchema = z.object({
+const _formSchema = z.object({
   modelIds: z.array(z.string()),
 });
 
@@ -37,7 +37,7 @@ export const ModelsForm = ({ agentId, initialData, isPreviewPage, models }: Mode
 
   const handleToggleEdit = () => setIsEditing((prev) => !prev);
 
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof _formSchema>) => {
     setIsFetching(true);
 
     try {

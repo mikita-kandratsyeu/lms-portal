@@ -17,7 +17,7 @@ type AttachmentProps = {
   initialData: Course & { attachments: Attachment[] };
 };
 
-const formSchema = z.object({
+const _formSchema = z.object({
   files: z.array(z.object({ url: z.string(), name: z.string() })),
 });
 
@@ -30,7 +30,7 @@ export const AttachmentForm = ({ initialData, courseId }: AttachmentProps) => {
 
   const handleToggleEdit = () => setIsEditing((prev) => !prev);
 
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof _formSchema>) => {
     try {
       await fetcher.post(`/api/courses/${courseId}/attachments`, { body: values });
 

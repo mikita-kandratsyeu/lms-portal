@@ -17,7 +17,7 @@ type ImageFormProps = {
   initialData: Course;
 };
 
-const formSchema = z.object({
+const _formSchema = z.object({
   imageUrl: z.string().min(1),
 });
 
@@ -29,7 +29,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
 
   const handleToggleEdit = () => setIsEditing((prev) => !prev);
 
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof _formSchema>) => {
     try {
       await fetcher.patch(`/api/courses/${courseId}`, { body: values });
 

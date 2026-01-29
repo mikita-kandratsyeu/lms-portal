@@ -43,7 +43,7 @@ export const OtpVerify = ({ callbackUrl, email, provider, secret, userId }: OtpV
         } else {
           setErrorMessage(t('errors.invalidOtp'));
         }
-      } catch (error) {
+      } catch {
         setErrorMessage(t('errors.somethingWentWrong'));
       } finally {
         setIsFetching(false);

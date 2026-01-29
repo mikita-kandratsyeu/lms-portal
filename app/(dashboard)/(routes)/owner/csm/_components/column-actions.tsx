@@ -68,7 +68,7 @@ export const ColumnActions = ({ csmId, csmIssue }: ColumnActionsProps) => {
         router.refresh();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast({ isError: true, description: (error as Error)?.message ?? '' });
     } finally {
       setIsFetching(false);

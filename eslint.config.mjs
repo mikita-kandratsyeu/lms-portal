@@ -4,6 +4,8 @@ import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
@@ -48,11 +50,14 @@ const eslintConfig = [
     },
     plugins: {
       '@typescript-eslint': tseslint,
+      'react': react,
+      'react-hooks': reactHooks,
       'simple-import-sort': simpleImportSort,
       prettier: prettier,
     },
     rules: {
       ...prettierConfig.rules,
+      // TypeScript rules
       '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -60,6 +65,7 @@ const eslintConfig = [
       '@typescript-eslint/no-unused-vars': ['error', { 
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
       }],
       '@typescript-eslint/no-unused-expressions': ['error', {
         allowShortCircuit: true,
@@ -67,12 +73,26 @@ const eslintConfig = [
         allowTaggedTemplates: true,
       }],
       '@typescript-eslint/no-shadow': 'off',
+      
+      // React rules
+      'react/display-name': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      
+      // General rules
       'no-var': 'error',
       'no-debugger': 'off',
       'no-shadow': 'off',
       'no-unused-vars': 'off',
       'no-unused-expressions': 'off',
+      'no-redeclare': 'off',
+      'no-undef': 'off', // TypeScript handles this
+      'no-useless-escape': 'warn',
+      'no-constant-binary-expression': 'warn',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
+      
+      // Prettier & imports
       'prettier/prettier': ['error'],
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
