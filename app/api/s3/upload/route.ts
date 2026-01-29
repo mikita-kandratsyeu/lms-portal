@@ -2,7 +2,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { S3FolderType, uploadFileToS3 } from '@/server/s3';
+import { DEFAULT_S3_FOLDER, S3FolderType, uploadFileToS3 } from '@/server/s3';
 
 export const POST = async (req: NextRequest) => {
   const user = await getCurrentUser();
@@ -14,7 +14,7 @@ export const POST = async (req: NextRequest) => {
 
     const formData = await req.formData();
     const file = formData.get('file') as File | null;
-    const folder = (formData.get('folder') as S3FolderType) || 'common';
+    const folder = (formData.get('folder') as S3FolderType) || DEFAULT_S3_FOLDER;
     const name = formData.get('name') as string;
 
     let pictureUrl = null;

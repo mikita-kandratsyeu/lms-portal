@@ -11,6 +11,8 @@ export type S3FolderType =
   | 'csm-files'
   | 'profile-images';
 
+export const DEFAULT_S3_FOLDER = 'common';
+
 const s3Client = new S3Client({
   region: process.env.S3_REGION,
   endpoint: process.env.S3_ENDPOINT,
@@ -22,7 +24,7 @@ const s3Client = new S3Client({
 
 const BUCKET_NAME = process.env.S3_BUCKET_NAME as string;
 
-const getS3FilePath = (fileName: string, folder: S3FolderType = 'common'): string => {
+const getS3FilePath = (fileName: string, folder: S3FolderType = DEFAULT_S3_FOLDER): string => {
   const folderMap: Record<S3FolderType, string> = {
     'ai-agent-images': 'Ai Agent Images',
     'chat-files': 'Chat Files',
@@ -40,7 +42,7 @@ const getS3FilePath = (fileName: string, folder: S3FolderType = 'common'): strin
 export const uploadFileToS3 = async (
   file: Buffer,
   fileName: string,
-  folder: S3FolderType = 'common',
+  folder: S3FolderType = DEFAULT_S3_FOLDER,
   contentType?: string,
 ): Promise<{ url: string; key: string }> => {
   const key = getS3FilePath(fileName, folder);

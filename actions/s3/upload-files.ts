@@ -1,7 +1,7 @@
 'use server';
 
 import { base64ToBlob } from '@/lib/utils';
-import { S3FolderType, uploadFileToS3 } from '@/server/s3';
+import { DEFAULT_S3_FOLDER, S3FolderType, uploadFileToS3 } from '@/server/s3';
 
 export const uploadFiles = async (
   files: { name: string; contentType: string; base64: string; folder?: S3FolderType }[],
@@ -12,7 +12,7 @@ export const uploadFiles = async (
       const arrayBuffer = await blob.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
-      const result = await uploadFileToS3(buffer, name, folder || 'common', contentType);
+      const result = await uploadFileToS3(buffer, name, folder || DEFAULT_S3_FOLDER, contentType);
 
       return {
         data: {

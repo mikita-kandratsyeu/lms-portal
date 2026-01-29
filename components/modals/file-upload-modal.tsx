@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { S3FolderType } from '@/server/s3';
+import { DEFAULT_S3_FOLDER, S3FolderType } from '@/server/s3';
 
 import { FileUpload } from '../common/file-upload';
 
@@ -28,7 +28,7 @@ type FileUploadModalProps = {
 export const FileUploadModal = ({
   accept,
   children,
-  folder = 'common',
+  folder = DEFAULT_S3_FOLDER,
   maxFiles,
   maxFileSize,
   onBegin,

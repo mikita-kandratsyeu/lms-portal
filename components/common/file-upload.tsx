@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 import { useToast } from '@/components/ui/use-toast';
 import { fetcher } from '@/lib/fetcher';
-import { S3FolderType } from '@/server/s3';
+import { DEFAULT_S3_FOLDER, S3FolderType } from '@/server/s3';
 
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
@@ -22,7 +22,7 @@ type FileUploadProps = {
 
 export const FileUpload = ({
   accept,
-  folder = 'common',
+  folder = DEFAULT_S3_FOLDER,
   maxFiles = 4,
   maxFileSize = 16,
   onBegin,

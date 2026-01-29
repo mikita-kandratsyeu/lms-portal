@@ -51,7 +51,7 @@ export const POST = async (req: NextRequest) => {
         name: `${uuidv4()}.png`,
         base64: response.image.data[0].b64_json ?? '',
         contentType: 'image/png',
-        folder: 'common',
+        folder: 'chat-files',
       },
     ]);
 
