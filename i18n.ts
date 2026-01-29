@@ -3,6 +3,7 @@ import { getRequestConfig } from 'next-intl/server';
 
 import { DEFAULT_LANGUAGE, USER_LOCALE_COOKIE } from './constants/locale';
 import { getLocale } from './lib/locale';
+import { getGeneralTranslations } from './lib/translations/general';
 
 export default getRequestConfig(async () => {
   const headersList = await headers();
@@ -18,7 +19,7 @@ export default getRequestConfig(async () => {
 
   return {
     locale,
-    messages: (await import(`/messages/general/${locale}.json`)).default,
+    messages: getGeneralTranslations(locale),
     timeZone: 'UTC',
   };
 });

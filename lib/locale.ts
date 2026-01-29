@@ -40,19 +40,19 @@ export const getFormatLocale = (language: string) => {
   }
 };
 
-export function replaceMessagePlaceholders<T>(obj: T, params: Record<string, string>): unknown {
+export function replaceMessagePlaceholders<T>(obj: T, params: Record<string, string>): T {
   if (isString(obj)) {
-    return obj.replace(/{(\w+)}/g, (_, key) => params[key] || `{${key}}`);
+    return obj.replace(/{(\w+)}/g, (_, key) => params[key] || `{${key}}`) as T;
   }
 
   if (isArray<T>(obj)) {
-    return obj.map((item) => replaceMessagePlaceholders(item, params));
+    return obj.map((item) => replaceMessagePlaceholders(item, params)) as T;
   }
 
   if (isObject(obj) && obj !== null) {
     return Object.fromEntries(
       Object.entries(obj).map(([key, value]) => [key, replaceMessagePlaceholders(value, params)]),
-    );
+    ) as T;
   }
 
   return obj;

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 type ChatLayoutProps = Readonly<{
   children: React.ReactNode;
-  params: Promise<{ slug: string[] }>;
+  params: Promise<{ slug?: string[] }>;
 }>;
 
 const ChatLayout = async ({ children, params }: ChatLayoutProps) => {
@@ -52,7 +52,7 @@ const ChatLayout = async ({ children, params }: ChatLayoutProps) => {
 
   if (isShared) {
     const sharedConversation = await db.chatSharedConversation.findUnique({
-      where: { id: slug[1] ?? '' },
+      where: { id: slug?.[1] ?? '' },
       select: { isActive: true, isOnlyAuth: true, expireAt: true },
     });
 

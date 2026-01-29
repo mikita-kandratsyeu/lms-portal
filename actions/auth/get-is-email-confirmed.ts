@@ -3,6 +3,7 @@
 import { getLocale } from 'next-intl/server';
 
 import db from '@/lib/db';
+import { getEmailTranslations } from '@/lib/translations/email';
 
 export const getIsEmailConfirmed = async (userId: string) => {
   const locale = await getLocale();
@@ -16,9 +17,7 @@ export const getIsEmailConfirmed = async (userId: string) => {
     return { success: true };
   }
 
-  const translations = (await import(`/messages/email/${locale}.json`)).default[
-    'confirmation-email'
-  ];
+  const translations = getEmailTranslations(locale)['confirmation-email'];
 
   return {
     success: false,

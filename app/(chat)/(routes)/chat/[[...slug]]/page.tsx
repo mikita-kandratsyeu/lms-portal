@@ -5,7 +5,7 @@ import { getChatConversations } from '@/actions/chat/get-chat-conversations';
 import { Chat } from './_components/chat-main/chat';
 
 type ChatPageProps = Readonly<{
-  params: Promise<{ slug: string[] }>;
+  params: Promise<{ slug?: string[] }>;
 }>;
 
 const ChatPage = async ({ params }: ChatPageProps) => {
@@ -17,7 +17,7 @@ const ChatPage = async ({ params }: ChatPageProps) => {
   const conversations =
     isEmbed || isShared
       ? await getChatConversations({
-          sharedConversationId: isShared ? slug[1] : '',
+          sharedConversationId: isShared ? slug?.[1] ?? '' : '',
         })
       : [];
 
