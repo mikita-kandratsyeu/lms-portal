@@ -49,7 +49,7 @@ export const ChatBubble = ({
     <div className="pb-4 pt-2">
       <div className="flex gap-x-4">
         <Avatar className="border dark:border-muted-foreground">
-          <AvatarImage src={picture ?? ''} />
+          <AvatarImage src={picture ?? '/assets/copilot.svg'} />
           <AvatarFallback>{getFallbackName(name)}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
