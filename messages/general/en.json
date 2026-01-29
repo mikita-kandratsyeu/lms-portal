@@ -170,6 +170,7 @@
     "billingAndSubscription": "Billing & Subscription",
     "browse": "Browse",
     "config": "Config",
+    "configurations": "Configurations",
     "cookies-policy": "Cookie Policy",
     "courses": "Courses",
     "csm": "CSM",
@@ -1010,6 +1011,216 @@
         "title": "All Issues",
         "description": "Complete list of customer service issues and bug reports",
         "noIssues": "No issues found"
+      }
+    },
+    "configurations": {
+      "page": {
+        "title": "Platform Configurations",
+        "description": "Manage platform settings, database configurations, and feature flags"
+      },
+      "tabs": {
+        "subscriptions": "Subscriptions",
+        "fees": "Fees",
+        "categories": "Categories",
+        "csmCategories": "CSM Categories",
+        "aiModels": "AI Models",
+        "appConfig": "App Config"
+      },
+      "common": {
+        "loading": "Loading...",
+        "addNew": "Add New",
+        "actions": "Actions",
+        "cancel": "Cancel",
+        "create": "Create",
+        "update": "Update",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save Changes",
+        "saving": "Saving...",
+        "name": "Name",
+        "noData": "No data yet",
+        "confirmDelete": "Are you sure you want to delete this {item}?",
+        "createFirst": "Create your first {item}",
+        "cannotDelete": "Cannot delete {item} with {related}",
+        "cannotDeleteInUse": "Cannot delete {item} in use by {related}"
+      },
+      "subscriptions": {
+        "title": "Stripe Subscription Descriptions",
+        "description": "Manage subscription plan descriptions and pricing",
+        "period": "Period",
+        "price": "Price",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "dialog": {
+          "createTitle": "Create Subscription Description",
+          "editTitle": "Edit Subscription Description",
+          "createDescription": "Add a new subscription description",
+          "updateDescription": "Update the subscription description details",
+          "namePlaceholder": "e.g., Premium Plan",
+          "selectPeriod": "Select period",
+          "priceLabel": "Price (USD)",
+          "pricePlaceholder": "9.99",
+          "nameRequired": "Name is required",
+          "priceRequired": "Price is required",
+          "invalidPrice": "Invalid price format"
+        },
+        "messages": {
+          "loadError": "Failed to load subscription descriptions",
+          "deleteSuccess": "Subscription description deleted successfully",
+          "deleteError": "Failed to delete subscription description",
+          "createSuccess": "Subscription description created successfully",
+          "updateSuccess": "Subscription description updated successfully",
+          "saveError": "Failed to save subscription description"
+        }
+      },
+      "fees": {
+        "title": "Platform Fees",
+        "description": "Manage transaction fees and platform charges",
+        "method": "Method",
+        "type": "Type",
+        "amount": "Amount",
+        "rate": "Rate",
+        "dialog": {
+          "createTitle": "Create Fee",
+          "editTitle": "Edit Fee",
+          "createDescription": "Add a new platform fee",
+          "updateDescription": "Update the fee details",
+          "methodPlaceholder": "e.g., Stripe",
+          "typePlaceholder": "e.g., Transaction",
+          "amountPlaceholder": "0.00",
+          "ratePlaceholder": "0.0",
+          "nameRequired": "Name is required",
+          "methodRequired": "Method is required",
+          "typeRequired": "Type is required",
+          "amountRequired": "Amount is required",
+          "rateRequired": "Rate is required",
+          "invalidAmount": "Invalid amount format",
+          "invalidRate": "Invalid rate format"
+        },
+        "messages": {
+          "loadError": "Failed to load fees",
+          "deleteSuccess": "Fee deleted successfully",
+          "deleteError": "Failed to delete fee",
+          "createSuccess": "Fee created successfully",
+          "updateSuccess": "Fee updated successfully",
+          "saveError": "Failed to save fee"
+        }
+      },
+      "categories": {
+        "title": "Course Categories",
+        "description": "Manage course categories for the platform",
+        "courses": "Courses",
+        "dialog": {
+          "createTitle": "Create Category",
+          "editTitle": "Edit Category",
+          "createDescription": "Add a new course category",
+          "updateDescription": "Update the category details",
+          "namePlaceholder": "e.g., Programming",
+          "nameRequired": "Name is required"
+        },
+        "messages": {
+          "loadError": "Failed to load categories",
+          "deleteSuccess": "Category deleted successfully",
+          "deleteError": "Failed to delete category. It might be in use.",
+          "createSuccess": "Category created successfully",
+          "updateSuccess": "Category updated successfully",
+          "saveError": "Failed to save category"
+        }
+      },
+      "csmCategories": {
+        "title": "CSM Categories",
+        "description": "Manage customer support issue categories",
+        "issues": "Issues",
+        "dialog": {
+          "createTitle": "Create CSM Category",
+          "editTitle": "Edit CSM Category",
+          "createDescription": "Add a new CSM category",
+          "updateDescription": "Update the CSM category details",
+          "namePlaceholder": "e.g., Bug Report",
+          "nameRequired": "Name is required"
+        },
+        "messages": {
+          "loadError": "Failed to load CSM categories",
+          "deleteSuccess": "CSM category deleted successfully",
+          "deleteError": "Failed to delete CSM category. It might be in use.",
+          "createSuccess": "CSM category created successfully",
+          "updateSuccess": "CSM category updated successfully",
+          "saveError": "Failed to save CSM category"
+        }
+      },
+      "aiModels": {
+        "title": "AI Models",
+        "description": "Manage AI models available for agents",
+        "provider": "Provider",
+        "providerName": "Provider Name",
+        "value": "Value",
+        "features": "Features",
+        "agents": "Agents",
+        "status": "Status",
+        "default": "Default",
+        "premium": "Premium",
+        "featureNames": {
+          "image": "Image",
+          "file": "File",
+          "reasoning": "Reasoning",
+          "text": "Text",
+          "search": "Search"
+        },
+        "dialog": {
+          "createTitle": "Create AI Model",
+          "editTitle": "Edit AI Model",
+          "createDescription": "Add a new AI model configuration",
+          "updateDescription": "Update the AI model details",
+          "namePlaceholder": "e.g., GPT-4",
+          "providerPlaceholder": "e.g., openai",
+          "providerNamePlaceholder": "e.g., OpenAI",
+          "valuePlaceholder": "e.g., gpt-4-turbo",
+          "valueDescription": "The actual model identifier used in API calls",
+          "selectFeatures": "Select features",
+          "isDefault": "Set as Default",
+          "isDefaultDescription": "Make this the default model for new agents",
+          "isSubscription": "Premium Only",
+          "isSubscriptionDescription": "Require premium subscription to use this model",
+          "nameRequired": "Name is required",
+          "providerRequired": "Provider is required",
+          "providerNameRequired": "Provider name is required",
+          "valueRequired": "Value is required"
+        },
+        "messages": {
+          "loadError": "Failed to load AI models",
+          "deleteSuccess": "AI model deleted successfully",
+          "deleteError": "Failed to delete AI model. It might be in use.",
+          "createSuccess": "AI model created successfully",
+          "updateSuccess": "AI model updated successfully",
+          "saveError": "Failed to save AI model"
+        }
+      },
+      "appConfig": {
+        "title": "Application Configuration",
+        "description": "Manage feature flags and platform settings",
+        "loadError": "Failed to load configuration",
+        "authSettings": {
+          "title": "Authentication Settings",
+          "description": "Control user registration and authentication",
+          "allowNewUsers": "Allow New Users",
+          "allowNewUsersDescription": "Enable new user registrations on the platform",
+          "allowNewUserSubscriptions": "Allow New User Subscriptions",
+          "allowNewUserSubscriptionsDescription": "Allow new users to subscribe immediately"
+        },
+        "authProviders": {
+          "title": "Authentication Providers",
+          "description": "Enable or disable OAuth providers"
+        },
+        "featureFlags": {
+          "title": "Feature Flags",
+          "description": "Toggle platform features on or off",
+          "christmas": "Enable Christmas theme and decorations",
+          "testMode": "Enable test mode for development"
+        },
+        "messages": {
+          "saveSuccess": "Configuration saved successfully",
+          "saveError": "Failed to save configuration"
+        }
       }
     }
   }

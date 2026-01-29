@@ -169,6 +169,7 @@
     "billingAndSubscription": "Оплата и подписка",
     "browse": "Обзор",
     "config": "Конфигурация",
+    "configurations": "Конфигурации",
     "cookies-policy": "Политика использования Cookies",
     "courses": "Курсы",
     "csm": "CSM",
@@ -1009,6 +1010,216 @@
         "title": "Все обращения",
         "description": "Полный список обращений в службу поддержки и отчетов об ошибках",
         "noIssues": "Обращения не найдены"
+      }
+    },
+    "configurations": {
+      "page": {
+        "title": "Конфигурации платформы",
+        "description": "Управление настройками платформы, конфигурациями базы данных и флагами функций"
+      },
+      "tabs": {
+        "subscriptions": "Подписки",
+        "fees": "Комиссии",
+        "categories": "Категории",
+        "csmCategories": "Категории CSM",
+        "aiModels": "AI Модели",
+        "appConfig": "Конфигурация приложения"
+      },
+      "common": {
+        "loading": "Загрузка...",
+        "addNew": "Добавить",
+        "actions": "Действия",
+        "cancel": "Отмена",
+        "create": "Создать",
+        "update": "Обновить",
+        "edit": "Редактировать",
+        "delete": "Удалить",
+        "save": "Сохранить изменения",
+        "saving": "Сохранение...",
+        "name": "Название",
+        "noData": "Пока нет данных",
+        "confirmDelete": "Вы уверены, что хотите удалить этот {item}?",
+        "createFirst": "Создать первый {item}",
+        "cannotDelete": "Невозможно удалить {item} с {related}",
+        "cannotDeleteInUse": "Невозможно удалить {item}, который используется в {related}"
+      },
+      "subscriptions": {
+        "title": "Описания подписок Stripe",
+        "description": "Управление описаниями планов подписок и ценами",
+        "period": "Период",
+        "price": "Цена",
+        "monthly": "Ежемесячно",
+        "yearly": "Ежегодно",
+        "dialog": {
+          "createTitle": "Создать описание подписки",
+          "editTitle": "Редактировать описание подписки",
+          "createDescription": "Добавить новое описание подписки",
+          "updateDescription": "Обновить детали описания подписки",
+          "namePlaceholder": "напр., Премиум план",
+          "selectPeriod": "Выберите период",
+          "priceLabel": "Цена (USD)",
+          "pricePlaceholder": "9.99",
+          "nameRequired": "Название обязательно",
+          "priceRequired": "Цена обязательна",
+          "invalidPrice": "Неверный формат цены"
+        },
+        "messages": {
+          "loadError": "Не удалось загрузить описания подписок",
+          "deleteSuccess": "Описание подписки успешно удалено",
+          "deleteError": "Не удалось удалить описание подписки",
+          "createSuccess": "Описание подписки успешно создано",
+          "updateSuccess": "Описание подписки успешно обновлено",
+          "saveError": "Не удалось сохранить описание подписки"
+        }
+      },
+      "fees": {
+        "title": "Комиссии платформы",
+        "description": "Управление комиссиями за транзакции и платежи платформы",
+        "method": "Метод",
+        "type": "Тип",
+        "amount": "Сумма",
+        "rate": "Ставка",
+        "dialog": {
+          "createTitle": "Создать комиссию",
+          "editTitle": "Редактировать комиссию",
+          "createDescription": "Добавить новую комиссию платформы",
+          "updateDescription": "Обновить детали комиссии",
+          "methodPlaceholder": "напр., Stripe",
+          "typePlaceholder": "напр., Транзакция",
+          "amountPlaceholder": "0.00",
+          "ratePlaceholder": "0.0",
+          "nameRequired": "Название обязательно",
+          "methodRequired": "Метод обязателен",
+          "typeRequired": "Тип обязателен",
+          "amountRequired": "Сумма обязательна",
+          "rateRequired": "Ставка обязательна",
+          "invalidAmount": "Неверный формат суммы",
+          "invalidRate": "Неверный формат ставки"
+        },
+        "messages": {
+          "loadError": "Не удалось загрузить комиссии",
+          "deleteSuccess": "Комиссия успешно удалена",
+          "deleteError": "Не удалось удалить комиссию",
+          "createSuccess": "Комиссия успешно создана",
+          "updateSuccess": "Комиссия успешно обновлена",
+          "saveError": "Не удалось сохранить комиссию"
+        }
+      },
+      "categories": {
+        "title": "Категории курсов",
+        "description": "Управление категориями курсов для платформы",
+        "courses": "Курсы",
+        "dialog": {
+          "createTitle": "Создать категорию",
+          "editTitle": "Редактировать категорию",
+          "createDescription": "Добавить новую категорию курса",
+          "updateDescription": "Обновить детали категории",
+          "namePlaceholder": "напр., Программирование",
+          "nameRequired": "Название обязательно"
+        },
+        "messages": {
+          "loadError": "Не удалось загрузить категории",
+          "deleteSuccess": "Категория успешно удалена",
+          "deleteError": "Не удалось удалить категорию. Возможно, она используется.",
+          "createSuccess": "Категория успешно создана",
+          "updateSuccess": "Категория успешно обновлена",
+          "saveError": "Не удалось сохранить категорию"
+        }
+      },
+      "csmCategories": {
+        "title": "Категории CSM",
+        "description": "Управление категориями обращений в поддержку",
+        "issues": "Обращения",
+        "dialog": {
+          "createTitle": "Создать категорию CSM",
+          "editTitle": "Редактировать категорию CSM",
+          "createDescription": "Добавить новую категорию CSM",
+          "updateDescription": "Обновить детали категории CSM",
+          "namePlaceholder": "напр., Отчет об ошибке",
+          "nameRequired": "Название обязательно"
+        },
+        "messages": {
+          "loadError": "Не удалось загрузить категории CSM",
+          "deleteSuccess": "Категория CSM успешно удалена",
+          "deleteError": "Не удалось удалить категорию CSM. Возможно, она используется.",
+          "createSuccess": "Категория CSM успешно создана",
+          "updateSuccess": "Категория CSM успешно обновлена",
+          "saveError": "Не удалось сохранить категорию CSM"
+        }
+      },
+      "aiModels": {
+        "title": "AI Модели",
+        "description": "Управление AI моделями, доступными для агентов",
+        "provider": "Провайдер",
+        "providerName": "Название провайдера",
+        "value": "Значение",
+        "features": "Функции",
+        "agents": "Агенты",
+        "status": "Статус",
+        "default": "По умолчанию",
+        "premium": "Премиум",
+        "featureNames": {
+          "image": "Изображение",
+          "file": "Файл",
+          "reasoning": "Рассуждение",
+          "text": "Текст",
+          "search": "Поиск"
+        },
+        "dialog": {
+          "createTitle": "Создать AI модель",
+          "editTitle": "Редактировать AI модель",
+          "createDescription": "Добавить новую конфигурацию AI модели",
+          "updateDescription": "Обновить детали AI модели",
+          "namePlaceholder": "напр., GPT-4",
+          "providerPlaceholder": "напр., openai",
+          "providerNamePlaceholder": "напр., OpenAI",
+          "valuePlaceholder": "напр., gpt-4-turbo",
+          "valueDescription": "Фактический идентификатор модели, используемый в API вызовах",
+          "selectFeatures": "Выберите функции",
+          "isDefault": "Установить по умолчанию",
+          "isDefaultDescription": "Сделать эту модель по умолчанию для новых агентов",
+          "isSubscription": "Только премиум",
+          "isSubscriptionDescription": "Требовать премиум подписку для использования этой модели",
+          "nameRequired": "Название обязательно",
+          "providerRequired": "Провайдер обязателен",
+          "providerNameRequired": "Название провайдера обязательно",
+          "valueRequired": "Значение обязательно"
+        },
+        "messages": {
+          "loadError": "Не удалось загрузить AI модели",
+          "deleteSuccess": "AI модель успешно удалена",
+          "deleteError": "Не удалось удалить AI модель. Возможно, она используется.",
+          "createSuccess": "AI модель успешно создана",
+          "updateSuccess": "AI модель успешно обновлена",
+          "saveError": "Не удалось сохранить AI модель"
+        }
+      },
+      "appConfig": {
+        "title": "Конфигурация приложения",
+        "description": "Управление флагами функций и настройками платформы",
+        "loadError": "Не удалось загрузить конфигурацию",
+        "authSettings": {
+          "title": "Настройки аутентификации",
+          "description": "Управление регистрацией пользователей и аутентификацией",
+          "allowNewUsers": "Разрешить новых пользователей",
+          "allowNewUsersDescription": "Включить регистрацию новых пользователей на платформе",
+          "allowNewUserSubscriptions": "Разрешить подписки новым пользователям",
+          "allowNewUserSubscriptionsDescription": "Разрешить новым пользователям сразу подписываться"
+        },
+        "authProviders": {
+          "title": "Провайдеры аутентификации",
+          "description": "Включить или отключить OAuth провайдеры"
+        },
+        "featureFlags": {
+          "title": "Флаги функций",
+          "description": "Включить или отключить функции платформы",
+          "christmas": "Включить рождественскую тему и украшения",
+          "testMode": "Включить тестовый режим для разработки"
+        },
+        "messages": {
+          "saveSuccess": "Конфигурация успешно сохранена",
+          "saveError": "Не удалось сохранить конфигурацию"
+        }
       }
     }
   }

@@ -113,6 +113,12 @@ export const getSideBarRoutes = async (referer: string): Promise<Record<string, 
       isProtected: true,
       label: 'csm',
     },
+    {
+      href: '/owner/configurations',
+      icon: 'settings',
+      isProtected: true,
+      label: 'configurations',
+    },
   ] as RouteItem[];
 
   const docsRoutes = [
