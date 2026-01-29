@@ -19,7 +19,7 @@ export const TotalCard = ({ info, type }: TotalCardProps) => {
 
   const spentTimeInSec = formatTimeInSeconds(info.totalSpentTimeInSec);
 
-  if (type === 'time' && !Boolean(spentTimeInSec.length)) {
+  if (type === 'time' && !spentTimeInSec.length) {
     return null;
   }
   return (

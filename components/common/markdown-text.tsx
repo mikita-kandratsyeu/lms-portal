@@ -17,7 +17,7 @@ type MarkdownTextProps = {
 };
 
 export const MarkdownText = ({ className, text }: MarkdownTextProps) => {
-  const outputText = text?.replace(/\((\[[^\]]+\]\(https?:\/\/[^\)]+\))\)/g, '$1');
+  const outputText = text?.replace(/\((\[[^\]]+\]\(https?:\/\/[^)]+\))\)/g, '$1');
 
   return (
     <div

@@ -23,7 +23,7 @@ export const hasJsonStructure = (str: string) => {
     const result = JSON.parse(str);
     const type = Object.prototype.toString.call(result);
     return type === '[object Object]' || type === '[object Array]';
-  } catch (err) {
+  } catch {
     return false;
   }
 };
@@ -61,13 +61,13 @@ export const isValidUrl = (value: string) => {
     new URL(value);
 
     return true;
-  } catch (_) {
+  } catch {
     return false;
   }
 };
 
 export const splitIntoWords = (sentence: string) => {
-  const cleanSentence = sentence.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').trim();
+  const cleanSentence = sentence.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').trim();
 
   return cleanSentence.split(/\s+/);
 };

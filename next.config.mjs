@@ -7,8 +7,8 @@ import npmConfig from './package.json' with { type: 'json' };
 const withNextIntl = createNextIntlPlugin('./i18n.ts');
 
 const nextConfig = {
-  publicRuntimeConfig: {
-    version: npmConfig?.version,
+  env: {
+    APP_VERSION: npmConfig?.version,
   },
   experimental: {
     staleTimes: {
@@ -27,6 +27,11 @@ const nextConfig = {
       { protocol: 'https', hostname: 'storage.yandexcloud.net' },
       { protocol: 'https', hostname: 'sun23-2.userapi.com' },
     ],
+  },
+  turbopack: {
+    resolveAlias: {
+      handlebars: 'handlebars/dist/handlebars.js',
+    },
   },
   webpack: (config) => {
     return {

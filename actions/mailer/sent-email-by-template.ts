@@ -5,6 +5,7 @@ import { getLocale } from 'next-intl/server';
 import Mail from 'nodemailer/lib/mailer';
 
 import { replaceMessagePlaceholders } from '@/lib/locale';
+import { EmailTemplateKey, getEmailTranslations } from '@/lib/translations/email';
 
 import { getEmailTemplate } from './get-email-template';
 import { sentEmailTo } from './sent-email-to';
@@ -15,7 +16,7 @@ type SentEmailByTemplate = {
   locale?: string | null;
   params: Record<string, string>;
   subject?: string;
-  template: string;
+  template: EmailTemplateKey;
 };
 
 export const sentEmailByTemplate = async ({
@@ -28,12 +29,15 @@ export const sentEmailByTemplate = async ({
 }: SentEmailByTemplate) => {
   try {
     const locale = customLocale ?? (await getLocale());
-    let translations = (await import(`/messages/email/${locale}.json`)).default[template];
+    const translationsTemplate = getEmailTranslations(locale)[template];
 
     const templateContent = await getEmailTemplate(template);
     const templateHtml = Handlebars.compile(templateContent);
 
-    translations = replaceMessagePlaceholders(translations, params);
+    const translations = replaceMessagePlaceholders(
+      translationsTemplate,
+      params,
+    ) as typeof translationsTemplate;
 
     const html = templateHtml({
       ...translations,

@@ -21,7 +21,7 @@ export const compressImage = async (
 
     return imageDataUrl ?? null;
   } catch (error) {
-    console.log('[COMPRESS_IMAGE_ERROR]', error);
+    console.error('[COMPRESS_IMAGE_ERROR]', error);
 
     return null;
   }

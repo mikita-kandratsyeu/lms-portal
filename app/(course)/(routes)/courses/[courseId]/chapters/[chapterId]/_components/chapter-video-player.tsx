@@ -53,7 +53,7 @@ export const ChapterVideoPlayer = ({
 
         toast({ title: t('progress') });
         router.refresh();
-      } catch (error) {
+      } catch {
         toast({
           isError: true,
         });

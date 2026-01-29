@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { PrismaClient } = require('@prisma/client');
 
 const database = new PrismaClient();
@@ -39,7 +38,7 @@ async function main() {
       ],
     });
 
-    console.info('Success');
+    console.warn('Success');
   } catch (error) {
     console.error('Error seeding the database categories', error);
   } finally {

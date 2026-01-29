@@ -4,7 +4,6 @@ import { getTranslations } from 'next-intl/server';
 
 const withCompanyLabel =
   <T extends object>(WrappedComponent: NextPage<T>) =>
-  // eslint-disable-next-line react/display-name
   async (props: T) => {
     const t = await getTranslations('app');
 

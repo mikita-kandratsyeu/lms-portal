@@ -50,7 +50,7 @@ export const ImageCrop = ({ buttonLabel, callback, isFetching, uploadLabel }: Im
 
         setImageSrc(imageDataUrl as string);
       } catch (error) {
-        console.log('[FILE_CHANGE_ERROR]', error);
+        console.error('[FILE_CHANGE_ERROR]', error);
       }
     }
   };

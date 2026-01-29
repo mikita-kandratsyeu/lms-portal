@@ -88,7 +88,7 @@ export const RequestPayoutModal = ({
 
       toast({ title: 'Payout request created' });
       router.refresh();
-    } catch (error) {
+    } catch {
       toast({ description: 'Insufficient funds on the balance sheet', isError: true });
     } finally {
       setIsFetching(false);

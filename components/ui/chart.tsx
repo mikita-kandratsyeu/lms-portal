@@ -8,11 +8,9 @@ import { formatPrice, getConvertedPrice } from '@/lib/format';
 import { isString } from '@/lib/guard';
 import { cn } from '@/lib/utils';
 
-// Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const;
 
 export type ChartConfig = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [k in string]: {
     label?: React.ReactNode;
     icon?: React.ComponentType;
