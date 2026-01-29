@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -65,6 +66,7 @@ export const CredentialsFrom = ({
   const [isSignInWithPass, setIsSignInWithPass] = useState(false);
   const [otpResponse, setOtpResponse] = useState<{ maskedEmail: string } | null>(null);
   const [data, setData] = useState<Data | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const validationSchema = useMemo(() => {
     if (isSignUpFlow) {
@@ -230,12 +232,28 @@ export const CredentialsFrom = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isDisabled}
-                      placeholder={t('password')}
-                      type="password"
-                    />
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        disabled={isDisabled}
+                        placeholder={t('password')}
+                        type={showPassword ? 'text' : 'password'}
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                        disabled={isDisabled}
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? (
+                          <EyeOffIcon className="h-4 w-4" />
+                        ) : (
+                          <EyeIcon className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
                   {errors?.password?.message && (
                     <p className="text-xs text-red-500">{t(errors.password.message)}</p>
