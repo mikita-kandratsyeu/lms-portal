@@ -68,9 +68,9 @@ export const NewTabCopilotForm = ({ initialData }: NewTabCopilotFormProps) => {
           control={form.control}
           name="isCopilotInNewTab"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between space-x-3 space-y-0 rounded-md border p-4">
-              <div className="space-y-0.5">
-                <FormLabel>{t('title')}</FormLabel>
+            <FormItem className="flex flex-row items-center justify-between space-x-3 space-y-0 rounded-md border p-4 bg-muted/30">
+              <div className="space-y-0.5 flex-1">
+                <FormLabel className="text-sm">{t('title')}</FormLabel>
                 <FormDescription className="text-xs">{t('body')}</FormDescription>
               </div>
               <FormControl>

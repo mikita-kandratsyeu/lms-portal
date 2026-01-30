@@ -13,8 +13,8 @@ export const MfaOptions = ({ initialData }: MfaOptionsProps) => {
   const t = useTranslations('settings');
 
   return (
-    <div className="flex flex-col gap-4 mt-8">
-      <p className="font-medium text-xl">{t('mfaOptions')}</p>
+    <div className="flex flex-col gap-4">
+      <h2 className="text-lg font-semibold">{t('mfaOptions')}</h2>
       <OtpForm initialData={initialData} />
     </div>
   );

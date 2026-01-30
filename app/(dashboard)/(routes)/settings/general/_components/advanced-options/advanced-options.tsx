@@ -19,11 +19,13 @@ export const AdvancedOptions = ({ initialData }: AdvancedOptionsProps) => {
   const { config } = useAppConfigStore((state) => ({ config: state.config }));
 
   return (
-    <div className="flex flex-col gap-4 mt-8">
-      <p className="font-medium text-xl">{t('advancedOptions')}</p>
-      <PublicProfileForm initialData={initialData} />
-      <NewTabCopilotForm initialData={initialData} />
-      {config?.features?.christmas && <ChristmasForm initialData={initialData} />}
+    <div className="flex flex-col gap-4">
+      <h2 className="text-lg font-semibold">{t('advancedOptions')}</h2>
+      <div className="space-y-4">
+        <PublicProfileForm initialData={initialData} />
+        <NewTabCopilotForm initialData={initialData} />
+        {config?.features?.christmas && <ChristmasForm initialData={initialData} />}
+      </div>
     </div>
   );
 };

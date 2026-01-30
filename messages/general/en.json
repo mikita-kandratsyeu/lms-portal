@@ -522,8 +522,7 @@
     "unreadCount": "{count, plural, =1 {1 unread notification} other {# unread notifications}}",
     "upToDate": "You are all up to date",
     "viewAll": "View all",
-    "yesterday": "Yesterday",
-    "viewAll": "View all"
+    "yesterday": "Yesterday"
   },
   "navbar": {
     "backTo": "Back to courses",
@@ -533,8 +532,12 @@
     "advancedOptions": "Advanced Options",
     "mfaOptions": "Multi-Factor Authentication",
     "connectedAccounts": "Connected accounts",
+    "connectedAccountsDescription": "Manage your connected third-party accounts.",
     "deleteAcc": "Delete Account",
+    "dangerZone": "Danger Zone",
+    "dangerZoneDescription": "Permanently delete your account and all associated data. This action cannot be undone.",
     "general": "General Settings",
+    "generalDescription": "Manage your account settings and preferences.",
     "generalForm": {
       "accInfo": "Account Information",
       "accInfoUpdated": "Account information updated.",

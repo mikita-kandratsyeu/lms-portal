@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { TextBadge, TextVariantsProps } from '@/components/common/text-badge';
 import { UpdatePhotoModal } from '@/components/modals/update-photo-modal';
 import { Avatar, AvatarFallback, AvatarImage, Input } from '@/components/ui';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { AuthStatus } from '@/constants/auth';
 import { TIMESTAMP_USER_PROFILE_TEMPLATE } from '@/constants/common';
@@ -18,7 +19,7 @@ import { useLocaleStore } from '@/hooks/store/use-locale-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { useDebounce } from '@/hooks/use-debounce';
 import { fetcher } from '@/lib/fetcher';
-import { cn, getFallbackName } from '@/lib/utils';
+import { getFallbackName } from '@/lib/utils';
 
 type GeneralSettingsFormProps = {
   emailVerification: { label: string; variant: string };
@@ -104,81 +105,86 @@ export const GeneralSettingsForm = ({
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <p className="font-medium text-xl">{t('accInfo')}</p>
-        <p className="text-xs text-muted-foreground">
-          {t('lastUpdated')}&nbsp;{format(initialData.updatedAt, TIMESTAMP_USER_PROFILE_TEMPLATE)}
-        </p>
-        {localeInfo && (
-          <div className="flex flex-col gap-y-1">
-            <p className="flex items-center gap-x-1 text-xs text-muted-foreground">
-              <IdCard className="h-3 w-3" />
-              <span>{initialData.id}</span>
-            </p>
-            <p className="flex items-center gap-x-1 text-xs text-muted-foreground">
-              <MapPin className="h-3 w-3" />
-              <span>
-                {localeInfo.details.city}, {localeInfo.details.country}
+    <Card className="shadow-none rounded-md">
+      <CardHeader>
+        <CardTitle>{t('accInfo')}</CardTitle>
+        <CardDescription className="flex flex-col gap-2">
+          <span>
+            {t('lastUpdated')}&nbsp;{format(initialData.updatedAt, TIMESTAMP_USER_PROFILE_TEMPLATE)}
+          </span>
+          {localeInfo && (
+            <div className="flex flex-col gap-y-1">
+              <span className="flex items-center gap-x-1">
+                <IdCard className="h-3 w-3" />
+                <span>{initialData.id}</span>
               </span>
-            </p>
-            <p className="flex items-center gap-x-1 text-xs text-muted-foreground">
-              <BadgeDollarSign className="h-3 w-3" />
-              <span>{localeInfo.locale.currency}</span>
-            </p>
-          </div>
-        )}
-      </div>
-      <div className="flex items-center gap-x-4 w-full">
-        <UpdatePhotoModal type="profile" callback={handleUpdatePicture}>
-          <button disabled={isFetching || status === AuthStatus.LOADING}>
-            <Avatar className="border dark:border-muted-foreground w-24 h-24">
-              <AvatarImage src={initialData?.pictureUrl ?? ''} />
-              <AvatarFallback>{getFallbackName(initialData?.name || '')}</AvatarFallback>
-            </Avatar>
-          </button>
-        </UpdatePhotoModal>
-        <div className="flex flex-col gap-y-4 flex-1">
-          <div className="flex flex-col gap-y-2">
-            <div className="text-xs text-muted-foreground font-medium">{t('name')}</div>
-            <Input
-              disabled={isFetching || status === AuthStatus.LOADING}
-              placeholder={t('enterName')}
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-y-2">
-            <div
-              className={cn(
-                'flex items-center',
-                emailVerification.label === 'success' ? 'gap-x-1' : 'gap-x-2',
-              )}
-            >
-              <div className="text-xs text-muted-foreground font-medium">{t('email')}</div>
-              <button
-                onClick={handleVerifyEmail}
-                disabled={isFetching || emailVerification.label !== 'failed'}
-              >
-                {emailVerification.label === 'success' ? (
-                  <div
-                    className="hover:cursor-pointer"
-                    title={t(`emailVerifyStatus.${emailVerification.label}`)}
-                  >
-                    <BadgeCheckIcon className="w-4 h-4 text-green-500" />
-                  </div>
-                ) : (
-                  <TextBadge
-                    label={t(`emailVerifyStatus.${emailVerification.label}`)}
-                    variant={emailVerification.variant as TextVariantsProps['variant']}
-                  />
-                )}
-              </button>
+              <span className="flex items-center gap-x-1">
+                <MapPin className="h-3 w-3" />
+                <span>
+                  {localeInfo.details.city}, {localeInfo.details.country}
+                </span>
+              </span>
+              <span className="flex items-center gap-x-1">
+                <BadgeDollarSign className="h-3 w-3" />
+                <span>{localeInfo.locale.currency}</span>
+              </span>
             </div>
-            <Input disabled placeholder={t('enterEmail')} value={initialData.email} />
+          )}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 w-full">
+          <UpdatePhotoModal type="profile" callback={handleUpdatePicture}>
+            <button disabled={isFetching || status === AuthStatus.LOADING} className="shrink-0">
+              <Avatar className="border dark:border-muted-foreground w-20 h-20 sm:w-24 sm:h-24 hover:opacity-80 transition-opacity">
+                <AvatarImage src={initialData?.pictureUrl ?? ''} />
+                <AvatarFallback>{getFallbackName(initialData?.name || '')}</AvatarFallback>
+              </Avatar>
+            </button>
+          </UpdatePhotoModal>
+          <div className="flex flex-col gap-y-4 flex-1 w-full">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-foreground">{t('name')}</label>
+              <Input
+                disabled={isFetching || status === AuthStatus.LOADING}
+                placeholder={t('enterName')}
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                className="max-w-md"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <div className="flex items-center gap-x-2">
+                <label className="text-sm font-medium text-foreground">{t('email')}</label>
+                <button
+                  onClick={handleVerifyEmail}
+                  disabled={isFetching || emailVerification.label !== 'failed'}
+                >
+                  {emailVerification.label === 'success' ? (
+                    <div
+                      className="hover:cursor-pointer"
+                      title={t(`emailVerifyStatus.${emailVerification.label}`)}
+                    >
+                      <BadgeCheckIcon className="w-4 h-4 text-green-500" />
+                    </div>
+                  ) : (
+                    <TextBadge
+                      label={t(`emailVerifyStatus.${emailVerification.label}`)}
+                      variant={emailVerification.variant as TextVariantsProps['variant']}
+                    />
+                  )}
+                </button>
+              </div>
+              <Input
+                disabled
+                placeholder={t('enterEmail')}
+                value={initialData.email}
+                className="max-w-md"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

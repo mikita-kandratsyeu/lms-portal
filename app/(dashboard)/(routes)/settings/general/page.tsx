@@ -27,17 +27,23 @@ const SettingsPage = async ({ searchParams }: SettingsPagePageProps) => {
   const emailVerification = await verifyUserEmail({ user: userInfo, code });
 
   return (
-    <div className="p-6 flex flex-col mb-6 md:max-w-[868px]">
-      <h1 className="text-2xl font-medium">{t('general')}</h1>
-      {userInfo && (
-        <div className="mt-12">
-          <GeneralSettingsForm emailVerification={emailVerification} initialData={userInfo} />
-          <AdvancedOptions initialData={userInfo} />
-          <MfaOptions initialData={userInfo} />
-          {Boolean(userInfo.oauth.length) && <ConnectedAccounts initialData={userInfo} />}
-        </div>
-      )}
-      <DeleteAccount userId={user?.userId} email={user?.email} />
+    <div className="p-4 sm:p-6 flex flex-col mb-6">
+      <div className="mb-8">
+        <h1 className="text-2xl font-medium">{t('general')}</h1>
+        <p className="text-muted-foreground mt-2">{t('generalDescription')}</p>
+      </div>
+
+      <div className="max-w-full md:max-w-5xl lg:max-w-6xl space-y-6">
+        {userInfo && (
+          <>
+            <GeneralSettingsForm emailVerification={emailVerification} initialData={userInfo} />
+            <AdvancedOptions initialData={userInfo} />
+            <MfaOptions initialData={userInfo} />
+            {Boolean(userInfo.oauth.length) && <ConnectedAccounts initialData={userInfo} />}
+          </>
+        )}
+        <DeleteAccount userId={user?.userId} email={user?.email} />
+      </div>
     </div>
   );
 };

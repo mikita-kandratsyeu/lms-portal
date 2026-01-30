@@ -10,6 +10,7 @@ import { TextBadge } from '@/components/common/text-badge';
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { CreateOtpModal } from '@/components/modals/create-otp-modal';
 import { Button } from '@/components/ui';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { TIMESTAMP_TEMPLATE } from '@/constants/common';
 import { fetcher } from '@/lib/fetcher';
@@ -69,38 +70,47 @@ export const OtpForm = ({ initialData }: OtpFormProps) => {
   };
 
   return (
-    <div className="flex flex-row items-center justify-between space-x-3 space-y-0 rounded-md border p-4">
-      <div className="space-y-0.5">
-        <div className="flex items-center space-x-2 mb-1.5">
-          <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            {t('title')}
+    <Card className="shadow-none rounded-md">
+      <CardHeader>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <CardTitle className="text-base">{t('title')}</CardTitle>
+              <TextBadge
+                label={t(isOtpEnabled ? 'enabled' : 'disabled')}
+                variant={isOtpEnabled ? 'green' : 'red'}
+              />
+            </div>
+            <CardDescription className="text-xs">
+              <p className={cn(isOtpEnabled && 'mb-2')}>{t('body')}</p>
+              {isOtpEnabled && otpCreatedAt && (
+                <p>{t('addedAt', { date: format(otpCreatedAt, TIMESTAMP_TEMPLATE) })}</p>
+              )}
+            </CardDescription>
           </div>
-          <TextBadge
-            label={t(isOtpEnabled ? 'enabled' : 'disabled')}
-            variant={isOtpEnabled ? 'green' : 'red'}
-          />
+          <div className="shrink-0">
+            {isOtpEnabled && (
+              <ConfirmModal onConfirm={handleDisable}>
+                <Button variant="secondary" disabled={isFetching} className="w-full sm:w-auto">
+                  {t('disable')}
+                </Button>
+              </ConfirmModal>
+            )}
+            {!isOtpEnabled && (
+              <CreateOtpModal qrCode={qrCode} secret={secret}>
+                <Button
+                  variant="outline"
+                  onClick={handleGenerate}
+                  disabled={isFetching}
+                  className="w-full sm:w-auto"
+                >
+                  {t('enable')}
+                </Button>
+              </CreateOtpModal>
+            )}
+          </div>
         </div>
-        <div className="text-muted-foreground text-xs">
-          <p className={cn(isOtpEnabled && 'mb-2')}>{t('body')}</p>
-          {isOtpEnabled && otpCreatedAt && (
-            <p>{t('addedAt', { date: format(otpCreatedAt, TIMESTAMP_TEMPLATE) })}</p>
-          )}
-        </div>
-      </div>
-      {isOtpEnabled && (
-        <ConfirmModal onConfirm={handleDisable}>
-          <Button variant="secondary" disabled={isFetching}>
-            {t('disable')}
-          </Button>
-        </ConfirmModal>
-      )}
-      {!isOtpEnabled && (
-        <CreateOtpModal qrCode={qrCode} secret={secret}>
-          <Button variant="outline" onClick={handleGenerate} disabled={isFetching}>
-            {t('enable')}
-          </Button>
-        </CreateOtpModal>
-      )}
-    </div>
+      </CardHeader>
+    </Card>
   );
 };
