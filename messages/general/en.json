@@ -137,10 +137,15 @@
     "accInfoUpdated": "Account information updated",
     "agentBody": "Add a photo, it will make your AI agent more attractive and interesting.",
     "body": "Add a photo, it will make your profile more attractive and interesting.",
+    "cancel": "Cancel",
+    "changeImage": "Change Image",
+    "clickToSelect": "Click to select or drag and drop",
     "delete": "Delete picture",
     "footer": "You can upload an image in JPG, GIF or PNG format.",
     "title": "Add a photo",
-    "upload": "Upload picture"
+    "upload": "Upload picture",
+    "zoom": "Zoom",
+    "zoomLevel": "Zoom: {level}x"
   },
   "file-upload-modal": {
     "footer": "You can upload an image or a PDF file.",
