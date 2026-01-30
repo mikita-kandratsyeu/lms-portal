@@ -22,6 +22,9 @@ export const getUserSubscription = async (userId = '', noCache = false) => {
 
       const stripeSubscription = await stripe.subscriptions.retrieve(
         userSubscription.stripeSubscriptionId,
+        {
+          expand: ['default_payment_method'],
+        },
       );
 
       if (!stripeSubscription) {
@@ -45,8 +48,25 @@ export const getUserSubscription = async (userId = '', noCache = false) => {
         },
       });
 
+      let paymentMethod = null;
+      if (
+        stripeSubscription.default_payment_method &&
+        typeof stripeSubscription.default_payment_method === 'object'
+      ) {
+        const pm = stripeSubscription.default_payment_method;
+        if (pm.type === 'card' && pm.card) {
+          paymentMethod = {
+            brand: pm.card.brand,
+            last4: pm.card.last4,
+            expMonth: pm.card.exp_month,
+            expYear: pm.card.exp_year,
+          };
+        }
+      }
+
       return {
         cancelAt: stripeSubscription.cancel_at ? fromUnixTime(stripeSubscription.cancel_at) : null,
+        cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
         endPeriod: fromUnixTime(stripeSubscription.items.data[0].current_period_end),
         price: {
           currency: stripeSubscription.items.data[0].price.currency,
@@ -55,6 +75,12 @@ export const getUserSubscription = async (userId = '', noCache = false) => {
         plan: stripeSubscription.items.data[0].plan,
         planName: planDescription?.name ?? 'Nova Plus',
         startPeriod: fromUnixTime(stripeSubscription.items.data[0].current_period_start),
+        paymentMethod,
+        status: stripeSubscription.status,
+        trialEnd: stripeSubscription.trial_end ? fromUnixTime(stripeSubscription.trial_end) : null,
+        trialStart: stripeSubscription.trial_start
+          ? fromUnixTime(stripeSubscription.trial_start)
+          : null,
       };
     };
 
