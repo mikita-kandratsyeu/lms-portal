@@ -6,6 +6,7 @@ import { PAGE_SIZES } from '@/constants/paginations';
 import db from '@/lib/db';
 
 type GetUserNotifications = {
+  filter?: 'all' | 'unread' | 'read';
   pageIndex?: string | number;
   pageSize?: string | number;
   search?: string;
@@ -14,6 +15,7 @@ type GetUserNotifications = {
 };
 
 export const getUserNotifications = async ({
+  filter = 'all',
   pageIndex = 0,
   pageSize = PAGE_SIZES[0],
   search,
@@ -27,9 +29,20 @@ export const getUserNotifications = async ({
   const index = Number(pageIndex);
   const size = Number(pageSize);
 
+  const whereClause: any = {
+    userId,
+    title: { contains: search, mode: 'insensitive' },
+  };
+
+  if (filter === 'unread') {
+    whereClause.isRead = false;
+  } else if (filter === 'read') {
+    whereClause.isRead = true;
+  }
+
   try {
     const userNotifications = await db.notification.findMany({
-      where: { userId, title: { contains: search, mode: 'insensitive' } },
+      where: whereClause,
       orderBy: { createdAt: 'desc' },
       select: {
         body: true,
@@ -45,7 +58,7 @@ export const getUserNotifications = async ({
     });
 
     const count = await db.notification.count({
-      where: { userId, title: { contains: search, mode: 'insensitive' } },
+      where: whereClause,
     });
 
     return { notifications: userNotifications, pageCount: Math.ceil(count / size) };

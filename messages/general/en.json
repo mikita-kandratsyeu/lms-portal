@@ -480,14 +480,33 @@
   },
   "notifications": {
     "all": "All",
+    "allMarkedAsRead": "All notifications marked as read",
+    "deleteAllRead": "Delete all read",
+    "emptyAllDescription": "You don't have any notifications yet. We'll notify you when something important happens.",
+    "emptyReadDescription": "No read notifications to show. Once you read notifications, they will appear here.",
+    "emptyReadTitle": "No read notifications",
+    "markAllAsRead": "Mark all as read",
     "markAsRead": "Mark as read",
     "markAsUnread": "Mark as unread",
     "markSelected": "Mark { amount } selected as { action }",
     "notFound": "There are no notifications",
     "notFoundAtTheMoment": "There are no new notifications at the moment",
     "notificationCenter": "Notification Center",
+    "notificationDeleted": "Notification deleted",
+    "older": "Older",
     "openMenu": "Open menu",
+    "pageDescription": "Manage and view all your notifications in one place",
+    "pagination": {
+      "goToFirstPage": "Go to first page",
+      "goToLastPage": "Go to last page",
+      "goToNextPage": "Go to next page",
+      "goToPreviousPage": "Go to previous page",
+      "pageOf": "Page {current} of {total}",
+      "rowsPerPage": "Rows per page"
+    },
     "read": "read",
+    "readDeleted": "All read notifications deleted",
+    "readFilter": "Read",
     "remove": "Remove",
     "table-data": {
       "date": "Date",
@@ -496,9 +515,14 @@
       "notification": "Notification",
       "title": "Title"
     },
+    "thisWeek": "This week",
     "title": "Notifications",
+    "today": "Today",
     "unread": "Unread",
+    "unreadCount": "{count, plural, =1 {1 unread notification} other {# unread notifications}}",
     "upToDate": "You are all up to date",
+    "viewAll": "View all",
+    "yesterday": "Yesterday",
     "viewAll": "View all"
   },
   "navbar": {

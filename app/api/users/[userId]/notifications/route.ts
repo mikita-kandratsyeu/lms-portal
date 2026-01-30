@@ -50,6 +50,19 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ userId:
     const { id, ids, ...other } = await req.json();
 
     const isUpdateAll = req.nextUrl.searchParams.get('all');
+    const markAllRead = req.nextUrl.searchParams.get('markAllRead');
+
+    if (markAllRead) {
+      const updatedAllUserNotification = await db.notification.updateMany({
+        where: {
+          userId,
+          isRead: false,
+        },
+        data: { isRead: true },
+      });
+
+      return NextResponse.json(updatedAllUserNotification);
+    }
 
     if (isUpdateAll) {
       const updatedAllUserNotification = await db.notification.updateMany({
@@ -96,6 +109,18 @@ export const DELETE = async (req: NextRequest, props: { params: Promise<{ userId
     }
 
     const id = req.nextUrl.searchParams.get('id');
+    const deleteAllRead = req.nextUrl.searchParams.get('deleteAllRead');
+
+    if (deleteAllRead) {
+      const deletedNotifications = await db.notification.deleteMany({
+        where: {
+          userId,
+          isRead: true,
+        },
+      });
+
+      return NextResponse.json(deletedNotifications);
+    }
 
     if (id) {
       const deletedUserNotification = await db.notification.delete({
@@ -110,7 +135,7 @@ export const DELETE = async (req: NextRequest, props: { params: Promise<{ userId
 
     return new NextResponse(ReasonPhrases.BAD_REQUEST, { status: StatusCodes.BAD_REQUEST });
   } catch (error) {
-    console.error('[UPDATE_USER_NOTIFICATION]', error);
+    console.error('[DELETE_USER_NOTIFICATION]', error);
 
     return new NextResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
