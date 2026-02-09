@@ -182,10 +182,15 @@ export const VideoPlayer = ({
           onPlaybackRateChange={setPlaybackRate}
           onVolumeChange={setVolume}
           playbackRate={playbackRate}
-          playerRef={playerRef as React.RefObject<ReactPlayerRef>}
+          playerRef={
+            playerRef as React.RefObject<{
+              seekTo: (a: number, t?: string) => void;
+              getInternalPlayer: () => unknown;
+            } | null>
+          }
           qualities={qualities}
           selectedQualityUrl={selectedQualityUrl}
-          onQualitySelect={qualities?.length ? setSelectedQualityUrl : undefined}
+          onQualitySelect={qualities && qualities.length > 0 ? setSelectedQualityUrl : undefined}
           showControls={showControls}
           volume={volume}
         />
