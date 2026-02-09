@@ -3,31 +3,34 @@
 import { useTranslations } from 'next-intl';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
+import { Period } from '@/constants/ai/analytics';
 
 import type { ModelUsage } from './types';
 
 type AnalyticsSummaryProps = {
-  showGlobal: boolean;
-  showPersonal: boolean;
-  globalUses: number;
-  globalUsers: number;
-  personalUsers: number;
   globalTop: ModelUsage | null;
+  globalUsers: number;
+  globalUses: number;
   hasGlobalUsage: boolean;
   hasGlobalUsers: boolean;
   hasPersonalUsers: boolean;
+  period: string;
+  personalUsers: number;
+  showGlobal: boolean;
+  showPersonal: boolean;
 };
 
 export const AnalyticsSummary = ({
-  showGlobal,
-  showPersonal,
-  globalUses,
-  globalUsers,
-  personalUsers,
   globalTop,
+  globalUsers,
+  globalUses,
   hasGlobalUsage,
   hasGlobalUsers,
   hasPersonalUsers,
+  period,
+  personalUsers,
+  showGlobal,
+  showPersonal,
 }: AnalyticsSummaryProps) => {
   const t = useTranslations('ai-agents.analytics');
   const emptyLabel = t('emptyData');
@@ -60,7 +63,11 @@ export const AnalyticsSummary = ({
             {hasGlobalUsers ? (
               <>
                 <div className="text-2xl font-semibold">{globalUsers.toLocaleString()}</div>
-                <p className="text-xs text-muted-foreground">{t('cards.last30Days')}</p>
+                {period !== Period.ALL && (
+                  <p className="text-xs text-muted-foreground">
+                    {t('cards.lastDays', { amount: period.slice(0, -1) })}
+                  </p>
+                )}
               </>
             ) : (
               <p className="text-sm text-muted-foreground">{emptyLabel}</p>

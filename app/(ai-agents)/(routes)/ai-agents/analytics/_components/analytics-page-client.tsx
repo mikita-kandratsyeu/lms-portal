@@ -94,15 +94,16 @@ export const AnalyticsPageClient = ({ analytics }: AnalyticsPageClientProps) => 
         onPeriodChange={(value) => setPeriod(value as PeriodId)}
       />
       <AnalyticsSummary
-        showGlobal={showGlobal}
-        showPersonal={showPersonal}
-        globalUses={sumUses(globalModelUsage)}
-        globalUsers={globalUsers}
-        personalUsers={personalUsers}
         globalTop={globalTop}
+        globalUsers={globalUsers}
+        globalUses={sumUses(globalModelUsage)}
         hasGlobalUsage={hasGlobalUsage}
         hasGlobalUsers={hasGlobalUsers}
         hasPersonalUsers={hasPersonalUsers}
+        period={period}
+        personalUsers={personalUsers}
+        showGlobal={showGlobal}
+        showPersonal={showPersonal}
       />
       <AnalyticsCharts
         showGlobal={showGlobal}

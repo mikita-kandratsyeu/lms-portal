@@ -5,8 +5,8 @@ export enum Scope {
 }
 
 export enum Period {
-  '30D' = '30d',
   '7D' = '7d',
+  '30D' = '30d',
   '90D' = '90d',
   ALL = 'all',
 }

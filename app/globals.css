@@ -244,6 +244,46 @@ body,
   margin-left: 0.5rem;
 }
 
-.react-player > video {
+.react-player {
+  position: absolute;
+  inset: 0;
+}
+
+.react-player > div {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.react-player video {
   outline: none;
+  object-fit: contain;
+}
+
+.video-progress .relative.overflow-hidden.rounded-full {
+  height: 0.5rem;
+  min-height: 0.5rem;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.video-progress .absolute.h-full.rounded-full {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.video-progress .block.rounded-full.border {
+  height: 1rem;
+  width: 1rem;
+  background: white;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 640px) {
+  .video-progress .relative.overflow-hidden.rounded-full {
+    height: 0.625rem;
+    min-height: 0.625rem;
+  }
+
+  .video-progress .block.rounded-full.border {
+    height: 1.25rem;
+    width: 1.25rem;
+  }
 }

@@ -262,7 +262,17 @@
       "loading": "Loading a video...",
       "lock": "This chapter is locked",
       "notCompleted": "Not completed",
-      "progress": "Progress updated"
+      "progress": "Progress updated",
+      "controls": {
+        "playPause": "Play / Pause",
+        "skipBack": "Rewind 10s",
+        "skipForward": "Forward 10s",
+        "mute": "Mute",
+        "unmute": "Unmute",
+        "fullscreen": "Fullscreen",
+        "speed": "Speed",
+        "quality": "Quality"
+      }
     },
     "banner": {
       "completed": "You have already completed this chapter.",
@@ -719,7 +729,7 @@
         "globalUses": "Global uses",
         "publicOnly": "Public agents only",
         "activeUsers": "Active users",
-        "last30Days": "Last 30 days",
+        "last30Days": "Last {amount} days",
         "myAgentsUsers": "Users using my agents",
         "includingPrivate": "Including private agents",
         "topModelGlobal": "Top model (global)",

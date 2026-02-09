@@ -22,7 +22,7 @@ const CourseIdPage = async (props: CourseIdPageProps) => {
     },
   });
 
-  if (!course) {
+  if (!course || (course?.isPremium && !user?.hasSubscription)) {
     redirect('/');
   }
 

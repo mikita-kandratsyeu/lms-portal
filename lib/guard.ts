@@ -6,3 +6,5 @@ export const isNumber = (value: unknown): value is number =>
 export const isObject = (value: unknown): value is object => typeof value === 'object';
 
 export const isArray = <T>(value: unknown): value is Array<T> => Array.isArray(value);
+
+export const isFunction = (value: unknown): value is object => typeof value === 'function';

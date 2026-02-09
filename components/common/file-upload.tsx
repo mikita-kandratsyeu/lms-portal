@@ -247,7 +247,7 @@ export const FileUpload = ({
         <div className="space-y-2">
           <Progress value={uploadProgress} />
           <p className="text-sm text-center text-gray-600 dark:text-gray-400">
-            {t('uploading')}... {uploadProgress}%
+            {t('uploading')} {uploadProgress}%
           </p>
         </div>
       )}
