@@ -5,6 +5,21 @@ import { promises as fs } from 'fs';
 import { getGithubContents } from '../github/get-contents';
 
 export type GetAppConfig = {
+  ai: {
+    cost: {
+      models: Record<
+        string,
+        {
+          cached_input_cents_per_1M: number;
+          input_cents_per_1M: number;
+          output_cents_per_1M: number;
+          provider: string;
+          source: string;
+        }
+      >;
+      updated: string | null;
+    };
+  };
   auth: {
     allowNewUsers: boolean;
     allowNewUserSubscriptions: boolean;
@@ -25,6 +40,7 @@ export const getAppConfig = async (): Promise<GetAppConfig> => {
     console.error('[GET_APP_CONFIG_ACTION]', error);
 
     return {
+      ai: { cost: { models: {}, updated: null } },
       auth: {
         allowNewUsers: false,
         allowNewUserSubscriptions: false,

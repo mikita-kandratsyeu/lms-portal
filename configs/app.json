@@ -1,4 +1,75 @@
 {
+  "ai": {
+    "cost": {
+      "models": {
+        "deepseek-reasoner": {
+          "provider": "deepseek",
+          "input_cents_per_1M": 55,
+          "cached_input_cents_per_1M": 28,
+          "output_cents_per_1M": 219,
+          "source": "burnwise.io/deepseek-2026"
+        },
+        "gpt-4.1-mini": {
+          "provider": "openai",
+          "input_cents_per_1M": 40,
+          "cached_input_cents_per_1M": 10,
+          "output_cents_per_1M": 160,
+          "source": "openai.com/api/pricing"
+        },
+        "gpt-4o-mini": {
+          "provider": "openai",
+          "input_cents_per_1M": 15,
+          "cached_input_cents_per_1M": 7.5,
+          "output_cents_per_1M": 60,
+          "source": "openai.com/api/pricing"
+        },
+        "o3-mini": {
+          "provider": "openai",
+          "input_cents_per_1M": 110,
+          "cached_input_cents_per_1M": 55,
+          "output_cents_per_1M": 440,
+          "source": "openai.com/api/pricing"
+        },
+        "gpt-5-nano": {
+          "provider": "openai",
+          "input_cents_per_1M": 5,
+          "cached_input_cents_per_1M": 0.5,
+          "output_cents_per_1M": 40,
+          "source": "openai.com/api/pricing"
+        },
+        "gpt-5-mini": {
+          "provider": "openai",
+          "input_cents_per_1M": 25,
+          "cached_input_cents_per_1M": 2.5,
+          "output_cents_per_1M": 200,
+          "source": "openai.com/api/pricing"
+        },
+        "gemini-3-flash-preview": {
+          "provider": "google",
+          "input_cents_per_1M": 50,
+          "cached_input_cents_per_1M": 5,
+          "output_cents_per_1M": 300,
+          "source": "aifreeapi.com/gemini-3-flash"
+        },
+        "deepseek-chat": {
+          "provider": "deepseek",
+          "input_cents_per_1M": 14,
+          "cached_input_cents_per_1M": 2.8,
+          "output_cents_per_1M": 28,
+          "source": "burnwise.io/deepseek-2026"
+        },
+        "dall-e-3": {
+          "provider": "openai",
+          "input_cents_per_1M": null,
+          "output_cents_per_1M": null,
+          "per_image_standard": 80,
+          "per_image_hd": 160,
+          "source": "openai.com/api/pricing"
+        }
+      },
+      "updated": "2026-02-09"
+    }
+  },
   "auth": {
     "allowNewUsers": true,
     "allowNewUserSubscriptions": true,
