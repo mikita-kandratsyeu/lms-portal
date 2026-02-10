@@ -171,6 +171,7 @@
   },
   "sidebar": {
     "ai-agents": "AI agents",
+    "ai-usage": "AI Usage",
     "analytics": "Analytics",
     "billingAndSubscription": "Billing & Subscription",
     "browse": "Browse",
@@ -759,6 +760,64 @@
         "reviewer": "Code Reviewer",
         "marketing": "Marketing Copy",
         "coach": "Private Coach"
+      }
+    },
+    "usage": {
+      "title": "AI Usage",
+      "subtitle": "Track your AI model usage, costs, and token consumption.",
+      "exportCsv": "Export CSV",
+      "periods": {
+        "7d": "7 days",
+        "30d": "30 days",
+        "90d": "90 days",
+        "all": "All time"
+      },
+      "cards": {
+        "costAndRequests": "Cost & Requests",
+        "totalCost": "{count} requests in selected period",
+        "unlimitedRequests": "Unlimited requests (Nova Plus)",
+        "freeRequests": "Free requests this week",
+        "resetsOn": "Resets {date}",
+        "tokenUsage": "Token Usage",
+        "totalTokens": "Total tokens in selected period",
+        "inputTokens": "Input",
+        "outputTokens": "Output"
+      },
+      "table": {
+        "date": "Date",
+        "email": "Email",
+        "model": "Model",
+        "provider": "Provider",
+        "inputTokens": "Input",
+        "outputTokens": "Output",
+        "totalTokens": "Total",
+        "cachedTokens": "Cached",
+        "cost": "Cost",
+        "empty": "No usage data found for the selected period."
+      },
+      "pagination": {
+        "goToFirstPage": "Go to first page",
+        "goToPreviousPage": "Go to previous page",
+        "goToNextPage": "Go to next page",
+        "goToLastPage": "Go to last page"
+      },
+      "export": {
+        "date": "Date",
+        "email": "Email",
+        "model": "Model",
+        "provider": "Provider",
+        "inputTokens": "Input Tokens",
+        "outputTokens": "Output Tokens",
+        "totalTokens": "Total Tokens",
+        "cachedTokens": "Cached Tokens",
+        "cost": "Cost (USD)",
+        "noData": "No data to export"
+      },
+      "errors": {
+        "title": "Something went wrong",
+        "body": "Failed to load usage data. Please try again.",
+        "tryAgain": "Try again",
+        "exportFailed": "Export failed. Please try again."
       }
     },
     "edit": {

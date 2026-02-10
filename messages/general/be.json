@@ -171,6 +171,7 @@
   },
   "sidebar": {
     "ai-agents": "ИИ агенты",
+    "ai-usage": "ИИ Выкарыстанне",
     "analytics": "Аналітыка",
     "billingAndSubscription": "Аплата і падпіска",
     "browse": "Прагляд",
@@ -759,6 +760,64 @@
         "reviewer": "Рэв'юер кода",
         "marketing": "Маркетынгавы копірайтэр",
         "coach": "Асабісты коуч"
+      }
+    },
+    "usage": {
+      "title": "Выкарыстанне ІІ",
+      "subtitle": "Адсочвайце выкарыстанне мадэляў ІІ, выдаткі і спажыванне токенаў.",
+      "exportCsv": "Экспарт CSV",
+      "periods": {
+        "7d": "7 дзён",
+        "30d": "30 дзён",
+        "90d": "90 дзён",
+        "all": "Увесь час"
+      },
+      "cards": {
+        "costAndRequests": "Выдаткі і запыты",
+        "totalCost": "{count} запытаў за абраны перыяд",
+        "unlimitedRequests": "Безлімітныя запыты (Nova Plus)",
+        "freeRequests": "Бясплатныя запыты на гэтым тыдні",
+        "resetsOn": "Скід {date}",
+        "tokenUsage": "Выкарыстанне токенаў",
+        "totalTokens": "Усяго токенаў за абраны перыяд",
+        "inputTokens": "Уваходныя",
+        "outputTokens": "Выходныя"
+      },
+      "table": {
+        "date": "Дата",
+        "email": "Email",
+        "model": "Мадэль",
+        "provider": "Правайдэр",
+        "inputTokens": "Уваходныя",
+        "outputTokens": "Выходныя",
+        "totalTokens": "Усяго",
+        "cachedTokens": "Кэш",
+        "cost": "Кошт",
+        "empty": "Няма дадзеных аб выкарыстанні за абраны перыяд."
+      },
+      "pagination": {
+        "goToFirstPage": "Перайсці на першую старонку",
+        "goToPreviousPage": "Папярэдняя старонка",
+        "goToNextPage": "Наступная старонка",
+        "goToLastPage": "Перайсці на апошнюю старонку"
+      },
+      "export": {
+        "date": "Дата",
+        "email": "Email",
+        "model": "Мадэль",
+        "provider": "Правайдэр",
+        "inputTokens": "Уваходныя токены",
+        "outputTokens": "Выходныя токены",
+        "totalTokens": "Усяго токенаў",
+        "cachedTokens": "Кэшаваныя токены",
+        "cost": "Кошт (USD)",
+        "noData": "Няма дадзеных для экспарту"
+      },
+      "errors": {
+        "title": "Нешта пайшло не так",
+        "body": "Не атрымалася загрузіць дадзеныя аб выкарыстанні. Паспрабуйце яшчэ раз.",
+        "tryAgain": "Паспрабаваць зноў",
+        "exportFailed": "Памылка экспарту. Паспрабуйце яшчэ раз."
       }
     },
     "edit": {

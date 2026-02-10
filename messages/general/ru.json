@@ -170,6 +170,7 @@
   },
   "sidebar": {
     "ai-agents": "ИИ агенты",
+    "ai-usage": "ИИ Использование",
     "analytics": "Аналитика",
     "billingAndSubscription": "Оплата и подписка",
     "browse": "Обзор",
@@ -758,6 +759,64 @@
         "reviewer": "Код-ревьюер",
         "marketing": "Маркетинговый копирайтер",
         "coach": "Личный коуч"
+      }
+    },
+    "usage": {
+      "title": "Использование ИИ",
+      "subtitle": "Отслеживайте использование моделей ИИ, расходы и потребление токенов.",
+      "exportCsv": "Экспорт CSV",
+      "periods": {
+        "7d": "7 дней",
+        "30d": "30 дней",
+        "90d": "90 дней",
+        "all": "Всё время"
+      },
+      "cards": {
+        "costAndRequests": "Расходы и запросы",
+        "totalCost": "{count} запросов за выбранный период",
+        "unlimitedRequests": "Безлимитные запросы (Nova Plus)",
+        "freeRequests": "Бесплатные запросы на этой неделе",
+        "resetsOn": "Сброс {date}",
+        "tokenUsage": "Использование токенов",
+        "totalTokens": "Всего токенов за выбранный период",
+        "inputTokens": "Входящие",
+        "outputTokens": "Исходящие"
+      },
+      "table": {
+        "date": "Дата",
+        "email": "Email",
+        "model": "Модель",
+        "provider": "Провайдер",
+        "inputTokens": "Входящие",
+        "outputTokens": "Исходящие",
+        "totalTokens": "Всего",
+        "cachedTokens": "Кэш",
+        "cost": "Стоимость",
+        "empty": "Нет данных об использовании за выбранный период."
+      },
+      "pagination": {
+        "goToFirstPage": "Перейти на первую страницу",
+        "goToPreviousPage": "Предыдущая страница",
+        "goToNextPage": "Следующая страница",
+        "goToLastPage": "Перейти на последнюю страницу"
+      },
+      "export": {
+        "date": "Дата",
+        "email": "Email",
+        "model": "Модель",
+        "provider": "Провайдер",
+        "inputTokens": "Входящие токены",
+        "outputTokens": "Исходящие токены",
+        "totalTokens": "Всего токенов",
+        "cachedTokens": "Кэшированные токены",
+        "cost": "Стоимость (USD)",
+        "noData": "Нет данных для экспорта"
+      },
+      "errors": {
+        "title": "Что-то пошло не так",
+        "body": "Не удалось загрузить данные об использовании. Попробуйте ещё раз.",
+        "tryAgain": "Попробовать снова",
+        "exportFailed": "Ошибка экспорта. Попробуйте ещё раз."
       }
     },
     "edit": {
