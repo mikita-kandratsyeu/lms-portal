@@ -55,7 +55,7 @@ export const UsagePagination = ({ currentPage, pageSize, pageCount }: UsagePagin
   const showNavigation = pageCount > 1;
 
   return (
-    <div className="flex items-center justify-center gap-2 sm:justify-end">
+    <div className="flex items-center justify-end gap-2">
       <Select value={`${pageSize}`} onValueChange={handlePageSizeChange}>
         <SelectTrigger className="h-8 w-[70px]">
           <SelectValue placeholder={pageSize} />

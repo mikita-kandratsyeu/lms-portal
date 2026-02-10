@@ -1,13 +1,15 @@
 'use client';
 
-import { Download } from 'lucide-react';
+import { Download, Mail } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import { Button } from '@/components/ui';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/components/ui/use-toast';
 import { Period } from '@/constants/ai/analytics';
+import { fetcher } from '@/lib/fetcher';
 
 type UsageHeaderProps = {
   title: string;
@@ -21,6 +23,8 @@ export const UsageHeader = ({ title, subtitle, period }: UsageHeaderProps) => {
   const t = useTranslations('ai-agents.usage');
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
+  const [isSending, setIsSending] = useState(false);
 
   const periodOptions = periodOptionIds.map((id) => ({
     id,
@@ -43,6 +47,34 @@ export const UsageHeader = ({ title, subtitle, period }: UsageHeaderProps) => {
     window.open(`/api/ai/usage/export?${params.toString()}`, '_blank');
   }, [period]);
 
+  const handleSendByEmail = useCallback(async () => {
+    setIsSending(true);
+    try {
+      await fetcher.post('/api/ai/usage/export', {
+        body: { period },
+        responseType: 'json',
+      });
+      toast({ title: t('sendByEmailSuccess'), type: 'success' });
+    } catch (error: unknown) {
+      const msg = (error as Error)?.message;
+      let description = t('errors.exportFailed');
+
+      if (msg) {
+        try {
+          const data = JSON.parse(msg) as { error?: string };
+          if (data.error) description = data.error;
+          else description = msg;
+        } catch {
+          description = msg;
+        }
+      }
+
+      toast({ isError: true, description });
+    } finally {
+      setIsSending(false);
+    }
+  }, [period, toast, t]);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -63,6 +95,16 @@ export const UsageHeader = ({ title, subtitle, period }: UsageHeaderProps) => {
           <Button variant="outline" size="sm" onClick={handleExportCsv} className="gap-2">
             <Download className="h-4 w-4" />
             {t('exportCsv')}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSendByEmail}
+            disabled={isSending}
+            className="gap-2"
+          >
+            <Mail className="h-4 w-4" />
+            {isSending ? t('sendByEmailSending') : t('sendByEmail')}
           </Button>
         </div>
       </div>

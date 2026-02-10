@@ -13,6 +13,7 @@ export type UsageRow = {
   email: string;
   model: string;
   provider: string;
+  referer: string | null;
   inputTokens: number;
   outputTokens: number;
   totalTokens: number;
@@ -66,12 +67,23 @@ const EMPTY_RESULT: UsagePageData = {
   },
 };
 
+const extractPath = (referer: string | null): string | null => {
+  if (!referer) return null;
+
+  try {
+    return new URL(referer).pathname;
+  } catch {
+    return referer.startsWith('/') ? referer : `/${referer}`;
+  }
+};
+
 const mapRow = (row: {
   id: string;
   createdAt: Date;
   email: string;
   model: string;
   provider: string;
+  referer: string | null;
   inputTokens: number;
   outputTokens: number;
   totalTokens: number;
@@ -83,6 +95,7 @@ const mapRow = (row: {
   email: row.email,
   model: row.model,
   provider: row.provider,
+  referer: extractPath(row.referer),
   inputTokens: Number(row.inputTokens),
   outputTokens: Number(row.outputTokens),
   totalTokens: Number(row.totalTokens),
@@ -96,6 +109,7 @@ const SELECT_FIELDS = {
   email: true,
   model: true,
   provider: true,
+  referer: true,
   inputTokens: true,
   outputTokens: true,
   totalTokens: true,

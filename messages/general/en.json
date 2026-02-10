@@ -766,6 +766,9 @@
       "title": "AI Usage",
       "subtitle": "Track your AI model usage, costs, and token consumption.",
       "exportCsv": "Export CSV",
+      "sendByEmail": "Send by email",
+      "sendByEmailSending": "Sending…",
+      "sendByEmailSuccess": "Report sent to your email.",
       "periods": {
         "7d": "7 days",
         "30d": "30 days",
@@ -788,6 +791,7 @@
         "email": "Email",
         "model": "Model",
         "provider": "Provider",
+        "referer": "Source",
         "inputTokens": "Input",
         "outputTokens": "Output",
         "totalTokens": "Total",
@@ -806,12 +810,16 @@
         "email": "Email",
         "model": "Model",
         "provider": "Provider",
+        "referer": "Source",
         "inputTokens": "Input Tokens",
         "outputTokens": "Output Tokens",
         "totalTokens": "Total Tokens",
         "cachedTokens": "Cached Tokens",
         "cost": "Cost (USD)",
-        "noData": "No data to export"
+        "noData": "No data to export",
+        "emailSubject": "AI Usage Report",
+        "emailText": "Your AI usage report is attached.",
+        "emailFailed": "Failed to send email. Please try again."
       },
       "errors": {
         "title": "Something went wrong",

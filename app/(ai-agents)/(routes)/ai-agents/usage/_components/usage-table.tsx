@@ -43,6 +43,7 @@ export const UsageTable = ({ rows }: UsageTableProps) => {
             <TableHead className="hidden min-w-[180px] md:table-cell">{t('table.email')}</TableHead>
             <TableHead className="min-w-[160px]">{t('table.model')}</TableHead>
             <TableHead className="hidden lg:table-cell">{t('table.provider')}</TableHead>
+            <TableHead className="hidden xl:table-cell">{t('table.referer')}</TableHead>
             <TableHead className="text-right">{t('table.inputTokens')}</TableHead>
             <TableHead className="text-right">{t('table.outputTokens')}</TableHead>
             <TableHead className="hidden text-right sm:table-cell">
@@ -63,6 +64,11 @@ export const UsageTable = ({ rows }: UsageTableProps) => {
               <TableCell className="text-xs font-medium">{row.model}</TableCell>
               <TableCell className="hidden text-xs capitalize lg:table-cell">
                 {row.provider}
+              </TableCell>
+              <TableCell className="hidden text-xs xl:table-cell">
+                <span className="max-w-[160px] truncate block text-muted-foreground">
+                  {row.referer ?? '—'}
+                </span>
               </TableCell>
               <TableCell className="text-right text-xs tabular-nums">
                 {formatTokens(row.inputTokens)}
