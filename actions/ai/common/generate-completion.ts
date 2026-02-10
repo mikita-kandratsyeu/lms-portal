@@ -98,30 +98,59 @@ export const generateCompletion = async ({
 
     (async () => {
       const writer = stream_response.writable.getWriter();
+      let streamUsage: {
+        prompt_tokens: number;
+        completion_tokens: number;
+        total_tokens: number;
+        prompt_tokens_details?: { cached_tokens?: number };
+      } | null = null;
 
       try {
         for await (const event of completion as any) {
-          if (providerName === AI_PROVIDER.openai && event.type === 'response.output_text.delta') {
-            await writer.write(
-              encoder.encode(
-                `data: ${JSON.stringify({
-                  item_id: event.item_id,
-                  output_index: event.output_index,
-                  content_index: event.content_index,
-                  delta: event.delta,
-                })}\n\n`,
-              ),
-            );
+          if (providerName === AI_PROVIDER.openai) {
+            if (event.type === 'response.output_text.delta') {
+              await writer.write(
+                encoder.encode(
+                  `data: ${JSON.stringify({
+                    item_id: event.item_id,
+                    output_index: event.output_index,
+                    content_index: event.content_index,
+                    delta: event.delta,
+                  })}\n\n`,
+                ),
+              );
+            } else if (event.type === 'response.completed' && event.response?.usage) {
+              const u = event.response.usage;
+              streamUsage = {
+                prompt_tokens: u.input_tokens ?? 0,
+                completion_tokens: u.output_tokens ?? 0,
+                total_tokens: u.total_tokens ?? 0,
+                ...(u.input_tokens_details?.cached_tokens != null && {
+                  prompt_tokens_details: { cached_tokens: u.input_tokens_details.cached_tokens },
+                }),
+              };
+            }
           } else if (
             [
               AI_PROVIDER.deepseek,
               AI_PROVIDER.gemini,
               AI_PROVIDER.lmsstudio,
               AI_PROVIDER.ollama,
-            ].includes(providerName as AI_PROVIDER) &&
-            event.choices[0].finish_reason !== 'stop'
+            ].includes(providerName as AI_PROVIDER)
           ) {
-            await writer.write(encoder.encode(event.choices[0].delta.content ?? ''));
+            if (event.usage) {
+              streamUsage = {
+                prompt_tokens: event.usage.prompt_tokens ?? 0,
+                completion_tokens: event.usage.completion_tokens ?? 0,
+                total_tokens: event.usage.total_tokens ?? 0,
+                ...(event.usage.prompt_tokens_details && {
+                  prompt_tokens_details: event.usage.prompt_tokens_details,
+                }),
+              };
+            }
+            if (event.choices?.[0]?.finish_reason !== 'stop') {
+              await writer.write(encoder.encode(event.choices[0].delta?.content ?? ''));
+            }
           }
         }
       } catch (error) {
@@ -132,6 +161,16 @@ export const generateCompletion = async ({
         );
       } finally {
         await writer.close();
+
+        if (usageAgentId && usageUserId && streamUsage) {
+          await logAiModelPricingUsage({
+            email: usageEmail,
+            model: usageModel,
+            providerName,
+            usage: streamUsage,
+            userId: usageUserId,
+          });
+        }
       }
     })();
 
