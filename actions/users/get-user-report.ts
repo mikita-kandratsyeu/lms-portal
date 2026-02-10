@@ -83,7 +83,6 @@ export const getUserReportBuffer = async (userId: string) => {
           },
           oauth: true,
           stripeSubscription: true,
-          copilotRequestLimit: true,
         },
       });
 

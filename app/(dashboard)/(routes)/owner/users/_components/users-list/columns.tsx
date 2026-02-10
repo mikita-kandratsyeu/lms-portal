@@ -2,7 +2,6 @@
 
 import {
   ChatSharedConversation,
-  CopilotRequestLimit,
   Course,
   CsmIssue,
   StripeSubscription,
@@ -31,7 +30,6 @@ import { ColumnActions } from './column-actions';
 import { RoleActions } from './role-actions';
 
 type UserWithSubscription = User & {
-  copilotRequestLimit: CopilotRequestLimit | null;
   courses: Course[];
   csmIssues: CsmIssue[];
   settings: UserSettings | null;

@@ -13,7 +13,6 @@ model User {
   aiAgents            AiAgent[]
   connectedAiAgents   AiAgentConnection[]      @relation("ConnectedAiAgents")
   conversations       ChatConversation[]
-  copilotRequestLimit CopilotRequestLimit?
   courses             Course[]
   createdAt           DateTime                 @default(now())
   csmIssues           CsmIssue[]
@@ -330,18 +329,6 @@ model CsmIssue {
 }
 
 // Copilot & Chat
-model CopilotRequestLimit {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  expiredAt DateTime?
-  requests  Int       @default(0)
-  updatedAt DateTime  @updatedAt
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String    @unique
-
-  @@index([userId])
-}
-
 model ChatMessage {
   id              String                      @id @default(uuid())
   content         String

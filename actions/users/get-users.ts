@@ -2,7 +2,6 @@
 
 import {
   ChatSharedConversation,
-  CopilotRequestLimit,
   Course,
   CsmIssue,
   StripeSubscription,
@@ -20,7 +19,6 @@ type GetUsers = {
 };
 
 type UserWithSubscription = User & {
-  copilotRequestLimit: CopilotRequestLimit | null;
   courses: Course[];
   csmIssues: CsmIssue[];
   settings: UserSettings | null;
@@ -40,7 +38,6 @@ export const getUsers = async ({
     const users = await db.user.findMany({
       where: { email: { contains: search, mode: 'insensitive' } },
       include: {
-        copilotRequestLimit: true,
         courses: true,
         csmIssues: true,
         settings: true,
