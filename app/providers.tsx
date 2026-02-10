@@ -95,6 +95,7 @@ export const Providers = ({
 
   useEffect(() => {
     switchLanguage(locale);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
