@@ -6,6 +6,7 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 
 import { getAgentData } from '../agent/get-agent-data';
 import { updateAiAnalytics } from '../analytics/update-ai-analytics';
+import { logAiModelPricingUsage } from '../pricing/update-ai-pricing';
 import { getProviderByAgent } from './get-target-provider';
 
 type GenerateImage = Omit<ImageGenerateParams, 'model'> & {
@@ -17,7 +18,7 @@ export const generateImage = async ({ agentId, modelId, prompt }: GenerateImage)
   const user = await getCurrentUser();
 
   const { agent } = await getAgentData({ agentId });
-  const { model, provider } = await getProviderByAgent(agent, modelId);
+  const { model, provider, providerName } = await getProviderByAgent(agent, modelId);
 
   if (!model || (!user?.hasSubscription && model?.isSubscription)) {
     return { image: null, model: model?.value };
@@ -37,6 +38,18 @@ export const generateImage = async ({ agentId, modelId, prompt }: GenerateImage)
       agentId: agent.id,
       userId: user.userId,
       model: model.value,
+    });
+
+    await logAiModelPricingUsage({
+      email: user.email ?? '',
+      model: model.value,
+      providerName,
+      usage: {
+        prompt_tokens: 0,
+        completion_tokens: 0,
+        total_tokens: 0,
+      },
+      userId: user.userId,
     });
   }
 
