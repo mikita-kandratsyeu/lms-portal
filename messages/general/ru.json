@@ -169,8 +169,8 @@
     }
   },
   "sidebar": {
-    "ai-agents": "ИИ агенты",
-    "ai-usage": "ИИ Использование",
+    "ai-agents": "Агенты",
+    "ai-usage": "Использование",
     "analytics": "Аналитика",
     "billingAndSubscription": "Оплата и подписка",
     "browse": "Обзор",
@@ -768,6 +768,7 @@
       "sendByEmail": "Отправить на почту",
       "sendByEmailSending": "Отправка…",
       "sendByEmailSuccess": "Отчёт отправлен на вашу почту.",
+      "sendByEmailDisabledReason": "Подтвердите почту, чтобы отправить отчёт на email.",
       "periods": {
         "7d": "7 дней",
         "30d": "30 дней",

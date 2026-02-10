@@ -170,8 +170,8 @@
     }
   },
   "sidebar": {
-    "ai-agents": "AI agents",
-    "ai-usage": "AI Usage",
+    "ai-agents": "Agents",
+    "ai-usage": "Usage",
     "analytics": "Analytics",
     "billingAndSubscription": "Billing & Subscription",
     "browse": "Browse",
@@ -769,6 +769,7 @@
       "sendByEmail": "Send by email",
       "sendByEmailSending": "Sending…",
       "sendByEmailSuccess": "Report sent to your email.",
+      "sendByEmailDisabledReason": "Confirm your email to send the report by email.",
       "periods": {
         "7d": "7 days",
         "30d": "30 days",
@@ -819,7 +820,8 @@
         "noData": "No data to export",
         "emailSubject": "AI Usage Report",
         "emailText": "Your AI usage report is attached.",
-        "emailFailed": "Failed to send email. Please try again."
+        "emailFailed": "Failed to send email. Please try again.",
+        "emailNotConfirmed": "Please confirm your email to send the report by email."
       },
       "errors": {
         "title": "Something went wrong",

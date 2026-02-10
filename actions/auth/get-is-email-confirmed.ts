@@ -2,8 +2,22 @@
 
 import { getLocale } from 'next-intl/server';
 
+import { getCurrentUser } from '@/actions/auth/get-current-user';
 import db from '@/lib/db';
 import { getEmailTranslations } from '@/lib/translations/email';
+
+export const getIsEmailConfirmedForCurrentUser = async (): Promise<boolean> => {
+  const user = await getCurrentUser();
+
+  if (!user?.userId) return false;
+
+  const row = await db.user.findUnique({
+    where: { id: user.userId },
+    select: { isEmailConfirmed: true },
+  });
+
+  return row?.isEmailConfirmed ?? false;
+};
 
 export const getIsEmailConfirmed = async (userId: string) => {
   const locale = await getLocale();

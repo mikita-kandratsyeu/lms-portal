@@ -15,11 +15,12 @@ type UsageHeaderProps = {
   title: string;
   subtitle: string;
   period: string;
+  isEmailConfirmed: boolean;
 };
 
 const periodOptionIds = [Period['7D'], Period['30D'], Period['90D'], Period.ALL];
 
-export const UsageHeader = ({ title, subtitle, period }: UsageHeaderProps) => {
+export const UsageHeader = ({ title, subtitle, period, isEmailConfirmed }: UsageHeaderProps) => {
   const t = useTranslations('ai-agents.usage');
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -100,7 +101,8 @@ export const UsageHeader = ({ title, subtitle, period }: UsageHeaderProps) => {
             variant="outline"
             size="sm"
             onClick={handleSendByEmail}
-            disabled={isSending}
+            disabled={isSending || !isEmailConfirmed}
+            title={!isEmailConfirmed ? t('sendByEmailDisabledReason') : undefined}
             className="gap-2"
           >
             <Mail className="h-4 w-4" />

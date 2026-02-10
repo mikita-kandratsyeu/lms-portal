@@ -6,6 +6,7 @@ import { getAiPricingCsvData } from '@/actions/ai/pricing/get-ai-pricing';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { sentEmailTo } from '@/actions/mailer/sent-email-to';
 import { Period } from '@/constants/ai/analytics';
+import db from '@/lib/db';
 
 const PERIOD_TO_DAYS: Record<string, number | null> = {
   [Period['7D']]: 7,
@@ -74,7 +75,23 @@ export async function POST(req: NextRequest) {
     const user = await getCurrentUser();
 
     if (!user?.userId || !user?.email) {
-      return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
+      return NextResponse.json(
+        { error: ReasonPhrases.UNAUTHORIZED },
+        { status: StatusCodes.UNAUTHORIZED },
+      );
+    }
+
+    const dbUser = await db.user.findUnique({
+      where: { id: user.userId },
+      select: { isEmailConfirmed: true },
+    });
+
+    if (!dbUser?.isEmailConfirmed) {
+      const t = await getTranslations('ai-agents.usage.export');
+      return NextResponse.json(
+        { error: t('emailNotConfirmed') },
+        { status: StatusCodes.FORBIDDEN },
+      );
     }
 
     const body = await req.json().catch(() => ({}));

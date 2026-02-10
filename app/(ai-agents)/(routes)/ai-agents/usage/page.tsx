@@ -1,4 +1,5 @@
 import { getAiPricing } from '@/actions/ai/pricing/get-ai-pricing';
+import { getIsEmailConfirmedForCurrentUser } from '@/actions/auth/get-is-email-confirmed';
 import { Period } from '@/constants/ai/analytics';
 
 import { UsagePageClient } from './_components/usage-page-client';
@@ -29,10 +30,19 @@ const UsagePage = async (props: UsagePageProps) => {
   const pageSize = Number(searchParams.pageSize || DEFAULT_PAGE_SIZE);
   const periodDays = PERIOD_TO_DAYS[period] ?? 7;
 
-  const data = await getAiPricing({ periodDays, page: pageIndex, pageSize });
+  const [data, isEmailConfirmed] = await Promise.all([
+    getAiPricing({ periodDays, page: pageIndex, pageSize }),
+    getIsEmailConfirmedForCurrentUser(),
+  ]);
 
   return (
-    <UsagePageClient currentPage={pageIndex} data={data} pageSize={pageSize} period={period} />
+    <UsagePageClient
+      currentPage={pageIndex}
+      data={data}
+      isEmailConfirmed={isEmailConfirmed}
+      pageSize={pageSize}
+      period={period}
+    />
   );
 };
 
