@@ -43,7 +43,7 @@ export const calculateModelCostMicroCents = async (
   if (modelPrices.pricing_type === 'per_image') {
     const microcents = modelPrices?.hd?.['1024x1024_microcents'];
 
-    return microcents != null ? BigInt(microcents) : 0n;
+    return microcents != null ? BigInt(microcents) / 1000n : 0n;
   }
 
   const inputN = BigInt(input);
