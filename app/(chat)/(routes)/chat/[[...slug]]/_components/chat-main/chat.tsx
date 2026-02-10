@@ -324,6 +324,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       assistantMessage,
       chatMessages,
       conversationId,
+      currentAgent?.aiModels,
       currentAgent?.id,
       currentAgent?.systemInstruction,
       currentAgent?.temperature,

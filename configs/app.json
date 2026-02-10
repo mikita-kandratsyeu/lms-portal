@@ -1,73 +1,91 @@
 {
   "ai": {
     "cost": {
+      "units": {
+        "tokens": "microcents_per_1M_tokens",
+        "images": "microcents_per_image"
+      },
+      "updated": "2026-02-10",
       "models": {
         "deepseek-reasoner": {
           "provider": "deepseek",
-          "input_cents_per_1M": 55,
-          "cached_input_cents_per_1M": 28,
-          "output_cents_per_1M": 219,
-          "source": "burnwise.io/deepseek-2026"
-        },
-        "gpt-4.1-mini": {
-          "provider": "openai",
-          "input_cents_per_1M": 40,
-          "cached_input_cents_per_1M": 10,
-          "output_cents_per_1M": 160,
-          "source": "openai.com/api/pricing"
-        },
-        "gpt-4o-mini": {
-          "provider": "openai",
-          "input_cents_per_1M": 15,
-          "cached_input_cents_per_1M": 7.5,
-          "output_cents_per_1M": 60,
-          "source": "openai.com/api/pricing"
-        },
-        "o3-mini": {
-          "provider": "openai",
-          "input_cents_per_1M": 110,
-          "cached_input_cents_per_1M": 55,
-          "output_cents_per_1M": 440,
-          "source": "openai.com/api/pricing"
-        },
-        "gpt-5-nano": {
-          "provider": "openai",
-          "input_cents_per_1M": 5,
-          "cached_input_cents_per_1M": 0.5,
-          "output_cents_per_1M": 40,
-          "source": "openai.com/api/pricing"
-        },
-        "gpt-5-mini": {
-          "provider": "openai",
-          "input_cents_per_1M": 25,
-          "cached_input_cents_per_1M": 2.5,
-          "output_cents_per_1M": 200,
-          "source": "openai.com/api/pricing"
-        },
-        "gemini-3-flash-preview": {
-          "provider": "google",
-          "input_cents_per_1M": 50,
-          "cached_input_cents_per_1M": 5,
-          "output_cents_per_1M": 300,
-          "source": "aifreeapi.com/gemini-3-flash"
+          "input_microcents_per_1M": 55000000,
+          "cached_input_microcents_per_1M": 14000000,
+          "output_microcents_per_1M": 219000000,
+          "source": "https://api-docs.deepseek.com/quick_start/pricing-details-usd"
         },
         "deepseek-chat": {
           "provider": "deepseek",
-          "input_cents_per_1M": 14,
-          "cached_input_cents_per_1M": 2.8,
-          "output_cents_per_1M": 28,
-          "source": "burnwise.io/deepseek-2026"
+          "input_microcents_per_1M": 27000000,
+          "cached_input_microcents_per_1M": 7000000,
+          "output_microcents_per_1M": 110000000,
+          "source": "https://api-docs.deepseek.com/quick_start/pricing-details-usd"
+        },
+        "gpt-4.1-mini": {
+          "provider": "openai",
+          "input_microcents_per_1M": 40000000,
+          "cached_input_microcents_per_1M": 10000000,
+          "output_microcents_per_1M": 160000000,
+          "source": "https://platform.openai.com/docs/pricing"
+        },
+        "gpt-4o-mini": {
+          "provider": "openai",
+          "input_microcents_per_1M": 15000000,
+          "cached_input_microcents_per_1M": 7500000,
+          "output_microcents_per_1M": 60000000,
+          "source": "https://platform.openai.com/docs/pricing"
+        },
+        "o4-mini": {
+          "provider": "openai",
+          "input_microcents_per_1M": 110000000,
+          "cached_input_microcents_per_1M": 27500000,
+          "output_microcents_per_1M": 440000000,
+          "source": "https://platform.openai.com/docs/pricing"
+        },
+        "o3-mini": {
+          "provider": "openai",
+          "input_microcents_per_1M": 110000000,
+          "cached_input_microcents_per_1M": 55000000,
+          "output_microcents_per_1M": 440000000,
+          "source": "https://platform.openai.com/docs/pricing"
+        },
+        "gpt-5-nano": {
+          "provider": "openai",
+          "input_microcents_per_1M": 5000000,
+          "cached_input_microcents_per_1M": 500000,
+          "output_microcents_per_1M": 40000000,
+          "source": "https://platform.openai.com/docs/pricing"
+        },
+        "gpt-5-mini": {
+          "provider": "openai",
+          "input_microcents_per_1M": 25000000,
+          "cached_input_microcents_per_1M": 2500000,
+          "output_microcents_per_1M": 200000000,
+          "source": "https://platform.openai.com/docs/pricing"
+        },
+        "gemini-3-flash-preview": {
+          "provider": "google",
+          "input_microcents_per_1M": 50000000,
+          "cached_input_microcents_per_1M": 5000000,
+          "output_microcents_per_1M": 300000000,
+          "source": "https://ai.google.dev/gemini-api/docs/pricing"
         },
         "dall-e-3": {
           "provider": "openai",
-          "input_cents_per_1M": null,
-          "output_cents_per_1M": null,
-          "per_image_standard": 80,
-          "per_image_hd": 160,
-          "source": "openai.com/api/pricing"
+          "pricing_type": "per_image",
+          "standard": {
+            "1024x1024_microcents": 4000000,
+            "1024x1792_microcents": 8000000,
+            "1792x1024_microcents": 8000000
+          },
+          "hd": {
+            "1024x1024_microcents": 8000000,
+            "1024x1792_microcents": 12000000,
+            "1792x1024_microcents": 12000000
+          },
+          "source": "https://platform.openai.com/docs/pricing"
         }
-      },
-      "updated": "2026-02-09"
+      }
     }
   },
   "auth": {

@@ -524,3 +524,22 @@ model AiAgentUsageSeen {
   @@index([agentId, periodType, periodStart])
   @@index([userId, periodType, periodStart])
 }
+
+model AiAgentModelUsageCost {
+  id             String   @id @default(uuid())
+  cachedTokens   Int?     @default(0)
+  costMicroCents BigInt
+  createdAt      DateTime @default(now())
+  email          String
+  inputTokens    Int
+  model          String
+  outputTokens   Int
+  provider       String
+  referer        String?
+  totalTokens    Int
+  userId         String?
+
+  @@index([createdAt])
+  @@index([provider, model])
+  @@index([userId, email])
+}

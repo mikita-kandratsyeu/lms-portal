@@ -9,6 +9,7 @@ import { LocaleInfo } from '@/hooks/store/use-locale-store';
 
 import { getAgentData } from '../agent/get-agent-data';
 import { updateAiAnalytics } from '../analytics/update-ai-analytics';
+import { logAiModelPricingUsage } from '../pricing/update-ai-pricing';
 import { getProviderByAgent } from './get-target-provider';
 
 type GenerateCompletion = Omit<ResponseCreateParamsBase, 'model'> & {
@@ -65,7 +66,7 @@ export const generateCompletion = async ({
     temperature,
   };
 
-  const completion =
+  const completion: any =
     providerName === AI_PROVIDER.openai
       ? await provider.responses.create({
           ...commonArgs,
@@ -76,17 +77,20 @@ export const generateCompletion = async ({
         })
       : await provider.chat.completions.create({
           ...commonArgs,
+          ...(stream ? { stream_options: { include_usage: true } } : {}),
           messages: [
             ...(instructions ? [{ role: ChatCompletionRole.SYSTEM, content: instructions }] : []),
             ...input,
           ] as ChatCompletionMessageParam[],
-          tools: tools as unknown as ChatCompletionTool[],
+
           tool_choice: 'auto',
+          tools: tools as unknown as ChatCompletionTool[],
         });
 
   const usageAgentId = agent?.id;
-  const usageUserId = user?.userId;
+  const usageEmail = user?.email ?? '';
   const usageModel = model.value;
+  const usageUserId = user?.userId;
 
   if (stream) {
     const encoder = new TextEncoder();
@@ -148,6 +152,16 @@ export const generateCompletion = async ({
       userId: usageUserId,
       model: usageModel,
     });
+
+    if (completion?.usage) {
+      await logAiModelPricingUsage({
+        email: usageEmail,
+        model: usageModel,
+        providerName,
+        usage: completion.usage,
+        userId: usageUserId,
+      });
+    }
   }
 
   return { completion, model: usageModel };

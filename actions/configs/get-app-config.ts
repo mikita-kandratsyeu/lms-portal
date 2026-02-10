@@ -10,9 +10,10 @@ export type GetAppConfig = {
       models: Record<
         string,
         {
-          cached_input_cents_per_1M: number;
-          input_cents_per_1M: number;
-          output_cents_per_1M: number;
+          cached_input_microcents_per_1M: number;
+          input_microcents_per_1M: number;
+          output_microcents_per_1M: number;
+          pricing_type: string;
           provider: string;
           source: string;
         }
