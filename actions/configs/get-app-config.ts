@@ -4,18 +4,26 @@ import { promises as fs } from 'fs';
 
 import { getGithubContents } from '../github/get-contents';
 
+export type ImageSizeMicrocents = {
+  '1024x1024_microcents'?: number;
+  '1024x1792_microcents'?: number;
+  '1792x1024_microcents'?: number;
+};
+
 export type GetAppConfig = {
   ai: {
     cost: {
       models: Record<
         string,
         {
-          cached_input_microcents_per_1M: number;
-          input_microcents_per_1M: number;
-          output_microcents_per_1M: number;
-          pricing_type: string;
+          cached_input_microcents_per_1M?: number;
+          input_microcents_per_1M?: number;
+          output_microcents_per_1M?: number;
+          pricing_type?: string;
           provider: string;
-          source: string;
+          source?: string;
+          standard?: ImageSizeMicrocents;
+          hd?: ImageSizeMicrocents;
         }
       >;
       updated: string | null;
