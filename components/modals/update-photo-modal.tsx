@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useCurrentUser } from '@/hooks/use-current-user';
+import { fetcher } from '@/lib/fetcher';
 
 import { ImageCrop } from '../image/image-crop';
 import { Button } from '../ui';
@@ -57,16 +58,11 @@ export const UpdatePhotoModal = ({ callback, children, type }: UpdatePhotoModalP
         formData.append('name', fileName);
         formData.append('folder', folder);
 
-        const uploadResponse = await fetch('/api/s3/upload', {
-          method: 'POST',
+        const data = await fetcher.post('/api/s3/upload', {
           body: formData,
+          responseType: 'json',
         });
 
-        if (!uploadResponse.ok) {
-          throw new Error('Upload failed');
-        }
-
-        const data = await uploadResponse.json();
         pictureUrl = data?.pictureUrl;
       }
 

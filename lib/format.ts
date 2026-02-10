@@ -1,8 +1,13 @@
+import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
+
 import { roundToNearestFive as roundToNearestFiveFn } from './price';
 
 export const formatPrice = (
   price: number,
-  { locale, currency }: { locale: string; currency: string },
+  { locale, currency }: { locale: string; currency: string } = {
+    currency: DEFAULT_CURRENCY,
+    locale: DEFAULT_LOCALE,
+  },
 ) =>
   new Intl.NumberFormat(locale, {
     currency,

@@ -1,7 +1,7 @@
 import { Fee } from '@prisma/client';
 import { useMemo } from 'react';
 
-import { DEFAULT_CURRENCY, DEFAULT_EXCHANGE_RATE, DEFAULT_LOCALE } from '@/constants/locale';
+import { DEFAULT_EXCHANGE_RATE } from '@/constants/locale';
 import { formatPrice, getConvertedPrice, getScaledPrice } from '@/lib/format';
 import { isNumber } from '@/lib/guard';
 import { hasJsonStructure } from '@/lib/utils';
@@ -30,7 +30,6 @@ export const useLocaleAmount = ({
 }: UseLocaleAmount) => {
   const localeInfo = useLocaleStore((state) => state.localeInfo);
 
-  const defaultLocale = { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY };
   const locale = localeInfo?.locale
     ? { ...localeInfo.locale, currency: currency ?? localeInfo.locale.currency }
     : null;
@@ -71,15 +70,14 @@ export const useLocaleAmount = ({
     ...(useDefaultLocale
       ? {
           amount: price,
-          formattedNet: formatPrice(getConvertedPrice(net), defaultLocale),
-          formattedPrice: formatPrice(getConvertedPrice(price ?? 0), defaultLocale),
+          formattedNet: formatPrice(getConvertedPrice(net)),
+          formattedPrice: formatPrice(getConvertedPrice(price ?? 0)),
           formattedCalculatedFees: calculatedFees.map((fee) => ({
             ...fee,
-            amount: formatPrice(getConvertedPrice(fee.amount), defaultLocale),
+            amount: formatPrice(getConvertedPrice(fee.amount)),
           })),
           formattedTotalFees: formatPrice(
             getConvertedPrice(calculatedFees.reduce((total, fee) => total + fee.amount, 0)),
-            defaultLocale,
           ),
         }
       : { amount, formattedNet, formattedPrice, formattedCalculatedFees, formattedTotalFees }),

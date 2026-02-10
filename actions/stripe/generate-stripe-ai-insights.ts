@@ -6,7 +6,7 @@ import { ChatCompletionUserMessageParam } from 'openai/resources/index.mjs';
 import { generateCompletion } from '@/actions/ai/common/generate-completion';
 import { ChatCompletionRole } from '@/constants/ai/general';
 import { TEN_MINUTE_SEC } from '@/constants/common';
-import { DEFAULT_CURRENCY, DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@/constants/locale';
+import { SUPPORTED_LOCALES } from '@/constants/locale';
 import { fetchCachedData } from '@/lib/cache';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 
@@ -24,20 +24,19 @@ export const generateStripeAiInsights = async () => {
       cacheKey,
       async () => {
         const analytics = await getStripeAnalytics();
-        const defaultLocale = { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY };
 
         const subscriptionPlansBreakdown = analytics.revenue.subscriptions.plans
           .map(
             (plan) =>
-              `  • ${plan.name} (${plan.period}): ${plan.activeCount} active subscriptions, ${formatPrice(getConvertedPrice(plan.revenue), defaultLocale)} revenue`,
+              `  • ${plan.name} (${plan.period}): ${plan.activeCount} active subscriptions, ${formatPrice(getConvertedPrice(plan.revenue))} revenue`,
           )
           .join('\n');
 
         const prompt = `Analyze the following business metrics from our LMS platform and provide actionable insights:
 
 **Financial Balances:**
-- Available Balance: ${formatPrice(getConvertedPrice(analytics.balances.available), defaultLocale)}
-- Pending Balance: ${formatPrice(getConvertedPrice(analytics.balances.pending), defaultLocale)}
+- Available Balance: ${formatPrice(getConvertedPrice(analytics.balances.available))}
+- Pending Balance: ${formatPrice(getConvertedPrice(analytics.balances.pending))}
 
 **User Metrics:**
 - Total Customers: ${analytics.customers.total.toLocaleString()}
@@ -45,13 +44,13 @@ export const generateStripeAiInsights = async () => {
 
 **Revenue Breakdown:**
 - Subscriptions: ${analytics.revenue.subscriptions.count} total (${analytics.revenue.subscriptions.active} active)
-  Revenue: ${formatPrice(getConvertedPrice(analytics.revenue.subscriptions.amount), defaultLocale)}
+  Revenue: ${formatPrice(getConvertedPrice(analytics.revenue.subscriptions.amount))}
 ${subscriptionPlansBreakdown ? `  Plans Breakdown:\n${subscriptionPlansBreakdown}` : ''}
-- Course Sales: ${analytics.revenue.sales.count} purchases totaling ${formatPrice(getConvertedPrice(analytics.revenue.sales.amount), defaultLocale)}
-- Total Revenue: ${formatPrice(getConvertedPrice(analytics.revenue.total), defaultLocale)}
+- Course Sales: ${analytics.revenue.sales.count} purchases totaling ${formatPrice(getConvertedPrice(analytics.revenue.sales.amount))}
+- Total Revenue: ${formatPrice(getConvertedPrice(analytics.revenue.total))}
 
 **Payouts:**
-- Total Paid Out: ${formatPrice(getConvertedPrice(analytics.payouts.total), defaultLocale)}
+- Total Paid Out: ${formatPrice(getConvertedPrice(analytics.payouts.total))}
 - Recent Payout Requests: ${analytics.payouts.recent}
 
 Please provide:

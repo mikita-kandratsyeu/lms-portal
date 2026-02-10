@@ -40,7 +40,7 @@ type AnalyticsPageClientProps = {
 export const AnalyticsPageClient = ({ analytics }: AnalyticsPageClientProps) => {
   const t = useTranslations('ai-agents.analytics');
 
-  const [period, setPeriod] = useState<PeriodId>(Period['30D']);
+  const [period, setPeriod] = useState<PeriodId>(Period['7D']);
   const [scope, setScope] = useState<ScopeId>(Scope.ALL);
 
   const periodOptions = periodOptionIds.map((id) => ({

@@ -17,8 +17,6 @@ export const TotalProfitCard = ({ totalProfit }: TotalProfitCardProps) => {
     return null;
   }
 
-  const defaultLocale = { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY };
-
   return (
     <Card className="shadow-none h-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -30,14 +28,12 @@ export const TotalProfitCard = ({ totalProfit }: TotalProfitCardProps) => {
             <div className="text-xs font-normal text-muted-foreground">
               <div className="flex gap-2 items-center justify-between">
                 <span>Total Revenue</span>
-                <span>{formatPrice(getConvertedPrice(totalProfit.total), defaultLocale)}</span>
+                <span>{formatPrice(getConvertedPrice(totalProfit.total))}</span>
               </div>
               {totalProfit.feeDetails.map((fee) => (
                 <div key={fee.name} className="flex gap-2 items-center justify-between ">
                   <span>{fee.name}</span>
-                  <span>
-                    &#8722;&nbsp;{formatPrice(getConvertedPrice(fee.amount), defaultLocale)}
-                  </span>
+                  <span>&#8722;&nbsp;{formatPrice(getConvertedPrice(fee.amount))}</span>
                 </div>
               ))}
             </div>

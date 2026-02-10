@@ -146,6 +146,12 @@ export const getSideBarRoutes = async (referer: string): Promise<Record<string, 
       icon: 'cpu',
     },
     {
+      href: '/ai-agents/usage',
+      isProtected: false,
+      label: 'ai-usage',
+      icon: 'chart-line',
+    },
+    {
       href: '/ai-agents/analytics',
       isProtected: false,
       icon: 'bar-chart-4',

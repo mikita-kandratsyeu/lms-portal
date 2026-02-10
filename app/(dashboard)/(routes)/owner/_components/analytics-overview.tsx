@@ -12,7 +12,6 @@ import { useTranslations } from 'next-intl';
 
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
-import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 
 type AnalyticsData = Awaited<ReturnType<typeof getStripeAnalytics>>;
@@ -23,19 +22,18 @@ type AnalyticsOverviewProps = {
 
 export const AnalyticsOverview = ({ analytics }: AnalyticsOverviewProps) => {
   const t = useTranslations('owner.analytics');
-  const defaultLocale = { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY };
 
   const metrics = [
     {
       title: t('availableBalance'),
-      value: formatPrice(getConvertedPrice(analytics.balances.available), defaultLocale),
+      value: formatPrice(getConvertedPrice(analytics.balances.available)),
       icon: DollarSign,
       description: t('descriptions.readyForPayout'),
       color: 'text-green-600',
     },
     {
       title: t('pendingBalance'),
-      value: formatPrice(getConvertedPrice(analytics.balances.pending), defaultLocale),
+      value: formatPrice(getConvertedPrice(analytics.balances.pending)),
       icon: TrendingUp,
       description: t('descriptions.processing'),
       color: 'text-yellow-600',
@@ -56,14 +54,14 @@ export const AnalyticsOverview = ({ analytics }: AnalyticsOverviewProps) => {
     },
     {
       title: t('subscriptionRevenue'),
-      value: formatPrice(getConvertedPrice(analytics.revenue.subscriptions.amount), defaultLocale),
+      value: formatPrice(getConvertedPrice(analytics.revenue.subscriptions.amount)),
       icon: CreditCard,
       description: `${analytics.revenue.subscriptions.active} ${t('descriptions.active')}`,
       color: 'text-indigo-600',
     },
     {
       title: t('courseSales'),
-      value: formatPrice(getConvertedPrice(analytics.revenue.sales.amount), defaultLocale),
+      value: formatPrice(getConvertedPrice(analytics.revenue.sales.amount)),
       icon: ShoppingCart,
       description: `${analytics.revenue.sales.count} ${t('descriptions.purchases')}`,
       color: 'text-pink-600',
