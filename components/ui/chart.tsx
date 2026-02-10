@@ -3,7 +3,6 @@
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
 
-import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 import { isString } from '@/lib/guard';
 import { cn } from '@/lib/utils';
@@ -226,11 +225,7 @@ const ChartTooltipContent = React.forwardRef<
                       </div>
                       {item.value && (
                         <span className="font-mono font-medium tabular-nums text-foreground">
-                          {isPriceFormat &&
-                            formatPrice(getConvertedPrice(Number(item.value)), {
-                              locale: DEFAULT_LOCALE,
-                              currency: DEFAULT_CURRENCY,
-                            })}
+                          {isPriceFormat && formatPrice(getConvertedPrice(Number(item.value)))}
                           {!isPriceFormat && item.value.toLocaleString()}
                         </span>
                       )}

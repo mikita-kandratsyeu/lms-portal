@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { Card, CardContent } from '@/components/ui';
-import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 
 type AnalyticsData = Awaited<ReturnType<typeof getStripeAnalytics>>;
@@ -16,7 +15,6 @@ type RevenueBreakdownProps = {
 
 export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
   const t = useTranslations('owner');
-  const defaultLocale = { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY };
   const totalRevenue = analytics.revenue.total;
 
   const subscriptionPercentage =
@@ -43,10 +41,7 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                 <div className="flex items-center justify-between mb-1">
                   <h4 className="font-medium">{t('revenue.subscriptionRevenue')}</h4>
                   <span className="text-sm font-semibold">
-                    {formatPrice(
-                      getConvertedPrice(analytics.revenue.subscriptions.amount),
-                      defaultLocale,
-                    )}
+                    {formatPrice(getConvertedPrice(analytics.revenue.subscriptions.amount))}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -69,7 +64,7 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                         </span>
                         <span className="font-medium">
                           {plan.activeCount} {t('revenue.active')} •{' '}
-                          {formatPrice(getConvertedPrice(plan.revenue), defaultLocale)}
+                          {formatPrice(getConvertedPrice(plan.revenue))}
                         </span>
                       </div>
                     ))}
@@ -86,7 +81,7 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                 <div className="flex items-center justify-between mb-1">
                   <h4 className="font-medium">{t('revenue.courseSales')}</h4>
                   <span className="text-sm font-semibold">
-                    {formatPrice(getConvertedPrice(analytics.revenue.sales.amount), defaultLocale)}
+                    {formatPrice(getConvertedPrice(analytics.revenue.sales.amount))}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -102,13 +97,13 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
               <div>
                 <p className="text-sm text-muted-foreground">{t('revenue.totalPlatformRevenue')}</p>
                 <p className="text-2xl font-bold mt-1">
-                  {formatPrice(getConvertedPrice(totalRevenue), defaultLocale)}
+                  {formatPrice(getConvertedPrice(totalRevenue))}
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-sm text-muted-foreground">{t('revenue.totalPaidOut')}</p>
                 <p className="text-2xl font-bold mt-1 text-green-600">
-                  {formatPrice(getConvertedPrice(analytics.payouts.total), defaultLocale)}
+                  {formatPrice(getConvertedPrice(analytics.payouts.total))}
                 </p>
               </div>
             </div>

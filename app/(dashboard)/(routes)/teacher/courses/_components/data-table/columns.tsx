@@ -6,7 +6,6 @@ import { ArrowUpDown } from 'lucide-react';
 
 import { TextBadge } from '@/components/common/text-badge';
 import { Button } from '@/components/ui';
-import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 
 import { ColumnActions } from './column-actions';
@@ -30,7 +29,7 @@ export const columns: ColumnDef<Course>[] = [
     header: ({ column }) => handleSortingHeader(column, 'Price'),
     cell: ({ row }) => {
       const price = getConvertedPrice(row.getValue('price') || 0);
-      const formatted = formatPrice(price, { locale: DEFAULT_LOCALE, currency: DEFAULT_CURRENCY });
+      const formatted = formatPrice(price);
 
       return price ? formatted : <TextBadge variant="lime" label="Free" />;
     },
