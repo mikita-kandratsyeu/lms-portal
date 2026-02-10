@@ -115,6 +115,7 @@ export const providers = [
         const res = await fetch(
           `https://oauth.mail.ru/userinfo?access_token=${context.tokens.access_token}`,
         );
+
         return await res.json();
       },
     },
