@@ -6,16 +6,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { UsageRow } from '@/actions/ai/pricing/get-ai-pricing';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
 import { TIMESTAMP_TEMPLATE } from '@/constants/common';
-import { formatPrice } from '@/lib/format';
+import { formatCompactNumber, formatPrice } from '@/lib/format';
 import { getFormatLocale } from '@/lib/locale';
-
-const formatTokens = (count: number) => {
-  if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M`;
-
-  if (count >= 1_000) return `${(count / 1_000).toFixed(1)}K`;
-
-  return count.toString();
-};
 
 type UsageTableProps = {
   rows: UsageRow[];
@@ -71,13 +63,13 @@ export const UsageTable = ({ rows }: UsageTableProps) => {
                 </span>
               </TableCell>
               <TableCell className="text-right text-xs tabular-nums">
-                {formatTokens(row.inputTokens)}
+                {formatCompactNumber(row.inputTokens)}
               </TableCell>
               <TableCell className="text-right text-xs tabular-nums">
-                {formatTokens(row.outputTokens)}
+                {formatCompactNumber(row.outputTokens)}
               </TableCell>
               <TableCell className="hidden text-right text-xs tabular-nums sm:table-cell">
-                {formatTokens(row.totalTokens)}
+                {formatCompactNumber(row.totalTokens)}
               </TableCell>
               <TableCell className="text-right text-xs tabular-nums">
                 {formatPrice(row.costCents)}

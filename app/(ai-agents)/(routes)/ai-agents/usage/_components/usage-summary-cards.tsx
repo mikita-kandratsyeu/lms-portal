@@ -7,16 +7,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { UsageSummary } from '@/actions/ai/pricing/get-ai-pricing';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { TIMESTAMP_REQUESTS_LIMIT_TEMPLATE } from '@/constants/common';
-import { formatPrice } from '@/lib/format';
+import { formatCompactNumber, formatPrice } from '@/lib/format';
 import { getFormatLocale } from '@/lib/locale';
-
-const formatTokens = (count: number) => {
-  if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M`;
-
-  if (count >= 1_000) return `${(count / 1_000).toFixed(1)}K`;
-
-  return count.toString();
-};
 
 type UsageSummaryCardsProps = {
   summary: UsageSummary;
@@ -85,16 +77,20 @@ export const UsageSummaryCards = ({ summary }: UsageSummaryCardsProps) => {
         </CardHeader>
         <CardContent className="space-y-3">
           <div>
-            <div className="text-2xl font-semibold">{formatTokens(summary.totalTokens)}</div>
+            <div className="text-2xl font-semibold">{formatCompactNumber(summary.totalTokens)}</div>
             <p className="text-xs text-muted-foreground">{t('cards.totalTokens')}</p>
           </div>
           <div className="grid grid-cols-2 gap-4 border-t pt-3">
             <div>
-              <div className="text-lg font-semibold">{formatTokens(summary.totalInputTokens)}</div>
+              <div className="text-lg font-semibold">
+                {formatCompactNumber(summary.totalInputTokens)}
+              </div>
               <p className="text-xs text-muted-foreground">{t('cards.inputTokens')}</p>
             </div>
             <div>
-              <div className="text-lg font-semibold">{formatTokens(summary.totalOutputTokens)}</div>
+              <div className="text-lg font-semibold">
+                {formatCompactNumber(summary.totalOutputTokens)}
+              </div>
               <p className="text-xs text-muted-foreground">{t('cards.outputTokens')}</p>
             </div>
           </div>

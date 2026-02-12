@@ -1022,13 +1022,21 @@
       "totalInstructors": "Total Instructors",
       "subscriptionRevenue": "Subscription Revenue",
       "courseSales": "Course Sales",
+      "storageUsage": "Storage Usage",
+      "aiTokensUsage": "AI Tokens Used",
+      "aiSpending": "AI Spending",
+      "averageCompletionRate": "Completion Rate",
       "descriptions": {
         "readyForPayout": "Ready for payout",
         "processing": "Processing",
         "activeUsers": "Active users",
         "connectedViaStripe": "Connected via Stripe",
         "active": "active",
-        "purchases": "purchases"
+        "purchases": "purchases",
+        "storageUsage": "{count} files in Yandex Cloud",
+        "aiTokensUsage": "Total tokens consumed by AI agents",
+        "aiSpending": "Total cost of AI API usage",
+        "averageCompletionRate": "{completed} of {total} chapters completed"
       }
     },
     "revenue": {

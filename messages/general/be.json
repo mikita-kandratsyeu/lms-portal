@@ -1022,13 +1022,21 @@
       "totalInstructors": "Усяго выкладчыкаў",
       "subscriptionRevenue": "Даход ад падпісак",
       "courseSales": "Продажы курсаў",
+      "storageUsage": "Запоўненасць сховішча",
+      "aiTokensUsage": "Выкарыстана ИИ токенаў",
+      "aiSpending": "Выдаткі на ИИ",
+      "averageCompletionRate": "Адсотак завяршэння",
       "descriptions": {
         "readyForPayout": "Гатова да вываду",
         "processing": "Апрацоўка",
         "activeUsers": "Актыўных карыстальнікаў",
         "connectedViaStripe": "Падключана праз Stripe",
         "active": "актыўных",
-        "purchases": "пакупак"
+        "purchases": "пакупак",
+        "storageUsage": "{count} файлаў у Яндекс Воблаку",
+        "aiTokensUsage": "Усяго токенаў выкарыстана ИИ агентамі",
+        "aiSpending": "Агульная кошт выкарыстання ИИ API",
+        "averageCompletionRate": "{completed} з {total} глаў завершана"
       }
     },
     "revenue": {

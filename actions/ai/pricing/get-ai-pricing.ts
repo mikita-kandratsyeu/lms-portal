@@ -4,7 +4,7 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { LIMIT_REQUESTS_PER_WEEK } from '@/constants/ai/general';
 import db from '@/lib/db';
 
-const MICRO_CENTS_DIVIDER = 1_000_000;
+export const MICRO_CENTS_DIVIDER = 1_000_000;
 const WEEK_STARTS_ON = 1;
 
 export type UsageRow = {

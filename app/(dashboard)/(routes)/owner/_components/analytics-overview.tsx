@@ -1,10 +1,14 @@
 'use client';
 
 import {
+  Bot,
   CreditCard,
   DollarSign,
   GraduationCap,
+  HardDrive,
   ShoppingCart,
+  Sparkles,
+  Target,
   TrendingUp,
   Users,
 } from 'lucide-react';
@@ -12,15 +16,30 @@ import { useTranslations } from 'next-intl';
 
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
-import { formatPrice, getConvertedPrice } from '@/lib/format';
+import { formatBytes, formatCompactNumber, formatPrice, getConvertedPrice } from '@/lib/format';
 
 type AnalyticsData = Awaited<ReturnType<typeof getStripeAnalytics>>;
+type S3Storage = { usedBytes: number; objectCount: number };
+type AiUsageStats = { totalTokens: number; totalCostCents: number };
+type CompletionRateStats = {
+  averageCompletionRate: number;
+  totalChapters: number;
+  completedChapters: number;
+};
 
 type AnalyticsOverviewProps = {
   analytics: AnalyticsData;
+  s3Storage: S3Storage;
+  aiUsageStats: AiUsageStats;
+  completionRateStats: CompletionRateStats;
 };
 
-export const AnalyticsOverview = ({ analytics }: AnalyticsOverviewProps) => {
+export const AnalyticsOverview = ({
+  analytics,
+  s3Storage,
+  aiUsageStats,
+  completionRateStats,
+}: AnalyticsOverviewProps) => {
   const t = useTranslations('owner.analytics');
 
   const metrics = [
@@ -65,6 +84,37 @@ export const AnalyticsOverview = ({ analytics }: AnalyticsOverviewProps) => {
       icon: ShoppingCart,
       description: `${analytics.revenue.sales.count} ${t('descriptions.purchases')}`,
       color: 'text-pink-600',
+    },
+    {
+      title: t('storageUsage'),
+      value: formatBytes(s3Storage.usedBytes),
+      icon: HardDrive,
+      description: t('descriptions.storageUsage', { count: s3Storage.objectCount }),
+      color: 'text-emerald-600',
+    },
+    {
+      title: t('aiTokensUsage'),
+      value: formatCompactNumber(aiUsageStats.totalTokens),
+      icon: Bot,
+      description: t('descriptions.aiTokensUsage'),
+      color: 'text-cyan-600',
+    },
+    {
+      title: t('aiSpending'),
+      value: formatPrice(aiUsageStats.totalCostCents),
+      icon: Sparkles,
+      description: t('descriptions.aiSpending'),
+      color: 'text-orange-600',
+    },
+    {
+      title: t('averageCompletionRate'),
+      value: `${completionRateStats.averageCompletionRate.toFixed(1)}%`,
+      icon: Target,
+      description: t('descriptions.averageCompletionRate', {
+        completed: completionRateStats.completedChapters,
+        total: completionRateStats.totalChapters,
+      }),
+      color: 'text-teal-600',
     },
   ];
 

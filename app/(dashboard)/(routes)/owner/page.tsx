@@ -1,5 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 
+import { getAiUsageStats } from '@/actions/ai/analytics/get-ai-usage-stats';
+import { getCompletionRateStats } from '@/actions/analytics/get-completion-rate';
+import { getS3StorageUsageAction } from '@/actions/s3/get-s3-storage-usage';
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { getStripeDetails } from '@/actions/stripe/get-stripe-details';
 
@@ -17,8 +20,19 @@ const OwnerPage = async (props: OwnerPageProps) => {
   const searchParams = await props.searchParams;
   const t = await getTranslations('owner.page');
 
-  const { pageCount, payoutRequests, owner } = await getStripeDetails(searchParams);
-  const analytics = await getStripeAnalytics();
+  const [
+    { pageCount, payoutRequests, owner },
+    analytics,
+    s3Storage,
+    aiUsageStats,
+    completionRateStats,
+  ] = await Promise.all([
+    getStripeDetails(searchParams),
+    getStripeAnalytics(),
+    getS3StorageUsageAction(),
+    getAiUsageStats(),
+    getCompletionRateStats(),
+  ]);
 
   return (
     <div className="p-6">
@@ -36,7 +50,12 @@ const OwnerPage = async (props: OwnerPageProps) => {
             {t('sections.overview.description')}
           </span>
         </div>
-        <AnalyticsOverview analytics={analytics} />
+        <AnalyticsOverview
+          analytics={analytics}
+          s3Storage={s3Storage}
+          aiUsageStats={aiUsageStats}
+          completionRateStats={completionRateStats}
+        />
       </div>
       <RevenueBreakdown analytics={analytics} />
       <StripeBalances />

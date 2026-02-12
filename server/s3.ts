@@ -1,4 +1,9 @@
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import mime from 'mime-types';
 
 export type S3FolderType =
@@ -81,6 +86,39 @@ export const deleteFileFromS3 = async (key: string): Promise<boolean> => {
 
 export const deleteFilesFromS3 = async (keys: string[]): Promise<boolean[]> => {
   return Promise.all(keys.map((key) => deleteFileFromS3(key)));
+};
+
+export const getS3StorageUsage = async (): Promise<{
+  usedBytes: number;
+  objectCount: number;
+}> => {
+  try {
+    let usedBytes = 0;
+    let objectCount = 0;
+    let continuationToken: string | undefined;
+
+    do {
+      const command = new ListObjectsV2Command({
+        Bucket: BUCKET_NAME,
+        ContinuationToken: continuationToken,
+      });
+
+      const response = await s3Client.send(command);
+      const contents = response.Contents ?? [];
+
+      for (const obj of contents) {
+        usedBytes += obj.Size ?? 0;
+        objectCount += 1;
+      }
+
+      continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
+    } while (continuationToken);
+
+    return { usedBytes, objectCount };
+  } catch (error) {
+    console.error('[GET_S3_STORAGE_USAGE_ERROR]', error);
+    return { usedBytes: 0, objectCount: 0 };
+  }
 };
 
 export const extractKeyFromUrl = (url: string): string | null => {
