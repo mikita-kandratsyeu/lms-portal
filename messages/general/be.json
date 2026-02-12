@@ -1033,9 +1033,9 @@
         "connectedViaStripe": "Падключана праз Stripe",
         "active": "актыўных",
         "purchases": "пакупак",
-        "storageUsage": "{count} файлаў у Яндекс Воблаку",
+        "storageUsage": "{count} файлаў у S3",
         "aiTokensUsage": "Усяго токенаў выкарыстана ИИ агентамі",
-        "aiSpending": "Агульная кошт выкарыстання ИИ API",
+        "aiSpending": "Агульны кошт выкарыстання вонкавага API",
         "averageCompletionRate": "{completed} з {total} глаў завершана"
       }
     },

@@ -1033,9 +1033,9 @@
         "connectedViaStripe": "Connected via Stripe",
         "active": "active",
         "purchases": "purchases",
-        "storageUsage": "{count} files in Yandex Cloud",
+        "storageUsage": "{count} files in S3",
         "aiTokensUsage": "Total tokens consumed by AI agents",
-        "aiSpending": "Total cost of AI API usage",
+        "aiSpending": "Total cost of external API usage",
         "averageCompletionRate": "{completed} of {total} chapters completed"
       }
     },
