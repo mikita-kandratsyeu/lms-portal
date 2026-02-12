@@ -24,7 +24,7 @@ export const getRequestsLimit = async (user: Awaited<ReturnType<typeof getCurren
 
   const requestsThisWeek = await db.aiAgentModelUsageCost.count({
     where: {
-      userId,
+      OR: [{ userId }, { email: user?.email ?? '' }],
       createdAt: { gte: weekStart },
     },
   });

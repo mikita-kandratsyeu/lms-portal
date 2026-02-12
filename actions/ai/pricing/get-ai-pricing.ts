@@ -132,7 +132,7 @@ export const getAiPricing = async ({
   const hasSubscription = user.hasSubscription ?? false;
 
   const where = {
-    userId: user.userId,
+    OR: [{ userId: user.userId }, { email: user?.email ?? '' }],
     ...(periodStart ? { createdAt: { gte: periodStart } } : {}),
   };
 
@@ -160,7 +160,7 @@ export const getAiPricing = async ({
     }),
     db.aiAgentModelUsageCost.count({
       where: {
-        userId: user.userId,
+        OR: [{ userId: user.userId }, { email: user?.email ?? '' }],
         createdAt: { gte: weekStartDate },
       },
     }),
@@ -204,7 +204,7 @@ export const getAiPricingCsvData = async ({
 
   const rows = await db.aiAgentModelUsageCost.findMany({
     where: {
-      userId: user.userId,
+      OR: [{ userId: user.userId }, { email: user?.email ?? '' }],
       ...(periodStart ? { createdAt: { gte: periodStart } } : {}),
     },
     orderBy: { createdAt: 'desc' },
