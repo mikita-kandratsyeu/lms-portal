@@ -415,6 +415,7 @@
     "download": "Download"
   },
   "price": {
+    "dynamicPriceTooltip": "Price is calculated dynamically based on your location.",
     "fees": "Fees",
     "free": "Free"
   },
@@ -431,13 +432,16 @@
       "unlock-premium-courses": "Premium courses",
       "teacher-functionality": "Advanced functionality for Teacher mode"
     },
-    "bestChoice": "The best choice!",
+    "bestChoice": "Best value",
+    "billedAnnually": "billed annually",
     "loginToContinue": "Login to continue",
     "mo": "/mo",
     "monthly": "Monthly",
+    "savePercent": "Save {percent}%",
     "redirect": "You will be redirected to the checkout page.",
     "upgrade": "Upgrade",
     "yearly": "Yearly",
+    "perYear": "/year",
     "block": "The subscription is not available at the moment."
   },
   "toast": {

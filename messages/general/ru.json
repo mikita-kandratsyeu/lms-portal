@@ -414,6 +414,7 @@
     "download": "Скачать"
   },
   "price": {
+    "dynamicPriceTooltip": "Цена рассчитывается динамически на основе вашей локации.",
     "fees": "Сборы",
     "free": "Бесплатно"
   },
@@ -430,13 +431,16 @@
       "unlock-premium-courses": "Премиум курсы",
       "teacher-functionality": "Расширенный функционал для Teacher режим"
     },
-    "bestChoice": "Лучший выбор!",
+    "bestChoice": "Лучшее предложение",
+    "billedAnnually": "оплата раз в год",
     "loginToContinue": "Войдите, чтобы продолжить",
     "mo": "/мес",
     "monthly": "Ежемесячно",
+    "savePercent": "Экономия {percent}%",
     "redirect": "Вы будете перенаправлены на страницу оформления заказа.",
     "upgrade": "Обновить",
     "yearly": "Ежегодно",
+    "perYear": "/год",
     "block": "В данный момент подписка недоступна."
   },
   "toast": {

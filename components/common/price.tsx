@@ -1,13 +1,24 @@
 'use client';
 
 import { Fee } from '@prisma/client';
+import { Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { memo, useMemo } from 'react';
 
 import { useHydration } from '@/hooks/use-hydration';
 import { useLocaleAmount } from '@/hooks/use-locale-amount';
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Skeleton } from '../ui';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Skeleton,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui';
 import { TextBadge } from './text-badge';
 
 type PriceProps = {
@@ -76,7 +87,25 @@ const PriceComponent = ({
       {isLoading && <Skeleton className="h-[20px] w-[100px]" />}
       {!isLoading && (amount ?? 0) > 0 && (
         <div className="flex flex-col gap-1">
-          <span>{formattedPrice}</span>
+          <span className="inline-flex items-center gap-1.5">
+            {formattedPrice}
+            <TooltipProvider delayDuration={200}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="inline-flex shrink-0 rounded-full p-0.5 text-muted-foreground/70 transition-colors hover:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    aria-label={t('dynamicPriceTooltip')}
+                  >
+                    <Info className="h-3.5 w-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="max-w-[220px]">
+                  {t('dynamicPriceTooltip')}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </span>
           {shouldShowFees && (
             <>
               {showFeesAccordion ? (
