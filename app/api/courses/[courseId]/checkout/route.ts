@@ -115,7 +115,7 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ courseId
           product_data: {
             name: course.title,
           },
-          unit_amount: Math.round(getScaledPrice(getConvertedPrice(course.price * rate, true))),
+          unit_amount: Math.round(getScaledPrice(getConvertedPrice(course.price * rate))),
         },
       },
     ];

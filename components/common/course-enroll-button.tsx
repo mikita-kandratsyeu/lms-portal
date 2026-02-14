@@ -32,7 +32,6 @@ export const CourseEnrollButton = ({
   const { amount, formattedPrice, isLoading } = useLocaleAmount({
     customRates,
     price,
-    roundToNearestFive: true,
   });
 
   const { isMounted } = useHydration();

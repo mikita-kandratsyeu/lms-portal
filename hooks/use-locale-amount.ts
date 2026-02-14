@@ -15,7 +15,6 @@ type UseLocaleAmount = {
   fees?: Fee[];
   ignoreExchangeRate?: boolean;
   price: number | null;
-  roundToNearestFive?: boolean;
   useDefaultLocale?: boolean;
 };
 
@@ -25,7 +24,6 @@ export const useLocaleAmount = ({
   fees = [],
   ignoreExchangeRate = false,
   price,
-  roundToNearestFive = false,
   useDefaultLocale = false,
 }: UseLocaleAmount) => {
   const localeInfo = useLocaleStore((state) => state.localeInfo);
@@ -45,9 +43,7 @@ export const useLocaleAmount = ({
     return localeInfo?.rate ?? DEFAULT_EXCHANGE_RATE;
   }, [customRates, ignoreExchangeRate, locale?.currency, localeInfo?.rate, useDefaultLocale]);
 
-  const amount = Math.round(
-    getScaledPrice(getConvertedPrice((price ?? 0) * exchangeRate, roundToNearestFive)),
-  );
+  const amount = Math.round(getScaledPrice(getConvertedPrice((price ?? 0) * exchangeRate)));
 
   const { net, calculatedFees } = useFeesAmount({ exchangeRate, fees, price: amount });
 

@@ -111,8 +111,7 @@ export const POST = async (req: NextRequest) => {
           price_data: {
             currency: locale.currency,
             product_data: { name: subscriptionName },
-            unit_amount:
-              Math.round(getScaledPrice(getConvertedPrice((price / 12) * rate, true))) * 12,
+            unit_amount: Math.round(getScaledPrice(getConvertedPrice((price / 12) * rate))) * 12,
             recurring: { interval: recurringInterval },
           },
         },
