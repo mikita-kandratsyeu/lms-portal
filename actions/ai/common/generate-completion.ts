@@ -6,6 +6,7 @@ import { ResponseCreateParamsBase, Tool } from 'openai/resources/responses/respo
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { AI_PROVIDER, ChatCompletionRole, DEFAULT_TEMPERATURE } from '@/constants/ai/general';
 import { LocaleInfo } from '@/hooks/store/use-locale-store';
+import { isArray, isString } from '@/lib/guard';
 
 import { getAgentData } from '../agent/get-agent-data';
 import { updateAiAnalytics } from '../analytics/update-ai-analytics';
@@ -71,7 +72,8 @@ export const generateCompletion = async ({
 
   const hasImageContent = (input as Array<{ content: unknown }>).some((msg) => {
     const content = msg.content;
-    return Array.isArray(content) && content.some((p: { type?: string }) => p.type === 'image_url');
+
+    return isArray(content) && content.some((p) => (p as { type?: string })?.type === 'image_url');
   });
 
   const VISION_PROVIDERS = [
@@ -92,7 +94,7 @@ export const generateCompletion = async ({
                 if (part.type === 'image_url' && part.image_url?.url) {
                   return `[Image attached: ${part.image_url.url}]`;
                 }
-                return part.text ?? (typeof part === 'string' ? part : '');
+                return part.text ?? (isString(part) ? part : '');
               })
               .filter(Boolean);
             return { ...msg, content: textParts.join('\n') };
@@ -113,7 +115,7 @@ export const generateCompletion = async ({
                   if (part.type === 'image_url' && part.image_url?.url) {
                     return { type: 'input_image' as const, image_url: part.image_url.url };
                   }
-                  const text = part.text ?? (typeof part === 'string' ? part : '');
+                  const text = part.text ?? (isString(part) ? part : '');
                   return { type: 'input_text' as const, text: String(text) };
                 },
               ),
@@ -123,21 +125,38 @@ export const generateCompletion = async ({
         })
       : input;
 
-  const chatMessages: ChatCompletionMessageParam[] = [
-    ...(instructions ? [{ role: ChatCompletionRole.SYSTEM, content: instructions }] : []),
-    ...(providerName === AI_PROVIDER.openai && !hasImageContent
+  const messagesToSpread =
+    providerName === AI_PROVIDER.openai && !hasImageContent
       ? openaiInput
       : hasImageContent && !supportsVision
         ? inputForChat
-        : input),
+        : input;
+
+  const messagesArray = Array.isArray(messagesToSpread)
+    ? messagesToSpread
+    : isString(messagesToSpread)
+      ? [{ role: ChatCompletionRole.USER, content: messagesToSpread }]
+      : [];
+
+  const chatMessages: ChatCompletionMessageParam[] = [
+    ...(instructions ? [{ role: ChatCompletionRole.SYSTEM, content: instructions }] : []),
+    ...messagesArray,
   ] as ChatCompletionMessageParam[];
 
   const useResponsesApi = providerName === AI_PROVIDER.openai && !hasImageContent && !isSearch;
 
+  const responsesApiInput = (() => {
+    if (isArray(openaiInput)) return openaiInput;
+
+    if (isString(openaiInput)) return openaiInput;
+
+    return [] as any;
+  })();
+
   const completion: any = useResponsesApi
     ? await provider.responses.create({
         ...commonArgs,
-        input: openaiInput,
+        input: responsesApiInput as any,
         instructions,
         tools: tools as unknown as Tool[],
         tool_choice: 'auto',
