@@ -423,14 +423,14 @@
     "searchFor": "Шукаць курс..."
   },
   "subscription": {
-    "bannerBody": "Прэміум-курсы, неабмежаваны доступ да Nova Copilot і многае іншае.",
+    "bannerBody": "Прэміум-курсы, пашыраны доступ да ИИ і многае іншае.",
     "bannerTitle": "Абнавіць да Nova Plus",
     "benefits": {
       "advanced-ai-agents": "Пашыраныя магчымасці ИИ агентаў",
       "cancel-anytime": "Без аплаты на працягу першых двух тыдняў",
-      "get-access-nova-ai": "Неабмежаваны доступ да Nova Copilot",
-      "unlock-premium-courses": "Прэміум курсы",
-      "teacher-functionality": "Пашыраны функцыянал для рэжыму настаўніка"
+      "get-access-nova-ai": "Да 100 ИИ запытаў на тыдзень",
+      "unlock-premium-courses": "Прэміум-курсы",
+      "teacher-functionality": "Пашыраны функцыянал для рэжыму Teacher"
     },
     "bestChoice": "Найлепшая прапанова",
     "billedAnnually": "аплата раз на год",
@@ -785,9 +785,10 @@
       },
       "cards": {
         "costAndRequests": "Выдаткі і запыты",
-        "totalCost": "{count} запытаў за абраны перыяд",
-        "unlimitedRequests": "Безлімітныя запыты (Nova Plus)",
-        "freeRequests": "Бясплатныя запыты на гэтым тыдні",
+        "totalCost": "Усяго: {count} запытаў за абраны перыяд (увесь ІИ)",
+        "freeRequests": "Запыты ў ІИ чат на гэтым тыдні",
+        "plusRequests": "Запыты ў ІИ чат на гэтым тыдні (Nova Plus)",
+        "limitAppliesToChat": "Ліміт распаўсюджваецца толькі на ІИ чат",
         "resetsOn": "Скід {date}",
         "tokenUsage": "Выкарыстанне токенаў",
         "totalTokens": "Усяго токенаў за абраны перыяд",

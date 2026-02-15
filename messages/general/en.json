@@ -423,12 +423,12 @@
     "searchFor": "Search for a course..."
   },
   "subscription": {
-    "bannerBody": "Premium courses, unlimited access to Nova Copilot, and more.",
+    "bannerBody": "Premium courses, extended access to AI, and more.",
     "bannerTitle": "Upgrade to Nova Plus",
     "benefits": {
       "advanced-ai-agents": "Advanced AI agent capabilities",
       "cancel-anytime": "No payment for the first two weeks",
-      "get-access-nova-ai": "Unlimited access to Nova Copilot",
+      "get-access-nova-ai": "Up to 100 AI requests to per week",
       "unlock-premium-courses": "Premium courses",
       "teacher-functionality": "Advanced functionality for Teacher mode"
     },
@@ -785,9 +785,10 @@
       },
       "cards": {
         "costAndRequests": "Cost & Requests",
-        "totalCost": "{count} requests in selected period",
-        "unlimitedRequests": "Unlimited requests (Nova Plus)",
-        "freeRequests": "Free requests this week",
+        "totalCost": "Total: {count} requests in selected period (all AI usage)",
+        "freeRequests": "AI chat requests this week",
+        "plusRequests": "AI chat requests this week (Nova Plus)",
+        "limitAppliesToChat": "Limit applies only to AI chat",
         "resetsOn": "Resets {date}",
         "tokenUsage": "Token Usage",
         "totalTokens": "Total tokens in selected period",

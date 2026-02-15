@@ -13,7 +13,8 @@ export const enum AI_PROVIDER {
   openrouter = 'openrouter',
 }
 
-export const LIMIT_REQUESTS_PER_WEEK = 5;
+export const LIMIT_REQUESTS_PER_WEEK_FREE_TIER = 5;
+export const LIMIT_REQUESTS_PER_WEEK_PAID_TIER = 100;
 export const LIMIT_CHAT_INPUT = 8000;
 export const LIMIT_CONVERSATION_TITLE = 100;
 export const LIMIT_CONVERSATION_STARTERS = 5;

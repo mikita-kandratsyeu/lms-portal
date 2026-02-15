@@ -31,7 +31,8 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    const requestsLimit = await getRequestsLimit(user);
+    const referer = req.headers.get('referer') ?? req.headers.get('referrer');
+    const requestsLimit = await getRequestsLimit(user, referer);
 
     if (requestsLimit.status === REQUEST_STATUS.FORBIDDEN) {
       return new NextResponse(requestsLimit.message, { status: StatusCodes.FORBIDDEN });

@@ -1,7 +1,10 @@
 import { addWeeks, startOfDay, startOfWeek, subDays } from 'date-fns';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { LIMIT_REQUESTS_PER_WEEK } from '@/constants/ai/general';
+import {
+  LIMIT_REQUESTS_PER_WEEK_FREE_TIER,
+  LIMIT_REQUESTS_PER_WEEK_PAID_TIER,
+} from '@/constants/ai/general';
 import db from '@/lib/db';
 
 export const MICRO_CENTS_DIVIDER = 1_000_000;
@@ -61,7 +64,7 @@ const EMPTY_RESULT: UsagePageData = {
     totalTokens: 0,
     requestCount: 0,
     freeRequestsUsed: 0,
-    freeRequestsLimit: LIMIT_REQUESTS_PER_WEEK,
+    freeRequestsLimit: LIMIT_REQUESTS_PER_WEEK_FREE_TIER,
     nextResetDate: null,
     hasSubscription: false,
   },
@@ -161,6 +164,7 @@ export const getAiPricing = async ({
     db.aiAgentModelUsageCost.count({
       where: {
         OR: [{ userId: user.userId }, { email: user?.email ?? '' }],
+        referer: { contains: 'chat' },
         createdAt: { gte: weekStartDate },
       },
     }),
@@ -183,7 +187,9 @@ export const getAiPricing = async ({
     totalTokens: sumTotalTokens,
     requestCount,
     freeRequestsUsed: weeklyCount,
-    freeRequestsLimit: LIMIT_REQUESTS_PER_WEEK,
+    freeRequestsLimit: hasSubscription
+      ? LIMIT_REQUESTS_PER_WEEK_PAID_TIER
+      : LIMIT_REQUESTS_PER_WEEK_FREE_TIER,
     nextResetDate,
     hasSubscription,
   };

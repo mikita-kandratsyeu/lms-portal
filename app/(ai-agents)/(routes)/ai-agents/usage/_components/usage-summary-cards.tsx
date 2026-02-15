@@ -1,7 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
-import { Clock, Infinity as InfinityIcon } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import type { UsageSummary } from '@/actions/ai/pricing/get-ai-pricing';
@@ -39,35 +39,33 @@ export const UsageSummaryCards = ({ summary }: UsageSummaryCardsProps) => {
             </p>
           </div>
           <div className="border-t pt-3">
-            {summary.hasSubscription ? (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <InfinityIcon className="h-4 w-4" />
-                <span>{t('cards.unlimitedRequests')}</span>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">
+                  {t(summary.hasSubscription ? 'cards.plusRequests' : 'cards.freeRequests')}
+                </span>
+                <span className="font-medium">
+                  {summary.freeRequestsUsed} / {summary.freeRequestsLimit}
+                </span>
               </div>
-            ) : (
-              <div className="space-y-1">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">{t('cards.freeRequests')}</span>
-                  <span className="font-medium">
-                    {summary.freeRequestsUsed} / {summary.freeRequestsLimit}
-                  </span>
-                </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
-                  <div
-                    className="h-full rounded-full bg-primary transition-all"
-                    style={{
-                      width: `${Math.min((summary.freeRequestsUsed / summary.freeRequestsLimit) * 100, 100)}%`,
-                    }}
-                  />
-                </div>
-                {resetDate && (
-                  <div className="flex items-center gap-1.5 pt-1 text-xs text-muted-foreground">
-                    <Clock className="h-3 w-3" />
-                    <span>{t('cards.resetsOn', { date: resetDate })}</span>
-                  </div>
-                )}
+              <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
+                <div
+                  className="h-full rounded-full bg-primary transition-all"
+                  style={{
+                    width: `${Math.min((summary.freeRequestsUsed / summary.freeRequestsLimit) * 100, 100)}%`,
+                  }}
+                />
               </div>
-            )}
+              <p className="pt-0.5 text-xs text-muted-foreground">
+                {t('cards.limitAppliesToChat')}
+              </p>
+              {resetDate && (
+                <div className="flex items-center gap-1.5 pt-1 text-xs text-muted-foreground">
+                  <Clock className="h-3 w-3" />
+                  <span>{t('cards.resetsOn', { date: resetDate })}</span>
+                </div>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
