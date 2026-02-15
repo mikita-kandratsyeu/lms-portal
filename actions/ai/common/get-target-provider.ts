@@ -32,6 +32,13 @@ const AIProvider = (providerName: string) => {
     };
   }
 
+  if (providerName === AI_PROVIDER.openrouter) {
+    options = {
+      apiKey: process.env.OPENROUTER_API_KEY as string,
+      baseURL: 'https://openrouter.ai/api/v1',
+    };
+  }
+
   return new OpenAI(options);
 };
 

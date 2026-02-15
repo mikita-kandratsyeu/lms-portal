@@ -202,8 +202,7 @@ export const SubscriptionModal = ({ description = [], open, setOpen }: Subscript
                   )}
                 </div>
               </div>
-
-              <div className="border-t pt-4 sm:pt-5">
+              <div>
                 <TabsContent value={StripeSubscriptionPeriod.yearly} className="mt-0 border-0 p-0">
                   {renderBenefits()}
                 </TabsContent>
@@ -213,7 +212,6 @@ export const SubscriptionModal = ({ description = [], open, setOpen }: Subscript
               </div>
             </div>
           </Tabs>
-
           <DialogFooter className="mt-2 flex-col gap-2 sm:flex-col">
             {user?.userId ? (
               <Button

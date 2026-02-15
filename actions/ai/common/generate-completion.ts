@@ -136,6 +136,7 @@ export const generateCompletion = async ({
               AI_PROVIDER.gemini,
               AI_PROVIDER.lmsstudio,
               AI_PROVIDER.ollama,
+              AI_PROVIDER.openrouter,
             ].includes(providerName as AI_PROVIDER)
           ) {
             if (event.usage) {

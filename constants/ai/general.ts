@@ -5,11 +5,12 @@ export const ChatCompletionRole = {
 };
 
 export const enum AI_PROVIDER {
-  gemini = 'gemini',
   deepseek = 'deepseek',
+  gemini = 'gemini',
   lmsstudio = 'lmsstudio',
   ollama = 'ollama',
   openai = 'openai',
+  openrouter = 'openrouter',
 }
 
 export const LIMIT_REQUESTS_PER_WEEK = 5;
