@@ -106,18 +106,25 @@ export const AnalyticsCharts = ({
           <CardContent>
             {hasGlobalUsage ? (
               <ChartContainer config={globalModelConfig} className="h-[280px] w-full">
-                <BarChart data={globalModelUsage} margin={{ left: 8, right: 8, top: 16 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
+                <BarChart
+                  data={globalModelUsage}
+                  layout="vertical"
+                  margin={{ left: 8, right: 8, top: 8, bottom: 8 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <XAxis type="number" />
+                  <YAxis
+                    type="category"
                     dataKey="model"
+                    width={160}
                     tick={{ fontSize: 11 }}
-                    interval={0}
-                    angle={-15}
-                    textAnchor="end"
-                    height={60}
+                    tickFormatter={(value) =>
+                      typeof value === 'string' && value.length > 22
+                        ? `${value.slice(0, 20)}…`
+                        : value
+                    }
                   />
-                  <YAxis />
-                  <Bar dataKey="uses" fill="var(--color-uses)" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="uses" fill="var(--color-uses)" radius={[0, 6, 6, 0]} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                 </BarChart>
               </ChartContainer>

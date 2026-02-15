@@ -399,7 +399,7 @@
     "translate": "Translate"
   },
   "ai-limit": {
-    "title": "You have run out of Nova Copilot requests. Switch to Nova Plus, or try again after {date}."
+    "title": "You have run out of AI requests. Try again after {date}."
   },
   "cookie-consent": {
     "accept": "Accept",
@@ -767,6 +767,14 @@
         "reviewer": "Code Reviewer",
         "marketing": "Marketing Copy",
         "coach": "Private Coach"
+      },
+      "tokenLeaderboard": {
+        "title": "LLM Leaderboard",
+        "subtitle": "Top models by token usage",
+        "tooltip": "Ranking of AI models by total tokens consumed in the selected period.",
+        "byProvider": "by {provider}",
+        "tokens": "tokens",
+        "new": "new"
       }
     },
     "usage": {

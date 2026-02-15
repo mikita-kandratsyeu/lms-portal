@@ -3,13 +3,16 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
+import type { AiAnalyticsResponse, PeriodAnalytics } from '@/actions/ai/analytics/get-ai-analytics';
+import type { TokenUsageLeaderboardByPeriod } from '@/actions/ai/analytics/get-token-usage-leaderboard';
 import { Period, Scope } from '@/constants/ai/analytics';
 
 import { AnalyticsCharts } from './analytics-charts';
 import { AnalyticsHeader } from './analytics-header';
 import { AnalyticsPersonal } from './analytics-personal';
 import { AnalyticsSummary } from './analytics-summary';
-import type { ModelUsage, PersonalAgent, WeeklyUsage } from './types';
+import { AnalyticsTokenLeaderboard } from './analytics-token-leaderboard';
+import type { ModelUsage } from './types';
 
 const periodOptionIds = Object.values(Period);
 const scopeOptionIds = Object.values(Scope);
@@ -17,27 +20,17 @@ const scopeOptionIds = Object.values(Scope);
 type PeriodId = (typeof periodOptionIds)[number];
 type ScopeId = (typeof scopeOptionIds)[number];
 
-type PeriodAnalytics = {
-  globalModelUsage: ModelUsage[];
-  personalModelUsage: ModelUsage[];
-  weeklyUsage: WeeklyUsage[];
-  globalUsers: number;
-  personalUsers: number;
-  personalAgents: PersonalAgent[];
-};
-
-type AnalyticsData = Record<PeriodId, PeriodAnalytics>;
-
 const getTopModel = (models: ModelUsage[]) =>
   models.reduce((top, current) => (current.uses > top.uses ? current : top), models[0]);
 
 const sumUses = (models: ModelUsage[]) => models.reduce((total, model) => total + model.uses, 0);
 
 type AnalyticsPageClientProps = {
-  analytics: AnalyticsData;
+  analytics: AiAnalyticsResponse;
+  tokenLeaderboard: TokenUsageLeaderboardByPeriod;
 };
 
-export const AnalyticsPageClient = ({ analytics }: AnalyticsPageClientProps) => {
+export const AnalyticsPageClient = ({ analytics, tokenLeaderboard }: AnalyticsPageClientProps) => {
   const t = useTranslations('ai-agents.analytics');
 
   const [period, setPeriod] = useState<PeriodId>(Period['7D']);
@@ -112,6 +105,10 @@ export const AnalyticsPageClient = ({ analytics }: AnalyticsPageClientProps) => 
         globalModelUsage={globalModelUsage}
         hasWeeklyUsage={hasWeeklyUsage}
         hasGlobalUsage={hasGlobalUsage}
+      />
+      <AnalyticsTokenLeaderboard
+        entries={tokenLeaderboard[period] ?? []}
+        periodLabel={t(`periods.${period}`)}
       />
       {showPersonal && (
         <AnalyticsPersonal

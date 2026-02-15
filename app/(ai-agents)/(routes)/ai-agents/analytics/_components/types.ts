@@ -10,6 +10,8 @@ export type WeeklyUsage = {
 };
 
 export type PersonalAgent = {
+  id: string;
   name: string;
+  pictureUrl: string | null;
   users: number;
 };

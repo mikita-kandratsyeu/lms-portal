@@ -19,6 +19,7 @@ export type WeeklyUsage = {
 export type PersonalAgentUsage = {
   id: string;
   name: string;
+  pictureUrl: string | null;
   users: number;
 };
 
@@ -239,7 +240,7 @@ export const getAiAnalytics = async ({
     }),
     db.aiAgent.findMany({
       where: { userId },
-      select: { id: true, name: true },
+      select: { id: true, name: true, pictureUrl: true },
     }),
   ]);
 
@@ -265,6 +266,7 @@ export const getAiAnalytics = async ({
         return {
           id: agent.id,
           name: agent.name,
+          pictureUrl: agent.pictureUrl,
           users,
         };
       })

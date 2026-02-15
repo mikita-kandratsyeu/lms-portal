@@ -3,8 +3,10 @@
 import { useTranslations } from 'next-intl';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { PERSONAL_PIE_COLORS } from '@/constants/ai/analytics';
+import { getFallbackName } from '@/lib/utils';
 
 import type { ModelUsage, PersonalAgent } from './types';
 
@@ -37,14 +39,20 @@ export const AnalyticsPersonal = ({
         <CardContent className="space-y-4">
           {hasPersonalAgents ? (
             personalAgents.map((agent) => (
-              <div key={agent.name} className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">{agent.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {t('myAgentUsers.activeUsers', { count: agent.users })}
-                  </p>
+              <div key={agent.id} className="flex items-center justify-between gap-4">
+                <div className="flex min-w-0 flex-1 items-center gap-3">
+                  <Avatar className="h-9 w-9 shrink-0 border dark:border-muted-foreground">
+                    <AvatarImage src={agent.pictureUrl ?? ''} />
+                    <AvatarFallback>{getFallbackName(agent.name)}</AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0">
+                    <p className="font-medium truncate">{agent.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t('myAgentUsers.activeUsers', { count: agent.users })}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-xs text-muted-foreground">
+                <div className="shrink-0 text-xs text-muted-foreground">
                   {Math.round((agent.users / personalUsers) * 100)}%
                 </div>
               </div>
