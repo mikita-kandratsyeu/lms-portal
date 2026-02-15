@@ -69,11 +69,21 @@ export const POST = async (req: NextRequest) => {
     }
 
     return NextResponse.json({ completion: response.completion });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('[OPEN_AI_COMPLETIONS]', error);
 
-    return new NextResponse(t('body'), {
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
+    const errorMessage =
+      (error as { message?: string })?.message ??
+      (error as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error
+        ?.message ??
+      t('body');
+
+    const isRateLimit =
+      (error as { status?: number })?.status === 429 ||
+      String(errorMessage).toLowerCase().includes('rate limit');
+
+    return new NextResponse(errorMessage, {
+      status: isRateLimit ? StatusCodes.TOO_MANY_REQUESTS : StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }
 };
