@@ -35,8 +35,10 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
 
   const {
     activeFeature,
+    attachedFile,
     chatMessages,
     conversationId,
+    setAttachedFile,
     setChatMessages,
     setConversationId,
     setIsFetching,
@@ -108,7 +110,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
   const saveLastMessages = useCallback(
     async (
       conversationId: string,
-      userMessage: Message,
+      userMessage: Message & { attachedFile?: { key: string; name: string; url: string } },
       assistMessage: Message & { url: string },
     ) => {
       if (assistMessage?.content || (isImageGenerationActive && assistMessage?.url)) {
@@ -183,11 +185,15 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
 
       const messages = chatMessages[currentConversationId] ?? [];
 
+      const userContent = currentMessage || options?.userMessage || '';
+      const hasContent = userContent.length > 0 || Boolean(attachedFile);
+
       const currentUserMessage = {
-        content: currentMessage || options?.userMessage || '',
+        attachedFile: attachedFile ?? undefined,
+        content: userContent,
         id: uuidv4(),
         role: ChatCompletionRole.USER,
-      } as Message;
+      } as Message & { attachedFile?: { key: string; name: string; url: string } };
 
       const currentAssistantMessage = {
         content: options?.userMessage ? '' : assistantMessage,
@@ -196,10 +202,12 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       } as Message;
 
       const messagesForApi = [currentAssistantMessage, currentUserMessage].filter(
-        (message) => message.content.length,
+        (message) =>
+          message.content.length ||
+          (message.role === ChatCompletionRole.USER && Boolean(attachedFile)),
       );
 
-      if (!messagesForApi.length) {
+      if (!hasContent) {
         return;
       }
 
@@ -212,6 +220,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
 
       setAssistantMessage('');
       setCurrentMessage('');
+      setAttachedFile(null);
 
       let streamAssistMessage = '';
       let streamAssistImage = '';
@@ -246,6 +255,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
 
           const completionStream = await fetcher.post('/api/ai/completions', {
             body: {
+              attachedFile: attachedFile ?? undefined,
               input: [...messages, ...messagesForApi].map(({ content, role }) => ({
                 content,
                 role,
@@ -322,6 +332,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
     },
     [
       assistantMessage,
+      attachedFile,
       chatMessages,
       conversationId,
       currentAgent?.aiModels,
@@ -335,6 +346,7 @@ export const Chat = ({ conversations = [], isEmbed, isShared }: ChatProps) => {
       isWebSearchActive,
       localeInfo,
       saveLastMessages,
+      setAttachedFile,
       setChatMessages,
       setConversationId,
       setIsFetching,

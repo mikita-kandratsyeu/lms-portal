@@ -147,7 +147,7 @@
     "zoomLevel": "Масштаб: {level}x"
   },
   "file-upload-modal": {
-    "footer": "Вы можете загрузить изображение или файл PDF.",
+    "footer": "Вы можете загрузить только PDF-файл.",
     "title": "Загрузить файл"
   },
   "footer": {
@@ -636,6 +636,9 @@
   },
   "file-upload": {
     "anyFileType": "Любой тип файла",
+    "clickToSelect": "Нажмите для выбора или перетащите файл",
+    "footer": "Можно загрузить {types}. Макс. {maxSize}МБ, до {maxFiles} файл(ов).",
+    "uploadFile": "Загрузить файл",
     "dragAndDrop": "Выберите файлы или перетащите их",
     "dropFiles": "Отпустите файлы здесь",
     "fileTooLarge": "Файл слишком большой",

@@ -12,21 +12,27 @@ import { cn } from '@/lib/utils';
 
 type ChatInputFooterProps = {
   isDisabled?: boolean;
+  isEmbed?: boolean;
   isSubmitting?: boolean;
   onSendMessage: () => void;
 };
 
 export const ChatInputFooter = ({
   isDisabled,
+  isEmbed,
   isSubmitting,
   onSendMessage,
 }: ChatInputFooterProps) => {
   const t = useTranslations('chat.input');
 
-  const { activeFeature, setActiveFeature } = useChatStore((state) => ({
-    activeFeature: state.activeFeature,
-    setActiveFeature: state.setActiveFeature,
-  }));
+  const { activeFeature, attachedFile, setActiveFeature, setAttachedFile } = useChatStore(
+    (state) => ({
+      activeFeature: state.activeFeature,
+      attachedFile: state.attachedFile,
+      setActiveFeature: state.setActiveFeature,
+      setAttachedFile: state.setAttachedFile,
+    }),
+  );
 
   const { currentAgent, currentModel } = useAiAgentStore((state) => ({
     currentAgent: state.currentAgent,
@@ -37,8 +43,7 @@ export const ChatInputFooter = ({
     .flatMap((model) => model.features)
     ?.includes(AiModelFeature.image);
   const hasWebSearch = currentModel?.features.includes(AiModelFeature.search);
-  // FIXME: Add File uploading with AI
-  const hasFileUploading = false && currentModel?.features.includes(AiModelFeature.file);
+  const hasFileUploading = !isEmbed && currentModel?.features?.includes(AiModelFeature.file);
 
   const showSeparator = hasImageGeneration || hasWebSearch || hasFileUploading;
 
@@ -63,8 +68,11 @@ export const ChatInputFooter = ({
         {hasWebSearch && (
           <button
             type="button"
-            className="mr-3"
-            disabled={isSubmitting}
+            className={cn(
+              'mr-3',
+              (isSubmitting || attachedFile) && 'cursor-not-allowed opacity-50',
+            )}
+            disabled={isSubmitting || Boolean(attachedFile)}
             onClick={() => {
               setActiveFeature(AiModelFeature.search);
             }}
@@ -79,8 +87,11 @@ export const ChatInputFooter = ({
         )}
         {hasImageGeneration && (
           <button
-            className="mr-3"
-            disabled={isSubmitting}
+            className={cn(
+              'mr-3',
+              (isSubmitting || attachedFile) && 'cursor-not-allowed opacity-50',
+            )}
+            disabled={isSubmitting || Boolean(attachedFile)}
             type="button"
             onClick={() => {
               setActiveFeature(AiModelFeature.image);
@@ -96,14 +107,27 @@ export const ChatInputFooter = ({
         )}
         {hasFileUploading && (
           <FileUploadModal
-            accept="application/pdf,image/*"
+            accept="application/pdf"
             folder="chat-files"
             maxFiles={1}
             maxFileSize={8}
-            onChange={() => {}}
+            onChange={(files) => {
+              const file = files[0] ?? null;
+              setAttachedFile(file);
+              if (file && (isWebSearchActive || isImageGenerationActive)) {
+                setActiveFeature(AiModelFeature.text);
+              }
+            }}
             onBegin={() => {}}
           >
-            <button type="button" className="mr-3" disabled={isSubmitting}>
+            <button
+              type="button"
+              className={cn(
+                'mr-3',
+                (isSubmitting || attachedFile) && 'cursor-not-allowed opacity-50',
+              )}
+              disabled={isSubmitting || Boolean(attachedFile)}
+            >
               <Paperclip
                 className={'w-4 h-4 text-muted-foreground transition-colors duration-300'}
               />

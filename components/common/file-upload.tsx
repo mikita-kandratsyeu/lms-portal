@@ -1,6 +1,6 @@
 'use client';
 
-import { CloudUpload, FileText, Trash2 } from 'lucide-react';
+import { CloudUpload, FileText, Info, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
@@ -10,6 +10,21 @@ import { DEFAULT_S3_FOLDER, S3FolderType } from '@/server/s3';
 
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
+
+const ACCEPT_TO_LABEL: Record<string, string> = {
+  'application/pdf': 'PDF',
+  'image/*': 'Images',
+  'image/jpeg': 'JPG',
+  'image/png': 'PNG',
+  'image/gif': 'GIF',
+};
+
+function formatAcceptTypes(anyFileLabel: string, accept?: string): string {
+  if (!accept) return anyFileLabel;
+  const types = accept.split(',').map((t) => t.trim());
+  const labels = types.map((t) => ACCEPT_TO_LABEL[t] ?? t.replace('/*', ''));
+  return labels.filter(Boolean).join(', ') || anyFileLabel;
+}
 
 type FileUploadProps = {
   accept?: string;
@@ -164,11 +179,11 @@ export const FileUpload = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={`
-          relative flex flex-col items-center justify-center w-full h-40 
+          relative flex flex-col items-center justify-center w-full min-h-[240px] sm:min-h-[280px]
           border-2 border-dashed rounded-lg cursor-pointer transition-all duration-200
           ${
             isDragging
-              ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/20'
+              ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/20 scale-[1.02]'
               : 'border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/20 hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-950/10'
           }
         `}
@@ -181,21 +196,27 @@ export const FileUpload = ({
           disabled={isUploading}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
-        <div className="flex flex-col items-center gap-2">
-          <CloudUpload
-            className={`w-8 h-8 ${isDragging ? 'text-blue-600' : 'text-gray-400 dark:text-gray-500'}`}
-          />
+        <div className="flex flex-col items-center gap-3 sm:gap-4 pointer-events-none px-4">
+          <div
+            className={`p-3 sm:p-4 rounded-full transition-all duration-200 ${isDragging ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-gray-100 dark:bg-gray-800'}`}
+          >
+            <CloudUpload
+              className={`w-8 h-8 sm:w-10 sm:h-10 transition-colors duration-200 ${isDragging ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500'}`}
+            />
+          </div>
           <div className="text-center">
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              {isDragging ? t('dropFiles') : t('dragAndDrop')}
+            <p className="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300">
+              {t('uploadFile')}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              {accept || t('anyFileType')} (max {maxFileSize}MB, {maxFiles} files)
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1.5 sm:mt-2">
+              {t('clickToSelect')}
+            </p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 sm:mt-3">
+              {formatAcceptTypes(t('anyFileType'), accept)}
             </p>
           </div>
         </div>
       </div>
-
       {selectedFiles.length > 0 && (
         <div className="space-y-2">
           <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -242,7 +263,6 @@ export const FileUpload = ({
           </div>
         </div>
       )}
-
       {isUploading && (
         <div className="space-y-2">
           <Progress value={uploadProgress} />
@@ -251,12 +271,21 @@ export const FileUpload = ({
           </p>
         </div>
       )}
-
       {selectedFiles.length > 0 && !isUploading && (
         <Button onClick={handleUpload} disabled={isUploading} className="w-full">
           {t('upload')}
         </Button>
       )}
+      <div className="flex gap-x-2 items-center justify-center p-3 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900">
+        <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+        <p className="text-xs text-blue-700 dark:text-blue-300">
+          {t('footer', {
+            maxFiles,
+            maxSize: maxFileSize,
+            types: formatAcceptTypes(t('anyFileType'), accept),
+          })}
+        </p>
+      </div>
     </div>
   );
 };

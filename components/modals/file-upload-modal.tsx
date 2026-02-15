@@ -1,6 +1,5 @@
 'use client';
 
-import { Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 
@@ -35,13 +34,12 @@ export const FileUploadModal = ({
   onChange,
 }: FileUploadModalProps) => {
   const t = useTranslations('file-upload-modal');
-
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[525px] sm:max-h-[625px] overflow-auto max-w-max sm:h-auto h-full sm:w-auto w-full flex flex-col justify-start pt-6">
+      <DialogContent className="fixed inset-x-0 bottom-0 top-0 w-full max-w-full translate-x-0 translate-y-0 sm:left-[50%] sm:right-auto sm:top-[50%] sm:bottom-auto sm:max-w-[525px] sm:max-h-[625px] sm:translate-x-[-50%] sm:translate-y-[-50%] overflow-auto sm:h-auto h-full flex flex-col justify-start pt-6 rounded-none sm:rounded-lg">
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
@@ -57,10 +55,6 @@ export const FileUploadModal = ({
             }}
             onBegin={onBegin}
           />
-        </div>
-        <div className="flex gap-x-2 items-center justify-center">
-          <Info className="w-4 h-4 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">{t('footer')}</p>
         </div>
       </DialogContent>
     </Dialog>

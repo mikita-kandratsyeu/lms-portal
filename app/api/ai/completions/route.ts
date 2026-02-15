@@ -6,6 +6,7 @@ import { generateCompletion } from '@/actions/ai/common/generate-completion';
 import { getRequestsLimit } from '@/actions/ai/common/get-requests-imit';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { REQUEST_STATUS } from '@/constants/ai/general';
+import { transformInputWithAttachedFile } from '@/lib/ai/transform-input-with-file';
 
 export const maxDuration = 60;
 
@@ -14,8 +15,17 @@ export const POST = async (req: NextRequest) => {
   const t = await getTranslations('error');
 
   try {
-    const { agentId, input, instructions, isSearch, localeInfo, modelId, stream, temperature } =
-      await req.json();
+    const {
+      agentId,
+      attachedFile,
+      input,
+      instructions,
+      isSearch,
+      localeInfo,
+      modelId,
+      stream,
+      temperature,
+    } = await req.json();
 
     if (!user) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
@@ -27,9 +37,11 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse(requestsLimit.message, { status: StatusCodes.FORBIDDEN });
     }
 
+    const transformedInput = await transformInputWithAttachedFile(input, attachedFile);
+
     const response = await generateCompletion({
       agentId,
-      input,
+      input: transformedInput,
       instructions,
       isSearch,
       localeInfo,

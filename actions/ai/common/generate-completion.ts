@@ -12,9 +12,12 @@ import { updateAiAnalytics } from '../analytics/update-ai-analytics';
 import { logAiModelPricingUsage } from '../pricing/update-ai-pricing';
 import { getProviderByAgent } from './get-target-provider';
 
-type GenerateCompletion = Omit<ResponseCreateParamsBase, 'model'> & {
+type ChatMessageInput = Array<{ content: string | unknown; role: string }>;
+
+type GenerateCompletion = Omit<ResponseCreateParamsBase, 'model' | 'input'> & {
   agentId?: string;
   customTools?: unknown[];
+  input?: string | ChatMessageInput;
   isSearch?: boolean;
   localeInfo?: LocaleInfo;
   modelId?: string;
@@ -66,26 +69,86 @@ export const generateCompletion = async ({
     temperature,
   };
 
-  const completion: any =
-    providerName === AI_PROVIDER.openai
-      ? await provider.responses.create({
-          ...commonArgs,
-          input,
-          instructions,
-          tools: tools as unknown as Tool[],
-          tool_choice: 'auto',
-        })
-      : await provider.chat.completions.create({
-          ...commonArgs,
-          ...(stream ? { stream_options: { include_usage: true } } : {}),
-          messages: [
-            ...(instructions ? [{ role: ChatCompletionRole.SYSTEM, content: instructions }] : []),
-            ...input,
-          ] as ChatCompletionMessageParam[],
+  const hasImageContent = (input as Array<{ content: unknown }>).some((msg) => {
+    const content = msg.content;
+    return Array.isArray(content) && content.some((p: { type?: string }) => p.type === 'image_url');
+  });
 
-          tool_choice: 'auto',
-          tools: tools as unknown as ChatCompletionTool[],
-        });
+  const VISION_PROVIDERS = [
+    AI_PROVIDER.openai,
+    AI_PROVIDER.openrouter,
+    AI_PROVIDER.gemini,
+    AI_PROVIDER.ollama,
+  ];
+  const supportsVision = VISION_PROVIDERS.includes(providerName as AI_PROVIDER);
+
+  const inputForChat =
+    hasImageContent && !supportsVision
+      ? (input as Array<{ content: unknown; role: string }>).map((msg) => {
+          const content = msg.content;
+          if (Array.isArray(content)) {
+            const textParts = content
+              .map((part: { type?: string; text?: string; image_url?: { url?: string } }) => {
+                if (part.type === 'image_url' && part.image_url?.url) {
+                  return `[Image attached: ${part.image_url.url}]`;
+                }
+                return part.text ?? (typeof part === 'string' ? part : '');
+              })
+              .filter(Boolean);
+            return { ...msg, content: textParts.join('\n') };
+          }
+          return msg;
+        })
+      : input;
+
+  const openaiInput =
+    providerName === AI_PROVIDER.openai && !hasImageContent
+      ? (input as Array<{ content: unknown; role: string }>).map((msg) => {
+          const content = msg.content;
+          if (Array.isArray(content)) {
+            return {
+              ...msg,
+              content: content.map(
+                (part: { type?: string; text?: string; image_url?: { url?: string } }) => {
+                  if (part.type === 'image_url' && part.image_url?.url) {
+                    return { type: 'input_image' as const, image_url: part.image_url.url };
+                  }
+                  const text = part.text ?? (typeof part === 'string' ? part : '');
+                  return { type: 'input_text' as const, text: String(text) };
+                },
+              ),
+            };
+          }
+          return msg;
+        })
+      : input;
+
+  const chatMessages: ChatCompletionMessageParam[] = [
+    ...(instructions ? [{ role: ChatCompletionRole.SYSTEM, content: instructions }] : []),
+    ...(providerName === AI_PROVIDER.openai && !hasImageContent
+      ? openaiInput
+      : hasImageContent && !supportsVision
+        ? inputForChat
+        : input),
+  ] as ChatCompletionMessageParam[];
+
+  const useResponsesApi = providerName === AI_PROVIDER.openai && !hasImageContent && !isSearch;
+
+  const completion: any = useResponsesApi
+    ? await provider.responses.create({
+        ...commonArgs,
+        input: openaiInput,
+        instructions,
+        tools: tools as unknown as Tool[],
+        tool_choice: 'auto',
+      })
+    : await provider.chat.completions.create({
+        ...commonArgs,
+        ...(stream ? { stream_options: { include_usage: true } } : {}),
+        messages: chatMessages,
+        tool_choice: 'auto',
+        tools: tools as unknown as ChatCompletionTool[],
+      });
 
   const usageAgentId = agent?.id;
   const usageEmail = user?.email ?? '';

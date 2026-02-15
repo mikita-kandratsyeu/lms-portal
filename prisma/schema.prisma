@@ -330,15 +330,18 @@ model CsmIssue {
 
 // Copilot & Chat
 model ChatMessage {
-  id              String                      @id @default(uuid())
-  content         String
-  conversation    ChatConversation?           @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  conversationId  String?
-  createdAt       DateTime                    @default(now())
-  imageGeneration ChatImageGenerationMessage?
-  model           String
-  role            String
-  updatedAt       DateTime                    @updatedAt
+  id               String                      @id @default(uuid())
+  content          String
+  conversation     ChatConversation?            @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId   String?
+  createdAt        DateTime                    @default(now())
+  imageGeneration  ChatImageGenerationMessage?
+  model            String
+  role             String
+  updatedAt        DateTime                    @updatedAt
+  attachedFileKey  String?
+  attachedFileName String?
+  attachedFileUrl  String?
 
   @@index([conversationId])
 }

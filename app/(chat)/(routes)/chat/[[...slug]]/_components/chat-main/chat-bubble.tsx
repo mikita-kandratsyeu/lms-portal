@@ -5,10 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { CopyClipboard } from '@/components/common/copy-clipboard';
+import { FileDownload } from '@/components/common/file-download';
 import { MarkdownText } from '@/components/common/markdown-text';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
 import { ChatCompletionRole } from '@/constants/ai/general';
 import { getFallbackName } from '@/lib/utils';
+
+type AttachedFile = { key: string; name: string; url: string };
 
 type ChatBubbleProps = {
   isShared?: boolean;
@@ -18,6 +21,10 @@ type ChatBubbleProps = {
     content: string;
     model?: string;
     id?: string;
+    attachedFile?: AttachedFile;
+    attachedFileKey?: string | null;
+    attachedFileName?: string | null;
+    attachedFileUrl?: string | null;
     imageGeneration?: {
       model: string;
       revisedPrompt: string;
@@ -41,6 +48,16 @@ export const ChatBubble = ({
 }: ChatBubbleProps) => {
   const isAssistant = message.role === ChatCompletionRole.ASSISTANT;
 
+  const attachedFile: AttachedFile | undefined =
+    message.attachedFile ??
+    (message.attachedFileUrl && message.attachedFileName
+      ? {
+          key: message.attachedFileKey ?? '',
+          name: message.attachedFileName,
+          url: message.attachedFileUrl,
+        }
+      : undefined);
+
   const text = streamMessage ?? message.content;
   const image = streamImage ?? message?.imageGeneration?.url;
   const model = message?.imageGeneration ? message.imageGeneration.model : message.model;
@@ -62,6 +79,15 @@ export const ChatBubble = ({
               <div className="text-xs text-muted-foreground">{model}</div>
             )}
           </div>
+          {!isAssistant && attachedFile && (
+            <div className="my-2">
+              <FileDownload
+                fileName={attachedFile.name}
+                showDownloadButton
+                url={attachedFile.url}
+              />
+            </div>
+          )}
           {image && (
             <div className="relative aspect-w-16 aspect-h-14 border my-4">
               <Image alt="Image" fill src={image} className="rounded-sm" />

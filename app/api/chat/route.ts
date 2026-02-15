@@ -23,13 +23,25 @@ export const POST = async (req: NextRequest) => {
 
     await db.chatMessage.createManyAndReturn({
       data: messages.map(
-        ({ id, content, role }: { id: string; content: string; role: ChatRole }) => ({
+        ({
+          id,
+          content,
+          role,
+          attachedFile,
+        }: {
+          id: string;
+          content: string;
+          role: ChatRole;
+          attachedFile?: { key: string; name: string; url: string };
+        }) => ({
           id,
           content,
           conversationId,
           model,
           role,
-          // WARNING: Necessary for the correct order of messages in DB
+          attachedFileKey: attachedFile?.key,
+          attachedFileName: attachedFile?.name,
+          attachedFileUrl: attachedFile?.url,
           createdAt: new Date(
             role === ChatCompletionRole.USER ? Date.now() : addMilliseconds(Date.now(), 10),
           ),

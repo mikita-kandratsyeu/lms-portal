@@ -148,7 +148,7 @@
     "zoomLevel": "Zoom: {level}x"
   },
   "file-upload-modal": {
-    "footer": "You can upload an image or a PDF file.",
+    "footer": "You can upload a PDF file only.",
     "title": "Upload File"
   },
   "footer": {
@@ -637,6 +637,9 @@
   },
   "file-upload": {
     "anyFileType": "Any file type",
+    "clickToSelect": "Click to select or drag and drop file",
+    "footer": "You can upload {types}. Max {maxSize}MB, up to {maxFiles} file(s).",
+    "uploadFile": "Upload file",
     "dragAndDrop": "Choose files or drag and drop",
     "dropFiles": "Drop files here",
     "fileTooLarge": "File is too large",
