@@ -67,7 +67,6 @@ export const generateCompletion = async ({
   const commonArgs = {
     model: model.value,
     stream,
-    temperature,
   };
 
   const hasImageContent = (input as Array<{ content: unknown }>).some((msg) => {
@@ -76,13 +75,12 @@ export const generateCompletion = async ({
     return isArray(content) && content.some((p) => (p as { type?: string })?.type === 'image_url');
   });
 
-  const VISION_PROVIDERS = [
+  const supportsVision = [
     AI_PROVIDER.openai,
     AI_PROVIDER.openrouter,
     AI_PROVIDER.gemini,
     AI_PROVIDER.ollama,
-  ];
-  const supportsVision = VISION_PROVIDERS.includes(providerName as AI_PROVIDER);
+  ].includes(providerName as AI_PROVIDER);
 
   const inputForChat =
     hasImageContent && !supportsVision
@@ -143,7 +141,7 @@ export const generateCompletion = async ({
     ...messagesArray,
   ] as ChatCompletionMessageParam[];
 
-  const useResponsesApi = providerName === AI_PROVIDER.openai && !hasImageContent && !isSearch;
+  const useResponsesApi = providerName === AI_PROVIDER.openai && !hasImageContent;
 
   const responsesApiInput = (() => {
     if (isArray(openaiInput)) return openaiInput;
@@ -165,6 +163,7 @@ export const generateCompletion = async ({
         ...commonArgs,
         ...(stream ? { stream_options: { include_usage: true } } : {}),
         messages: chatMessages,
+        temperature,
         tool_choice: 'auto',
         tools: tools as unknown as ChatCompletionTool[],
       });
