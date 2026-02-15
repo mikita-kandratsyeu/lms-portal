@@ -54,6 +54,7 @@ export const VideoPlayer = ({
   const isGoogleDrivePlayer = videoUrl.includes('drive.google.com');
   const isGoogleSlidesPlayer = videoUrl.includes('docs.google.com');
   const isVKPlayer = videoUrl.includes('vk.com');
+  const isYoutubePlayer = videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be');
 
   const effectiveUrl = qualities?.length
     ? selectedQualityUrl ?? qualities[0]?.url ?? videoUrl
@@ -112,7 +113,7 @@ export const VideoPlayer = ({
     width: '100%',
   };
 
-  if (isGoogleDrivePlayer || isGoogleSlidesPlayer || isVKPlayer) {
+  if (isGoogleDrivePlayer || isGoogleSlidesPlayer || isVKPlayer || isYoutubePlayer) {
     if (autoPlay && !isGoogleDrivePlayer) {
       url.searchParams.append('autoplay', '1');
     }
@@ -148,7 +149,6 @@ export const VideoPlayer = ({
         <ReactPlayer
           key={effectiveUrl}
           ref={playerRef as React.RefObject<ReactPlayerRef>}
-          {...commonProps}
           className="react-player"
           config={{
             file: {
@@ -167,9 +167,9 @@ export const VideoPlayer = ({
           onReady={handleReady}
           playing={useCustomControls ? isPlaying : autoPlay}
           url={url.toString()}
+          {...commonProps}
         />
       </div>
-
       {useCustomControls && (
         <VideoPlayerControls
           containerRef={containerRef}
