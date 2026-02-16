@@ -32,7 +32,6 @@ export const UsageTable = ({ rows }: UsageTableProps) => {
         <TableHeader>
           <TableRow>
             <TableHead className="min-w-[160px]">{t('table.date')}</TableHead>
-            <TableHead className="hidden min-w-[180px] md:table-cell">{t('table.email')}</TableHead>
             <TableHead className="min-w-[160px]">{t('table.model')}</TableHead>
             <TableHead className="hidden lg:table-cell">{t('table.provider')}</TableHead>
             <TableHead className="hidden xl:table-cell">{t('table.referer')}</TableHead>
@@ -49,9 +48,6 @@ export const UsageTable = ({ rows }: UsageTableProps) => {
             <TableRow key={row.id}>
               <TableCell className="text-xs">
                 {format(new Date(row.createdAt), TIMESTAMP_TEMPLATE, { locale: formatLocale })}
-              </TableCell>
-              <TableCell className="hidden text-xs md:table-cell">
-                <span className="max-w-[180px] truncate block">{row.email}</span>
               </TableCell>
               <TableCell className="text-xs font-medium">{row.model}</TableCell>
               <TableCell className="hidden text-xs capitalize lg:table-cell">

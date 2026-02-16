@@ -38,6 +38,11 @@ export const formatBytes = (bytes: number, decimals = 2): string => {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 };
 
+export const formatNumber = (
+  num: number,
+  { locale }: { locale?: string } = { locale: DEFAULT_LOCALE },
+) => new Intl.NumberFormat(locale).format(num);
+
 export const formatCompactNumber = (num: number): string => {
   if (num < 1000) return num.toString();
   if (num < 1_000_000) return `${(num / 1000).toFixed(1)}K`;

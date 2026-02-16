@@ -206,11 +206,19 @@ export const getAiPricingCsvData = async ({
 
   if (!user?.userId) return [];
 
+  return getAiPricingCsvDataForUser(user.userId, user.email ?? '', periodDays);
+};
+
+export const getAiPricingCsvDataForUser = async (
+  userId: string,
+  userEmail: string,
+  periodDays: number | null = 90,
+): Promise<UsageRow[]> => {
   const periodStart = getPeriodStart(periodDays);
 
   const rows = await db.aiAgentModelUsageCost.findMany({
     where: {
-      OR: [{ userId: user.userId }, { email: user?.email ?? '' }],
+      OR: [{ userId }, { email: userEmail }],
       ...(periodStart ? { createdAt: { gte: periodStart } } : {}),
     },
     orderBy: { createdAt: 'desc' },

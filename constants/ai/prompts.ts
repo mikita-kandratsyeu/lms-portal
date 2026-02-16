@@ -61,37 +61,31 @@ export const NOVA_PULSE_SUMMARY = <T>(data: T, locale: string) =>
 
 Translate the entire response into ${locale}.`;
 
-export const USER_SUMMARY = <T>(
+export const USER_SUMMARY = <T extends { userData: unknown; aiUsage: unknown }>(
   data: T,
   locale: string,
-) => `Based on the provided user data, generate a formal and well-structured summary for a "User Activity Report". Include the following aspects:
-1. **General User Information:** Mention the user's name, role, registration date, and the date of the last profile update.
-2. **User Activity Highlights:** Summarize the number of completed actions, such as conversations, support tickets, and purchases.
-3. **Key Achievements or Issues:** Highlight the most significant aspects of the user's interactions with the system (e.g., successful purchases, complex tickets, or frequent requests).
-4. **Engagement Metrics:** Describe the user's level of activity (e.g., daily, weekly, infrequent).
-5. **Recommendations:** Based on the data, provide brief suggestions for ways to improve the user's experience and engagement. 
+) => `You are an expert analyst writing an Executive Summary for a confidential User Activity Report. Output ONLY valid JSON.
 
-Provided data:
 ${JSON.stringify(data)}
 
-Formatting requirements:
-- Use a professional and formal tone.
-- Structure the summary in paragraphs or bullet points with clear headings.
-- Ensure the content is concise but informative.
-- Length: 150–200 words maximum.
+Write a concise executive summary (120–180 words) in the requested language (${locale}). Structure:
 
-Example Output:
-- **General Information:** [User’s name] registered on [date] and holds the role of [role]. The profile was last updated on [date].
-- **Activity Highlights:** The user has completed [X] conversations, [Y] support tickets, and [Z] purchases.
-- **Key Achievements or Issues:** [Highlight any notable successes or challenges, such as resolving complex tickets or completing major purchases].
-- **Engagement Level:** The user interacts with the system frequently, with activity recorded [daily/weekly/infrequently].
-- **Recommendations:** [Provide actionable insights, such as offering additional resources, improving support ticket resolution processes, or encouraging further engagement].
-- The output must strictly adhere to the specified JSON format and be translated into the requested language (${locale})
-- The summary must be strictly formatted as JSON:
-  
-   {
-       "content": "Text format"
-   }
+1. **Overview** — One sentence: user name, role, plan (Premium/Base), registration date.
+2. **Activity snapshot** — Key metrics: conversations, CSM issues, purchases. If AI usage exists: requests count, total cost in USD.
+3. **Insights** — 1–2 sentences on notable patterns: e.g. top AI model used, engagement level (active/moderate/low), purchase activity, or any open CSM issues.
+4. **Recommendation** — One actionable suggestion for the account owner (e.g. follow up on open tickets, suggest upgrade, or encourage AI usage).
 
-The response should be comprehensive, professional, and ready to be included in a formal report.
+Rules:
+- If aiUsage.requestCount is 0 or empty, omit AI usage from the summary.
+- If aiUsage.byModel exists and has items, mention the most used model.
+- Be factual and neutral. Do not invent data.
+- Use plain text only; no markdown or HTML.
+
+Output strictly this JSON:
+
+{
+  "content": "Your full summary text as a single string. Use paragraphs separated by newlines for readability."
+}
+
+Return only the JSON object.
 `;

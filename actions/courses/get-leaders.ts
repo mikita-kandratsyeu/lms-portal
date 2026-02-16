@@ -5,7 +5,7 @@ import groupBy from 'lodash.groupby';
 import { CHAPTER_XP } from '@/constants/courses';
 import { DELAY_MS } from '@/constants/paginations';
 import db from '@/lib/db';
-import { isBusinessOwner as isOwnerFunc } from '@/lib/owner';
+import { isBusinessOwner } from '@/lib/owner';
 import { getBatchedItems, sleep } from '@/lib/utils';
 
 import { getUserSubscription } from '../stripe/get-user-subscription';
@@ -64,7 +64,7 @@ export const getLeaders = async (currentUserId?: string) => {
       const currentBatchUserSubscription = await Promise.all(
         batch.map(async (user) => {
           const userSubscription = await getUserSubscription(user.id);
-          const isOwner = isOwnerFunc(user.id);
+          const isOwner = isBusinessOwner(user.id);
 
           return {
             hasSubscription: isOwner || Boolean(userSubscription),

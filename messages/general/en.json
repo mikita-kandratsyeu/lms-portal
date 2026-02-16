@@ -1124,9 +1124,24 @@
         },
         "premium": "Premium",
         "free": "Free",
+        "base": "Base",
         "public": "Public",
         "private": "Private",
         "noUsers": "No users found"
+      },
+      "reportModal": {
+        "viewReport": "View Report",
+        "title": "User Report",
+        "description": "Preview the report before downloading or sending by email",
+        "preview": "Preview",
+        "download": "Download PDF",
+        "sendByEmail": "Send by Email",
+        "loading": "Generating report...",
+        "errors": {
+          "fetchFailed": "Failed to load report. Please try again.",
+          "sendFailed": "Failed to send email. Please try again."
+        },
+        "sendSuccess": "Report sent to your email successfully"
       }
     },
     "csm": {

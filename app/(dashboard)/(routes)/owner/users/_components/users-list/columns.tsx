@@ -119,7 +119,7 @@ export const useColumns = (): ColumnDef<UserWithSubscription>[] => {
 
         return (
           <TextBadge
-            label={isPremium ? t('premium') : t('free')}
+            label={isPremium ? t('premium') : t('base')}
             variant={isPremium ? 'indigo' : 'lime'}
           />
         );
@@ -171,9 +171,17 @@ export const useColumns = (): ColumnDef<UserWithSubscription>[] => {
     {
       id: 'columnActions',
       cell: ({ row }) => {
-        const { id } = row.original;
+        const { id, name, email, role, stripeSubscription } = row.original;
 
-        return <ColumnActions userId={id} />;
+        return (
+          <ColumnActions
+            userId={id}
+            userName={name}
+            userEmail={email}
+            userRole={role}
+            isPremium={!!stripeSubscription?.stripeSubscriptionId}
+          />
+        );
       },
     },
   ];
@@ -212,7 +220,7 @@ export const columns: ColumnDef<UserWithSubscription>[] = [
       const isPremium = stripeSubscription?.stripeSubscriptionId;
 
       return (
-        <TextBadge label={isPremium ? 'Premium' : 'Free'} variant={isPremium ? 'indigo' : 'lime'} />
+        <TextBadge label={isPremium ? 'Premium' : 'Base'} variant={isPremium ? 'indigo' : 'lime'} />
       );
     },
   },
@@ -262,9 +270,17 @@ export const columns: ColumnDef<UserWithSubscription>[] = [
   {
     id: 'columnActions',
     cell: ({ row }) => {
-      const { id } = row.original;
+      const { id, name, email, role, stripeSubscription } = row.original;
 
-      return <ColumnActions userId={id} />;
+      return (
+        <ColumnActions
+          userId={id}
+          userName={name}
+          userEmail={email}
+          userRole={role}
+          isPremium={!!stripeSubscription?.stripeSubscriptionId}
+        />
+      );
     },
   },
 ];

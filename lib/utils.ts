@@ -10,6 +10,13 @@ export const cn = (...inputs: ClassValue[]) => {
 
 export const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
 
+export const truncate = (str: string, maxLength: number): string => {
+  if (!str) return '';
+
+  const s = String(str);
+  return s.length <= maxLength ? s : `${s.slice(0, maxLength)}...`;
+};
+
 export const getFallbackName = (fullName: string) => {
   const [firstname, lastname] = fullName.split(' ');
 
