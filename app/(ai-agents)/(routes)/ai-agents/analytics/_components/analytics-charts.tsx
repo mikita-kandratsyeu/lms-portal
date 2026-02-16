@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Bar, BarChart, CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import {
@@ -11,24 +11,20 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 
-import type { ModelUsage, WeeklyUsage } from './types';
+import type { WeeklyUsage } from './types';
 
 type AnalyticsChartsProps = {
   showGlobal: boolean;
   showPersonal: boolean;
   weeklyUsage: WeeklyUsage[];
-  globalModelUsage: ModelUsage[];
   hasWeeklyUsage: boolean;
-  hasGlobalUsage: boolean;
 };
 
 export const AnalyticsCharts = ({
   showGlobal,
   showPersonal,
   weeklyUsage,
-  globalModelUsage,
   hasWeeklyUsage,
-  hasGlobalUsage,
 }: AnalyticsChartsProps) => {
   const t = useTranslations('ai-agents.analytics');
   const emptyLabel = t('emptyData');
@@ -38,18 +34,8 @@ export const AnalyticsCharts = ({
     personal: { label: t('labels.personal'), color: 'hsl(var(--muted-foreground))' },
   } satisfies ChartConfig;
 
-  const globalModelConfig = {
-    uses: {
-      label: t('labels.uses'),
-      theme: {
-        light: 'hsl(var(--muted-foreground))',
-        dark: 'hsl(var(--muted-foreground))',
-      },
-    },
-  } satisfies ChartConfig;
-
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 grid-cols-1">
       {(showGlobal || showPersonal) && (
         <Card className="shadow-none">
           <CardHeader>
@@ -90,43 +76,6 @@ export const AnalyticsCharts = ({
                   )}
                   <ChartTooltip content={<ChartTooltipContent />} />
                 </LineChart>
-              </ChartContainer>
-            ) : (
-              <p className="text-sm text-muted-foreground">{emptyLabel}</p>
-            )}
-          </CardContent>
-        </Card>
-      )}
-      {showGlobal && (
-        <Card className="shadow-none">
-          <CardHeader>
-            <CardTitle>{t('popularModels.title')}</CardTitle>
-            <p className="text-xs text-muted-foreground">{t('cards.publicOnly')}</p>
-          </CardHeader>
-          <CardContent>
-            {hasGlobalUsage ? (
-              <ChartContainer config={globalModelConfig} className="h-[280px] w-full">
-                <BarChart
-                  data={globalModelUsage}
-                  layout="vertical"
-                  margin={{ left: 8, right: 8, top: 8, bottom: 8 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                  <XAxis type="number" />
-                  <YAxis
-                    type="category"
-                    dataKey="model"
-                    width={160}
-                    tick={{ fontSize: 11 }}
-                    tickFormatter={(value) =>
-                      typeof value === 'string' && value.length > 22
-                        ? `${value.slice(0, 20)}…`
-                        : value
-                    }
-                  />
-                  <Bar dataKey="uses" fill="var(--color-uses)" radius={[0, 6, 6, 0]} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </BarChart>
               </ChartContainer>
             ) : (
               <p className="text-sm text-muted-foreground">{emptyLabel}</p>

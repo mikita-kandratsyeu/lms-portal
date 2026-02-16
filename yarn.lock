@@ -6099,13 +6099,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sparticuz/chromium@npm:^138.0.2":
+"@sparticuz/chromium-min@npm:^138.0.2":
   version: 138.0.2
-  resolution: "@sparticuz/chromium@npm:138.0.2"
+  resolution: "@sparticuz/chromium-min@npm:138.0.2"
   dependencies:
     follow-redirects: "npm:^1.15.9"
     tar-fs: "npm:^3.1.0"
-  checksum: 10c0/8274e70d1b77ee3c31b34cd1600ca5616027a4ace981b1fa3e8694e743304460c562d36ed03fcb2d16d56be6363e70fd0b27899736b6adba90433f1f36a50a40
+  checksum: 10c0/83a1cce06c94d7e1a6ba621675bfa7402722c0de069338cd1bd185c09a32db3997276135be3940866aec3dc3eebc2b0c9f27d77ebe905e943b07710689b0966b
   languageName: node
   linkType: hard
 
@@ -11570,7 +11570,7 @@ __metadata:
     "@radix-ui/react-switch": "npm:^1.0.3"
     "@radix-ui/react-tabs": "npm:^1.0.4"
     "@radix-ui/react-tooltip": "npm:^1.2.7"
-    "@sparticuz/chromium": "npm:^138.0.2"
+    "@sparticuz/chromium-min": "npm:^138.0.2"
     "@tailwindcss/aspect-ratio": "npm:^0.4.2"
     "@tailwindcss/typography": "npm:^0.5.10"
     "@tanstack/react-table": "npm:^8.11.8"

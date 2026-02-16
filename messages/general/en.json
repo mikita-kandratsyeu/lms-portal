@@ -749,9 +749,6 @@
         "globalOnly": "Global public agents",
         "personalOnly": "Your agents only"
       },
-      "popularModels": {
-        "title": "Most popular models (global)"
-      },
       "myAgentUsers": {
         "title": "My agent users",
         "subtitle": "Top agents by active users",

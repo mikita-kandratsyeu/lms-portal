@@ -102,9 +102,7 @@ export const AnalyticsPageClient = ({ analytics, tokenLeaderboard }: AnalyticsPa
         showGlobal={showGlobal}
         showPersonal={showPersonal}
         weeklyUsage={weeklyUsage}
-        globalModelUsage={globalModelUsage}
         hasWeeklyUsage={hasWeeklyUsage}
-        hasGlobalUsage={hasGlobalUsage}
       />
       <AnalyticsTokenLeaderboard
         entries={tokenLeaderboard[period] ?? []}

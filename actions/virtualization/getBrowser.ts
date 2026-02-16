@@ -3,14 +3,17 @@
 import * as puppeteer from 'puppeteer';
 import puppeteerCore from 'puppeteer-core';
 
+const CHROMIUM_PACK_URL =
+  'https://github.com/Sparticuz/chromium/releases/download/v138.0.2/chromium-v138.0.2-pack.x64.tar';
+
 export const getBrowser = async () => {
   if (process.env.NODE_ENV === 'production') {
-    const chromium = (await import('@sparticuz/chromium')).default;
+    const chromium = (await import('@sparticuz/chromium-min')).default;
 
     return await puppeteerCore.launch({
       headless: true,
       args: chromium.args,
-      executablePath: await chromium.executablePath(),
+      executablePath: await chromium.executablePath(CHROMIUM_PACK_URL),
     });
   }
 
