@@ -20,8 +20,9 @@ type ChatSideBarProps = {
 export const ChatSideBar = ({ agentsAmount, conversations }: ChatSideBarProps) => {
   const { user, status } = useCurrentUser();
 
-  const { setConversations } = useChatStore((state) => ({
+  const { setConversations, storeConversations } = useChatStore((state) => ({
     setConversations: state.setConversations,
+    storeConversations: state.conversations,
   }));
 
   useEffect(() => {
@@ -29,16 +30,17 @@ export const ChatSideBar = ({ agentsAmount, conversations }: ChatSideBarProps) =
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversations]);
 
+  const displayConversations = storeConversations.length > 0 ? storeConversations : conversations;
   const isLoading = status === AuthStatus.LOADING;
 
   return (
     <div className="h-full border-r flex flex-col justify-between shadow-sm bg-white dark:bg-neutral-900 md:pt-[80px]">
       <ChatSideBarTop agentsAmount={agentsAmount} />
       <div className="flex flex-col w-full overflow-y-auto h-full">
-        <ChatSideBarItems conversations={conversations} />
+        <ChatSideBarItems conversations={displayConversations} />
       </div>
       {!isLoading && !user?.hasSubscription && <SubscriptionBanner className="m-4" />}
-      <ChatSideBarBottom amountOfConversations={conversations.length} />
+      <ChatSideBarBottom amountOfConversations={displayConversations.length} />
     </div>
   );
 };

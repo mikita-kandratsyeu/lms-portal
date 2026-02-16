@@ -35,12 +35,12 @@ export const ChatSideBarItems = ({ conversations }: ChatSideBarItemsProps) => {
     chatMessages,
     conversationId,
     isFetching,
+    removeConversation,
     setChatMessages,
     setConversationId,
     setIsFetching,
   } = useChatStore();
 
-  const [clientConversations, setClientConversations] = useState(conversations);
   const [editTitleId, setEditTitleId] = useState('');
   const [actionMenuOpen, setActionMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -50,20 +50,24 @@ export const ChatSideBarItems = ({ conversations }: ChatSideBarItemsProps) => {
   );
 
   useEffect(() => {
-    setClientConversations(conversations);
-  }, [conversations]);
-
-  useEffect(() => {
     document.body.style.removeProperty('pointer-events');
   }, [open]);
 
   useEffect(() => {
-    if (Object.keys(chatMessages).length !== conversations.length) {
+    if (!conversations.length) return;
+
+    const conversationIds = conversations.map((c) => c.id);
+    const currentInList = conversationId && conversationIds.includes(conversationId);
+    const chatMessagesSynced =
+      Object.keys(chatMessages).length === conversations.length &&
+      conversationIds.every((id) => id in chatMessages);
+
+    if (!currentInList || !chatMessagesSynced) {
       setConversationId(conversations[0].id);
       setChatMessages(getChatMessages(conversations));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversations.length]);
+  }, [conversations]);
 
   const handleOnClick = (event: SyntheticEvent, id: string) => {
     event.stopPropagation();
@@ -81,7 +85,9 @@ export const ChatSideBarItems = ({ conversations }: ChatSideBarItemsProps) => {
     setIsFetching(true);
 
     try {
-      fetcher.delete(`/api/chat/conversations/${id}`);
+      await fetcher.delete(`/api/chat/conversations/${id}`);
+
+      removeConversation(id);
 
       toast({
         title: t('removed-conversation', {
@@ -110,7 +116,7 @@ export const ChatSideBarItems = ({ conversations }: ChatSideBarItemsProps) => {
         />
       )}
       <div>
-        {clientConversations.map((conversation) => {
+        {conversations.map((conversation) => {
           const isActive = conversationId === conversation.id;
           const isShared = conversation.shared.isShared;
 
