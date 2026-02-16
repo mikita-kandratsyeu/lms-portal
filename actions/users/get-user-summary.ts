@@ -18,7 +18,7 @@ export const getUserSummary = async <T>(data: T) => {
         'You are a machine that returns ONLY with valid JSON format without unnecessary symbols.',
       input: [
         {
-          content: USER_SUMMARY(data, locale),
+          content: USER_SUMMARY(data as any, locale),
           role: ChatCompletionRole.USER as unknown as ChatCompletionUserMessageParam['role'],
         },
       ],
