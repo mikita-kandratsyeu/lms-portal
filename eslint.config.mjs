@@ -1,5 +1,3 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from '@typescript-eslint/eslint-plugin';
@@ -9,9 +7,6 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const eslintConfig = [
   {
@@ -57,7 +52,6 @@ const eslintConfig = [
     },
     rules: {
       ...prettierConfig.rules,
-      // TypeScript rules
       '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -73,26 +67,20 @@ const eslintConfig = [
         allowTaggedTemplates: true,
       }],
       '@typescript-eslint/no-shadow': 'off',
-      
-      // React rules
       'react/display-name': 'off',
       'react/react-in-jsx-scope': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      
-      // General rules
       'no-var': 'error',
       'no-debugger': 'off',
       'no-shadow': 'off',
       'no-unused-vars': 'off',
       'no-unused-expressions': 'off',
       'no-redeclare': 'off',
-      'no-undef': 'off', // TypeScript handles this
+      'no-undef': 'off', 
       'no-useless-escape': 'warn',
       'no-constant-binary-expression': 'warn',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-      
-      // Prettier & imports
       'prettier/prettier': ['error'],
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
