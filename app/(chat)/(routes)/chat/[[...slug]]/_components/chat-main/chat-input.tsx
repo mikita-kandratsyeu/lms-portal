@@ -113,7 +113,7 @@ const ChatInputComponent = ({
           </p>
         </div>
       </div>
-      <div className="h-[calc(100%+20px)] w-full bg-gradient-to-t from-neutral-50 dark:from-neutral-900 to-transparent absolute bottom-0 z-0 pointer-events-none"></div>
+      <div className="h-[calc(100%+20px)] w-full absolute bottom-0 z-0 pointer-events-none"></div>
     </div>
   );
 };
