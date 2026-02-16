@@ -45,3 +45,11 @@ export const formatCompactNumber = (num: number): string => {
 
   return `${(num / 1_000_000_000).toFixed(1)}B`;
 };
+
+export const toMicrocentsPer1M = (usdPerToken: string): number => {
+  const parsed = parseFloat(usdPerToken);
+
+  if (Number.isNaN(parsed) || parsed < 0) return 0;
+
+  return Math.round(parsed * 1_000_000 * 100 * 1_000_000);
+};

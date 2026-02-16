@@ -5,6 +5,8 @@ import { headers } from 'next/headers';
 import { getAppConfig } from '@/actions/configs/get-app-config';
 import db from '@/lib/db';
 
+import { getOpenRouterModelsPricing } from './get-openrouter-models';
+
 const TOKENS_DIVIDER = 1_000_000n;
 
 type UsageAiModelData = {
@@ -25,21 +27,20 @@ type LogAiModelPricingOptions = {
   userId?: string;
 };
 
-export const calculateModelCostMicroCents = async (
-  model: string,
+type ModelPrices = {
+  input_microcents_per_1M?: number;
+  output_microcents_per_1M?: number;
+  cached_input_microcents_per_1M?: number;
+  pricing_type?: string;
+  hd?: { '1024x1024_microcents'?: number };
+};
+
+const calculateFromPrices = (
+  modelPrices: ModelPrices,
   input: number,
   output: number,
   cached: number,
-): Promise<bigint> => {
-  const config = await getAppConfig();
-  const modelPrices = config?.ai?.cost?.models?.[model];
-
-  if (!modelPrices) {
-    console.warn(`Price not found for model: ${model}`);
-
-    return 0n;
-  }
-
+): bigint => {
   if (modelPrices.pricing_type === 'per_image') {
     const microcents = modelPrices?.hd?.['1024x1024_microcents'];
 
@@ -49,7 +50,6 @@ export const calculateModelCostMicroCents = async (
   const inputN = BigInt(input);
   const outputN = BigInt(output);
   const cachedN = BigInt(cached);
-
   const uncachedInputN = inputN - cachedN;
   let costMicroCents = 0n;
 
@@ -69,6 +69,38 @@ export const calculateModelCostMicroCents = async (
   }
 
   return costMicroCents;
+};
+
+export const calculateModelCostMicroCents = async (
+  model: string,
+  input: number,
+  output: number,
+  cached: number,
+): Promise<bigint> => {
+  try {
+    const [openRouterPrices, config] = await Promise.all([
+      getOpenRouterModelsPricing(),
+      getAppConfig(),
+    ]);
+
+    const openRouterModelPrices = openRouterPrices[model];
+
+    if (openRouterModelPrices) {
+      return calculateFromPrices(openRouterModelPrices, input, output, cached);
+    }
+
+    const configModelPrices = config?.ai?.cost?.models?.[model];
+
+    if (configModelPrices) {
+      return calculateFromPrices(configModelPrices, input, output, cached);
+    }
+  } catch (error) {
+    console.error(`[calculateModelCostMicroCents] Error for model ${model}:`, error);
+  }
+
+  console.warn(`Price not found for model: ${model}`);
+
+  return 0n;
 };
 
 export const logAiModelPricingUsage = async (options: LogAiModelPricingOptions) => {
