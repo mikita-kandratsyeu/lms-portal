@@ -1,7 +1,7 @@
 import { fromUnixTime } from 'date-fns';
 import { StatusCodes } from 'http-status-codes';
 import { headers } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 import { sentEmailByTemplate } from '@/actions/mailer/sent-email-by-template';
@@ -12,22 +12,37 @@ import { fetcher } from '@/lib/fetcher';
 import { isObject, isString } from '@/lib/guard';
 import { stripe } from '@/server/stripe';
 
-export const POST = async (req: NextRequest) => {
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+export const POST = async (req: Request) => {
   const body = await req.text();
   const headersList = await headers();
+  const signature = headersList.get('stripe-signature');
 
-  const signature = headersList.get('Stripe-Signature') as string;
+  if (!body || !signature) {
+    console.error('[Stripe Webhook] Missing body or stripe-signature header');
+    return new NextResponse('Webhook Error: Missing body or signature', {
+      status: StatusCodes.BAD_REQUEST,
+    });
+  }
+
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    console.error('[Stripe Webhook] STRIPE_WEBHOOK_SECRET is not set');
+    return new NextResponse('Webhook Error: Server misconfiguration', {
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
 
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET as string,
-    );
-  } catch (error: any) {
-    return new NextResponse(`Webhook Error: ${error?.message}`, {
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error('[Stripe Webhook] Signature verification failed:', message);
+    return new NextResponse(`Webhook Error: ${message}`, {
       status: StatusCodes.BAD_REQUEST,
     });
   }
@@ -243,5 +258,6 @@ export const POST = async (req: NextRequest) => {
     return new NextResponse(null);
   }
 
-  return new NextResponse(`Webhook Error: Unhandled event type ${event.type}`);
+  console.log(`[Stripe Webhook] Unhandled event type: ${event.type}`);
+  return new NextResponse(JSON.stringify({ received: true }), { status: 200 });
 };
