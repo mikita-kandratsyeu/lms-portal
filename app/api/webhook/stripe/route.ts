@@ -47,152 +47,176 @@ export const POST = async (req: Request) => {
     });
   }
 
+  console.log(`[Stripe Webhook] Received event: ${event.type} (${event.id})`);
+
   const session = event.data.object as Stripe.Checkout.Session;
   const userId = session?.metadata?.userId;
   const courseId = session?.metadata?.courseId;
-  const isSubscription = session.metadata?.isSubscription;
+  const isSubscription = session?.metadata?.isSubscription;
   const locale = session?.metadata?.locale ?? DEFAULT_LANGUAGE;
 
   if (event.type === 'checkout.session.completed') {
-    if (session.total_details?.amount_discount) {
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
-        expand: ['data.discounts'],
-      });
+    console.log('[Stripe Webhook] Processing checkout.session.completed', {
+      sessionId: session?.id,
+      userId,
+      courseId,
+      isSubscription,
+    });
 
-      for (const item of lineItems.data) {
-        if (item.discounts && item.discounts.length > 0) {
-          for (const discount of item.discounts) {
-            if (discount.discount && isObject(discount.discount)) {
-              const promotionCodeId = discount.discount.promotion_code;
+    try {
+      if (session.total_details?.amount_discount) {
+        const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+          expand: ['data.discounts'],
+        });
 
-              if (isString(promotionCodeId)) {
-                const promoCode = await stripe.promotionCodes.retrieve(promotionCodeId);
+        for (const item of lineItems.data) {
+          if (item.discounts && item.discounts.length > 0) {
+            for (const discount of item.discounts) {
+              if (discount.discount && isObject(discount.discount)) {
+                const promotionCodeId = discount.discount.promotion_code;
 
-                const existingPromo = await db.stripePromo.findUnique({
-                  where: { stripePromoId: promoCode.id },
-                });
+                if (isString(promotionCodeId)) {
+                  const promoCode = await stripe.promotionCodes.retrieve(promotionCodeId);
 
-                if (existingPromo) {
-                  const shouldDeactivate =
-                    promoCode.max_redemptions &&
-                    promoCode.times_redeemed >= promoCode.max_redemptions;
-
-                  await db.stripePromo.update({
+                  const existingPromo = await db.stripePromo.findUnique({
                     where: { stripePromoId: promoCode.id },
-                    data: {
-                      timesRedeemed: promoCode.times_redeemed,
-                      isActive: shouldDeactivate ? false : promoCode.active,
-                    },
                   });
 
-                  await removeValueFromMemoryCache(
-                    `user-promo-redeemed_${existingPromo.id}_${promoCode.id}`,
-                  );
+                  if (existingPromo) {
+                    const shouldDeactivate =
+                      promoCode.max_redemptions &&
+                      promoCode.times_redeemed >= promoCode.max_redemptions;
+
+                    await db.stripePromo.update({
+                      where: { stripePromoId: promoCode.id },
+                      data: {
+                        timesRedeemed: promoCode.times_redeemed,
+                        isActive: shouldDeactivate ? false : promoCode.active,
+                      },
+                    });
+
+                    await removeValueFromMemoryCache(
+                      `user-promo-redeemed_${existingPromo.id}_${promoCode.id}`,
+                    );
+                  }
                 }
               }
             }
           }
         }
       }
-    }
 
-    if (!userId || (!isSubscription && !courseId)) {
-      return new NextResponse('Webhook Error: Missing metadata', {
-        status: StatusCodes.BAD_REQUEST,
-      });
-    }
+      if (!userId || (!isSubscription && !courseId)) {
+        console.error('[Stripe Webhook] Missing metadata', { userId, courseId, isSubscription });
+        return new NextResponse('Webhook Error: Missing metadata', {
+          status: StatusCodes.BAD_REQUEST,
+        });
+      }
 
-    if (isSubscription) {
-      const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
+      if (isSubscription) {
+        const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
 
-      const response = await db.stripeSubscription.create({
-        data: {
-          endDate: new Date(subscription.items.data[0].current_period_end * 1000),
-          name: session?.metadata?.subscriptionName ?? '',
-          startDate: new Date(subscription.items.data[0].current_period_start * 1000),
-          stripeCustomerId: subscription.customer as string,
-          stripePriceId: subscription.items.data[0].price.id,
-          stripeSubscriptionId: subscription.id,
-          userId,
-        },
-      });
-
-      await removeValueFromMemoryCache(`user-subscription_${userId}`);
-
-      return new NextResponse(JSON.stringify(response));
-    } else {
-      const response = await db.$transaction(async (prisma) => {
-        const purchase = await prisma.purchase.create({
+        const response = await db.stripeSubscription.create({
           data: {
-            courseId: courseId!,
+            endDate: new Date(subscription.items.data[0].current_period_end * 1000),
+            name: session?.metadata?.subscriptionName ?? '',
+            startDate: new Date(subscription.items.data[0].current_period_start * 1000),
+            stripeCustomerId: subscription.customer as string,
+            stripePriceId: subscription.items.data[0].price.id,
+            stripeSubscriptionId: subscription.id,
             userId,
           },
         });
 
-        const invoiceId = (() => {
-          if (isString(session.invoice)) {
-            return session.invoice;
-          }
+        await removeValueFromMemoryCache(`user-subscription_${userId}`);
 
-          if (isObject(session.invoice)) {
-            return session.invoice?.id;
-          }
-          return null;
-        })();
+        console.log('[Stripe Webhook] checkout.session.completed success (subscription)', {
+          subscriptionId: response.stripeSubscriptionId,
+        });
+        return new NextResponse(JSON.stringify(response));
+      } else {
+        const response = await db.$transaction(async (prisma) => {
+          const purchase = await prisma.purchase.create({
+            data: {
+              courseId: courseId!,
+              userId,
+            },
+          });
 
-        const transaction = await prisma.purchaseDetails.create({
-          data: {
-            city: session?.metadata?.city,
-            country: session?.metadata?.country,
-            countryCode: session?.metadata?.countryCode,
-            currency: session.currency?.toUpperCase(),
-            invoiceId,
-            latitude: Number(session?.metadata?.latitude),
-            longitude: Number(session?.metadata?.longitude),
-            paymentIntent: session.payment_intent?.toString(),
-            price: session.amount_total ?? 0,
-            purchaseId: purchase.id,
-          },
+          const invoiceId = (() => {
+            if (isString(session.invoice)) {
+              return session.invoice;
+            }
+
+            if (isObject(session.invoice)) {
+              return session.invoice?.id;
+            }
+            return null;
+          })();
+
+          const transaction = await prisma.purchaseDetails.create({
+            data: {
+              city: session?.metadata?.city,
+              country: session?.metadata?.country,
+              countryCode: session?.metadata?.countryCode,
+              currency: session.currency?.toUpperCase(),
+              invoiceId,
+              latitude: Number(session?.metadata?.latitude),
+              longitude: Number(session?.metadata?.longitude),
+              paymentIntent: session.payment_intent?.toString(),
+              price: session.amount_total ?? 0,
+              purchaseId: purchase.id,
+            },
+          });
+
+          return transaction;
         });
 
-        return transaction;
-      });
+        let pdfBuffer = null;
+        const invoiceId = response?.invoiceId;
 
-      let pdfBuffer = null;
-      const invoiceId = response?.invoiceId;
+        if (invoiceId) {
+          const stripeInvoice = await stripe.invoices.retrieve(invoiceId);
+          const invoicePdf = stripeInvoice?.invoice_pdf;
 
-      if (invoiceId) {
-        const stripeInvoice = await stripe.invoices.retrieve(invoiceId);
-        const invoicePdf = stripeInvoice?.invoice_pdf;
+          if (invoicePdf) {
+            pdfBuffer = await fetcher.get(invoicePdf, { responseType: 'arrayBuffer' });
+          }
 
-        if (invoicePdf) {
-          pdfBuffer = await fetcher.get(invoicePdf, { responseType: 'arrayBuffer' });
+          const emailParams = {
+            courseLink: session.success_url ?? '',
+            courseName: session?.metadata?.courseName ?? '',
+            username: session?.metadata?.username ?? '',
+          };
+
+          await sentEmailByTemplate({
+            attachments: pdfBuffer
+              ? [
+                  {
+                    content: Buffer.from(pdfBuffer),
+                    contentType: 'application/pdf',
+                    filename: `${invoiceId}_invoice.pdf`,
+                  },
+                ]
+              : [],
+            emails: [session?.metadata?.email ?? ''],
+            locale,
+            params: emailParams,
+            template: 'course-purchase',
+          });
         }
 
-        const emailParams = {
-          courseLink: session.success_url ?? '',
-          courseName: session?.metadata?.courseName ?? '',
-          username: session?.metadata?.username ?? '',
-        };
-
-        await sentEmailByTemplate({
-          attachments: pdfBuffer
-            ? [
-                {
-                  content: Buffer.from(pdfBuffer),
-                  contentType: 'application/pdf',
-                  filename: `${invoiceId}_invoice.pdf`,
-                },
-              ]
-            : [],
-          emails: [session?.metadata?.email ?? ''],
-          locale,
-          params: emailParams,
-          template: 'course-purchase',
+        console.log('[Stripe Webhook] checkout.session.completed success', {
+          purchaseId: response?.purchaseId ?? response?.id,
         });
+        return new NextResponse(JSON.stringify(response));
       }
-
-      return new NextResponse(JSON.stringify(response));
+    } catch (error) {
+      console.error('[Stripe Webhook] checkout.session.completed failed:', error);
+      return new NextResponse(
+        `Webhook Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      );
     }
   }
 
