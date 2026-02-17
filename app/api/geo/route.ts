@@ -17,7 +17,6 @@ export const GET = async (req: NextRequest) => {
     const {
       features: { enableDynamicPricing },
     } = await getAppConfig();
-
     const geo = geolocation(req);
 
     const currency = enableDynamicPricing
@@ -36,11 +35,16 @@ export const GET = async (req: NextRequest) => {
       timezone: DEFAULT_TIMEZONE,
     };
 
-    const exchangeRates = enableDynamicPricing ? (await getExchangeRates())?.exchangeRates : {};
+    let rates = {};
+
+    if (enableDynamicPricing) {
+      const { exchangeRates } = await getExchangeRates();
+      rates = exchangeRates;
+    }
 
     return NextResponse.json({
       details,
-      exchangeRates,
+      exchangeRates: rates,
       locale,
     });
   } catch (error) {
