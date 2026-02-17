@@ -17,13 +17,13 @@ export type GetAppConfig = {
         string,
         {
           cached_input_microcents_per_1M?: number;
+          hd?: ImageSizeMicrocents;
           input_microcents_per_1M?: number;
           output_microcents_per_1M?: number;
           pricing_type?: string;
           provider: string;
           source?: string;
           standard?: ImageSizeMicrocents;
-          hd?: ImageSizeMicrocents;
         }
       >;
       updated: string | null;
@@ -34,7 +34,7 @@ export type GetAppConfig = {
     allowNewUserSubscriptions: boolean;
     providers: Record<string, boolean>;
   };
-  features: { christmas: boolean; testMode: boolean };
+  features: { christmas: boolean; enableDynamicPricing: boolean; testMode: boolean };
 };
 
 export const getAppConfig = async (): Promise<GetAppConfig> => {
@@ -65,6 +65,7 @@ export const getAppConfig = async (): Promise<GetAppConfig> => {
       },
       features: {
         christmas: false,
+        enableDynamicPricing: false,
         testMode: false,
       },
     };

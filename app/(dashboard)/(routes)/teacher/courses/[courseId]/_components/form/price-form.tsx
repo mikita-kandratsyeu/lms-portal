@@ -22,6 +22,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { TIMESTAMP_TEMPLATE } from '@/constants/common';
 import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { MAX_PRICE_INT } from '@/constants/payments';
+import { useAppConfigStore } from '@/hooks/store/use-app-config-store';
 import { useLocaleStore } from '@/hooks/store/use-locale-store';
 import { fetcher } from '@/lib/fetcher';
 import { formatPrice, getConvertedPrice, getScaledPrice } from '@/lib/format';
@@ -38,6 +39,7 @@ export const PriceForm = ({ courseId, fees, initialData }: PriceFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
+  const { config } = useAppConfigStore((state) => ({ config: state.config }));
   const { exchangeRates, localeInfo } = useLocaleStore((state) => ({
     exchangeRates: state.exchangeRates,
     localeInfo: state.localeInfo,
@@ -104,6 +106,7 @@ export const PriceForm = ({ courseId, fees, initialData }: PriceFormProps) => {
   };
 
   const isValidCustomRates = hasJsonStructure(customRates);
+  const isDynamicPricingEnabled = config?.features?.enableDynamicPricing && exchangeRates?.rates;
 
   return (
     <div className="mt-6 border  bg-neutral-100 dark:bg-neutral-900 rounded-md p-4">
@@ -134,7 +137,7 @@ export const PriceForm = ({ courseId, fees, initialData }: PriceFormProps) => {
                 placeholder="Set a price for course"
                 value={price}
               />
-              {exchangeRates?.rates && (
+              {isDynamicPricingEnabled && (
                 <div
                   className="flex items-center gap-2 text-sm text-muted-foreground"
                   title={`Updated at ${format(fromUnixTime(exchangeRates.updatedAt), TIMESTAMP_TEMPLATE)}`}
@@ -172,13 +175,17 @@ export const PriceForm = ({ courseId, fees, initialData }: PriceFormProps) => {
             </div>
             <p className="text-xs text-muted-foreground">Fees will be included in the price</p>
           </div>
-          <p className="text-sm">You can also add a custom exchange rate</p>
-          <Input
-            disabled={isSubmitting}
-            placeholder={`e.g. '{"BTN": 82.908948, ... }'`}
-            onChange={handleCustomRatesChange}
-            defaultValue={initialData?.customRates ?? ''}
-          />
+          {isDynamicPricingEnabled && (
+            <>
+              <p className="text-sm">You can also add a custom exchange rate</p>
+              <Input
+                disabled={isSubmitting}
+                placeholder={`e.g. '{"BTN": 82.908948, ... }'`}
+                onChange={handleCustomRatesChange}
+                defaultValue={initialData?.customRates ?? ''}
+              />
+            </>
+          )}
           <div className="flex items-center gap-x-2">
             <Button
               disabled={!price || isSubmitting || Boolean(!isValidCustomRates && customRates)}

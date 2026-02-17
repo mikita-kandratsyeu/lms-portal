@@ -2,6 +2,7 @@ import { geolocation } from '@vercel/functions';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { getAppConfig } from '@/actions/configs/get-app-config';
 import { getExchangeRates } from '@/actions/exchange/get-exchange-rates';
 import {
   CURRENCY_BY_COUNTRY,
@@ -13,15 +14,19 @@ import {
 
 export const GET = async (req: NextRequest) => {
   try {
-    const { exchangeRates } = await getExchangeRates();
+    const {
+      features: { enableDynamicPricing },
+    } = await getAppConfig();
+
     const geo = geolocation(req);
 
-    const currency =
-      CURRENCY_BY_COUNTRY[
-        (geo.country ?? DEFAULT_COUNTRY_CODE) as keyof typeof CURRENCY_BY_COUNTRY
-      ] ?? DEFAULT_CURRENCY;
+    const currency = enableDynamicPricing
+      ? CURRENCY_BY_COUNTRY[
+          (geo.country ?? DEFAULT_COUNTRY_CODE) as keyof typeof CURRENCY_BY_COUNTRY
+        ]
+      : null;
 
-    const locale = { currency, locale: DEFAULT_LOCALE };
+    const locale = { currency: currency ?? DEFAULT_CURRENCY, locale: DEFAULT_LOCALE };
     const details = {
       city: geo.city,
       country: geo.country,
@@ -30,6 +35,8 @@ export const GET = async (req: NextRequest) => {
       longitude: geo.longitude,
       timezone: DEFAULT_TIMEZONE,
     };
+
+    const exchangeRates = enableDynamicPricing ? (await getExchangeRates())?.exchangeRates : {};
 
     return NextResponse.json({
       details,

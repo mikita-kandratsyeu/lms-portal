@@ -103,6 +103,7 @@
   },
   "features": {
     "christmas": false,
+    "enableDynamicPricing": false,
     "testMode": true
   }
 }

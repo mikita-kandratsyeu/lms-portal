@@ -5,6 +5,7 @@ import { Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { memo, useMemo } from 'react';
 
+import { useAppConfigStore } from '@/hooks/store/use-app-config-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { useLocaleAmount } from '@/hooks/use-locale-amount';
 
@@ -55,6 +56,7 @@ const PriceComponent = ({
 }: PriceProps) => {
   const t = useTranslations('price');
 
+  const { config } = useAppConfigStore((state) => ({ config: state.config }));
   const {
     amount,
     formattedPrice,
@@ -89,22 +91,24 @@ const PriceComponent = ({
         <div className="flex flex-col gap-1">
           <span className="inline-flex items-center gap-1.5">
             {formattedPrice}
-            <TooltipProvider delayDuration={200}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className="inline-flex shrink-0 rounded-full p-0.5 text-muted-foreground/70 transition-colors hover:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t('dynamicPriceTooltip')}
-                  >
-                    <Info className="h-3.5 w-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top" className="max-w-[220px]">
-                  {t('dynamicPriceTooltip')}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            {config?.features?.enableDynamicPricing && (
+              <TooltipProvider delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="inline-flex shrink-0 rounded-full p-0.5 text-muted-foreground/70 transition-colors hover:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      aria-label={t('dynamicPriceTooltip')}
+                    >
+                      <Info className="h-3.5 w-3.5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-[220px]">
+                    {t('dynamicPriceTooltip')}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
           </span>
           {shouldShowFees && (
             <>
