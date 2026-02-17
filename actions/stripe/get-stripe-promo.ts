@@ -65,11 +65,16 @@ const getPromos = (promos: StripePromotionCodes, customers: StripeCustomers) => 
     return {
       active: pc.active,
       code: pc.code,
-      coupon: {
-        description: formatCouponDescription(pc.coupon as Stripe.Coupon),
-        id: pc.coupon.id,
-        name: pc.coupon.name,
-      },
+      coupon: (() => {
+        const coupon = pc.promotion.coupon;
+        if (!coupon || typeof coupon === 'string')
+          return { description: '', id: coupon ?? '', name: null };
+        return {
+          description: formatCouponDescription(coupon),
+          id: coupon.id,
+          name: coupon.name,
+        };
+      })(),
       customer: customer
         ? {
             email: customer.email,
@@ -130,7 +135,10 @@ export const getStripePromo = async ({
           batch.map(async (code) => {
             const data = await fetchCachedData(
               `promo_${code.id}_${code.stripePromoId}`,
-              async () => stripe.promotionCodes.retrieve(code.stripePromoId),
+              async () =>
+                stripe.promotionCodes.retrieve(code.stripePromoId, {
+                  expand: ['promotion.coupon'],
+                }),
               ONE_MINUTE_SEC,
             );
 

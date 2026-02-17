@@ -38,9 +38,13 @@ export const POST = async (req: NextRequest) => {
     }
 
     if (action === PromoStatus.NEW) {
-      const payload = {
-        coupon: other.couponId,
+      const payload: Stripe.PromotionCodeCreateParams = {
+        promotion: {
+          coupon: other.couponId,
+          type: 'coupon',
+        },
         code: other.code,
+        expand: ['promotion.coupon'],
         max_redemptions: other?.limitNumberOfRedeemed ? other.numberOfRedeemed : undefined,
         customer: other.limitToSpecificCustomer && other.customerId ? other.customerId : undefined,
         restrictions: {
@@ -50,22 +54,26 @@ export const POST = async (req: NextRequest) => {
             minimum_amount_currency: other.minAmountCurrency,
           }),
         },
-      } as Stripe.PromotionCodeCreateParams;
+      };
 
       const stripePromotion = await stripe.promotionCodes.create(payload);
 
-      const coupon = stripePromotion.coupon as Stripe.Coupon;
+      const promotionCoupon = stripePromotion.promotion.coupon;
+      const coupon =
+        promotionCoupon && typeof promotionCoupon === 'object'
+          ? promotionCoupon
+          : await stripe.coupons.retrieve(other.couponId);
 
       const promotionCode = await db.stripePromo.create({
         data: {
           code: other.code,
           stripeCouponId: other.couponId,
           stripePromoId: stripePromotion.id,
-          couponName: coupon.name || null,
-          percentOff: coupon.percent_off || null,
-          amountOff: coupon.amount_off || null,
-          currency: coupon.currency || null,
-          durationInMonths: coupon.duration_in_months || null,
+          couponName: coupon?.name ?? null,
+          percentOff: coupon?.percent_off ?? null,
+          amountOff: coupon?.amount_off ?? null,
+          currency: coupon?.currency ?? null,
+          durationInMonths: coupon?.duration_in_months ?? null,
           firstTimeTransaction: stripePromotion.restrictions.first_time_transaction || false,
           minimumAmount: stripePromotion.restrictions.minimum_amount || null,
           minimumAmountCurrency: stripePromotion.restrictions.minimum_amount_currency || null,
