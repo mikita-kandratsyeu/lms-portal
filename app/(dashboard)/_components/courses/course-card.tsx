@@ -71,7 +71,7 @@ export const CourseCard = ({
             className="object-cover"
             fill
             placeholder="blur"
-            src={imageUrl!}
+            src={imageUrl ?? imagePlaceholder}
           />
         </div>
         <div className="flex flex-col pt-2">

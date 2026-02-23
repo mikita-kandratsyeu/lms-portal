@@ -3,7 +3,7 @@
 import { Category, Course } from '@prisma/client';
 
 import db from '@/lib/db';
-import { getImagePlaceHolder } from '@/lib/image';
+import { getImagePlaceHolder, NO_PHOTO_PLACEHOLDER } from '@/lib/image';
 
 import { getProgress } from './get-progress';
 
@@ -42,7 +42,9 @@ export const getCourses = async ({ hasSubscription, title, userId }: GetCourses)
 
   const courseWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
     courses.map(async (course) => {
-      const imagePlaceholder = await getImagePlaceHolder(course.imageUrl!);
+      const imagePlaceholder = course.imageUrl
+        ? await getImagePlaceHolder(course.imageUrl)
+        : { base64: NO_PHOTO_PLACEHOLDER };
       const purchasesUserIds = course.purchases.filter((purchase) => purchase.userId === userId);
 
       if (!userId || !purchasesUserIds.length) {

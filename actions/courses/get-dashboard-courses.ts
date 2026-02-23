@@ -4,7 +4,7 @@ import { Category, Chapter, Course, UserProgress } from '@prisma/client';
 
 import { FilterStatus } from '@/constants/courses';
 import db from '@/lib/db';
-import { getImagePlaceHolder } from '@/lib/image';
+import { getImagePlaceHolder, NO_PHOTO_PLACEHOLDER } from '@/lib/image';
 
 import { getProgress } from './get-progress';
 
@@ -61,7 +61,9 @@ export const getDashboardCourses = async ({
       courseId: course.id,
       includeValidChapters: includeChapter,
     });
-    const imagePlaceholder = await getImagePlaceHolder(course.imageUrl!);
+    const imagePlaceholder = course.imageUrl
+      ? await getImagePlaceHolder(course.imageUrl)
+      : { base64: NO_PHOTO_PLACEHOLDER };
 
     course['imagePlaceholder'] = imagePlaceholder.base64;
     course['progress'] = progress;
