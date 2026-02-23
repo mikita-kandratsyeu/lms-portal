@@ -47,7 +47,7 @@ export const POST = async (req: Request) => {
     });
   }
 
-  console.log(`[Stripe Webhook] Received event: ${event.type} (${event.id})`);
+  console.warn(`[Stripe Webhook] Received event: ${event.type} (${event.id})`);
 
   const session = event.data.object as Stripe.Checkout.Session;
   const userId = session?.metadata?.userId;
@@ -56,7 +56,7 @@ export const POST = async (req: Request) => {
   const locale = session?.metadata?.locale ?? DEFAULT_LANGUAGE;
 
   if (event.type === 'checkout.session.completed') {
-    console.log('[Stripe Webhook] Processing checkout.session.completed', {
+    console.warn('[Stripe Webhook] Processing checkout.session.completed', {
       sessionId: session?.id,
       userId,
       courseId,
@@ -130,7 +130,7 @@ export const POST = async (req: Request) => {
 
         await removeValueFromMemoryCache(`user-subscription_${userId}`);
 
-        console.log('[Stripe Webhook] checkout.session.completed success (subscription)', {
+        console.warn('[Stripe Webhook] checkout.session.completed success (subscription)', {
           subscriptionId: response.stripeSubscriptionId,
         });
         return new NextResponse(JSON.stringify(response));
@@ -206,7 +206,7 @@ export const POST = async (req: Request) => {
           });
         }
 
-        console.log('[Stripe Webhook] checkout.session.completed success', {
+        console.warn('[Stripe Webhook] checkout.session.completed success', {
           purchaseId: response?.purchaseId ?? response?.id,
         });
         return new NextResponse(JSON.stringify(response));
@@ -282,6 +282,6 @@ export const POST = async (req: Request) => {
     return new NextResponse(null);
   }
 
-  console.log(`[Stripe Webhook] Unhandled event type: ${event.type}`);
+  console.warn(`[Stripe Webhook] Unhandled event type: ${event.type}`);
   return new NextResponse(JSON.stringify({ received: true }), { status: 200 });
 };

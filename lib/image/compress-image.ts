@@ -4,8 +4,7 @@ export const compressImage = async (
   imageFile: File,
   callback?: (file: File) => Promise<string | ArrayBuffer | null>,
 ): Promise<string | ArrayBuffer | null> => {
-  // eslint-disable-next-line no-console
-  console.log(`OriginalFile size ${imageFile.size / 1024 / 1024} MB`);
+  console.warn(`OriginalFile size ${imageFile.size / 1024 / 1024} MB`);
 
   try {
     const compressedImageFile = await imageCompression(imageFile, {
@@ -14,8 +13,7 @@ export const compressImage = async (
       useWebWorker: true,
     });
 
-    // eslint-disable-next-line no-console
-    console.log(`CompressedFile size ${compressedImageFile.size / 1024 / 1024} MB`);
+    console.warn(`CompressedFile size ${compressedImageFile.size / 1024 / 1024} MB`);
 
     const imageDataUrl = await callback?.(compressedImageFile);
 
