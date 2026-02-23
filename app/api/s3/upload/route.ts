@@ -24,7 +24,7 @@ export const POST = async (req: NextRequest) => {
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
-      const result = await uploadFileToS3(buffer, name, folder, file.type);
+      const result = await uploadFileToS3(buffer, name, folder, file.type, user.userId);
 
       pictureUrl = result.url;
       fileKey = result.key;

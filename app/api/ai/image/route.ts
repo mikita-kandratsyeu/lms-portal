@@ -47,14 +47,17 @@ export const POST = async (req: NextRequest) => {
       });
     }
 
-    const files = await uploadFiles([
-      {
-        name: `${uuidv4()}.png`,
-        base64: response.image.data[0].b64_json ?? '',
-        contentType: 'image/png',
-        folder: 'chat-files',
-      },
-    ]);
+    const files = await uploadFiles(
+      [
+        {
+          name: `${uuidv4()}.png`,
+          base64: response.image.data[0].b64_json ?? '',
+          contentType: 'image/png',
+          folder: 'chat-files',
+        },
+      ],
+      user.userId,
+    );
 
     return NextResponse.json({
       revisedPrompt: response.image.data[0].revised_prompt,

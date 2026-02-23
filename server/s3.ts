@@ -1,4 +1,5 @@
 import {
+  CopyObjectCommand,
   DeleteObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
@@ -27,21 +28,25 @@ const s3Client = new S3Client({
   },
 });
 
-const BUCKET_NAME = process.env.S3_BUCKET_NAME as string;
+export const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME as string;
 
-const getS3FilePath = (fileName: string, folder: S3FolderType = DEFAULT_S3_FOLDER): string => {
-  const folderMap: Record<S3FolderType, string> = {
-    'ai-agent-images': 'Ai Agent Images',
-    'chat-files': 'Chat Files',
-    'course-attachments': 'Course Attachments',
-    'course-images': 'Course Images',
-    'course-videos': 'Course Videos',
-    'csm-files': 'CSM Files',
-    'profile-images': 'Profile Images',
-    common: 'Common',
-  };
+const FOLDER_MAP: Record<S3FolderType, string> = {
+  'ai-agent-images': 'AI Agent Images',
+  'chat-files': 'Chat Files',
+  'course-attachments': 'Course Attachments',
+  'course-images': 'Course Images',
+  'course-videos': 'Course Videos',
+  'csm-files': 'CSM Files',
+  'profile-images': 'Profile Images',
+  common: 'Common',
+};
 
-  return `${folderMap[folder]}/${fileName}`;
+const getS3FilePath = (
+  fileName: string,
+  folder: S3FolderType = DEFAULT_S3_FOLDER,
+  userId: string,
+): string => {
+  return `${userId}/${FOLDER_MAP[folder]}/${fileName}`;
 };
 
 export const uploadFileToS3 = async (
@@ -49,13 +54,15 @@ export const uploadFileToS3 = async (
   fileName: string,
   folder: S3FolderType = DEFAULT_S3_FOLDER,
   contentType?: string,
+  userId?: string,
 ): Promise<{ url: string; key: string }> => {
-  const key = getS3FilePath(fileName, folder);
+  const effectiveUserId = userId ?? 'legacy';
+  const key = getS3FilePath(fileName, folder, effectiveUserId);
 
   const mimeType = contentType || mime.lookup(fileName) || 'application/octet-stream';
 
   const command = new PutObjectCommand({
-    Bucket: BUCKET_NAME,
+    Bucket: S3_BUCKET_NAME,
     Key: key,
     Body: file,
     ContentType: mimeType,
@@ -64,7 +71,7 @@ export const uploadFileToS3 = async (
 
   await s3Client.send(command);
 
-  const url = `${process.env.S3_PUBLIC_URL || `https://${BUCKET_NAME}.storage.yandexcloud.net`}/${key}`;
+  const url = `${process.env.S3_PUBLIC_URL || `https://${S3_BUCKET_NAME}.storage.yandexcloud.net`}/${key}`;
 
   return { url, key };
 };
@@ -72,7 +79,7 @@ export const uploadFileToS3 = async (
 export const deleteFileFromS3 = async (key: string): Promise<boolean> => {
   try {
     const command = new DeleteObjectCommand({
-      Bucket: BUCKET_NAME,
+      Bucket: S3_BUCKET_NAME,
       Key: key,
     });
 
@@ -99,7 +106,7 @@ export const getS3StorageUsage = async (): Promise<{
 
     do {
       const command = new ListObjectsV2Command({
-        Bucket: BUCKET_NAME,
+        Bucket: S3_BUCKET_NAME,
         ContinuationToken: continuationToken,
       });
 
@@ -117,8 +124,63 @@ export const getS3StorageUsage = async (): Promise<{
     return { usedBytes, objectCount };
   } catch (error) {
     console.error('[GET_S3_STORAGE_USAGE_ERROR]', error);
+
     return { usedBytes: 0, objectCount: 0 };
   }
+};
+
+export const copyObjectInS3 = async (
+  sourceKey: string,
+  destinationKey: string,
+): Promise<boolean> => {
+  try {
+    const copySource = `${S3_BUCKET_NAME}/${sourceKey.split('/').map(encodeURIComponent).join('/')}`;
+
+    const command = new CopyObjectCommand({
+      Bucket: S3_BUCKET_NAME,
+      CopySource: copySource,
+      Key: destinationKey,
+      ACL: 'public-read',
+    });
+
+    await s3Client.send(command);
+
+    return true;
+  } catch (error) {
+    console.error('[COPY_OBJECT_IN_S3_ERROR]', error);
+
+    return false;
+  }
+};
+
+export const listAllS3Keys = async (): Promise<string[]> => {
+  const keys: string[] = [];
+  let continuationToken: string | undefined;
+
+  do {
+    const command = new ListObjectsV2Command({
+      Bucket: S3_BUCKET_NAME,
+      ContinuationToken: continuationToken,
+    });
+
+    const response = await s3Client.send(command);
+    const contents = response.Contents ?? [];
+
+    for (const obj of contents) {
+      if (obj.Key) keys.push(obj.Key);
+    }
+
+    continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
+  } while (continuationToken);
+
+  return keys;
+};
+
+export const isLegacyS3Key = (key: string): boolean => {
+  const folderNames = Object.values(FOLDER_MAP);
+  const firstPart = key.split('/')[0];
+
+  return folderNames.includes(firstPart);
 };
 
 export const extractKeyFromUrl = (url: string): string | null => {

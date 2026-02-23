@@ -27,7 +27,7 @@ export const POST = async (req: NextRequest) => {
         const timestamp = Date.now();
         const fileName = `${user.userId}_${timestamp}_${file.name}`;
 
-        const result = await uploadFileToS3(buffer, fileName, folder, file.type);
+        const result = await uploadFileToS3(buffer, fileName, folder, file.type, user.userId);
 
         uploadedFiles.push({
           url: result.url,
