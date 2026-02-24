@@ -1,6 +1,5 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -18,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { ContinueButton } from './_components/continue-button';
 import { CourseHighlights } from './_components/course-highlights';
 import { PreviewDescription } from './_components/preview-description';
+import { PreviewImage } from './_components/preview-image';
 import { PreviewVideoPlayer } from './_components/preview-video-player';
 
 type PreviewCourseIdPageProps = {
@@ -68,17 +68,13 @@ const PreviewCourseIdPage = async (props: PreviewCourseIdPageProps) => {
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="space-y-6 lg:col-span-2">
+        <div className="min-w-0 space-y-6 lg:col-span-2">
           {course.chapters?.[0]?.imageUrl && (
-            <div className="relative aspect-w-16 aspect-h-9 border rounded-lg overflow-hidden shadow-none">
-              <Image
-                alt="Course preview"
-                blurDataURL={chapterImagePlaceholder}
-                className="object-cover"
-                fill
-                src={course.chapters[0].imageUrl}
-              />
-            </div>
+            <PreviewImage
+              alt="Course preview"
+              blurDataURL={chapterImagePlaceholder}
+              src={course.chapters[0].imageUrl}
+            />
           )}
           {course.chapters?.[0]?.videoUrl && (
             <PreviewVideoPlayer
