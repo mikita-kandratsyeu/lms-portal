@@ -1,15 +1,26 @@
 'use client';
 
-import { CloudUpload, FileText, Info, Trash2 } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  CloudUpload,
+  FileText,
+  FolderOpen,
+  Info,
+  Trash2,
+} from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useToast } from '@/components/ui/use-toast';
+import { useCurrentUser } from '@/hooks/use-current-user';
 import { fetcher } from '@/lib/fetcher';
-import { DEFAULT_S3_FOLDER, S3FolderType } from '@/server/s3';
+import { DEFAULT_S3_FOLDER, getFolderDisplayName, S3FolderType } from '@/server/s3';
 
+import { FileDownload } from '../common/file-download';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 const ACCEPT_TO_LABEL: Record<string, string> = {
   'application/pdf': 'PDF',
@@ -26,6 +37,8 @@ function formatAcceptTypes(anyFileLabel: string, accept?: string): string {
   return labels.filter(Boolean).join(', ') || anyFileLabel;
 }
 
+type S3FileItem = { url: string; name: string; key: string; folder: string };
+
 type FileUploadProps = {
   accept?: string;
   folder?: S3FolderType;
@@ -33,6 +46,7 @@ type FileUploadProps = {
   maxFileSize?: number;
   onBegin?: () => void;
   onChange: (files: { url: string; name: string; key: string }[]) => void;
+  showSelectFromStorage?: boolean;
 };
 
 export const FileUpload = ({
@@ -42,14 +56,64 @@ export const FileUpload = ({
   maxFileSize = 16,
   onBegin,
   onChange,
+  showSelectFromStorage = true,
 }: FileUploadProps) => {
   const t = useTranslations('file-upload');
   const { toast } = useToast();
+  const { user } = useCurrentUser();
 
+  const canSelectFromStorage = showSelectFromStorage && !!user;
+
+  const [activeTab, setActiveTab] = useState<'upload' | 'select'>('upload');
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const [storageFiles, setStorageFiles] = useState<S3FileItem[]>([]);
+  const [storagePage, setStoragePage] = useState(0);
+  const [storageTotalCount, setStorageTotalCount] = useState(0);
+  const [isLoadingStorage, setIsLoadingStorage] = useState(false);
+
+  const folderDisplayName = getFolderDisplayName(folder);
+  const storagePageSize = 12;
+  const storagePageCount = Math.ceil(storageTotalCount / storagePageSize) || 1;
+
+  useEffect(() => {
+    if (activeTab !== 'select' || !canSelectFromStorage) return;
+
+    let cancelled = false;
+    setIsLoadingStorage(true);
+
+    fetcher
+      .get(
+        `/api/s3/files?folder=${encodeURIComponent(folder)}&pageIndex=${storagePage}&pageSize=${storagePageSize}`,
+        { responseType: 'json', cache: 'no-store' },
+      )
+      .then((res: { files?: S3FileItem[]; totalCount?: number }) => {
+        if (cancelled) return;
+        if (res?.files) {
+          setStorageFiles(res.files);
+          setStorageTotalCount(res.totalCount ?? 0);
+        }
+      })
+      .catch((error: Error) => {
+        if (cancelled) return;
+        toast({ isError: true, description: error?.message ?? t('loadStorageError') });
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoadingStorage(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- toast/t in catch only; including them can cause infinite re-fetches
+  }, [activeTab, canSelectFromStorage, folder, storagePage]);
+
+  const handleSelectFromStorage = (file: S3FileItem) => {
+    onChange([{ url: file.url, name: file.name, key: file.key }]);
+  };
 
   const validateFiles = (files: FileList | null): File[] => {
     if (!files || files.length === 0) return [];
@@ -172,8 +236,8 @@ export const FileUpload = ({
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  return (
-    <div className="w-full space-y-4">
+  const uploadContent = (
+    <>
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -275,6 +339,89 @@ export const FileUpload = ({
         <Button onClick={handleUpload} disabled={isUploading} className="w-full">
           {t('upload')}
         </Button>
+      )}
+    </>
+  );
+
+  const selectContent = (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50 border">
+        <FolderOpen className="h-4 w-4 text-muted-foreground" />
+        <p className="text-sm font-medium">
+          {t('folderLabel')}: <span className="text-primary">{folderDisplayName}</span>
+        </p>
+      </div>
+      {isLoadingStorage ? (
+        <div className="flex items-center justify-center min-h-[200px]">
+          <p className="text-sm text-muted-foreground">{t('loadingStorage')}</p>
+        </div>
+      ) : storageFiles.length === 0 ? (
+        <div className="flex flex-col items-center justify-center min-h-[200px] text-center p-4">
+          <FolderOpen className="h-12 w-12 text-muted-foreground mb-2" />
+          <p className="text-sm text-muted-foreground">{t('noFilesInFolder')}</p>
+          <p className="text-xs text-muted-foreground mt-1">{t('uploadFirst')}</p>
+        </div>
+      ) : (
+        <>
+          <div className="space-y-2 max-h-[280px] overflow-y-auto">
+            {storageFiles.map((file) => (
+              <FileDownload
+                key={file.key}
+                fileName={file.name}
+                folder={file.folder}
+                onFileSelect={() => handleSelectFromStorage(file)}
+                showDownloadButton
+                url={file.url}
+              />
+            ))}
+          </div>
+          {storagePageCount > 1 && (
+            <div className="flex items-center justify-center gap-2 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={storagePage <= 0}
+                onClick={() => setStoragePage((p) => Math.max(0, p - 1))}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                {storagePage + 1} / {storagePageCount}
+              </span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={storagePage >= storagePageCount - 1}
+                onClick={() => setStoragePage((p) => Math.min(storagePageCount - 1, p + 1))}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="w-full space-y-4">
+      {canSelectFromStorage ? (
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'upload' | 'select')}>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="upload">{t('tabUpload')}</TabsTrigger>
+            <TabsTrigger value="select">{t('tabSelect')}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="upload" className="mt-4 space-y-4">
+            {uploadContent}
+          </TabsContent>
+          <TabsContent value="select" className="mt-4">
+            {selectContent}
+          </TabsContent>
+        </Tabs>
+      ) : (
+        uploadContent
       )}
       <div className="flex gap-x-2 items-center justify-center p-3 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900">
         <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />

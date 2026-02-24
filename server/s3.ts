@@ -30,7 +30,7 @@ const s3Client = new S3Client({
 
 export const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME as string;
 
-const FOLDER_MAP: Record<S3FolderType, string> = {
+export const FOLDER_MAP: Record<S3FolderType, string> = {
   'ai-agent-images': 'AI Agent Images',
   'chat-files': 'Chat Files',
   'course-attachments': 'Course Attachments',
@@ -40,6 +40,8 @@ const FOLDER_MAP: Record<S3FolderType, string> = {
   'profile-images': 'Profile Images',
   common: 'Common',
 };
+
+export const getFolderDisplayName = (folder: S3FolderType): string => FOLDER_MAP[folder] ?? folder;
 
 const getS3FilePath = (
   fileName: string,
@@ -204,6 +206,57 @@ export const listUserS3Files = async (
     return {
       fileName,
       folder,
+      key,
+      url: `${baseUrl}/${encodedKey}`,
+    };
+  });
+
+  return { files, totalCount };
+};
+
+export const listUserS3FilesByFolder = async (
+  userId: string,
+  folder: S3FolderType,
+  pageIndex: number,
+  pageSize: number,
+): Promise<{ files: UserS3File[]; totalCount: number }> => {
+  const folderName = FOLDER_MAP[folder];
+  const prefix = `${userId}/${folderName}/`;
+  const keys: string[] = [];
+  let continuationToken: string | undefined;
+
+  do {
+    const command = new ListObjectsV2Command({
+      Bucket: S3_BUCKET_NAME,
+      Prefix: prefix,
+      MaxKeys: 1000,
+      ContinuationToken: continuationToken,
+    });
+
+    const response = await s3Client.send(command);
+    const contents = response.Contents ?? [];
+
+    for (const obj of contents) {
+      if (obj.Key) keys.push(obj.Key);
+    }
+
+    continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
+  } while (continuationToken);
+
+  const totalCount = keys.length;
+  const start = pageIndex * pageSize;
+  const paginatedKeys = keys.slice(start, start + pageSize);
+
+  const baseUrl = process.env.S3_PUBLIC_URL || `https://${S3_BUCKET_NAME}.storage.yandexcloud.net`;
+
+  const files: UserS3File[] = paginatedKeys.map((key) => {
+    const parts = key.split('/');
+    const fileName = parts.pop() ?? key;
+    const encodedKey = key.split('/').map(encodeURIComponent).join('/');
+
+    return {
+      fileName,
+      folder: folderName,
       key,
       url: `${baseUrl}/${encodedKey}`,
     };

@@ -22,6 +22,7 @@ type FileUploadModalProps = {
   maxFileSize?: number;
   onBegin?: () => void;
   onChange: (files: { url: string; name: string; key: string }[]) => void;
+  showSelectFromStorage?: boolean;
 };
 
 export const FileUploadModal = ({
@@ -32,6 +33,7 @@ export const FileUploadModal = ({
   maxFileSize,
   onBegin,
   onChange,
+  showSelectFromStorage = true,
 }: FileUploadModalProps) => {
   const t = useTranslations('file-upload-modal');
   const [open, setOpen] = useState(false);
@@ -54,6 +56,7 @@ export const FileUploadModal = ({
               setOpen(false);
             }}
             onBegin={onBegin}
+            showSelectFromStorage={showSelectFromStorage}
           />
         </div>
       </DialogContent>

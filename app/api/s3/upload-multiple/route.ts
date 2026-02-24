@@ -4,16 +4,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { DEFAULT_S3_FOLDER, S3FolderType, uploadFileToS3 } from '@/server/s3';
 
+const ANONYMOUS_ALLOWED_FOLDERS: S3FolderType[] = ['csm-files'];
+
 export const POST = async (req: NextRequest) => {
   const user = await getCurrentUser();
 
   try {
-    if (!user) {
+    const formData = await req.formData();
+    const folder = (formData.get('folder') as S3FolderType) || DEFAULT_S3_FOLDER;
+
+    const isAnonymousAllowed = !user && ANONYMOUS_ALLOWED_FOLDERS.includes(folder);
+
+    if (!user && !isAnonymousAllowed) {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    const formData = await req.formData();
-    const folder = (formData.get('folder') as S3FolderType) || DEFAULT_S3_FOLDER;
+    const effectiveUserId = user?.userId ?? 'anonymous';
 
     const uploadedFiles: Array<{ url: string; name: string; key: string }> = [];
 
@@ -25,9 +31,9 @@ export const POST = async (req: NextRequest) => {
         const buffer = Buffer.from(arrayBuffer);
 
         const timestamp = Date.now();
-        const fileName = `${user.userId}_${timestamp}_${file.name}`;
+        const fileName = `${effectiveUserId}_${timestamp}_${file.name}`;
 
-        const result = await uploadFileToS3(buffer, fileName, folder, file.type, user.userId);
+        const result = await uploadFileToS3(buffer, fileName, folder, file.type, effectiveUserId);
 
         uploadedFiles.push({
           url: result.url,
