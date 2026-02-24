@@ -75,12 +75,8 @@ export const FileDownload = ({
 
   const handleRootClick = (e: React.MouseEvent) => {
     if (!isSelectable) return;
-
     if (previewJustClosedRef.current) return;
-
     if ((e.target as HTMLElement).closest('[data-file-action]')) return;
-
-    if ((e.target as HTMLElement).closest('[role="dialog"]')) return;
 
     onFileSelect?.();
   };

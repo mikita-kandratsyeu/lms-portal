@@ -100,7 +100,7 @@ export const AttachmentForm = ({ initialData, courseId }: AttachmentProps) => {
             accept="application/pdf,image/*,text/*,application/zip"
             folder="course-attachments"
             maxFiles={4}
-            maxFileSize={128}
+            maxFileSize={4}
             onChange={(files) => {
               if (files?.length) {
                 handleSubmit({ files });

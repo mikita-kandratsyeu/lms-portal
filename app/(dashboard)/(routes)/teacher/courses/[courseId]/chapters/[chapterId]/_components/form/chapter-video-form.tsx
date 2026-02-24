@@ -39,6 +39,7 @@ export const ChapterVideoForm = ({ initialData, chapterId, courseId }: ChapterVi
   const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isImage, setIsImage] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,8 +47,6 @@ export const ChapterVideoForm = ({ initialData, chapterId, courseId }: ChapterVi
   });
 
   const { isSubmitting, isValid } = form.formState;
-
-  const [isImage, setIsImage] = useState(false);
 
   const handleToggleEdit = () => {
     setIsEditing((prev) => !prev);
@@ -141,7 +140,7 @@ export const ChapterVideoForm = ({ initialData, chapterId, courseId }: ChapterVi
                 accept="image/*"
                 folder="course-images"
                 maxFiles={1}
-                maxFileSize={8}
+                maxFileSize={4}
                 onChange={(files) => {
                   if (files?.length) {
                     handleSubmit({ imageUrl: files[0]?.url });

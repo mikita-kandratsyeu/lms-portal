@@ -17,6 +17,7 @@ import { FileUpload } from '../common/file-upload';
 type FileUploadModalProps = {
   accept?: string;
   children: React.ReactNode;
+  filterStorageByAccept?: boolean;
   folder?: S3FolderType;
   maxFiles?: number;
   maxFileSize?: number;
@@ -28,6 +29,7 @@ type FileUploadModalProps = {
 export const FileUploadModal = ({
   accept,
   children,
+  filterStorageByAccept = true,
   folder = DEFAULT_S3_FOLDER,
   maxFiles,
   maxFileSize,
@@ -48,6 +50,7 @@ export const FileUploadModal = ({
         <div className="w-full flex flex-col gap-y-2 my-4">
           <FileUpload
             accept={accept}
+            filterStorageByAccept={filterStorageByAccept}
             folder={folder}
             maxFiles={maxFiles}
             maxFileSize={maxFileSize}

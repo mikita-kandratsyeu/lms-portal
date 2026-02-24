@@ -45,10 +45,10 @@ export const ChatInputFooter = ({
   const hasWebSearch = currentModel?.features.includes(AiModelFeature.search);
   const hasFileUploading = !isEmbed && currentModel?.features?.includes(AiModelFeature.file);
 
-  const showSeparator = hasImageGeneration || hasWebSearch || hasFileUploading;
-
   const isImageGenerationActive = activeFeature === AiModelFeature.image;
   const isWebSearchActive = activeFeature === AiModelFeature.search;
+
+  const showSeparator = hasImageGeneration || hasWebSearch || hasFileUploading;
 
   return (
     <div className="flex justify-between px-2 py-2 items-center">
@@ -107,10 +107,10 @@ export const ChatInputFooter = ({
         )}
         {hasFileUploading && (
           <FileUploadModal
-            accept="application/pdf"
+            accept=".pdf,.csv,.doc,.docx,.xls,.xlsx"
             folder="chat-files"
             maxFiles={1}
-            maxFileSize={8}
+            maxFileSize={4}
             onChange={(files) => {
               const file = files[0] ?? null;
               setAttachedFile(file);

@@ -24,11 +24,47 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 const ACCEPT_TO_LABEL: Record<string, string> = {
   'application/pdf': 'PDF',
+  'application/msword': 'DOC',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX',
+  'text/csv': 'CSV',
+  'application/vnd.ms-excel': 'XLS',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'XLSX',
   'image/*': 'Images',
   'image/jpeg': 'JPG',
   'image/png': 'PNG',
   'image/gif': 'GIF',
 };
+
+const ACCEPT_TO_EXTENSIONS: Record<string, string[]> = {
+  'application/pdf': ['.pdf'],
+  '.pdf': ['.pdf'],
+  'application/msword': ['.doc'],
+  '.doc': ['.doc'],
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+  '.docx': ['.docx'],
+  'text/csv': ['.csv'],
+  '.csv': ['.csv'],
+  'application/vnd.ms-excel': ['.xls'],
+  '.xls': ['.xls'],
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+  '.xlsx': ['.xlsx'],
+  'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp', '.ico'],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/png': ['.png'],
+  'image/gif': ['.gif'],
+  'video/*': ['.mp4', '.webm', '.mov', '.avi', '.mkv'],
+};
+
+function fileMatchesAccept(fileName: string, accept?: string): boolean {
+  if (!accept) return true;
+  const lastDot = fileName.lastIndexOf('.');
+  const ext = lastDot >= 0 ? fileName.toLowerCase().slice(lastDot) : '';
+  const types = accept.split(',').map((t) => t.trim());
+  return types.some((type) => {
+    const exts = ACCEPT_TO_EXTENSIONS[type];
+    return exts ? exts.includes(ext) : false;
+  });
+}
 
 function formatAcceptTypes(anyFileLabel: string, accept?: string): string {
   if (!accept) return anyFileLabel;
@@ -41,6 +77,7 @@ type S3FileItem = { url: string; name: string; key: string; folder: string };
 
 type FileUploadProps = {
   accept?: string;
+  filterStorageByAccept?: boolean;
   folder?: S3FolderType;
   maxFiles?: number;
   maxFileSize?: number;
@@ -51,9 +88,10 @@ type FileUploadProps = {
 
 export const FileUpload = ({
   accept,
+  filterStorageByAccept = true,
   folder = DEFAULT_S3_FOLDER,
   maxFiles = 4,
-  maxFileSize = 16,
+  maxFileSize = 4,
   onBegin,
   onChange,
   showSelectFromStorage = true,
@@ -93,8 +131,14 @@ export const FileUpload = ({
       .then((res: { files?: S3FileItem[]; totalCount?: number }) => {
         if (cancelled) return;
         if (res?.files) {
-          setStorageFiles(res.files);
-          setStorageTotalCount(res.totalCount ?? 0);
+          const filtered =
+            filterStorageByAccept && accept
+              ? res.files.filter((f) => fileMatchesAccept(f.name, accept))
+              : res.files;
+          setStorageFiles(filtered);
+          setStorageTotalCount(
+            filterStorageByAccept && accept ? filtered.length : res.totalCount ?? 0,
+          );
         }
       })
       .catch((error: Error) => {
@@ -109,7 +153,7 @@ export const FileUpload = ({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- toast/t in catch only; including them can cause infinite re-fetches
-  }, [activeTab, canSelectFromStorage, folder, storagePage]);
+  }, [activeTab, canSelectFromStorage, folder, storagePage, filterStorageByAccept, accept]);
 
   const handleSelectFromStorage = (file: S3FileItem) => {
     onChange([{ url: file.url, name: file.name, key: file.key }]);

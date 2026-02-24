@@ -83,7 +83,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
             accept="image/*"
             folder="course-images"
             maxFiles={1}
-            maxFileSize={8}
+            maxFileSize={4}
             onChange={(files) => {
               if (files?.length) {
                 handleSubmit({ imageUrl: files[0]?.url });
