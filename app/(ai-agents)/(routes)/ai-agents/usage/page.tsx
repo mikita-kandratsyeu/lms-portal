@@ -28,7 +28,7 @@ const UsagePage = async (props: UsagePageProps) => {
   const period = searchParams.period || DEFAULT_PERIOD;
   const pageIndex = Number(searchParams.pageIndex || 0);
   const pageSize = Number(searchParams.pageSize || DEFAULT_PAGE_SIZE);
-  const periodDays = PERIOD_TO_DAYS[period] ?? 7;
+  const periodDays = period === Period.ALL ? null : PERIOD_TO_DAYS[period] ?? 7;
 
   const [data, isEmailConfirmed] = await Promise.all([
     getAiPricing({ periodDays, page: pageIndex, pageSize }),

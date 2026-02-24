@@ -18,9 +18,9 @@ export const PromotionsTabs = ({ promotions }: PromotionsTabsProps) => {
   const renderPromotionCards = (promos: Promotion[]) => {
     if (promos.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center text-center py-12">
+        <div className="flex flex-col items-center justify-center py-12 px-4 rounded-lg border border-dashed">
           <TagIcon className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium mb-2">{t('empty')}</h3>
+          <p className="text-center text-muted-foreground">{t('empty')}</p>
         </div>
       );
     }

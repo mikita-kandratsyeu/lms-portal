@@ -12,18 +12,31 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse(ReasonPhrases.UNAUTHORIZED, { status: StatusCodes.UNAUTHORIZED });
     }
 
-    const { fileUrls } = await req.json();
+    const { fileUrls, fileKeys } = await req.json();
 
-    if (!fileUrls || !Array.isArray(fileUrls) || fileUrls.length === 0) {
-      return new NextResponse('Invalid file URLs', { status: StatusCodes.BAD_REQUEST });
+    let keys: string[] = [];
+
+    if (fileKeys && Array.isArray(fileKeys) && fileKeys.length > 0) {
+      keys = fileKeys.filter((k: unknown): k is string => typeof k === 'string' && k.length > 0);
+    } else if (fileUrls && Array.isArray(fileUrls) && fileUrls.length > 0) {
+      keys = fileUrls
+        .map((url: string) => extractKeyFromUrl(url))
+        .filter((key): key is string => key !== null);
     }
 
-    const keys = fileUrls
-      .map((url: string) => extractKeyFromUrl(url))
-      .filter((key): key is string => key !== null);
-
     if (keys.length === 0) {
-      return new NextResponse('No valid file keys found', { status: StatusCodes.BAD_REQUEST });
+      return new NextResponse('Invalid file URLs or keys', { status: StatusCodes.BAD_REQUEST });
+    }
+
+    const userPrefix = `${user.userId}/`;
+    const forbiddenKeys = keys.filter(
+      (key) => key.includes('/') && /^[a-f0-9-]{36}\//i.test(key) && !key.startsWith(userPrefix),
+    );
+
+    if (forbiddenKeys.length > 0) {
+      return new NextResponse('Some files do not belong to the user', {
+        status: StatusCodes.FORBIDDEN,
+      });
     }
 
     const results = await deleteFilesFromS3(keys);

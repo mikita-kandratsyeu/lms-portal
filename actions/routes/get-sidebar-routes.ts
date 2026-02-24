@@ -79,6 +79,12 @@ export const getSideBarRoutes = async (referer: string): Promise<Record<string, 
       label: 'notifications',
     },
     {
+      href: '/settings/storage',
+      icon: 'hard-drive',
+      isProtected: true,
+      label: 'storage',
+    },
+    {
       href: '/settings/promotions',
       icon: 'ticket-percent',
       isProtected: true,

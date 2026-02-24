@@ -10,13 +10,14 @@ const PromotionsPage = async () => {
   const { promotions } = await getUserPromotions();
 
   return (
-    <div className="p-6 flex flex-col mb-6">
-      <div className="mb-8">
+    <div className="p-4 sm:p-6 flex flex-col mb-6">
+      <div className="mb-6">
         <h1 className="text-2xl font-medium">{t('title')}</h1>
         <p className="text-muted-foreground mt-2">{t('description')}</p>
       </div>
-
-      {promotions.length === 0 ? <EmptyState /> : <PromotionsTabs promotions={promotions} />}
+      <div className="w-full">
+        {promotions.length === 0 ? <EmptyState /> : <PromotionsTabs promotions={promotions} />}
+      </div>
     </div>
   );
 };

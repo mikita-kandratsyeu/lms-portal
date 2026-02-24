@@ -189,6 +189,7 @@
     "promo": "Promo",
     "promotions": "Promotions",
     "releases": "Releases notes",
+    "storage": "Storage",
     "terms": "Terms and Conditions",
     "users": "Users"
   },
@@ -412,7 +413,8 @@
     "redirect": "You will be redirected to the checkout page."
   },
   "file-download": {
-    "download": "Download"
+    "download": "Download",
+    "preview": "Preview"
   },
   "price": {
     "dynamicPriceTooltip": "Price is calculated dynamically based on your location.",
@@ -633,6 +635,24 @@
     "new-tab-copilot": {
       "title": "Nova Copilot in a new tab",
       "body": "Open the chat always in a new tab."
+    },
+    "storage": {
+      "title": "Storage",
+      "description": "View and manage files you have uploaded to storage.",
+      "empty": "No files uploaded yet.",
+      "fileCount": "{count, plural, =0 {No files} =1 {1 file} other {# files}}",
+      "confirmDeleteTitle": "Delete file",
+      "confirmDelete": "This action cannot be undone. The file will be permanently removed from storage.",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleted": "File deleted successfully",
+      "deleteError": "Failed to delete file",
+      "pagination": {
+        "goToFirstPage": "Go to first page",
+        "goToPreviousPage": "Go to previous page",
+        "goToNextPage": "Go to next page",
+        "goToLastPage": "Go to last page"
+      }
     }
   },
   "file-upload": {

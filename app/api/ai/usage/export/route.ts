@@ -16,7 +16,7 @@ const PERIOD_TO_DAYS: Record<string, number | null> = {
 };
 
 async function buildCsvForPeriod(period: string) {
-  const periodDays = PERIOD_TO_DAYS[period] ?? 30;
+  const periodDays = period === Period.ALL ? null : PERIOD_TO_DAYS[period] ?? 30;
   const t = await getTranslations('ai-agents.usage.export');
   const rows = await getAiPricingCsvData({ periodDays });
 

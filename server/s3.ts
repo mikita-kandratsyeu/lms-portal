@@ -153,6 +153,63 @@ export const copyObjectInS3 = async (
   }
 };
 
+export type UserS3File = {
+  fileName: string;
+  folder: string;
+  key: string;
+  url: string;
+};
+
+export const listUserS3Files = async (
+  userId: string,
+  pageIndex: number,
+  pageSize: number,
+): Promise<{ files: UserS3File[]; totalCount: number }> => {
+  const prefix = `${userId}/`;
+  const keys: string[] = [];
+  let continuationToken: string | undefined;
+
+  do {
+    const command = new ListObjectsV2Command({
+      Bucket: S3_BUCKET_NAME,
+      Prefix: prefix,
+      MaxKeys: 1000,
+      ContinuationToken: continuationToken,
+    });
+
+    const response = await s3Client.send(command);
+    const contents = response.Contents ?? [];
+
+    for (const obj of contents) {
+      if (obj.Key) keys.push(obj.Key);
+    }
+
+    continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
+  } while (continuationToken);
+
+  const totalCount = keys.length;
+  const start = pageIndex * pageSize;
+  const paginatedKeys = keys.slice(start, start + pageSize);
+
+  const baseUrl = process.env.S3_PUBLIC_URL || `https://${S3_BUCKET_NAME}.storage.yandexcloud.net`;
+
+  const files: UserS3File[] = paginatedKeys.map((key) => {
+    const parts = key.split('/');
+    const fileName = parts.pop() ?? key;
+    const folder = parts.length >= 2 ? parts[parts.length - 1] : '';
+    const encodedKey = key.split('/').map(encodeURIComponent).join('/');
+
+    return {
+      fileName,
+      folder,
+      key,
+      url: `${baseUrl}/${encodedKey}`,
+    };
+  });
+
+  return { files, totalCount };
+};
+
 export const listAllS3Keys = async (): Promise<string[]> => {
   const keys: string[] = [];
   let continuationToken: string | undefined;
