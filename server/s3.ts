@@ -71,7 +71,9 @@ export const uploadFileToS3 = async (
 
   await s3Client.send(command);
 
-  const url = `${process.env.S3_PUBLIC_URL || `https://${S3_BUCKET_NAME}.storage.yandexcloud.net`}/${key}`;
+  const baseUrl = process.env.S3_PUBLIC_URL || `https://${S3_BUCKET_NAME}.storage.yandexcloud.net`;
+  const encodedKey = key.split('/').map(encodeURIComponent).join('/');
+  const url = `${baseUrl}/${encodedKey}`;
 
   return { url, key };
 };

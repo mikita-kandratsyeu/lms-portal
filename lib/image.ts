@@ -6,7 +6,8 @@ export { NO_PHOTO_PLACEHOLDER } from './image-placeholders';
 
 export const getImagePlaceHolder = async (path: string) => {
   try {
-    const res = await fetch(path);
+    const normalizedUrl = new URL(path).href;
+    const res = await fetch(normalizedUrl);
 
     if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
 
