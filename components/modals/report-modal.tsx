@@ -4,11 +4,11 @@ import { getCookie, setCookie } from 'cookies-next';
 import { format, fromUnixTime, sub } from 'date-fns';
 import { Clock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { SyntheticEvent, useState } from 'react';
-import { DateRange } from 'react-day-picker';
+import { useTranslations } from 'next-intl';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 
 import { getAnalytics } from '@/actions/analytics/get-analytics';
-import { Button, Calendar } from '@/components/ui';
+import { Button, Input, Label } from '@/components/ui';
 import {
   Dialog,
   DialogContent,
@@ -19,10 +19,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { DATE_RANGE_TEMPLATE, ONE_DAY_SEC, ONE_YEAR_SEC } from '@/constants/common';
+import { ONE_DAY_SEC } from '@/constants/common';
 import { Report } from '@/constants/payments';
 import { roundDate } from '@/lib/date';
 import { fetcher } from '@/lib/fetcher';
+
+const toDateString = (date: Date) => format(date, 'yyyy-MM-dd');
 
 type Analytics = Awaited<ReturnType<typeof getAnalytics>>;
 
@@ -32,17 +34,59 @@ type ReportModalProps = {
   stripeConnect?: Analytics['stripeConnect'];
 };
 
+const parseErrorMessage = (message: string): string => {
+  try {
+    const parsed = JSON.parse(message) as { error?: string };
+
+    return parsed?.error ?? message;
+  } catch {
+    return message;
+  }
+};
+
 export const ReportModal = ({ children, reportType, stripeConnect }: ReportModalProps) => {
+  const t = useTranslations('report-modal');
   const { toast } = useToast();
   const router = useRouter();
 
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: sub(new Date(), { seconds: ONE_DAY_SEC * 10 }),
-    to: new Date(),
-  });
+  const today = toDateString(new Date());
+  const fallbackMinDate = stripeConnect?.created
+    ? toDateString(fromUnixTime(stripeConnect.created))
+    : toDateString(sub(new Date(), { years: 1 }));
 
   const [open, setOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [minDate, setMinDate] = useState(fallbackMinDate);
+  const [startDate, setStartDate] = useState(toDateString(sub(new Date(), { days: 10 })));
+  const [endDate, setEndDate] = useState(today);
+
+  useEffect(() => {
+    if (!open) return;
+
+    fetcher
+      .get(`/api/payments/report/available-dates?reportType=${reportType}`, {
+        responseType: 'json',
+        cache: 'no-store',
+      })
+      .then((data: { minDate?: string }) => {
+        if (data?.minDate) {
+          const effectiveMin = fallbackMinDate > data.minDate ? fallbackMinDate : data.minDate;
+          setMinDate(effectiveMin);
+          setStartDate((prev) => (prev < effectiveMin ? effectiveMin : prev));
+        }
+      })
+      .catch(() => {
+        setMinDate(fallbackMinDate);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fallbackMinDate is stable
+  }, [open, reportType]);
+
+  useEffect(() => {
+    if (startDate && endDate && startDate > endDate) {
+      setEndDate(startDate);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only sync when startDate changes
+  }, [startDate]);
 
   const cookieKey = `report-${stripeConnect?.id ?? 'nonId'}-${reportType}`;
 
@@ -64,9 +108,9 @@ export const ReportModal = ({ children, reportType, stripeConnect }: ReportModal
       const response = await fetcher.post(`/api/payments/report/${stripeConnect?.id ?? 'nonId'}`, {
         responseType: 'json',
         body: {
-          endDate: roundDate(date?.to as Date),
+          endDate: roundDate(new Date(endDate)),
           reportType,
-          startDate: roundDate(date?.from as Date),
+          startDate: roundDate(new Date(startDate)),
         },
       });
 
@@ -76,14 +120,15 @@ export const ReportModal = ({ children, reportType, stripeConnect }: ReportModal
 
       if (!isRequested) {
         setCookie([cookieKey, 'requested'].join('-'), 'true', { maxAge: ONE_DAY_SEC });
-        toast({ title: 'Report was requested' });
+        toast({ title: response?.url ? t('toast.ready') : t('toast.requested') });
       } else {
-        toast({ title: response?.url ? 'Report is ready' : 'Report in progress...' });
+        toast({ title: response?.url ? t('toast.ready') : t('toast.inProgress') });
       }
 
       router.refresh();
     } catch (error) {
-      toast({ isError: true, description: (error as Error)?.message ?? '' });
+      const message = parseErrorMessage((error as Error)?.message ?? '');
+      toast({ isError: true, description: message || t('errors.generic') });
     } finally {
       setIsFetching(false);
       setOpen(false);
@@ -96,43 +141,40 @@ export const ReportModal = ({ children, reportType, stripeConnect }: ReportModal
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Request report</DialogTitle>
-            <DialogDescription>
-              Select the start and end dates of the report. The report can be requested once a day.
-            </DialogDescription>
+            <DialogTitle>{t('title')}</DialogTitle>
+            <DialogDescription>{t('description')}</DialogDescription>
           </DialogHeader>
-          <div className="grid gap-2 my-4">
-            <div className="text-sm text-muted-foreground">
-              {date?.from ? (
-                date.to ? (
-                  <>
-                    {format(date.from, DATE_RANGE_TEMPLATE)}&nbsp;-&nbsp;
-                    {format(date.to, DATE_RANGE_TEMPLATE)}
-                  </>
-                ) : (
-                  format(date.from, DATE_RANGE_TEMPLATE)
-                )
-              ) : (
-                <span>Pick a date</span>
-              )}
+          <div className="grid gap-4 my-4">
+            <div className="grid gap-2">
+              <Label htmlFor="start-date">{t('startDate')}</Label>
+              <Input
+                id="start-date"
+                type="date"
+                min={minDate}
+                max={today}
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
             </div>
-            <Calendar
-              mode="range"
-              defaultMonth={date?.from}
-              selected={date}
-              onSelect={setDate}
-              disabled={(date) =>
-                date > new Date() ||
-                date <
-                  (stripeConnect?.created
-                    ? fromUnixTime(stripeConnect.created)
-                    : sub(new Date(), { seconds: ONE_YEAR_SEC }))
-              }
-            />
+            <div className="grid gap-2">
+              <Label htmlFor="end-date">{t('endDate')}</Label>
+              <Input
+                id="end-date"
+                type="date"
+                min={startDate}
+                max={today}
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </div>
           </div>
           <DialogFooter>
-            <Button disabled={isFetching} isLoading={isFetching} type="submit">
-              Request
+            <Button
+              disabled={isFetching || !startDate || !endDate || startDate > endDate}
+              isLoading={isFetching}
+              type="submit"
+            >
+              {isFetching ? t('toast.generating') : t('request')}
             </Button>
           </DialogFooter>
         </form>
@@ -140,7 +182,14 @@ export const ReportModal = ({ children, reportType, stripeConnect }: ReportModal
     </Dialog>
   ) : (
     <>
-      {Boolean(fileUrl) && <button onClick={handleSubmit}>{children}</button>}
+      {Boolean(fileUrl) && (
+        <div
+          onClick={handleSubmit}
+          className="cursor-pointer [&_button]:cursor-pointer inline-flex"
+        >
+          {children}
+        </div>
+      )}
       {!fileUrl && (
         <Button
           variant="outline"
@@ -149,7 +198,7 @@ export const ReportModal = ({ children, reportType, stripeConnect }: ReportModal
           isLoading={isFetching}
         >
           {!isFetching && <Clock className="h-4 w-4 mr-2" />}
-          Check report status
+          {t('checkStatus')}
         </Button>
       )}
     </>

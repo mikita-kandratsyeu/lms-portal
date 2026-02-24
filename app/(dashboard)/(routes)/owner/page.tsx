@@ -4,6 +4,7 @@ import { getAiUsageStats } from '@/actions/ai/analytics/get-ai-usage-stats';
 import { getCompletionRateStats } from '@/actions/analytics/get-completion-rate';
 import { getS3StorageUsageAction } from '@/actions/s3/get-s3-storage-usage';
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
+import { getStripeBalanceTransactions } from '@/actions/stripe/get-stripe-balance-transactions';
 import { getStripeDetails } from '@/actions/stripe/get-stripe-details';
 
 import { AiInsightsModal } from './_components/ai-insights-modal';
@@ -23,12 +24,14 @@ const OwnerPage = async (props: OwnerPageProps) => {
   const [
     { pageCount, payoutRequests, owner },
     analytics,
+    balanceTransactions,
     s3Storage,
     aiUsageStats,
     completionRateStats,
   ] = await Promise.all([
     getStripeDetails(searchParams),
     getStripeAnalytics(),
+    getStripeBalanceTransactions(),
     getS3StorageUsageAction(),
     getAiUsageStats(),
     getCompletionRateStats(),
@@ -58,7 +61,7 @@ const OwnerPage = async (props: OwnerPageProps) => {
         />
       </div>
       <RevenueBreakdown analytics={analytics} />
-      <StripeBalances />
+      <StripeBalances balanceTransactions={balanceTransactions} />
       <PayoutRequests pageCount={pageCount} payoutRequests={payoutRequests} />
     </div>
   );

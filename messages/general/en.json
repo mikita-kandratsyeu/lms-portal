@@ -46,6 +46,26 @@
     "continue": "Continue",
     "title": "Are you sure?"
   },
+  "report-modal": {
+    "title": "Request report",
+    "description": "Select the start and end dates for the report. The report can be requested once per day per date range. Generation may take up to 2 minutes.",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "pickDate": "Pick a date",
+    "request": "Request",
+    "checkStatus": "Check report status",
+    "toast": {
+      "requested": "Report requested. Generation in progress...",
+      "ready": "Report is ready",
+      "inProgress": "Report generation in progress...",
+      "generating": "Generating report..."
+    },
+    "errors": {
+      "generic": "Failed to generate report. Please try again.",
+      "timeout": "Report generation is taking longer than expected. Please check status later.",
+      "dataUnavailable": "Data is only available from {minDate}. Please select a start date on or after this date."
+    }
+  },
   "otp-modal": {
     "body": "You can use any authenticator app that supports Time-based, One Time Password (TOTP) such as the Google.",
     "enable": "Enable",
@@ -1092,6 +1112,31 @@
     "stripe": {
       "secureProcessing": "All financial transactions are securely processed through",
       "downloadReport": "Download Report"
+    },
+    "balanceTransactions": {
+      "title": "Balance transaction history",
+      "description": "Detailed breakdown of credits and debits to your Stripe account",
+      "columns": {
+        "type": "Type",
+        "date": "Date",
+        "status": "Status",
+        "amount": "Amount",
+        "fee": "Fee",
+        "net": "Net"
+      },
+      "types": {
+        "charge": "Customer payment",
+        "payment": "Payment",
+        "subscription": "Subscription",
+        "transfer": "Transfer to instructor",
+        "payout": "Bank payout",
+        "refund": "Refund",
+        "paymentRefund": "Payment refund",
+        "applicationFee": "Platform fee",
+        "adjustment": "Adjustment",
+        "stripeFee": "Stripe fee",
+        "other": "Other"
+      }
     },
     "aiInsights": {
       "button": "AI Analytics Insights",

@@ -3,11 +3,17 @@
 import { Download, Wallet } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import type { BalanceTransactionItem } from '@/actions/stripe/get-stripe-balance-transactions';
+import { BalanceTransactions } from '@/app/(dashboard)/(routes)/owner/_components/balance-transactions';
 import { ReportModal } from '@/components/modals/report-modal';
 import { Button, Card, CardContent } from '@/components/ui';
 import { Report } from '@/constants/payments';
 
-export const StripeBalances = () => {
+type StripeBalancesProps = {
+  balanceTransactions?: BalanceTransactionItem[];
+};
+
+export const StripeBalances = ({ balanceTransactions = [] }: StripeBalancesProps) => {
   const t = useTranslations('owner');
 
   return (
@@ -35,6 +41,7 @@ export const StripeBalances = () => {
               </Button>
             </ReportModal>
           </div>
+          <BalanceTransactions transactions={balanceTransactions} />
         </CardContent>
       </Card>
     </div>
