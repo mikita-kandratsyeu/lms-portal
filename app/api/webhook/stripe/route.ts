@@ -124,6 +124,7 @@ export const POST = async (req: Request) => {
             stripeCustomerId: subscription.customer as string,
             stripePriceId: subscription.items.data[0].price.id,
             stripeSubscriptionId: subscription.id,
+            trialEnd: subscription.trial_end ? fromUnixTime(subscription.trial_end) : null,
             userId,
           },
         });
@@ -233,6 +234,7 @@ export const POST = async (req: Request) => {
         where: { stripeSubscriptionId: subscription.id },
         data: {
           cancelAt: subscription.cancel_at ? fromUnixTime(subscription.cancel_at) : null,
+          trialEnd: subscription.trial_end ? fromUnixTime(subscription.trial_end) : null,
         },
       });
 

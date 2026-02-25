@@ -1096,7 +1096,8 @@
         "storageUsage": "{count} files in S3",
         "aiTokensUsage": "Total tokens consumed by AI agents",
         "aiSpending": "Total cost of external API usage",
-        "averageCompletionRate": "{completed} of {total} chapters completed"
+        "averageCompletionRate": "{completed} of {total} chapters completed",
+        "subscriptionWithTrial": "{active} subscribers, {trialCount} on trial. First payment from {date}"
       }
     },
     "revenue": {
@@ -1107,7 +1108,15 @@
       "active": "active",
       "total": "total",
       "ofTotalRevenue": "of total revenue",
-      "purchases": "purchases"
+      "purchases": "purchases",
+      "onTrial": "on trial",
+      "firstPaymentFrom": "First payment from {date}",
+      "subscribersList": "Subscribers list",
+      "statusActive": "Active",
+      "statusCancelled": "Cancelled",
+      "onTrialUntil": "Trial until {date}",
+      "cancelledAt": "Cancelled {date}",
+      "cancelsAt": "Cancels {date}"
     },
     "stripe": {
       "secureProcessing": "All financial transactions are securely processed through",

@@ -22,12 +22,37 @@ export const getStripeAnalytics = async () => {
       },
     });
     const subscriptionDescriptions = await db.stripeSubscriptionDescription.findMany();
+    const now = new Date();
 
-    const subscriptionPlans = subscriptions.reduce(
+    const isActiveSubscription = (s: { cancelAt: Date | null }) =>
+      !s.cancelAt || s.cancelAt > now;
+
+    const subscriptionsWithTrialStatus = await Promise.all(
+      subscriptions.map(async (sub) => {
+        let trialEnd: Date | null = sub.trialEnd;
+        let stripeStatus: string | null = null;
+        if (trialEnd == null) {
+          try {
+            const stripeSub = await stripe.subscriptions.retrieve(sub.stripeSubscriptionId);
+            stripeStatus = stripeSub.status;
+            trialEnd = stripeSub.trial_end ? new Date(stripeSub.trial_end * 1000) : null;
+          } catch {
+            trialEnd = null;
+          }
+        }
+        const isInTrial =
+          stripeStatus === 'trialing' || (trialEnd != null && trialEnd > now);
+        return { ...sub, isInTrial, trialEnd };
+      }),
+    );
+
+    const subscriptionPlans = subscriptionsWithTrialStatus.reduce(
       (acc, sub) => {
         const planName = sub.name;
         const description = subscriptionDescriptions.find((desc) => desc.name === planName);
         const price = description?.price || 0;
+        const isActive = isActiveSubscription(sub);
+        const contributesRevenue = isActive && !sub.isInTrial;
 
         if (!acc[planName]) {
           acc[planName] = {
@@ -40,8 +65,10 @@ export const getStripeAnalytics = async () => {
         }
 
         acc[planName].count += 1;
-        if (!sub.cancelAt) {
+        if (isActive) {
           acc[planName].activeCount += 1;
+        }
+        if (contributesRevenue) {
           acc[planName].revenue += price;
         }
 
@@ -57,6 +84,15 @@ export const getStripeAnalytics = async () => {
       (total, plan) => total + plan.revenue,
       0,
     );
+
+    const trialSubscriptions = subscriptionsWithTrialStatus.filter(
+      (s) => isActiveSubscription(s) && s.isInTrial,
+    );
+    const trialEndDates = trialSubscriptions
+      .map((s) => s.trialEnd)
+      .filter((d): d is Date => d != null)
+      .sort((a, b) => a.getTime() - b.getTime());
+    const earliestTrialEnd = trialEndDates[0] ?? null;
 
     const purchases = await db.purchase.findMany({
       include: {
@@ -109,9 +145,22 @@ export const getStripeAnalytics = async () => {
       revenue: {
         subscriptions: {
           count: subscriptions.length,
-          active: subscriptions.filter((s) => !s.cancelAt).length,
+          active: subscriptions.filter(isActiveSubscription).length,
+          trialCount: trialSubscriptions.length,
+          payingCount:
+            subscriptions.filter(isActiveSubscription).length - trialSubscriptions.length,
           amount: subscriptionRevenueAmount,
+          earliestTrialEnd,
           plans: Object.values(subscriptionPlans).sort((a, b) => b.activeCount - a.activeCount),
+          subscribers: subscriptionsWithTrialStatus.map((s) => ({
+            name: s.user?.name ?? '',
+            email: s.user?.email ?? '',
+            planName: s.name,
+            isActive: isActiveSubscription(s),
+            isInTrial: s.isInTrial,
+            cancelAt: s.cancelAt,
+            trialEnd: s.trialEnd,
+          })),
         },
         sales: {
           amount: salesRevenue,
@@ -142,8 +191,12 @@ export const getStripeAnalytics = async () => {
         subscriptions: {
           count: 0,
           active: 0,
+          trialCount: 0,
+          payingCount: 0,
           amount: 0,
+          earliestTrialEnd: null,
           plans: [],
+          subscribers: [],
         },
         sales: {
           amount: 0,

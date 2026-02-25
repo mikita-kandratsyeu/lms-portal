@@ -227,6 +227,7 @@ model StripeSubscription {
   stripeCustomerId     String    @unique
   stripePriceId        String    @unique
   stripeSubscriptionId String    @unique
+  trialEnd             DateTime?
   updatedAt            DateTime  @updatedAt
   user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId               String    @unique

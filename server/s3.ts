@@ -1,6 +1,7 @@
 import {
   CopyObjectCommand,
   DeleteObjectCommand,
+  ListObjectVersionsCommand,
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
@@ -106,30 +107,61 @@ export const getS3StorageUsage = async (): Promise<{
   try {
     let usedBytes = 0;
     let objectCount = 0;
-    let continuationToken: string | undefined;
+    let keyMarker: string | undefined;
+    let versionIdMarker: string | undefined;
+    let isTruncated = false;
 
     do {
-      const command = new ListObjectsV2Command({
+      const command = new ListObjectVersionsCommand({
         Bucket: S3_BUCKET_NAME,
-        ContinuationToken: continuationToken,
+        KeyMarker: keyMarker,
+        VersionIdMarker: versionIdMarker,
       });
 
       const response = await s3Client.send(command);
-      const contents = response.Contents ?? [];
+      const versions = response.Versions ?? [];
 
-      for (const obj of contents) {
-        usedBytes += obj.Size ?? 0;
+      for (const version of versions) {
+        usedBytes += version.Size ?? 0;
         objectCount += 1;
       }
 
-      continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
-    } while (continuationToken);
+      keyMarker = response.NextKeyMarker;
+      versionIdMarker = response.NextVersionIdMarker;
+      isTruncated = response.IsTruncated ?? false;
+    } while (isTruncated);
 
     return { usedBytes, objectCount };
   } catch (error) {
-    console.error('[GET_S3_STORAGE_USAGE_ERROR]', error);
+    console.warn('[GET_S3_STORAGE_USAGE] ListObjectVersions not supported, falling back to ListObjectsV2', error);
 
-    return { usedBytes: 0, objectCount: 0 };
+    try {
+      let usedBytes = 0;
+      let objectCount = 0;
+      let continuationToken: string | undefined;
+
+      do {
+        const command = new ListObjectsV2Command({
+          Bucket: S3_BUCKET_NAME,
+          ContinuationToken: continuationToken,
+        });
+
+        const response = await s3Client.send(command);
+        const contents = response.Contents ?? [];
+
+        for (const obj of contents) {
+          usedBytes += obj.Size ?? 0;
+          objectCount += 1;
+        }
+
+        continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
+      } while (continuationToken);
+
+      return { usedBytes, objectCount };
+    } catch (fallbackError) {
+      console.error('[GET_S3_STORAGE_USAGE_ERROR]', fallbackError);
+      return { usedBytes: 0, objectCount: 0 };
+    }
   }
 };
 

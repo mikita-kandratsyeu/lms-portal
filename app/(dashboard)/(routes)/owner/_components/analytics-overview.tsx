@@ -1,5 +1,7 @@
 'use client';
 
+import { format } from 'date-fns';
+import type { Locale } from 'date-fns';
 import {
   Bot,
   CreditCard,
@@ -12,8 +14,9 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
+import { getFormatLocale } from '@/lib/locale';
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { formatBytes, formatCompactNumber, formatPrice, getConvertedPrice } from '@/lib/format';
@@ -34,6 +37,26 @@ type AnalyticsOverviewProps = {
   completionRateStats: CompletionRateStats;
 };
 
+const getSubscriptionDescription = (
+  subs: {
+    active: number;
+    trialCount: number;
+    payingCount: number;
+    earliestTrialEnd: Date | null;
+  },
+  t: (key: string, values?: Record<string, string | number>) => string,
+  dateLocale: Locale,
+) => {
+  if (subs.trialCount > 0 && subs.earliestTrialEnd) {
+    return t('descriptions.subscriptionWithTrial', {
+      active: subs.active,
+      trialCount: subs.trialCount,
+      date: format(subs.earliestTrialEnd, 'd MMM yyyy', { locale: dateLocale }),
+    });
+  }
+  return `${subs.active} ${t('descriptions.active')}`;
+};
+
 export const AnalyticsOverview = ({
   analytics,
   s3Storage,
@@ -41,6 +64,8 @@ export const AnalyticsOverview = ({
   completionRateStats,
 }: AnalyticsOverviewProps) => {
   const t = useTranslations('owner.analytics');
+  const locale = useLocale();
+  const formatLocale = getFormatLocale(locale);
 
   const metrics = [
     {
@@ -75,7 +100,11 @@ export const AnalyticsOverview = ({
       title: t('subscriptionRevenue'),
       value: formatPrice(getConvertedPrice(analytics.revenue.subscriptions.amount)),
       icon: CreditCard,
-      description: `${analytics.revenue.subscriptions.active} ${t('descriptions.active')}`,
+      description: getSubscriptionDescription(
+        analytics.revenue.subscriptions,
+        t,
+        formatLocale,
+      ),
       color: 'text-indigo-600',
     },
     {

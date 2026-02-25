@@ -1096,7 +1096,8 @@
         "storageUsage": "{count} файлаў у S3",
         "aiTokensUsage": "Усяго токенаў выкарыстана ИИ агентамі",
         "aiSpending": "Агульны кошт выкарыстання вонкавага API",
-        "averageCompletionRate": "{completed} з {total} глаў завершана"
+        "averageCompletionRate": "{completed} з {total} глаў завершана",
+        "subscriptionWithTrial": "{active} падпісчыкаў, {trialCount} на трыяле. Першы плацёж з {date}"
       }
     },
     "revenue": {
@@ -1107,7 +1108,15 @@
       "active": "актыўных",
       "total": "усяго",
       "ofTotalRevenue": "ад агульнага даходу",
-      "purchases": "пакупак"
+      "purchases": "пакупак",
+      "onTrial": "на трыяле",
+      "firstPaymentFrom": "Першы плацёж з {date}",
+      "subscribersList": "Спіс падпісчыкаў",
+      "statusActive": "Актыўны",
+      "statusCancelled": "Скасаваны",
+      "onTrialUntil": "Трыял да {date}",
+      "cancelledAt": "Скасавана {date}",
+      "cancelsAt": "Скасаванне {date}"
     },
     "stripe": {
       "secureProcessing": "Усе фінансавыя транзакцыі бяспечна апрацоўваюцца праз",
