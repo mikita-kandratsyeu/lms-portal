@@ -4,10 +4,10 @@ import { format } from 'date-fns';
 import { CheckCircle2, CreditCard, ShoppingBag, XCircle } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 
-import { getFormatLocale } from '@/lib/locale';
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { Badge, Card, CardContent } from '@/components/ui';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
+import { getFormatLocale } from '@/lib/locale';
 
 type AnalyticsData = Awaited<ReturnType<typeof getStripeAnalytics>>;
 
@@ -53,7 +53,10 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                     {analytics.revenue.subscriptions.active} {t('revenue.active')} •{' '}
                     {analytics.revenue.subscriptions.count} {t('revenue.total')}
                     {analytics.revenue.subscriptions.trialCount > 0 && (
-                      <> • {analytics.revenue.subscriptions.trialCount} {t('revenue.onTrial')}</>
+                      <>
+                        {' '}
+                        • {analytics.revenue.subscriptions.trialCount} {t('revenue.onTrial')}
+                      </>
                     )}
                   </span>
                   {analytics.revenue.subscriptions.trialCount > 0 &&
@@ -120,7 +123,9 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                               <span className="text-xs text-muted-foreground">
                                 {t('revenue.onTrialUntil', {
                                   date: format(
-                                    sub.trialEnd instanceof Date ? sub.trialEnd : new Date(sub.trialEnd),
+                                    sub.trialEnd instanceof Date
+                                      ? sub.trialEnd
+                                      : new Date(sub.trialEnd),
                                     'd MMM yyyy',
                                     { locale: formatLocale },
                                   ),
@@ -131,7 +136,9 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                               <span className="text-xs text-muted-foreground">
                                 {t('revenue.cancelledAt', {
                                   date: format(
-                                    sub.cancelAt instanceof Date ? sub.cancelAt : new Date(sub.cancelAt),
+                                    sub.cancelAt instanceof Date
+                                      ? sub.cancelAt
+                                      : new Date(sub.cancelAt),
                                     'd MMM yyyy',
                                     { locale: formatLocale },
                                   ),
@@ -140,18 +147,21 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                             )}
                             {sub.isActive &&
                               sub.cancelAt &&
-                              (sub.cancelAt instanceof Date ? sub.cancelAt : new Date(sub.cancelAt)) >
-                                new Date() && (
-                              <span className="text-xs text-amber-600">
-                                {t('revenue.cancelsAt', {
-                                  date: format(
-                                    sub.cancelAt instanceof Date ? sub.cancelAt : new Date(sub.cancelAt),
-                                    'd MMM yyyy',
-                                    { locale: formatLocale },
-                                  ),
-                                })}
-                              </span>
-                            )}
+                              (sub.cancelAt instanceof Date
+                                ? sub.cancelAt
+                                : new Date(sub.cancelAt)) > new Date() && (
+                                <span className="text-xs text-amber-600">
+                                  {t('revenue.cancelsAt', {
+                                    date: format(
+                                      sub.cancelAt instanceof Date
+                                        ? sub.cancelAt
+                                        : new Date(sub.cancelAt),
+                                      'd MMM yyyy',
+                                      { locale: formatLocale },
+                                    ),
+                                  })}
+                                </span>
+                              )}
                           </div>
                         </li>
                       ))}

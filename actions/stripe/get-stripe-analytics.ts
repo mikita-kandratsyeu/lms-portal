@@ -24,8 +24,7 @@ export const getStripeAnalytics = async () => {
     const subscriptionDescriptions = await db.stripeSubscriptionDescription.findMany();
     const now = new Date();
 
-    const isActiveSubscription = (s: { cancelAt: Date | null }) =>
-      !s.cancelAt || s.cancelAt > now;
+    const isActiveSubscription = (s: { cancelAt: Date | null }) => !s.cancelAt || s.cancelAt > now;
 
     const subscriptionsWithTrialStatus = await Promise.all(
       subscriptions.map(async (sub) => {
@@ -40,8 +39,7 @@ export const getStripeAnalytics = async () => {
             trialEnd = null;
           }
         }
-        const isInTrial =
-          stripeStatus === 'trialing' || (trialEnd != null && trialEnd > now);
+        const isInTrial = stripeStatus === 'trialing' || (trialEnd != null && trialEnd > now);
         return { ...sub, isInTrial, trialEnd };
       }),
     );

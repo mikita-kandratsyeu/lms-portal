@@ -1,7 +1,7 @@
 'use client';
 
-import { format } from 'date-fns';
 import type { Locale } from 'date-fns';
+import { format } from 'date-fns';
 import {
   Bot,
   CreditCard,
@@ -16,10 +16,10 @@ import {
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 
-import { getFormatLocale } from '@/lib/locale';
 import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { formatBytes, formatCompactNumber, formatPrice, getConvertedPrice } from '@/lib/format';
+import { getFormatLocale } from '@/lib/locale';
 
 type AnalyticsData = Awaited<ReturnType<typeof getStripeAnalytics>>;
 type S3Storage = { usedBytes: number; objectCount: number };
@@ -100,11 +100,7 @@ export const AnalyticsOverview = ({
       title: t('subscriptionRevenue'),
       value: formatPrice(getConvertedPrice(analytics.revenue.subscriptions.amount)),
       icon: CreditCard,
-      description: getSubscriptionDescription(
-        analytics.revenue.subscriptions,
-        t,
-        formatLocale,
-      ),
+      description: getSubscriptionDescription(analytics.revenue.subscriptions, t, formatLocale),
       color: 'text-indigo-600',
     },
     {

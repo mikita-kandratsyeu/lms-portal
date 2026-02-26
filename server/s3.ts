@@ -1,8 +1,8 @@
 import {
   CopyObjectCommand,
   DeleteObjectCommand,
-  ListObjectVersionsCommand,
   ListObjectsV2Command,
+  ListObjectVersionsCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
@@ -133,7 +133,10 @@ export const getS3StorageUsage = async (): Promise<{
 
     return { usedBytes, objectCount };
   } catch (error) {
-    console.warn('[GET_S3_STORAGE_USAGE] ListObjectVersions not supported, falling back to ListObjectsV2', error);
+    console.warn(
+      '[GET_S3_STORAGE_USAGE] ListObjectVersions not supported, falling back to ListObjectsV2',
+      error,
+    );
 
     try {
       let usedBytes = 0;
