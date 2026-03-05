@@ -9,6 +9,7 @@ import { ConnectedAccounts } from './_components/connected-accounts';
 import { DeleteAccount } from './_components/delete-account';
 import { GeneralSettingsForm } from './_components/general-settings-form';
 import { MfaOptions } from './_components/mfa-options/mfa-options';
+import { PasswordForm } from './_components/password-form';
 
 type SettingsPagePageProps = {
   searchParams: Promise<{ code: string }>;
@@ -39,6 +40,7 @@ const SettingsPage = async ({ searchParams }: SettingsPagePageProps) => {
             <GeneralSettingsForm emailVerification={emailVerification} initialData={userInfo} />
             <AdvancedOptions initialData={userInfo} />
             <MfaOptions initialData={userInfo} />
+            <PasswordForm initialData={userInfo} />
             {Boolean(userInfo.oauth.length) && <ConnectedAccounts initialData={userInfo} />}
           </>
         )}

@@ -589,7 +589,7 @@
   },
   "settings": {
     "advancedOptions": "Advanced Options",
-    "mfaOptions": "Multi-Factor Authentication",
+    "mfaOptions": "Authentication",
     "connectedAccounts": "Connected accounts",
     "connectedAccountsDescription": "Manage your connected third-party accounts.",
     "deleteAcc": "Delete Account",
@@ -629,6 +629,31 @@
       "enabled": "Enabled",
       "otpDisabled": "2FA authentication is disabled",
       "title": "Authenticator App"
+    },
+    "passwordForm": {
+      "title": "Password",
+      "body": "Set or update your account password. A verification code will be sent to your email.",
+      "set": "Set Password",
+      "change": "Change Password",
+      "isSet": "Set",
+      "notSet": "Not Set",
+      "codeSent": "A verification code has been sent to { email }",
+      "code": "Verification Code",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "enterCode": "Enter 6-digit code",
+      "enterNewPassword": "Enter new password",
+      "enterConfirmPassword": "Confirm your new password",
+      "save": "Save Password",
+      "cancel": "Cancel",
+      "resend": "Resend code",
+      "resendIn": "Resend in { seconds }s",
+      "passwordUpdated": "Password updated successfully",
+      "errors": {
+        "passwordMismatch": "Passwords do not match",
+        "passwordTooShort": "Password must be at least 8 characters",
+        "invalidCode": "Invalid or expired verification code"
+      }
     },
     "billing": {
       "activePlan": "Active Plan",

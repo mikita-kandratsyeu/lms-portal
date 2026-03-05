@@ -40,6 +40,14 @@
     "subject": "{ticketID}",
     "footerNote": "All rights reserved."
   },
+  "set-password": {
+    "subject": "{{code}} - Your Nova Academy password verification code",
+    "description": "Enter this code to verify your identity and set a new password:",
+    "footerNote": "All rights reserved.",
+    "greeting": "Hey!",
+    "ignoreNote": "If you didn't request a password change, you can safely ignore this email.",
+    "validityNote": "This code is valid for 15 minutes and can only be used once."
+  },
   "user-blocked": {
     "subject": "Your account has been suspended",
     "badgeLabel": "Account Suspended",
