@@ -1,4 +1,3 @@
-import { geolocation } from '@vercel/functions';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -12,27 +11,64 @@ import {
   DEFAULT_TIMEZONE,
 } from '@/constants/locale';
 
+interface IpInfoResponse {
+  ip: string;
+  city?: string;
+  country?: string;
+  loc?: string;
+  timezone?: string;
+  bogon?: boolean;
+}
+
+function getClientIp(req: NextRequest): string | null {
+  const forwarded = req.headers.get('x-forwarded-for');
+
+  if (forwarded) {
+    return forwarded.split(',')[0].trim();
+  }
+
+  return req.headers.get('x-real-ip');
+}
+
+async function getGeoFromIp(ip: string): Promise<IpInfoResponse | null> {
+  try {
+    const res = await fetch(`https://ipinfo.io/${ip}/json`, {
+      next: { revalidate: 3600 },
+    });
+
+    if (!res.ok) return null;
+    const data: IpInfoResponse = await res.json();
+
+    return data.bogon ? null : data;
+  } catch {
+    return null;
+  }
+}
+
 export const GET = async (req: NextRequest) => {
   try {
     const {
       features: { enableDynamicPricing },
     } = await getAppConfig();
-    const geo = geolocation(req);
+
+    const ip = getClientIp(req);
+    const geoData = ip ? await getGeoFromIp(ip) : null;
+
+    const [latitude, longitude] = geoData?.loc?.split(',') ?? [];
+    const countryCode = geoData?.country ?? DEFAULT_COUNTRY_CODE;
 
     const currency = enableDynamicPricing
-      ? CURRENCY_BY_COUNTRY[
-          (geo.country ?? DEFAULT_COUNTRY_CODE) as keyof typeof CURRENCY_BY_COUNTRY
-        ]
+      ? CURRENCY_BY_COUNTRY[countryCode as keyof typeof CURRENCY_BY_COUNTRY]
       : null;
 
     const locale = { currency: currency ?? DEFAULT_CURRENCY, locale: DEFAULT_LOCALE };
     const details = {
-      city: geo.city,
-      country: geo.country,
-      countryCode: geo.country,
-      latitude: geo.latitude,
-      longitude: geo.longitude,
-      timezone: DEFAULT_TIMEZONE,
+      city: geoData?.city,
+      country: geoData?.country,
+      countryCode,
+      latitude,
+      longitude,
+      timezone: geoData?.timezone ?? DEFAULT_TIMEZONE,
     };
 
     let rates = {};
@@ -48,7 +84,7 @@ export const GET = async (req: NextRequest) => {
       locale,
     });
   } catch (error) {
-    console.error('[GET_GEO]', error);
+    console.error('[GET_USER_LOCATION_GEO]', error);
 
     return new NextResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
