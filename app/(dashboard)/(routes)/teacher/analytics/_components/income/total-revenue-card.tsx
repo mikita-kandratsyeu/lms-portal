@@ -3,16 +3,26 @@
 import { format, parseISO } from 'date-fns';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import { getAnalytics } from '@/actions/analytics/get-analytics';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/constants/locale';
 import { formatPrice, getConvertedPrice, getCurrencySymbol } from '@/lib/format';
 import { isNumber } from '@/lib/guard';
 import { cn } from '@/lib/utils';
+
+const COMPARISON_OFFSETS = [1, 2, 3] as const;
 
 type Analytics = Awaited<ReturnType<typeof getAnalytics>>;
 
@@ -31,14 +41,32 @@ const chartConfig = {
 
 export const TotalRevenueCard = ({ totalRevenue, totalRevenueData }: TotalRevenueCardProps) => {
   const t = useTranslations('teacher.analytics.revenueCard');
+  const [comparisonOffset, setComparisonOffset] = useState<number>(1);
+
+  useEffect(() => {
+    if (totalRevenueData.length > 0 && comparisonOffset >= totalRevenueData.length) {
+      setComparisonOffset(1);
+    }
+  }, [totalRevenueData.length, comparisonOffset]);
 
   if (!isNumber(totalRevenue)) {
     return null;
   }
 
-  const diff = totalRevenueData[totalRevenueData.length - 1]?.diff ?? 0;
-  const isPositive = isNumber(diff) && diff >= 0;
   const hasMonthlyData = totalRevenueData.length > 0;
+  const latestIndex = totalRevenueData.length - 1;
+  const comparisonIndex = latestIndex - comparisonOffset;
+
+  const currentRevenue = totalRevenueData[latestIndex]?.revenue;
+  const comparisonRevenue = comparisonIndex >= 0 ? totalRevenueData[comparisonIndex]?.revenue : 0;
+
+  const canCompare = comparisonRevenue > 0 && isNumber(currentRevenue);
+  const diff = canCompare
+    ? parseFloat((((currentRevenue - comparisonRevenue) / comparisonRevenue) * 100).toFixed(2))
+    : null;
+  const times = canCompare ? currentRevenue / comparisonRevenue : null;
+
+  const isPositive = isNumber(diff) && diff >= 0;
 
   const chartData = totalRevenueData.map((d) => ({
     ...d,
@@ -49,24 +77,55 @@ export const TotalRevenueCard = ({ totalRevenue, totalRevenueData }: TotalRevenu
     averageConverted: getConvertedPrice(d.average),
   }));
 
+  const comparisonLabel =
+    comparisonOffset === 1 ? t('vsPrevMonth') : t('vsMonthsAgo', { count: comparisonOffset });
+
   return (
     <Card className="shadow-none h-full">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{t('title')}</CardTitle>
-        {isNumber(diff) && (
-          <span
-            className={cn(
-              'flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full',
-              isPositive
-                ? 'bg-green-50 text-green-600 dark:bg-green-950 dark:text-green-400'
-                : 'bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400',
-            )}
-          >
-            {isPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-            {isPositive ? '+' : ''}
-            {diff}%
-          </span>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          {hasMonthlyData && totalRevenueData.length > 1 && (
+            <Select
+              value={String(comparisonOffset)}
+              onValueChange={(v) => setComparisonOffset(Number(v) as 1 | 2 | 3)}
+            >
+              <SelectTrigger className="h-8 w-auto min-w-[140px] text-xs">
+                <SelectValue placeholder={t('compareTo')} />
+              </SelectTrigger>
+              <SelectContent>
+                {COMPARISON_OFFSETS.filter((off) => totalRevenueData.length > off).map((off) => (
+                  <SelectItem key={off} value={String(off)} className="text-xs">
+                    {off === 1 ? t('options.prevMonth') : t('options.monthsAgo', { count: off })}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          {canCompare && (
+            <div className="flex items-center gap-2">
+              <span
+                className={cn(
+                  'flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full',
+                  isPositive
+                    ? 'bg-green-50 text-green-600 dark:bg-green-950 dark:text-green-400'
+                    : 'bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400',
+                )}
+              >
+                {isPositive ? (
+                  <TrendingUp className="h-3 w-3" />
+                ) : (
+                  <TrendingDown className="h-3 w-3" />
+                )}
+                {isPositive ? '+' : ''}
+                {diff}%
+              </span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {t('times', { value: times! < 1 ? times!.toFixed(2) : times!.toFixed(1) })}
+              </span>
+            </div>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="pb-2">
         <CountUp
@@ -76,8 +135,8 @@ export const TotalRevenueCard = ({ totalRevenue, totalRevenueData }: TotalRevenu
           end={getConvertedPrice(totalRevenue)}
           prefix={`${getCurrencySymbol(DEFAULT_LOCALE, DEFAULT_CURRENCY)} `}
         />
-        {isNumber(diff) && (
-          <p className="text-xs text-muted-foreground mt-0.5 mb-3">{t('vsPrevMonth')}</p>
+        {canCompare && (
+          <p className="text-xs text-muted-foreground mt-0.5 mb-3">{comparisonLabel}</p>
         )}
 
         {hasMonthlyData ? (

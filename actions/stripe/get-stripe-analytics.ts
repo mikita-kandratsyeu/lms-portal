@@ -129,6 +129,30 @@ export const getStripeAnalytics = async () => {
       },
     });
 
+    const connectAccounts = await db.stripeConnectAccount.findMany({
+      select: { stripeAccountId: true },
+    });
+
+    let teachersOwed = 0;
+
+    await Promise.all(
+      connectAccounts.map(async ({ stripeAccountId }) => {
+        try {
+          const balance = await stripe.balance.retrieve({
+            stripeAccount: stripeAccountId,
+          });
+          const available = balance?.available?.reduce((acc, cur) => acc + cur.amount, 0) ?? 0;
+          teachersOwed += available;
+        } catch (error) {
+          console.error('[GET_STRIPE_CONNECTED_ACC_ACTION]', error);
+        }
+      }),
+    );
+
+    const totalRevenue = salesRevenue + subscriptionRevenueAmount;
+    const totalPaidOut = totalPayoutAmount._sum.amount || 0;
+    const netIncome = totalRevenue - totalPaidOut - teachersOwed;
+
     return {
       balances: {
         available: stripeBalance?.available?.reduce((acc, current) => acc + current.amount, 0) ?? 0,
@@ -167,9 +191,11 @@ export const getStripeAnalytics = async () => {
         total: salesRevenue + subscriptionRevenueAmount,
       },
       payouts: {
-        total: totalPayoutAmount._sum.amount || 0,
+        total: totalPaidOut,
         recent: recentPayoutRequests.length,
       },
+      teachersOwed,
+      netIncome,
     };
   } catch (error) {
     console.error('[GET_STRIPE_ANALYTICS_ACTION]', error);
@@ -206,6 +232,8 @@ export const getStripeAnalytics = async () => {
         total: 0,
         recent: 0,
       },
+      teachersOwed: 0,
+      netIncome: 0,
     };
   }
 };

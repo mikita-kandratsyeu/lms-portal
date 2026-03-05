@@ -8,6 +8,7 @@ import { getStripeAnalytics } from '@/actions/stripe/get-stripe-analytics';
 import { Badge, Card, CardContent } from '@/components/ui';
 import { formatPrice, getConvertedPrice } from '@/lib/format';
 import { getFormatLocale } from '@/lib/locale';
+import { cn } from '@/lib/utils';
 
 type AnalyticsData = Awaited<ReturnType<typeof getStripeAnalytics>>;
 
@@ -190,20 +191,38 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
             </div>
           </div>
 
-          <div className="pt-4 border-t">
-            <div className="flex items-center justify-between">
+          <div className="pt-4 border-t space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">{t('revenue.totalPlatformRevenue')}</p>
                 <p className="text-2xl font-bold mt-1">
                   {formatPrice(getConvertedPrice(totalRevenue))}
                 </p>
               </div>
-              <div className="text-right">
+              <div>
                 <p className="text-sm text-muted-foreground">{t('revenue.totalPaidOut')}</p>
                 <p className="text-2xl font-bold mt-1 text-green-600">
                   {formatPrice(getConvertedPrice(analytics.payouts.total))}
                 </p>
               </div>
+              <div>
+                <p className="text-sm text-muted-foreground">{t('revenue.teachersOwed')}</p>
+                <p className="text-2xl font-bold mt-1 text-amber-600">
+                  {formatPrice(getConvertedPrice(analytics.teachersOwed ?? 0))}
+                </p>
+              </div>
+            </div>
+            <div className="pt-4 border-t">
+              <p className="text-sm text-muted-foreground">{t('revenue.netIncome')}</p>
+              <p
+                className={cn(
+                  'text-2xl font-bold mt-1',
+                  (analytics.netIncome ?? 0) >= 0 ? 'text-primary' : 'text-destructive',
+                )}
+              >
+                {formatPrice(getConvertedPrice(analytics.netIncome ?? 0))}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">{t('revenue.netIncomeFormula')}</p>
             </div>
           </div>
         </CardContent>

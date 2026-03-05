@@ -30,7 +30,9 @@ export const getTotalRevenueData = async (transactions: any[]) => {
 
   let previousRevenue: number | null = null;
 
-  const totalRevenueData: TotalRevenueData = Object.keys(monthlyData).map((month) => {
+  const sortedMonths = Object.keys(monthlyData).sort();
+
+  const totalRevenueData: TotalRevenueData = sortedMonths.map((month) => {
     const data = monthlyData[month];
 
     const revenue = data.totalRevenue;

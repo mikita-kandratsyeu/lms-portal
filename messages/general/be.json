@@ -1152,6 +1152,9 @@
       "courseSales": "Продажы курсаў",
       "totalPlatformRevenue": "Агульны даход платформы",
       "totalPaidOut": "Усяго выплачана",
+      "teachersOwed": "Чаканыя выплаты выкладчыкам",
+      "netIncome": "Чысты даход",
+      "netIncomeFormula": "Даход платформы − Выплачана − Чаканыя выплаты",
       "active": "актыўных",
       "total": "усяго",
       "ofTotalRevenue": "ад агульнага даходу",
@@ -1352,6 +1355,13 @@
       "revenueCard": {
         "title": "Агульны даход",
         "vsPrevMonth": "у параўнанні з мінулым месяцам",
+        "vsMonthsAgo": "у параўнанні з {count} мес. таму",
+        "times": "×{value}",
+        "compareTo": "Параўнаць з",
+        "options": {
+          "prevMonth": "Мінулы месяц",
+          "monthsAgo": "{count} мес. таму"
+        },
         "noData": "Штомесячных даных яшчэ няма",
         "tooltip": {
           "revenue": "Даход",

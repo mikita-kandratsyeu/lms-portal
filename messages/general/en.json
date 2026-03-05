@@ -1152,6 +1152,9 @@
       "courseSales": "Course Sales",
       "totalPlatformRevenue": "Total Platform Revenue",
       "totalPaidOut": "Total Paid Out",
+      "teachersOwed": "Owed to teachers",
+      "netIncome": "Net Income",
+      "netIncomeFormula": "Platform Revenue − Paid Out − Owed to teachers",
       "active": "active",
       "total": "total",
       "ofTotalRevenue": "of total revenue",
@@ -1352,6 +1355,13 @@
       "revenueCard": {
         "title": "Total Revenue",
         "vsPrevMonth": "vs. previous month",
+        "vsMonthsAgo": "vs. {count} months ago",
+        "times": "×{value}",
+        "compareTo": "Compare to",
+        "options": {
+          "prevMonth": "Previous month",
+          "monthsAgo": "{count} months ago"
+        },
         "noData": "No monthly data yet",
         "tooltip": {
           "revenue": "Revenue",
