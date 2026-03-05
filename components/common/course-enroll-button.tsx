@@ -15,6 +15,7 @@ type CourseEnrollButtonProps = {
   courseId: string;
   customRates: string | null;
   price: number | null;
+  promoCode?: string;
   variant?: ButtonProps['variant'];
 };
 
@@ -22,6 +23,7 @@ export const CourseEnrollButton = ({
   courseId,
   customRates,
   price,
+  promoCode,
   variant = 'success',
 }: CourseEnrollButtonProps) => {
   const t = useTranslations('course-enroll');
@@ -47,6 +49,7 @@ export const CourseEnrollButton = ({
           locale: localeInfo?.locale,
           details: localeInfo?.details,
           rate: localeInfo?.rate,
+          ...(promoCode ? { promoCode } : {}),
         },
         responseType: 'json',
       });

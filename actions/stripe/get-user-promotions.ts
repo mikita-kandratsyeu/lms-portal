@@ -68,6 +68,9 @@ const formatPromotionCode = (
     maxRedemptions: promo.maxRedemptions ?? 0,
     timesRedeemed,
     expiresAt: promo.expiresAt,
+    percentOff: promo.percentOff,
+    amountOff: promo.amountOff,
+    currency: promo.currency,
   };
 };
 

@@ -344,6 +344,12 @@
         "lock": "This preview is locked",
         "additionalInfo": "Additional Information",
         "pricing": "Course Pricing"
+      },
+      "promo": {
+        "available": "Your promo codes",
+        "apply": "Apply",
+        "applied": "Applied",
+        "savings": "You save"
       }
     },
     "progress": {

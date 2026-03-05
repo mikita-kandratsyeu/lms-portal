@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -6,16 +6,12 @@ import { getTranslations } from 'next-intl/server';
 
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getPreviewCourse } from '@/actions/courses/get-preview-course';
-import { AuthRedirect } from '@/components/auth/auth-redirect';
-import { CourseEnrollButton } from '@/components/common/course-enroll-button';
-import { Price } from '@/components/common/price';
-import { Button } from '@/components/ui/button';
+import { getUserPromotions } from '@/actions/stripe/get-user-promotions';
 import { PLATFORM_DESCRIPTION } from '@/constants/common';
 import db from '@/lib/db';
-import { cn } from '@/lib/utils';
 
-import { ContinueButton } from './_components/continue-button';
 import { CourseHighlights } from './_components/course-highlights';
+import { CoursePurchaseSection } from './_components/course-purchase-section';
 import { PreviewDescription } from './_components/preview-description';
 import { PreviewImage } from './_components/preview-image';
 import { PreviewVideoPlayer } from './_components/preview-video-player';
@@ -44,11 +40,11 @@ const PreviewCourseIdPage = async (props: PreviewCourseIdPageProps) => {
 
   const user = await getCurrentUser();
 
-  const { chapterImagePlaceholder, course, fees, hasPurchase, durationInSec } =
-    await getPreviewCourse({
-      courseId: courseId,
-      userId: user?.userId,
-    });
+  const [{ chapterImagePlaceholder, course, fees, hasPurchase, durationInSec }, { promotions }] =
+    await Promise.all([
+      getPreviewCourse({ courseId, userId: user?.userId }),
+      user?.userId ? getUserPromotions() : Promise.resolve({ promotions: [] }),
+    ]);
 
   if (!course || (course?.isPremium && !user?.hasSubscription)) {
     redirect('/');
@@ -102,52 +98,15 @@ const PreviewCourseIdPage = async (props: PreviewCourseIdPageProps) => {
           />
         </div>
         <div className="space-y-6 lg:col-span-1">
-          {!hasPurchase && (
-            <div className="border rounded-lg p-6 bg-card">
-              <h4 className="font-semibold text-lg mb-4">{t('preview.pricing')}</h4>
-              <Price
-                customRates={course.customRates}
-                price={course.price}
-                fees={fees}
-                showFeesAccordion
-              />
-            </div>
-          )}
-          <div
-            className={cn(
-              'w-full border rounded-lg p-6',
-              user?.userId &&
-                'bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%',
-              !user?.userId && 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500',
-            )}
-          >
-            <div className="mb-8 space-y-2 text-white">
-              <h4 className="font-semibold text-xl">{t('readyToLearn')}</h4>
-              <p className="text-sm">{t('keepProgress')}</p>
-            </div>
-            <div className="w-full">
-              {user?.userId ? (
-                <>
-                  {!hasPurchase && (
-                    <CourseEnrollButton
-                      courseId={courseId}
-                      customRates={course.customRates}
-                      price={course.price}
-                      variant="outline"
-                    />
-                  )}
-                  {hasPurchase && <ContinueButton redirectUrl={`/courses/${courseId}`} />}
-                </>
-              ) : (
-                <AuthRedirect>
-                  <Button className="w-full truncate" variant="outline">
-                    {t('loginToContinue')}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </AuthRedirect>
-              )}
-            </div>
-          </div>
+          <CoursePurchaseSection
+            courseId={courseId}
+            customRates={course.customRates}
+            fees={fees}
+            hasPurchase={hasPurchase}
+            isLoggedIn={!!user?.userId}
+            price={course.price}
+            promotions={promotions}
+          />
         </div>
       </div>
     </div>

@@ -35,7 +35,7 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ courseId
       where: { id: courseId, isPublished: true },
     });
 
-    const { locale, details, rate } = await req.json();
+    const { locale, details, rate, promoCode } = await req.json();
 
     if (!course || !locale?.currency) {
       return new NextResponse(ReasonPhrases.NOT_FOUND, { status: StatusCodes.NOT_FOUND });
@@ -137,7 +137,9 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ courseId
     }
 
     const session = await stripe.checkout.sessions.create({
-      allow_promotion_codes: true,
+      ...(promoCode
+        ? { discounts: [{ promotion_code: promoCode }] }
+        : { allow_promotion_codes: true }),
       cancel_url: absoluteUrl(`/preview-course/${course.id}?canceled=true`),
       customer: stripeCustomer.stripeCustomerId,
       expires_at: getUnixTime(addSeconds(Date.now(), 3600)),
