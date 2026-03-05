@@ -38,7 +38,7 @@ export const useUserLocation = () => {
           responseType: 'json',
         });
 
-        if (exchangeRates) {
+        if (exchangeRates?.rates && Object.keys(exchangeRates.rates).length > 0) {
           handleExchangeRates({
             ...exchangeRates,
             rates: Object.keys(exchangeRates.rates)
@@ -62,11 +62,7 @@ export const useUserLocation = () => {
       }
     };
 
-    if (process.env.NODE_ENV === 'development') {
-      handleLocaleInfo(defaultLocaleInfo);
-    } else {
-      getUserLocation();
-    }
+    getUserLocation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
