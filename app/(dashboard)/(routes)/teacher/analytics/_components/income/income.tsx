@@ -1,6 +1,7 @@
 'use client';
 
 import { LatLngExpression } from 'leaflet';
+import { useTranslations } from 'next-intl';
 
 import { getAnalytics } from '@/actions/analytics/get-analytics';
 import Map from '@/components/map';
@@ -17,6 +18,8 @@ type IncomeProps = {
 } & Pick<Analytics, 'totalProfit' | 'totalRevenue' | 'totalRevenueData'>;
 
 export const Income = ({ mapData, totalProfit, totalRevenue, totalRevenueData }: IncomeProps) => {
+  const t = useTranslations('teacher.analytics.income');
+
   const mapMarkers = mapData.map((mp) => {
     return {
       position: mp.position,
@@ -45,16 +48,18 @@ export const Income = ({ mapData, totalProfit, totalRevenue, totalRevenueData }:
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <p className="font-medium text-xl">Income</p>
-        <span className="text-xs text-muted-foreground">Total revenue from all sales</span>
+        <div className="flex items-center gap-2">
+          <p className="font-medium text-xl">{t('title')}</p>
+        </div>
+        <span className="text-xs text-muted-foreground">{t('subtitle')}</span>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
-        <div className="flex flex-col gap-4 mb-4 md:mb-0">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="flex flex-col gap-4">
           <TotalRevenueCard totalRevenue={totalRevenue} totalRevenueData={totalRevenueData} />
           <TotalProfitCard totalProfit={totalProfit} />
         </div>
         <Map
-          className="w-full h-[445px] border rounded-lg col-span-2"
+          className="w-full h-[400px] md:h-auto border rounded-lg col-span-2"
           mapStyles={{ width: '100%', height: '100%', borderRadius: '8px', zIndex: 1 }}
           markers={mapMarkers}
         />

@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server';
+
 import { getAnalytics } from '@/actions/analytics/get-analytics';
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { Banner } from '@/components/common/banner';
@@ -11,7 +13,7 @@ import { SalesChart } from './_components/sales-chart';
 import { StripeConnect } from './_components/stripe-connect/stripe-connect';
 
 const AnalyticsPage = async () => {
-  const user = await getCurrentUser();
+  const [user, t] = await Promise.all([getCurrentUser(), getTranslations('teacher.analytics')]);
 
   const {
     activePayouts,
@@ -33,18 +35,20 @@ const AnalyticsPage = async () => {
       {isError && <ErrorModal />}
       {hasActivePayouts && (
         <Banner
-          label={`You have a pending payment request for ${formatPrice(
-            getConvertedPrice(activePayouts[0].amount),
-            {
+          label={t('page.banner.pendingPayout', {
+            amount: formatPrice(getConvertedPrice(activePayouts[0].amount), {
               locale: DEFAULT_LOCALE,
               currency: activePayouts[0].currency,
-            },
-          )}. A new request will be available after the current one is completed.`}
+            }),
+          })}
           variant="warning"
         />
       )}
       <div className="p-6">
-        <h1 className="text-2xl font-medium mb-12">Analytics Dashboard</h1>
+        <div className="mb-10">
+          <h1 className="text-2xl font-medium">{t('page.title')}</h1>
+          <p className="text-sm text-muted-foreground mt-1">{t('page.subtitle')}</p>
+        </div>
         <StripeConnect
           hasActivePayouts={hasActivePayouts}
           stripeConnect={stripeConnect}

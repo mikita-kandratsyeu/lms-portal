@@ -1328,5 +1328,76 @@
         "noIssues": "Обращения не найдены"
       }
     }
+  },
+  "teacher": {
+    "analytics": {
+      "page": {
+        "title": "Аналитическая панель",
+        "subtitle": "Отслеживайте продажи курсов, доходы и выплаты",
+        "banner": {
+          "pendingPayout": "У вас есть ожидающий запрос на выплату в размере {amount}. Новый запрос будет доступен после завершения текущего."
+        }
+      },
+      "income": {
+        "title": "Доходы",
+        "subtitle": "Общий доход от всех продаж курсов"
+      },
+      "salesChart": {
+        "title": "Продажи по курсам",
+        "subtitle": "{totalSales, plural, =1 {# продажа} few {# продажи} many {# продаж} other {# продаж}} по {courseCount, plural, =1 {# курсу} few {# курсам} many {# курсам} other {# курсам}}",
+        "noData": "Данных о продажах ещё нет"
+      },
+      "revenueCard": {
+        "title": "Общий доход",
+        "vsPrevMonth": "по сравнению с прошлым месяцем",
+        "noData": "Ежемесячных данных ещё нет",
+        "tooltip": {
+          "revenue": "Доход",
+          "avgSale": "Ср. / продажа",
+          "transactions": "Транзакции"
+        }
+      },
+      "profitCard": {
+        "title": "Чистая прибыль",
+        "margin": "{percent}% маржи",
+        "feesDeducted": "{amount} в вычтенных комиссиях",
+        "grossRevenue": "Валовой доход",
+        "availableForPayout": "Доступно для выплаты"
+      },
+      "stripeConnect": {
+        "title": "Stripe Connect",
+        "subtitle": "Ваш доступный баланс в {stripeConnect}.",
+        "autoPayments": "Автоматические платежи на карту или банковский счёт выполняются {interval} по {day}м",
+        "createAccount": "Создать Stripe Connect",
+        "continueCreating": "Продолжить создание аккаунта",
+        "requestPayout": "Запросить выплату",
+        "downloadReport": "Скачать отчёт",
+        "stripeExpress": "Stripe Express",
+        "redirectOnboarding": "Вы будете перенаправлены на страницу онбординга Stripe.",
+        "redirectExpress": "Вы будете перенаправлены на страницу Stripe Express.",
+        "recentTransactions": "Последние транзакции баланса",
+        "table": {
+          "type": "Тип",
+          "date": "Дата транзакции",
+          "status": "Статус",
+          "totalAmount": "Общая сумма",
+          "feeAmount": "Комиссия",
+          "netAmount": "Чистая сумма"
+        }
+      },
+      "transactions": {
+        "title": "История транзакций",
+        "subtitle": "{count, plural, =1 {# транзакция} few {# транзакции} many {# транзакций} other {# транзакций}}",
+        "noData": "Транзакции клиентов отсутствуют",
+        "columns": {
+          "course": "Курс",
+          "billingDetails": "Платёжные данные",
+          "price": "Цена",
+          "purchaseDate": "Дата покупки",
+          "receipt": "Квитанция",
+          "userDeleted": "Пользователь удалён"
+        }
+      }
+    }
   }
 }

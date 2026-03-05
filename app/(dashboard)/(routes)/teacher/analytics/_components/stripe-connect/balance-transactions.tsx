@@ -1,6 +1,7 @@
 'use client';
 
 import { format, fromUnixTime } from 'date-fns';
+import { useTranslations } from 'next-intl';
 
 import { getAnalytics } from '@/actions/analytics/get-analytics';
 import { TextBadge } from '@/components/common/text-badge';
@@ -27,23 +28,25 @@ type Analytics = Awaited<ReturnType<typeof getAnalytics>>;
 type BalanceTransactionsProps = { stripeConnectPayout: Analytics['stripeConnectPayouts'] };
 
 export const BalanceTransactions = ({ stripeConnectPayout }: BalanceTransactionsProps) => {
+  const t = useTranslations('teacher.analytics.stripeConnect');
+
   return (
     <div className="w-full mt-6">
       <Accordion type="single" collapsible>
         <AccordionItem value="transactions" className="border-none">
           <AccordionTrigger className="pt-0 pb-2 hover:no-underline">
-            <p>Recent balance transactions</p>
+            <p>{t('recentTransactions')}</p>
           </AccordionTrigger>
           <AccordionContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Type</TableHead>
-                  <TableHead>Date of transaction</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Total amount</TableHead>
-                  <TableHead>Fee amount</TableHead>
-                  <TableHead className="text-right">Net amount</TableHead>
+                  <TableHead className="w-[100px]">{t('table.type')}</TableHead>
+                  <TableHead>{t('table.date')}</TableHead>
+                  <TableHead>{t('table.status')}</TableHead>
+                  <TableHead>{t('table.totalAmount')}</TableHead>
+                  <TableHead>{t('table.feeAmount')}</TableHead>
+                  <TableHead className="text-right">{t('table.netAmount')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

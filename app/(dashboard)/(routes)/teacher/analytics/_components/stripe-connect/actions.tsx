@@ -1,6 +1,7 @@
 'use client';
 
 import { Download, ExternalLink, HandCoins } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { getAnalytics } from '@/actions/analytics/get-analytics';
@@ -23,6 +24,7 @@ type ActionsProps = {
 };
 
 export const Actions = ({ disableRequest = false, stripeConnect, totalProfit }: ActionsProps) => {
+  const t = useTranslations('teacher.analytics.stripeConnect');
   const { toast } = useToast();
   const { user } = useCurrentUser();
 
@@ -36,7 +38,7 @@ export const Actions = ({ disableRequest = false, stripeConnect, totalProfit }: 
         responseType: 'json',
       });
 
-      toast({ title: 'You will be redirected to the Stripe Onboarding page.' });
+      toast({ title: t('redirectOnboarding') });
       window.location.assign(response.url);
     } catch (error) {
       toast({ isError: true, description: (error as Error)?.message ?? '' });
@@ -53,7 +55,7 @@ export const Actions = ({ disableRequest = false, stripeConnect, totalProfit }: 
         responseType: 'json',
       });
 
-      toast({ title: 'You will be redirected to the Stripe Express page.' });
+      toast({ title: t('redirectExpress') });
       window.location.assign(response.url);
     } catch (error) {
       toast({ isError: true, description: (error as Error)?.message ?? '' });
@@ -68,8 +70,8 @@ export const Actions = ({ disableRequest = false, stripeConnect, totalProfit }: 
       <div className="flex flex-col md:flex-row gap-3 md:gap-2 items-center w-full md:w-auto">
         {(!stripeConnect || !stripeConnect?.isActive) && (
           <Button className="w-full" disabled={isFetching} onClick={handleCreateAccount}>
-            {!stripeConnect && <span> Create Stripe Connect</span>}
-            {stripeConnect && !stripeConnect?.isActive && <span>Continue creating an account</span>}
+            {!stripeConnect && <span>{t('createAccount')}</span>}
+            {stripeConnect && !stripeConnect?.isActive && <span>{t('continueCreating')}</span>}
           </Button>
         )}
         {stripeConnect && stripeConnect.isActive && (
@@ -80,13 +82,13 @@ export const Actions = ({ disableRequest = false, stripeConnect, totalProfit }: 
                 className="w-full"
               >
                 <HandCoins className="h-4 w-4 mr-2" />
-                <span>Request a payout</span>
+                <span>{t('requestPayout')}</span>
               </Button>
             </RequestPayoutModal>
             <ReportModal reportType={Report.CONNECT} stripeConnect={stripeConnect}>
               <Button variant="outline" className="w-full">
                 <Download className="h-4 w-4 mr-2" />
-                Download report
+                {t('downloadReport')}
               </Button>
             </ReportModal>
             <Button
@@ -96,7 +98,7 @@ export const Actions = ({ disableRequest = false, stripeConnect, totalProfit }: 
               className="w-full"
             >
               <ExternalLink className="h-4 w-4 mr-2" />
-              <span>Stripe Express</span>
+              <span>{t('stripeExpress')}</span>
             </Button>
           </div>
         )}

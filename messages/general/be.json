@@ -1330,5 +1330,76 @@
         "noIssues": "Звароты не знойдзены"
       }
     }
+  },
+  "teacher": {
+    "analytics": {
+      "page": {
+        "title": "Аналітычная панэль",
+        "subtitle": "Адсочвайце продажы курсаў, даходы і выплаты",
+        "banner": {
+          "pendingPayout": "У вас ёсць запыт на выплату ў памеры {amount}. Новы запыт будзе даступны пасля завяршэння бягучага."
+        }
+      },
+      "income": {
+        "title": "Даходы",
+        "subtitle": "Агульны даход ад усіх продажаў курсаў"
+      },
+      "salesChart": {
+        "title": "Продажы па курсах",
+        "subtitle": "{totalSales, plural, =1 {# продаж} few {# продажы} many {# продажаў} other {# продажаў}} па {courseCount, plural, =1 {# курсе} few {# курсах} many {# курсах} other {# курсах}}",
+        "noData": "Даных аб продажах яшчэ няма"
+      },
+      "revenueCard": {
+        "title": "Агульны даход",
+        "vsPrevMonth": "у параўнанні з мінулым месяцам",
+        "noData": "Штомесячных даных яшчэ няма",
+        "tooltip": {
+          "revenue": "Даход",
+          "avgSale": "Ср. / продаж",
+          "transactions": "Транзакцыі"
+        }
+      },
+      "profitCard": {
+        "title": "Чысты прыбытак",
+        "margin": "{percent}% маржы",
+        "feesDeducted": "{amount} у выдатках на камісіі",
+        "grossRevenue": "Валавы даход",
+        "availableForPayout": "Даступна для выплаты"
+      },
+      "stripeConnect": {
+        "title": "Stripe Connect",
+        "subtitle": "Ваш даступны баланс у {stripeConnect}.",
+        "autoPayments": "Аўтаматычныя плацяжы на карту або банкаўскі рахунак выконваюцца {interval} у {day}",
+        "createAccount": "Стварыць Stripe Connect",
+        "continueCreating": "Працягнуць стварэнне акаўнта",
+        "requestPayout": "Запытаць выплату",
+        "downloadReport": "Спампаваць справаздачу",
+        "stripeExpress": "Stripe Express",
+        "redirectOnboarding": "Вас перанакіруюць на старонку анбордынгу Stripe.",
+        "redirectExpress": "Вас перанакіруюць на старонку Stripe Express.",
+        "recentTransactions": "Апошнія транзакцыі балансу",
+        "table": {
+          "type": "Тып",
+          "date": "Дата транзакцыі",
+          "status": "Статус",
+          "totalAmount": "Агульная сума",
+          "feeAmount": "Камісія",
+          "netAmount": "Чыстая сума"
+        }
+      },
+      "transactions": {
+        "title": "Гісторыя транзакцый",
+        "subtitle": "{count, plural, =1 {# транзакцыя} few {# транзакцыі} many {# транзакцый} other {# транзакцый}}",
+        "noData": "Транзакцый кліентаў няма",
+        "columns": {
+          "course": "Курс",
+          "billingDetails": "Плацёжныя дадзеныя",
+          "price": "Цана",
+          "purchaseDate": "Дата набыцця",
+          "receipt": "Квітанцыя",
+          "userDeleted": "Карыстальнік выдалены"
+        }
+      }
+    }
   }
 }

@@ -1330,5 +1330,76 @@
         "noIssues": "No issues found"
       }
     }
+  },
+  "teacher": {
+    "analytics": {
+      "page": {
+        "title": "Analytics Dashboard",
+        "subtitle": "Track your course sales, revenue, and payouts",
+        "banner": {
+          "pendingPayout": "You have a pending payment request for {amount}. A new request will be available after the current one is completed."
+        }
+      },
+      "income": {
+        "title": "Income",
+        "subtitle": "Total revenue from all course sales"
+      },
+      "salesChart": {
+        "title": "Sales by Course",
+        "subtitle": "{totalSales, plural, =1 {# sale} other {# sales}} across {courseCount, plural, =1 {# course} other {# courses}}",
+        "noData": "No sales data available yet"
+      },
+      "revenueCard": {
+        "title": "Total Revenue",
+        "vsPrevMonth": "vs. previous month",
+        "noData": "No monthly data yet",
+        "tooltip": {
+          "revenue": "Revenue",
+          "avgSale": "Avg / sale",
+          "transactions": "Transactions"
+        }
+      },
+      "profitCard": {
+        "title": "Net Profit",
+        "margin": "{percent}% margin",
+        "feesDeducted": "{amount} in fees deducted",
+        "grossRevenue": "Gross Revenue",
+        "availableForPayout": "Available for payout"
+      },
+      "stripeConnect": {
+        "title": "Stripe Connect",
+        "subtitle": "Your available balance in the {stripeConnect}.",
+        "autoPayments": "Automatic payments to a card or bank account are made {interval} on {day}s",
+        "createAccount": "Create Stripe Connect",
+        "continueCreating": "Continue creating an account",
+        "requestPayout": "Request a payout",
+        "downloadReport": "Download report",
+        "stripeExpress": "Stripe Express",
+        "redirectOnboarding": "You will be redirected to the Stripe Onboarding page.",
+        "redirectExpress": "You will be redirected to the Stripe Express page.",
+        "recentTransactions": "Recent balance transactions",
+        "table": {
+          "type": "Type",
+          "date": "Date of transaction",
+          "status": "Status",
+          "totalAmount": "Total amount",
+          "feeAmount": "Fee amount",
+          "netAmount": "Net amount"
+        }
+      },
+      "transactions": {
+        "title": "Transaction History",
+        "subtitle": "{count, plural, =1 {# transaction recorded} other {# transactions recorded}}",
+        "noData": "No client transactions",
+        "columns": {
+          "course": "Course",
+          "billingDetails": "Billing Details",
+          "price": "Price",
+          "purchaseDate": "Purchase date",
+          "receipt": "Receipt",
+          "userDeleted": "User deleted"
+        }
+      }
+    }
   }
 }

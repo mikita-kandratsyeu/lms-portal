@@ -4,6 +4,7 @@ import { Column, ColumnDef } from '@tanstack/react-table';
 import { format, fromUnixTime } from 'date-fns';
 import { ArrowUpDown, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { getAnalytics } from '@/actions/analytics/get-analytics';
 import { CreditCardInfo } from '@/components/common/credit-card-info';
@@ -13,6 +14,7 @@ import { TIMESTAMP_TEMPLATE } from '@/constants/common';
 import { DEFAULT_LOCALE } from '@/constants/locale';
 
 type ClientTransactions = Awaited<ReturnType<typeof getAnalytics>>['transactions'][number];
+type TFunction = ReturnType<typeof useTranslations<'teacher.analytics.transactions.columns'>>;
 
 const handleSortingHeader = <T extends Column<ClientTransactions, unknown>>(
   column: T,
@@ -26,14 +28,14 @@ const handleSortingHeader = <T extends Column<ClientTransactions, unknown>>(
   );
 };
 
-export const columns: ColumnDef<ClientTransactions>[] = [
+export const createColumns = (t: TFunction): ColumnDef<ClientTransactions>[] => [
   {
     accessorKey: 'title',
-    header: ({ column }) => handleSortingHeader(column, 'Course'),
+    header: ({ column }) => handleSortingHeader(column, t('course')),
   },
   {
     id: 'customer',
-    header: () => <span>Billing Details</span>,
+    header: () => <span>{t('billingDetails')}</span>,
     cell: ({ row }) => {
       const { billingDetails, paymentMethod } = row.original;
 
@@ -55,14 +57,16 @@ export const columns: ColumnDef<ClientTransactions>[] = [
               )}
             </>
           )}
-          {!billingDetails.email && <p className="text-sm text-muted-foreground">User deleted</p>}
+          {!billingDetails.email && (
+            <p className="text-sm text-muted-foreground">{t('userDeleted')}</p>
+          )}
         </div>
       );
     },
   },
   {
     accessorKey: 'amount',
-    header: ({ column }) => handleSortingHeader(column, 'Price'),
+    header: ({ column }) => handleSortingHeader(column, t('price')),
     cell: ({ row }) => {
       const { amount, currency } = row.original;
       const locale = {
@@ -75,7 +79,7 @@ export const columns: ColumnDef<ClientTransactions>[] = [
   },
   {
     accessorKey: 'purchaseDate',
-    header: ({ column }) => handleSortingHeader(column, 'Purchase date'),
+    header: ({ column }) => handleSortingHeader(column, t('purchaseDate')),
     cell: ({ row }) => {
       const { purchaseDate } = row.original;
 
@@ -91,7 +95,7 @@ export const columns: ColumnDef<ClientTransactions>[] = [
         <Link href={receiptUrl} target="_blank" className="hover:underline">
           <div className="flex gap-2 items-center justify-center">
             <ReceiptText className="h-4 w-4" />
-            Receipt
+            {t('receipt')}
           </div>
         </Link>
       ) : (

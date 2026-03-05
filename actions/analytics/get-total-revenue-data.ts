@@ -8,6 +8,7 @@ type MonthlyRevenueData = {
 type TotalRevenueData = {
   average: number;
   diff: number | null;
+  month: string;
   revenue: number;
   transactionCount: number;
 }[];
@@ -45,6 +46,7 @@ export const getTotalRevenueData = async (transactions: any[]) => {
     return {
       average,
       diff,
+      month,
       revenue,
       transactionCount,
     };
