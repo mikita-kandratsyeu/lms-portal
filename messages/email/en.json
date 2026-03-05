@@ -41,7 +41,7 @@
     "footerNote": "All rights reserved."
   },
   "set-password": {
-    "subject": "{{code}} - Your Nova Academy password verification code",
+    "subject": "{code} - Your Nova Academy password verification code",
     "description": "Enter this code to verify your identity and set a new password:",
     "footerNote": "All rights reserved.",
     "greeting": "Hey!",
