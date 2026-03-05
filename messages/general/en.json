@@ -384,6 +384,22 @@
     "body": "Registration of new users is closed. We apologize 🥺",
     "goBackHome": "Go back home"
   },
+  "blocked": {
+    "title": "Account Suspended",
+    "body": "Your account has been suspended by the platform administrator.",
+    "reasonLabel": "Reason",
+    "noReason": "No reason provided.",
+    "blockedUntilLabel": "Suspended until",
+    "permanent": "Permanently suspended",
+    "goBackHome": "Go back home",
+    "sessionModal": {
+      "title": "Your account has been suspended",
+      "body": "The platform administrator has suspended your account. You will be signed out automatically.",
+      "reasonLabel": "Reason",
+      "signOut": "Sign out now",
+      "signingOut": "Signing out..."
+    }
+  },
   "chat": {
     "body": {
       "greeting": "Hello there!",
@@ -1214,6 +1230,7 @@
         "base": "Base",
         "public": "Public",
         "private": "Private",
+        "blocked": "Blocked",
         "noUsers": "No users found"
       },
       "reportModal": {
@@ -1229,6 +1246,30 @@
           "sendFailed": "Failed to send email. Please try again."
         },
         "sendSuccess": "Report sent to your email successfully"
+      },
+      "blockModal": {
+        "blockUser": "Block User",
+        "unblockUser": "Unblock User",
+        "title": "Block User",
+        "description": "Specify the reason and duration of the block. The user will be notified by email and all their subscriptions will be paused.",
+        "reasonLabel": "Reason for blocking",
+        "reasonPlaceholder": "Describe why this user is being blocked...",
+        "durationLabel": "Block duration",
+        "durationPermanent": "Permanent",
+        "durationUntilDate": "Until a specific date",
+        "dateLabel": "Block until",
+        "confirmBlock": "Block User",
+        "confirmUnblock": "Unblock User",
+        "cancel": "Cancel",
+        "blocked": "Blocked",
+        "errors": {
+          "reasonRequired": "Please provide a reason for blocking.",
+          "dateRequired": "Please select a date for temporary block.",
+          "failed": "Failed to block user. Please try again.",
+          "unblockFailed": "Failed to unblock user. Please try again."
+        },
+        "blockSuccess": "User has been blocked successfully",
+        "unblockSuccess": "User has been unblocked successfully"
       }
     },
     "csm": {

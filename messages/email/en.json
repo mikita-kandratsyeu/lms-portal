@@ -39,5 +39,16 @@
   "csm-issue-resolution": {
     "subject": "{ticketID}",
     "footerNote": "All rights reserved."
+  },
+  "user-blocked": {
+    "subject": "Your account has been suspended",
+    "badgeLabel": "Account Suspended",
+    "greeting": "Hello, {username}!",
+    "description": "We are writing to inform you that your account on Nova Academy has been suspended by the platform administrator.",
+    "reasonLabel": "Reason",
+    "expiryNote": "Your account will be suspended until:",
+    "permanentNote": "This suspension is permanent.",
+    "contactSupport": "Contact Support",
+    "footerNote": "All rights reserved."
   }
 }

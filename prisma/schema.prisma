@@ -11,12 +11,15 @@ model User {
   id                  String                   @id @default(uuid())
   aiAgentUsageSeen    AiAgentUsageSeen[]
   aiAgents            AiAgent[]
+  blockedReason       String?
+  blockedUntil        DateTime?
   connectedAiAgents   AiAgentConnection[]      @relation("ConnectedAiAgents")
   conversations       ChatConversation[]
   courses             Course[]
   createdAt           DateTime                 @default(now())
   csmIssues           CsmIssue[]
   email               String                   @unique
+  isBlocked           Boolean?                 @default(false)
   isEmailConfirmed    Boolean?                 @default(false)
   name                String?
   notifications       Notification[]

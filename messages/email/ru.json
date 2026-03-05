@@ -39,5 +39,16 @@
   "csm-issue-resolution": {
     "subject": "{ticketID}",
     "footerNote": "Все права защищены."
+  },
+  "user-blocked": {
+    "subject": "Ваш аккаунт был заблокирован",
+    "badgeLabel": "Аккаунт заблокирован",
+    "greeting": "Здравствуйте, {username}!",
+    "description": "Сообщаем вам, что ваш аккаунт на платформе Nova Academy был заблокирован администратором.",
+    "reasonLabel": "Причина",
+    "expiryNote": "Ваш аккаунт заблокирован до:",
+    "permanentNote": "Блокировка является постоянной.",
+    "contactSupport": "Написать в поддержку",
+    "footerNote": "Все права защищены."
   }
 }

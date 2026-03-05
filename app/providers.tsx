@@ -10,6 +10,7 @@ import Snowfall from 'react-snowfall';
 
 import { GetConnectedAgents } from '@/actions/ai/agent/get-connected-agents';
 import { GetAppConfig } from '@/actions/configs/get-app-config';
+import { BlockedSessionModal } from '@/components/modals/blocked-session-modal';
 import { Toaster as ToasterProvider } from '@/components/ui/sonner';
 import { useConfettiStore } from '@/hooks/store/use-confetti-store';
 import { useUserSettingsStore } from '@/hooks/store/use-user-settings.store';
@@ -105,6 +106,7 @@ export const Providers = ({
           {config?.features?.christmas && <ChristmasProvider />}
           <ConfettiProvider />
           <ToasterProvider />
+          <BlockedSessionModal />
           {children}
         </AuthProvider>
       </NextIntlClientProvider>

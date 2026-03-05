@@ -1,17 +1,22 @@
 'use client';
 
-import { FileText, MoreHorizontal } from 'lucide-react';
+import { FileText, MoreHorizontal, ShieldBan, ShieldCheck } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui';
+import { useToast } from '@/components/ui/use-toast';
+import { fetcher } from '@/lib/fetcher';
 
+import { BlockUserModal } from './block-user-modal';
 import { UserReportModal } from './user-report-modal';
 
 type ColumnActionsProps = {
@@ -20,6 +25,7 @@ type ColumnActionsProps = {
   userEmail?: string | null;
   userRole?: string | null;
   isPremium?: boolean;
+  isBlocked?: boolean | null;
 };
 
 export const ColumnActions = ({
@@ -28,9 +34,33 @@ export const ColumnActions = ({
   userEmail,
   userRole,
   isPremium,
+  isBlocked,
 }: ColumnActionsProps) => {
-  const t = useTranslations('owner.users.reportModal');
+  const t = useTranslations('owner.users');
+  const { toast } = useToast();
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+
   const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [blockModalOpen, setBlockModalOpen] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+
+  const handleUnblock = async () => {
+    try {
+      setIsFetching(true);
+
+      await fetcher.patch(`/api/users/${userId}/block`, {
+        body: { action: 'unblock' },
+      });
+
+      toast({ title: t('blockModal.unblockSuccess') });
+      startTransition(() => router.refresh());
+    } catch {
+      toast({ isError: true, description: t('blockModal.errors.unblockFailed') });
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
   return (
     <>
@@ -47,8 +77,27 @@ export const ColumnActions = ({
             onClick={() => setReportModalOpen(true)}
           >
             <FileText className="h-4 w-4 mr-2" />
-            {t('viewReport')}
+            {t('reportModal.viewReport')}
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          {isBlocked ? (
+            <DropdownMenuItem
+              className="hover:cursor-pointer text-green-600 focus:text-green-600"
+              onClick={handleUnblock}
+              disabled={isFetching || pending}
+            >
+              <ShieldCheck className="h-4 w-4 mr-2" />
+              {t('blockModal.unblockUser')}
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem
+              className="hover:cursor-pointer text-destructive focus:text-destructive"
+              onClick={() => setBlockModalOpen(true)}
+            >
+              <ShieldBan className="h-4 w-4 mr-2" />
+              {t('blockModal.blockUser')}
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
       <UserReportModal
@@ -59,6 +108,12 @@ export const ColumnActions = ({
         userEmail={userEmail}
         userRole={userRole}
         isPremium={isPremium}
+      />
+      <BlockUserModal
+        open={blockModalOpen}
+        setOpen={setBlockModalOpen}
+        userId={userId}
+        userName={userName}
       />
     </>
   );

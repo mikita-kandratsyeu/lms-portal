@@ -90,7 +90,7 @@ export const useColumns = (): ColumnDef<UserWithSubscription>[] => {
       id: 'user',
       header: () => <span>{t('columns.user')}</span>,
       cell: ({ row }) => {
-        const { email, name, pictureUrl, isEmailConfirmed } = row.original;
+        const { email, name, pictureUrl, isEmailConfirmed, isBlocked } = row.original;
 
         return (
           <div className="flex items-center gap-2 min-w-[200px]">
@@ -102,6 +102,13 @@ export const useColumns = (): ColumnDef<UserWithSubscription>[] => {
               <div className="flex items-center gap-x-1">
                 <p className="font-medium truncate">{name}</p>
                 {isEmailConfirmed && <BadgeCheckIcon className="w-4 h-4 text-green-500 shrink-0" />}
+                {isBlocked && (
+                  <TextBadge
+                    label={t('blocked')}
+                    variant="red"
+                    className="text-[10px] px-1 py-0 h-4"
+                  />
+                )}
               </div>
               <p className="text-muted-foreground truncate">{email}</p>
             </div>
@@ -171,7 +178,7 @@ export const useColumns = (): ColumnDef<UserWithSubscription>[] => {
     {
       id: 'columnActions',
       cell: ({ row }) => {
-        const { id, name, email, role, stripeSubscription } = row.original;
+        const { id, name, email, role, stripeSubscription, isBlocked } = row.original;
 
         return (
           <ColumnActions
@@ -180,6 +187,7 @@ export const useColumns = (): ColumnDef<UserWithSubscription>[] => {
             userEmail={email}
             userRole={role}
             isPremium={!!stripeSubscription?.stripeSubscriptionId}
+            isBlocked={isBlocked}
           />
         );
       },
@@ -192,7 +200,7 @@ export const columns: ColumnDef<UserWithSubscription>[] = [
     id: 'user',
     header: () => <span>User</span>,
     cell: ({ row }) => {
-      const { email, name, pictureUrl, isEmailConfirmed } = row.original;
+      const { email, name, pictureUrl, isEmailConfirmed, isBlocked } = row.original;
 
       return (
         <div className="flex items-center gap-2 min-w-[200px]">
@@ -204,6 +212,9 @@ export const columns: ColumnDef<UserWithSubscription>[] = [
             <div className="flex items-center gap-x-1">
               <p className="font-medium truncate">{name}</p>
               {isEmailConfirmed && <BadgeCheckIcon className="w-4 h-4 text-green-500 shrink-0" />}
+              {isBlocked && (
+                <TextBadge label="Blocked" variant="red" className="text-[10px] px-1 py-0 h-4" />
+              )}
             </div>
             <p className="text-muted-foreground truncate">{email}</p>
           </div>
@@ -270,7 +281,7 @@ export const columns: ColumnDef<UserWithSubscription>[] = [
   {
     id: 'columnActions',
     cell: ({ row }) => {
-      const { id, name, email, role, stripeSubscription } = row.original;
+      const { id, name, email, role, stripeSubscription, isBlocked } = row.original;
 
       return (
         <ColumnActions
@@ -279,6 +290,7 @@ export const columns: ColumnDef<UserWithSubscription>[] = [
           userEmail={email}
           userRole={role}
           isPremium={!!stripeSubscription?.stripeSubscriptionId}
+          isBlocked={isBlocked}
         />
       );
     },

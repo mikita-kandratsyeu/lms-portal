@@ -10,10 +10,15 @@ export const getUpdatedUser = async (userId = '') => {
     async () => {
       const updatedUser = await db.user.findUnique({
         where: { id: userId },
-        select: { role: true },
+        select: { blockedReason: true, blockedUntil: true, isBlocked: true, role: true },
       });
 
-      return { role: updatedUser?.role };
+      return {
+        blockedReason: updatedUser?.blockedReason ?? null,
+        blockedUntil: updatedUser?.blockedUntil ?? null,
+        isBlocked: updatedUser?.isBlocked ?? false,
+        role: updatedUser?.role,
+      };
     },
     TEN_MINUTE_SEC,
   );

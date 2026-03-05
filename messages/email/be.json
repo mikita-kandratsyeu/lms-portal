@@ -39,5 +39,16 @@
   "csm-issue-resolution": {
     "subject": "{ticketID}",
     "footerNote": "Усе правы абаронены."
+  },
+  "user-blocked": {
+    "subject": "Ваш акаўнт быў заблакіраваны",
+    "badgeLabel": "Акаўнт заблакіраваны",
+    "greeting": "Вітаем, {username}!",
+    "description": "Паведамляем вам, што ваш акаўнт на платформе Nova Academy быў заблакіраваны адміністратарам.",
+    "reasonLabel": "Прычына",
+    "expiryNote": "Ваш акаўнт заблакіраваны да:",
+    "permanentNote": "Блакіроўка з'яўляецца пастаяннай.",
+    "contactSupport": "Напісаць у падтрымку",
+    "footerNote": "Усе правы абаронены."
   }
 }

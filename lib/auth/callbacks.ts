@@ -30,6 +30,26 @@ export const callbacks: NextAuthOptions['callbacks'] = {
         return `/restricted?code=${encodeURIComponent(encrypt({ email }, process.env.NEXTAUTH_SECRET as string))}`;
       }
 
+      if (dbUser.blocked) {
+        const params = new URLSearchParams();
+
+        if (dbUser.blockedReason) {
+          params.set('reason', encodeURIComponent(dbUser.blockedReason));
+        }
+
+        if (dbUser.blockedUntil) {
+          params.set('until', encodeURIComponent(dbUser.blockedUntil.toISOString()));
+        }
+
+        const blockedUrl = absoluteUrl(`/blocked?${params.toString()}`);
+
+        if (account?.provider === Provider.CREDENTIALS) {
+          throw new Error(blockedUrl);
+        }
+
+        return blockedUrl;
+      }
+
       if (!hasOtpSecret && dbUser.otpSecret) {
         const redirectUrl = absoluteUrl(
           `/otp-verification?code=${encodeURIComponent(encrypt({ secret: dbUser.otpSecret, userId: dbUser.id, provider: account?.provider, email }, process.env.OTP_SECRET as string))}`,
@@ -94,6 +114,17 @@ export const callbacks: NextAuthOptions['callbacks'] = {
       if (updatedToken?.role && updatedToken.role !== session?.user?.role) {
         session.user.role = updatedToken.role;
       }
+
+      const isCurrentlyBlocked =
+        updatedToken?.isBlocked &&
+        (!updatedToken.blockedUntil || new Date(updatedToken.blockedUntil) > new Date());
+
+      session.user.isBlocked = Boolean(isCurrentlyBlocked);
+      session.user.blockedReason = isCurrentlyBlocked ? updatedToken?.blockedReason ?? null : null;
+      session.user.blockedUntil =
+        isCurrentlyBlocked && updatedToken?.blockedUntil
+          ? new Date(updatedToken.blockedUntil).toISOString()
+          : null;
 
       session.user.hasSubscription = Boolean(userSubscription);
     }

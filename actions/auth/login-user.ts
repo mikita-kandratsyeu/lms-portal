@@ -49,6 +49,36 @@ export const loginUser = async (
   if (existingUser) {
     await createUserOauth(existingUser.id, oauth);
 
+    const isCurrentlyBlocked =
+      existingUser.isBlocked &&
+      (!existingUser.blockedUntil || new Date(existingUser.blockedUntil) > new Date());
+
+    if (isCurrentlyBlocked) {
+      return {
+        blocked: true,
+        blockedReason: existingUser.blockedReason,
+        blockedUntil: existingUser.blockedUntil,
+        hasSubscription: false,
+        id: existingUser.id,
+        image: existingUser.pictureUrl,
+        isPublic: existingUser.settings?.isPublicProfile,
+        name: existingUser.name,
+        otpSecret: null,
+        role: existingUser.role,
+      };
+    }
+
+    if (
+      existingUser.isBlocked &&
+      existingUser.blockedUntil &&
+      new Date(existingUser.blockedUntil) <= new Date()
+    ) {
+      await db.user.update({
+        where: { id: existingUser.id },
+        data: { isBlocked: false, blockedReason: null, blockedUntil: null },
+      });
+    }
+
     return {
       hasSubscription: Boolean(existingUser.stripeSubscription),
       id: existingUser.id,

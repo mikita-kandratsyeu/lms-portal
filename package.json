@@ -37,7 +37,7 @@
     "@neondatabase/serverless": "^1.0.2",
     "@plaiceholder/next": "^3.0.0",
     "@prisma/adapter-neon": "^7.4.0",
-    "@prisma/client": "^7.4.1",
+    "@prisma/client": "^7.4.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -170,7 +170,7 @@
     "lint-staged": "^15.2.2",
     "postcss": "^8",
     "prettier": "^3.2.4",
-    "prisma": "^7.4.1",
+    "prisma": "^7.4.2",
     "puppeteer": "^24.22.0",
     "tailwindcss": "^3.3.0",
     "typescript": "^5.9.3"
