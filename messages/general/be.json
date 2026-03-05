@@ -1368,8 +1368,17 @@
       },
       "stripeConnect": {
         "title": "Stripe Connect",
-        "subtitle": "Ваш даступны баланс у {stripeConnect}.",
+        "subtitle": "Ваш даступны баланс у <stripeConnect>Stripe Connect</stripeConnect>.",
         "autoPayments": "Аўтаматычныя плацяжы на карту або банкаўскі рахунак выконваюцца {interval} у {day}",
+        "days": {
+          "monday": "панядзелак",
+          "tuesday": "аўторак",
+          "wednesday": "серада",
+          "thursday": "чацвер",
+          "friday": "пятніцу",
+          "saturday": "суботу",
+          "sunday": "нядзелю"
+        },
         "createAccount": "Стварыць Stripe Connect",
         "continueCreating": "Працягнуць стварэнне акаўнта",
         "requestPayout": "Запытаць выплату",

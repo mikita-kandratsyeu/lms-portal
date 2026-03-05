@@ -1366,8 +1366,17 @@
       },
       "stripeConnect": {
         "title": "Stripe Connect",
-        "subtitle": "Ваш доступный баланс в {stripeConnect}.",
-        "autoPayments": "Автоматические платежи на карту или банковский счёт выполняются {interval} по {day}м",
+        "subtitle": "Ваш доступный баланс в <stripeConnect>Stripe Connect</stripeConnect>.",
+        "autoPayments": "Автоматические платежи на карту или банковский счёт выполняются {interval} по {day}",
+        "days": {
+          "monday": "понедельникам",
+          "tuesday": "вторникам",
+          "wednesday": "средам",
+          "thursday": "четвергам",
+          "friday": "пятницам",
+          "saturday": "субботам",
+          "sunday": "воскресеньям"
+        },
         "createAccount": "Создать Stripe Connect",
         "continueCreating": "Продолжить создание аккаунта",
         "requestPayout": "Запросить выплату",

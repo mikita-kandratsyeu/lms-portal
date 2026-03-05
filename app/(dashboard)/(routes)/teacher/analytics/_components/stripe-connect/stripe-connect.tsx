@@ -4,7 +4,6 @@ import { useTranslations } from 'next-intl';
 
 import { getAnalytics } from '@/actions/analytics/get-analytics';
 import { Card, CardContent } from '@/components/ui';
-import { capitalize } from '@/lib/utils';
 
 import { Actions } from './actions';
 import { BalanceTransactions } from './balance-transactions';
@@ -45,7 +44,7 @@ export const StripeConnect = ({
             <span>
               {t('autoPayments', {
                 interval: autoPaymentSchedule.interval,
-                day: capitalize(autoPaymentSchedule.weeklyAnchor),
+                day: t(`days.${autoPaymentSchedule.weeklyAnchor}`),
               })}
             </span>
           )}

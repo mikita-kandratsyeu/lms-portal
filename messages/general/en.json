@@ -1368,8 +1368,17 @@
       },
       "stripeConnect": {
         "title": "Stripe Connect",
-        "subtitle": "Your available balance in the {stripeConnect}.",
-        "autoPayments": "Automatic payments to a card or bank account are made {interval} on {day}s",
+        "subtitle": "Your available balance in the <stripeConnect>Stripe Connect</stripeConnect>.",
+        "autoPayments": "Automatic payments to a card or bank account are made {interval} on {day}",
+        "days": {
+          "monday": "Mondays",
+          "tuesday": "Tuesdays",
+          "wednesday": "Wednesdays",
+          "thursday": "Thursdays",
+          "friday": "Fridays",
+          "saturday": "Saturdays",
+          "sunday": "Sundays"
+        },
         "createAccount": "Create Stripe Connect",
         "continueCreating": "Continue creating an account",
         "requestPayout": "Request a payout",
