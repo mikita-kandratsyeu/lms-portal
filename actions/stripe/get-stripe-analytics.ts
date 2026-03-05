@@ -151,7 +151,7 @@ export const getStripeAnalytics = async () => {
 
     const totalRevenue = salesRevenue + subscriptionRevenueAmount;
     const totalPaidOut = totalPayoutAmount._sum.amount || 0;
-    const netIncome = totalRevenue - totalPaidOut - teachersOwed;
+    const netIncome = totalRevenue - totalPaidOut;
 
     return {
       balances: {

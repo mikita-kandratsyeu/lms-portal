@@ -210,6 +210,9 @@ export const RevenueBreakdown = ({ analytics }: RevenueBreakdownProps) => {
                 <p className="text-2xl font-bold mt-1 text-amber-600">
                   {formatPrice(getConvertedPrice(analytics.teachersOwed ?? 0))}
                 </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {t('revenue.teachersOwedHint')}
+                </p>
               </div>
             </div>
             <div className="pt-4 border-t">
