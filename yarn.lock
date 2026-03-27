@@ -11689,7 +11689,7 @@ __metadata:
     next-intl: "npm:^4.3.7"
     next-themes: "npm:^0.4.6"
     node-cache: "npm:^5.1.2"
-    nodemailer: "npm:^7.0.11"
+    nodemailer: "npm:^8.0.4"
     openai: "npm:^4.95.0"
     otplib: "npm:^12.0.1"
     pdf-parse: "npm:^1.1.1"
@@ -13123,10 +13123,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:^7.0.11":
-  version: 7.0.11
-  resolution: "nodemailer@npm:7.0.11"
-  checksum: 10c0/208f108fdb4c5dd0e3a2f013578d53dad505cf1b9c7a084f6d22fc9d6f3912daafb4a23793ca568ff848afc35f15f4eb24382d3f6f9fb8ede4a8410d4ca63618
+"nodemailer@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "nodemailer@npm:8.0.4"
+  checksum: 10c0/5fb6fa72645b541c18b84b861de46f4740449e1d7c987b4d9ef715d815d613f93262225bc319e217df6215d6f123efadb9a412dcf937fe0a41cbecf279dfb2a0
   languageName: node
   linkType: hard
 
