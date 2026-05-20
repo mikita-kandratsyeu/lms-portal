@@ -7,14 +7,14 @@
       },
       "updated": "2026-02-10",
       "models": {
-        "deepseek-reasoner": {
+        "deepseek-v4-pro": {
           "provider": "deepseek",
           "input_microcents_per_1M": 55000000,
           "cached_input_microcents_per_1M": 14000000,
           "output_microcents_per_1M": 219000000,
           "source": "https://api-docs.deepseek.com/quick_start/pricing-details-usd"
         },
-        "deepseek-chat": {
+        "deepseek-v4-flash": {
           "provider": "deepseek",
           "input_microcents_per_1M": 27000000,
           "cached_input_microcents_per_1M": 7000000,
