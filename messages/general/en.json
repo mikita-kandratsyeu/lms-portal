@@ -450,7 +450,8 @@
     "policy": "Cookie Policy"
   },
   "voice-inbox-promo": {
-    "bannerTitle": "Try Voice Inbox AI",
+    "badge": "New app",
+    "bannerTitle": "Voice Inbox AI",
     "bannerBody": "Voice notes with AI summaries, tasks, and on-device privacy.",
     "cta": "Get the app",
     "dismiss": "Dismiss"

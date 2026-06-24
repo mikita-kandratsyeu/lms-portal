@@ -450,8 +450,9 @@
     "policy": "Палітыка файлаў cookie"
   },
   "voice-inbox-promo": {
-    "bannerTitle": "Паспрабуйце Voice Inbox AI",
-    "bannerBody": "Галасавыя нататкі з ІІ-рэзюмэ, задачамі і прыватным рэжымам на прыладзе.",
+    "badge": "Навінка",
+    "bannerTitle": "Voice Inbox AI",
+    "bannerBody": "Галасавыя нататкі з ІІ-рэзюмэ, задачамі і прыватным рэжымам.",
     "cta": "Спампаваць",
     "dismiss": "Закрыць"
   },
