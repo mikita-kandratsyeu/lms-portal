@@ -1,8 +1,13 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 import withPlaiceholder from '@plaiceholder/next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 /** @type {import('next').NextConfig} */
 import npmConfig from './package.json' with { type: 'json' };
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const withNextIntl = createNextIntlPlugin('./i18n.ts');
 
@@ -29,6 +34,7 @@ const nextConfig = {
     ],
   },
   turbopack: {
+    root: projectRoot,
     resolveAlias: {
       handlebars: 'handlebars/dist/handlebars.js',
     },
