@@ -449,6 +449,13 @@
     "body": "We use cookies to enhance the user experience. By using our website, you consent to all cookies in accordance with our",
     "policy": "Cookie Policy"
   },
+  "voice-inbox-promo": {
+    "badge": "New",
+    "title": "Voice Inbox AI",
+    "description": "Turn your thoughts into structured notes with AI",
+    "cta": "Learn more",
+    "dismiss": "Dismiss"
+  },
   "course-enroll": {
     "enrollFor": "Enroll for ",
     "free": "Free",

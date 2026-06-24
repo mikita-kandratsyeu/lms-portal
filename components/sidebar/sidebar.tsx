@@ -11,7 +11,7 @@ export const SideBar = async () => {
   const routes = await getSideBarRoutes(referer);
 
   return (
-    <div className="h-full md:pt-[80px] flex flex-col justify-between bg-white dark:bg-neutral-900 md:border-r">
+    <div className="h-full md:pt-[calc(80px+var(--promo-banner-height))] flex flex-col justify-between bg-white dark:bg-neutral-900 md:border-r">
       <SideBarRoutes routes={routes} />
     </div>
   );

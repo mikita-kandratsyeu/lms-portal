@@ -34,7 +34,7 @@ export const ChatSideBar = ({ agentsAmount, conversations }: ChatSideBarProps) =
   const isLoading = status === AuthStatus.LOADING;
 
   return (
-    <div className="h-full border-r flex flex-col justify-between shadow-sm bg-white dark:bg-neutral-900 md:pt-[80px]">
+    <div className="h-full border-r flex flex-col justify-between shadow-sm bg-white dark:bg-neutral-900 md:pt-[calc(80px+var(--promo-banner-height))]">
       <ChatSideBarTop agentsAmount={agentsAmount} />
       <div className="flex flex-col w-full overflow-y-auto h-full">
         <ChatSideBarItems conversations={displayConversations} />
