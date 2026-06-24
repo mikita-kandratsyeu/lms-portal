@@ -8,6 +8,7 @@ import { AuthStatus } from '@/constants/auth';
 import { useCurrentUser } from '@/hooks/use-current-user';
 
 import { SubscriptionBanner } from '../common/subscription-banner';
+import { VoiceInboxPromoBanner } from '../common/voice-inbox-promo-banner';
 import { SideBarItem } from './sidebar-item';
 
 type SideBarRoutesProps = {
@@ -72,7 +73,10 @@ export const SideBarRoutes = ({ routes }: SideBarRoutesProps) => {
           />
         ))}
       </div>
-      {!isLoading && !user?.hasSubscription && <SubscriptionBanner />}
+      <div className="flex flex-col gap-y-2">
+        <VoiceInboxPromoBanner />
+        {!isLoading && !user?.hasSubscription && <SubscriptionBanner />}
+      </div>
     </div>
   );
 };

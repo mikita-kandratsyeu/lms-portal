@@ -69,17 +69,17 @@ const CourseLayout = async ({ children, params }: CourseLayoutProps) => {
 
   return (
     <div className="h-full">
-      <div className="h-[80px] md:pl-80 top-[var(--promo-banner-height)] fixed w-full z-50">
+      <div className="h-[80px] md:pl-80 fixed inset-y-0 w-full z-50">
         <CourseNavBar
           {...commonCourseProps}
           globalProgress={globalProgress}
           userNotifications={userNotifications}
         />
       </div>
-      <div className="hidden md:flex h-full w-80 flex-col fixed top-[var(--promo-banner-height)] bottom-0 z-50">
+      <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">
         <CourseSideBar {...commonCourseProps} />
       </div>
-      <main className="md:pl-80 pt-[calc(80px+var(--promo-banner-height))] h-full">{children}</main>
+      <main className="md:pl-80 pt-[80px] h-full">{children}</main>
     </div>
   );
 };

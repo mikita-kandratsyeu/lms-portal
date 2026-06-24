@@ -11,7 +11,6 @@ import { getAppConfig } from '@/actions/configs/get-app-config';
 import { getUserSettings } from '@/actions/users/get-user-settings';
 import { CookieConsent } from '@/components/common/cookie-consent';
 import { TestModeDeclaimer } from '@/components/common/test-mode-declaimer';
-import { VoiceInboxPromoBanner } from '@/components/common/voice-inbox-promo-banner';
 import { PLATFORM_DESCRIPTION } from '@/constants/common';
 import { cn } from '@/lib/utils';
 
@@ -58,7 +57,6 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
           userSettings={userSettings}
         >
           {appConfig.features.testMode && <TestModeDeclaimer useToast />}
-          <VoiceInboxPromoBanner />
           {children}
           <CookieConsent />
         </Providers>

@@ -449,10 +449,9 @@
     "policy": "Политикой использования файлов cookie"
   },
   "voice-inbox-promo": {
-    "badge": "Новинка",
-    "title": "Voice Inbox AI",
-    "description": "Превращайте мысли в структурированные заметки с ИИ",
-    "cta": "Подробнее",
+    "bannerTitle": "Попробуйте Voice Inbox AI",
+    "bannerBody": "Голосовые заметки с ИИ-резюме, задачами и приватным режимом на устройстве.",
+    "cta": "Скачать",
     "dismiss": "Закрыть"
   },
   "course-enroll": {

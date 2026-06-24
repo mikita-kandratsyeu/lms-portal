@@ -38,19 +38,17 @@ const AiAgentsLayout = async ({ children }: AiAgentsLayoutProps) => {
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1">
-        <div className="h-[80px] top-[var(--promo-banner-height)] w-full z-[50] fixed">
+        <div className="h-[80px] inset-y-0 w-full z-[50] fixed">
           <ChatNavBar
             globalProgress={globalProgress}
             isAiAgents
             userNotifications={userNotifications}
           />
         </div>
-        <div className="hidden md:flex h-full w-64 flex-col fixed top-[var(--promo-banner-height)] bottom-0 z-[48]">
+        <div className="hidden md:flex h-full w-64 flex-col fixed inset-y-0 z-[48]">
           <SideBar />
         </div>
-        <main className="md:pl-64 pt-[calc(80px+var(--promo-banner-height))] h-full">
-          {children}
-        </main>
+        <main className="md:pl-64 pt-[80px] h-full">{children}</main>
       </div>
       <Footer categories={categories} />
     </div>

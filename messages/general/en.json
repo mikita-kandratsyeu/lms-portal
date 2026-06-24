@@ -450,10 +450,9 @@
     "policy": "Cookie Policy"
   },
   "voice-inbox-promo": {
-    "badge": "New",
-    "title": "Voice Inbox AI",
-    "description": "Turn your thoughts into structured notes with AI",
-    "cta": "Learn more",
+    "bannerTitle": "Try Voice Inbox AI",
+    "bannerBody": "Voice notes with AI summaries, tasks, and on-device privacy.",
+    "cta": "Get the app",
     "dismiss": "Dismiss"
   },
   "course-enroll": {

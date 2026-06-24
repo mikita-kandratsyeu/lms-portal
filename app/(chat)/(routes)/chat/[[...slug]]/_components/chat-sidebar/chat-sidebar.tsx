@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 import { Conversation } from '@/actions/chat/get-chat-conversations';
 import { SubscriptionBanner } from '@/components/common/subscription-banner';
+import { VoiceInboxPromoBanner } from '@/components/common/voice-inbox-promo-banner';
 import { AuthStatus } from '@/constants/auth';
 import { useChatStore } from '@/hooks/store/use-chat-store';
 import { useCurrentUser } from '@/hooks/use-current-user';
@@ -34,12 +35,17 @@ export const ChatSideBar = ({ agentsAmount, conversations }: ChatSideBarProps) =
   const isLoading = status === AuthStatus.LOADING;
 
   return (
-    <div className="h-full border-r flex flex-col justify-between shadow-sm bg-white dark:bg-neutral-900 md:pt-[calc(80px+var(--promo-banner-height))]">
+    <div className="h-full border-r flex flex-col justify-between shadow-sm bg-white dark:bg-neutral-900 md:pt-[80px]">
       <ChatSideBarTop agentsAmount={agentsAmount} />
       <div className="flex flex-col w-full overflow-y-auto h-full">
         <ChatSideBarItems conversations={displayConversations} />
       </div>
-      {!isLoading && !user?.hasSubscription && <SubscriptionBanner className="m-4" />}
+      {!isLoading && (
+        <div className="flex flex-col gap-y-2 m-4 mb-0">
+          <VoiceInboxPromoBanner />
+          {!user?.hasSubscription && <SubscriptionBanner />}
+        </div>
+      )}
       <ChatSideBarBottom amountOfConversations={displayConversations.length} />
     </div>
   );
